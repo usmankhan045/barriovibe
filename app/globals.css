@@ -1,0 +1,3041 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+/* ==========================================================================
+   BASE
+   ========================================================================== */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    /* NO `scroll-behavior: smooth` here, deliberately.
+     *
+     * On the root element Chrome applies it to user-initiated scrolling too,
+     * not just anchor jumps: a mouse wheel notch or a Page Down stops being a
+     * direct 1:1 move and becomes an animation the browser eases into. That
+     * is the "laggy", floaty feel — the page arrives a beat after the input,
+     * and there is nothing the user can do to hurry it. Trackpads are exempt,
+     * which is why it reads as fine on some machines and sluggish on others.
+     *
+     * `scroll-padding-top` below is the part that actually matters for
+     * anchors, and it keeps working on an instant jump.
+     */
+    scroll-padding-top: calc(var(--header-h) + 1.5rem);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink-body);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Prevents the horizontal scrollbar that decorative art bleeding past
+       the container would otherwise cause. */
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    color: var(--color-ink);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Visible, brand-colored focus ring on keyboard nav only.
+     The unlayered override below is what makes the colour instant. */
+  :focus-visible {
+    outline: 2px solid var(--color-blue-600);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background-color: var(--color-blue-600);
+    color: var(--color-white);
+  }
+
+  /* Numerals never reflow while a counter animates. */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  img,
+  svg,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+}
+
+/* ==========================================================================
+   LAYOUT PRIMITIVES
+   ========================================================================== */
+@layer components {
+  .u-container {
+    width: 100%;
+    max-width: calc(var(--container-max) + var(--gutter) * 2);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .u-section {
+    padding-block: var(--section-y);
+  }
+
+  .u-section-tight {
+    padding-block: var(--section-y-tight);
+  }
+
+  /* ── A note on the scroll edge effect, which is deliberately NOT here ───
+     Apple pairs Liquid Glass with a "scroll edge effect": a scrim across the
+     top of the viewport that dissolves content as it passes under a floating
+     glass element, so the glass stays legible without a bar behind it.
+
+     It is not implemented, and that is a decision rather than an omission.
+     HeaderClient.tsx records a client directive — the header carries no
+     surface of its own at any scroll position, and legibility problems are
+     fixed on the element that lost them, not by reintroducing a bar. A scrim
+     pinned across the top of the page is that bar with a gradient on it.
+
+     What replaces it is the more Apple-correct answer anyway: the nav pill is
+     made of the material itself (`.u-glass--pill` below), so it lenses the
+     content passing under it rather than needing the content dimmed first. */
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     LIQUID GLASS — the material
+     ═══════════════════════════════════════════════════════════════════════
+
+     Parameters and physics are in the GLASS block of tokens.css. Read that
+     first. This is the construction: four layers, in the order Apple stacks
+     them.
+
+     ┌────────────────────────────────────────────────────────────────────────┐
+     │  FLOATING ELEMENTS ONLY. Do not put this on a card.                    │
+     │                                                                        │
+     │  The nav pill, the mega-menu panel, the mobile menu button, and the    │
+     │  footer — which is lifted over the CTA band. Things with real content  │
+     │  behind them.                                                          │
+     └────────────────────────────────────────────────────────────────────────┘
+
+     ── The version of this that was wrong ──
+
+     `.u-tile`, `.u-bento-card`, `.u-bento-feature` and `.u-badge` were once
+     aliases of this class, which put the material on roughly forty cards a
+     page. It failed on both counts it could fail on.
+
+     It was HEAVY. Two backdrop-filters per card — the body pass and the rim
+     pass — came to well over a hundred filtered layers on the home page, and a
+     backdrop-filter is not paid once: the compositor re-snapshots and
+     re-filters the region behind every one of them on every frame it is on
+     screen. That is the entire scroll.
+
+     And it was not Liquid Glass, it was GLASSMORPHISM — a translucent frosted
+     panel with a bright border, applied uniformly. The two are opposites where
+     it counts: frosted glass SCATTERS light and hides what is behind it,
+     Liquid Glass BENDS light and reveals it. Bending needs something to bend,
+     and behind a card on a near-white canvas there is nothing. The tell was
+     that it needed a fabricated ambient light field painted across the page to
+     have anything to refract. Inventing the content that glass exists to
+     reveal is the placement being wrong, restated.
+
+     ── The layer stack, bottom to top ──
+
+       backdrop-filter on .u-glass     LENSING, body pass — the whole surface
+       background-image on .u-glass    the body tint, i.e. the material itself
+       ::before  (z-index: -1)         LENSING, rim pass + the travelling
+                                       HIGHLIGHT, both masked to a narrow band
+       ::after   (z-index: -1)         specular, caustic and ILLUMINATION
+       the element's own children      content, above all of it
+       box-shadow on .u-glass          the adaptive SHADOW, outside everything
+
+     ── Why the rim gets a second, separate filter pass ──
+
+     A lens is nearly flat through its middle and steep at its edge, so it
+     barely deflects light through the centre and bends it hard at the rim. One
+     uniform filter across the whole face is a frosted disc — the thing Liquid
+     Glass specifically is not. It nests INSIDE the parent's backdrop-filter,
+     so ::before samples the already-refracted image and bends it again. Two
+     passes at the rim is exactly the physics.
+
+     ── Why the visible rim is on ::after and not `border` ──
+
+     Paint order inside a stacking context runs: the element's own background
+     AND BORDER, then its negative-z descendants, then content. A real border
+     therefore paints UNDERNEATH both pseudo-elements and is swallowed by the
+     rim lens. `border: 1px solid transparent` stays to hold the geometry; the
+     rim you can actually see is drawn by ::after, which paints last. */
+  .u-glass {
+    position: relative;
+    /* backdrop-filter already makes this a stacking context, but state it: the
+       whole layer scheme depends on one existing, and an edit that drops the
+       filter for a fallback must not silently take the pseudo-elements out
+       from behind the content with it. */
+    isolation: isolate;
+    border-radius: var(--radius-tile);
+    border: 1px solid transparent; /* geometry only — see above */
+    background-color: transparent;
+
+    /* The material. Lit from the site's single light source, picking up a blue
+       cast at its far edge the way real glass shows its own colour where you
+       look through more of it. */
+    background-image: radial-gradient(
+      132% 132% at var(--glass-light-x) var(--glass-light-y),
+      color-mix(in srgb, var(--color-white) var(--glass-fill), transparent) 0%,
+      color-mix(in srgb, var(--color-white) var(--glass-fill-edge), transparent)
+        58%,
+      color-mix(
+          in srgb,
+          color-mix(in srgb, var(--color-blue-600) 20%, var(--color-white))
+            var(--glass-fill-edge),
+          transparent
+        )
+        100%
+    );
+
+    /* ── THE PREFIXED PROPERTY GOES FIRST. EVERY TIME. ────────────────────
+       Not a style preference — the standard property is silently DELETED if it
+       comes first.
+
+       Tailwind v4 runs the stylesheet through Lightning CSS, which treats
+       `backdrop-filter` and `-webkit-backdrop-filter` as one logical property.
+       Given both, it keeps the LAST one and drops the other. Authored in the
+       usual standard-then-prefixed order, every glass rule on this site shipped
+       `-webkit-backdrop-filter` alone — which Safari and Chrome honour and
+       Firefox does not, so the entire material was inert in Firefox: no
+       lensing on the nav pill, none on the footer sheet, none on the cards.
+
+       Verified against the built stylesheet, not assumed. Prefixed first emits
+       BOTH declarations; standard first emits only the prefixed one.
+
+       The same order is required on the `none` overrides under Reduce
+       Transparency and Increase Contrast at the bottom of this file, and for
+       the same reason doubled: if the setter reaches Firefox but the override
+       does not, the material stays on for exactly the users who asked it off.
+
+       If a `backdrop-filter` is ever added elsewhere, write the prefixed line
+       first and check the built CSS. */
+    -webkit-backdrop-filter: blur(var(--glass-blur))
+      saturate(var(--glass-saturate)) brightness(var(--glass-brightness))
+      contrast(var(--glass-range));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate))
+      brightness(var(--glass-brightness)) contrast(var(--glass-range));
+
+    box-shadow: var(--glass-shadow);
+
+    transition:
+      transform var(--duration-base) var(--ease-liquid),
+      box-shadow var(--duration-base) var(--ease-brand);
+  }
+
+  /* ── Layers 1b + 2: the rim ─────────────────────────────────────────────
+     One element doing two jobs, because both happen in the same narrow band
+     and splitting them would cost a third composited layer for no visual
+     difference.
+
+     THE BAND MASK — four feathered edges, added together. The first version
+     was the standard ring trick (two box gradients composited with `exclude`),
+     which produces a geometrically perfect ring and was clearly wrong on
+     screen: a bevel is a CURVE, so the extra distortion has to fade in across
+     it. A hard-edged ring ends the second pass on a line, and the eye reads
+     that line as an edge in its own right — every surface looked like it had a
+     second border drawn 14px inside the first.
+
+     Nothing here follows `border-radius` and nothing needs to: the element's
+     own `border-radius: inherit` clips the whole pseudo-element, so coverage
+     out in the corner squares is discarded before it is composited.
+
+     THE TRAVELLING HIGHLIGHT. Apple's rim light is not a stroke of uniform
+     brightness — it is a light source reflecting off a curved edge, bright
+     where the edge faces the light, dark where it faces away, and bright again
+     at the bottom where light bounces back UP off the surface below. That
+     bounce is the same feature the blue button pill has at 95% (see
+     --grad-blue in tokens.css); it is a brand detail, not a generic glass one,
+     and it is why the conic has four stops rather than two. */
+  .u-glass::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+
+    -webkit-backdrop-filter: blur(var(--glass-blur-rim))
+      saturate(var(--glass-saturate-rim)) contrast(var(--glass-contrast-rim));
+    backdrop-filter: blur(var(--glass-blur-rim))
+      saturate(var(--glass-saturate-rim)) contrast(var(--glass-contrast-rim));
+
+    background-image: conic-gradient(
+      from calc(315deg + var(--u-sweep, 0deg)) at 50% 50%,
+      color-mix(in srgb, var(--color-white) var(--glass-rim-lit), transparent)
+        0deg,
+      color-mix(in srgb, var(--color-white) var(--glass-rim-shade), transparent)
+        88deg,
+      color-mix(in srgb, var(--color-white) var(--glass-rim-shade), transparent)
+        142deg,
+      /* the bounce */
+        color-mix(in srgb, var(--color-white) 66%, transparent) 196deg,
+      color-mix(in srgb, var(--color-white) var(--glass-rim-shade), transparent)
+        252deg,
+      color-mix(in srgb, var(--color-white) var(--glass-rim-shade), transparent)
+        304deg,
+      color-mix(in srgb, var(--color-white) var(--glass-rim-lit), transparent)
+        360deg
+    );
+
+    /* Dispersion. A real lens splits white light and throws the fringes to
+       opposite edges. These two are the brand blue and Metallic Silver rather
+       than a hue rotation, so the chromatic aberration cannot drift off-brand
+       — the same trick the reveal bead uses. */
+    box-shadow:
+      inset 1px 1px 3px
+        color-mix(in srgb, var(--color-blue-400) 26%, transparent),
+      inset -1px -1px 3px
+        color-mix(in srgb, var(--color-silver-400) 38%, transparent);
+
+    -webkit-mask-image:
+      linear-gradient(to right, black 0, transparent var(--glass-rim-band)),
+      linear-gradient(to left, black 0, transparent var(--glass-rim-band)),
+      linear-gradient(to bottom, black 0, transparent var(--glass-rim-band)),
+      linear-gradient(to top, black 0, transparent var(--glass-rim-band));
+    mask-image:
+      linear-gradient(to right, black 0, transparent var(--glass-rim-band)),
+      linear-gradient(to left, black 0, transparent var(--glass-rim-band)),
+      linear-gradient(to bottom, black 0, transparent var(--glass-rim-band)),
+      linear-gradient(to top, black 0, transparent var(--glass-rim-band));
+    mask-composite: add;
+
+    transition: opacity var(--duration-base) var(--ease-brand);
+  }
+
+  /* ── Layers 2b + 4: specular, caustic, illumination ─────────────────────
+     Painted, not filtered — light ON the surface, nothing sampling the
+     backdrop. Listed top-most first, which is CSS background order:
+
+       1. ILLUMINATION. Apple lights the material from within when you touch
+          it. --u-lit is 0 at rest, so the glow exists only during interaction.
+          It is anchored at --u-px/--u-py, which resolve to the site's light
+          source. A client component used to write the live pointer position
+          into those two, which is what Apple does — the glow starts under the
+          fingertip. It was deleted along with the glass cards: a global
+          pointermove listener is a reasonable trade for forty surfaces and an
+          absurd one for four. The two properties stay as the seam to reinstate
+          it behind, if glass ever lands somewhere that earns the listener.
+       2. SPECULAR. The light source's own reflection, at --glass-light-x/y.
+       3. CAUSTIC. Light that has passed THROUGH the pane and refocused on the
+          far side, low and wide. With only the specular a glass surface reads
+          as a soap bubble; the caustic is what gives it thickness. */
+  .u-glass::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    /* Painted last of the three layers, so this is the rim you actually see.
+       `border-color` is animatable, which lets the interactive tier brighten
+       its edge on hover without repainting a gradient. */
+    border: 1px solid
+      color-mix(in srgb, var(--color-white) 62%, var(--color-line));
+    background-image:
+      radial-gradient(
+        var(--glass-glow) var(--glass-glow) at var(--u-px) var(--u-py),
+        color-mix(
+            in srgb,
+            var(--color-white)
+              calc(var(--glass-glow-strength) * var(--u-lit, 0)),
+            transparent
+          )
+          0%,
+        transparent 100%
+      ),
+      radial-gradient(
+        ellipse 44% 28% at var(--glass-light-x) var(--glass-light-y),
+        color-mix(in srgb, var(--color-white) 52%, transparent) 0%,
+        color-mix(in srgb, var(--color-white) 14%, transparent) 46%,
+        transparent 74%
+      ),
+      radial-gradient(
+        ellipse 68% 22% at 52% 104%,
+        color-mix(in srgb, var(--color-white) 40%, transparent) 0%,
+        transparent 78%
+      );
+    transition:
+      border-color var(--duration-base) var(--ease-brand),
+      background-image var(--duration-fast) linear;
+  }
+
+  /* ── The interactive tier ───────────────────────────────────────────────
+     `:focus-within` alongside `:hover` deliberately: these elements contain
+     their own focusable controls, and a keyboard user has to get the same
+     feedback the mouse gets. */
+  .u-glass-interactive {
+    cursor: pointer;
+  }
+
+  .u-glass-interactive:is(:hover, :focus-visible, :focus-within) {
+    transform: translateY(-3px);
+    box-shadow: var(--glass-shadow-lift);
+    /* --u-lit is a registered <number>, so this interpolates rather than
+       stepping. */
+    --u-lit: 1;
+  }
+
+  .u-glass-interactive:is(:hover, :focus-visible, :focus-within)::after {
+    border-color: color-mix(
+      in srgb,
+      var(--color-white) 74%,
+      var(--color-blue-200)
+    );
+  }
+
+  /* The light travels around the silhouette. One pass, not a loop — a rim
+     light that keeps orbiting is a loading spinner. `forwards` parks it back
+     where it started, and 360deg is congruent with 0deg so a pointer leaving
+     mid-sweep produces no jump. */
+  .u-glass-interactive:is(:hover, :focus-visible, :focus-within)::before {
+    animation: u-glass-sweep var(--duration-sweep) var(--ease-out-soft) forwards;
+  }
+
+  /* ── GEL PRESS ──────────────────────────────────────────────────────────
+     Apple's glass compresses under the touch and springs back PAST its rest
+     size. That overshoot is --ease-gel, and it is the difference between a
+     material with give and a div that got smaller for 200ms.
+
+     This is on the CARDS as well as the glass, and it is the one piece of the
+     material's behaviour that transferred to a solid surface intact — worth
+     being explicit about, because it is the same test everything else failed:
+     the press is pure `transform`, so it is compositor-only, costs nothing per
+     frame, and needs nothing behind the element. Lensing needed content
+     underneath and a filter per frame. A spring needs neither.
+
+     `translateY(-1px)` rather than 0 on the tiles: they are already lifted by
+     their hover, and dropping all the way back to the resting plane on press
+     reads as the card falling over rather than as being pushed.
+
+     The short duration is on the press only. Going in has to be immediate to
+     feel like contact; coming back out inherits --duration-base, and that is
+     where the spring is actually visible. */
+  .u-glass-interactive:active,
+  .u-tile-interactive:active,
+  .u-bento-card:active,
+  .u-bento-feature:active {
+    transform: scale(0.985) translateY(-1px);
+    transition-duration: 90ms;
+    transition-timing-function: var(--ease-gel);
+  }
+
+  /* Only the glass has an illumination layer to flare and a shadow token to
+     collapse; the cards keep their own hover shadow through the press. */
+  .u-glass-interactive:active {
+    box-shadow: var(--glass-shadow-press);
+    --u-lit: 1.7;
+  }
+
+  /* ── Pill-shaped glass ──────────────────────────────────────────────────
+     For the nav pill and anything else fully rounded. Only the bevel changes:
+     --glass-rim-band is a length, and a 14px band on a 44px-tall pill is two
+     thirds of its height — the pill would be all edge and no face. */
+  .u-glass--pill {
+    --glass-rim-band: 5px;
+    --glass-blur: 16px;
+    --glass-glow: 8rem;
+
+    /* ── The legibility floor ────────────────────────────────────────────
+       The nav pill is the one element on this site that flies over EVERYTHING
+       — hero, white cards, the deep blue feature card, the CTA band — while
+       carrying text. Its links are --color-ink-strong, 8.80:1 on white, which
+       sounds like plenty and is not: contrast is against whatever is behind
+       the glass, not against the page's usual colour.
+
+       Measured off the rendered page, mid-scroll, with the pill sitting over
+       the blue bento card — worst PIXEL beneath the link text, not the average:
+
+           range 1.0  / edge 56%     3.01:1     fails
+           range 0.5  / edge 68%     4.19:1     still fails
+           range 0.32 / edge 74%     4.88:1     ← these values
+           over white, unchanged     8.35:1
+
+       3.01 was a real failure, not a marginal one, and it is invisible in
+       every static screenshot: it exists only while scrolling past one card.
+       Anything that changes these two numbers has to be re-measured the same
+       way — mid-scroll, over the darkest thing on the site.
+
+       Two causes, both fixed here. The pane's tint falls to --glass-fill-edge
+       toward its lower edge, and 56% white over a near-black backdrop is a
+       mid-grey; that is raised. And the backdrop itself is range-compressed so
+       nothing dark ever reaches the pane — see --glass-range in tokens.css for
+       why that stands in for Apple's light/dark flip. */
+    --glass-range: 0.32;
+    --glass-fill-edge: 74%;
+  }
+
+  /* ── Sheet glass ────────────────────────────────────────────────────────
+     A large pane lifted over rich content, rather than a small control
+     floating on it. Used by the footer, which is pulled up over the deep blue
+     CTA band and curves across it.
+
+     ── Why the footer qualifies and a card does not ──
+
+     Same test as everything else here: is there something behind it. The
+     footer overlaps the CTA band by 48px, so its top edge genuinely has the
+     band's blue-800→blue-900 gradient underneath — real content at real
+     contrast, refracted and lensed at the curve. Below that overlap there is
+     only canvas, and the pane simply goes quiet, which is what actual glass
+     does when there is nothing behind it. Nothing is faked.
+
+     On the five routes with no CTA band (/contact, the legal pages, 404,
+     kitchen-sink) the whole pane is over canvas and the footer reads as a
+     clean light surface. That is the correct degradation, not a broken state.
+
+     ── The fill runs vertically here, and that is the whole design ──
+
+     Every other glass surface on the site is lit radially from
+     --glass-light-x/y. A sheet is different: it is transparent where there is
+     something to look through and opaque where it has to carry text, and on
+     this element those are top and bottom respectively. So the fill is a
+     vertical ramp keyed in PIXELS to the overlap depth — 34% white across the
+     48px sitting over the band, climbing to 90% by the time the wordmark and
+     the four link columns begin.
+
+     Pixels, not percentages: the ramp has to line up with the overlap and the
+     top padding, which are lengths. As a percentage it would slide every time
+     the footer's content changed height, and the blue would start bleeding up
+     behind the copy. If the overlap or `pt-` on the footer changes, these
+     three stops change with them. */
+  .u-glass--sheet {
+    /* Tighter than the 20px a pane this size would otherwise take, and
+       brighter. A wide soft band reads as haze; a narrow bright one reads as
+       an EDGE, and an edge is the entire claim being made here — that this is
+       a physical sheet lying over the band rather than a gradient painted into
+       it. With a smooth gradient behind it there is little for the refraction
+       itself to show, so the edge is doing most of the work. */
+    --glass-rim-band: 13px;
+    --glass-rim-lit: 82%;
+    --glass-rim-shade: 46%;
+    /* Apple's material simulates a THICKER pane at larger sizes — more
+       pronounced refraction, more scattering. This is the largest pane on the
+       site by a wide margin. */
+    --glass-blur: 22px;
+    /* Hotter than any other surface here. The blue arriving through this pane
+       is the only colour in it, and at the base 186% it came through as a
+       grey-lavender rather than as brand blue seen through glass. The
+       brightness goes ABOVE 1 for the same reason — the rule that it must sit
+       below 1 exists so a pane separates from a WHITE page, and the only part
+       of this one that is visibly glass has deep blue behind it instead. */
+    --glass-saturate: 235%;
+    --glass-brightness: 1.0;
+
+    /* The ramp finishes ON the overlap, not past it.
+       The first version reached 90% at 104px while the CTA band behind it ends
+       at 48px, so between those two the pane was still half-transparent over
+       plain canvas — a 56px zone of translucent white over white, which is
+       grey. It read as a dull stripe below the blue rather than as the blue
+       fading out, and it put a second soft edge under the band's own hard one.
+       Landing at 92% by 52px makes the fill's transition and the backdrop's
+       transition the same event, so there is one edge instead of two. */
+    background-image: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-white) 26%, transparent) 0px,
+      color-mix(in srgb, var(--color-white) 52%, transparent) 28px,
+      color-mix(in srgb, var(--color-white) 92%, transparent) 52px,
+      color-mix(in srgb, var(--color-white) 95%, transparent) 100%
+    );
+  }
+
+  /* The rim is on the TOP EDGE ONLY.
+     `.u-glass`'s bevel is four feathered edges, which is right for something
+     with four visible edges. This pane is full-bleed: its left and right sides
+     run off the viewport and its bottom is the end of the document, so three
+     of those four bands were 20px vertical light strips down the screen edges
+     — an artifact with nothing physical behind it. The top curve is the only
+     edge of this sheet a viewer can actually see, so it is the only one that
+     bevels.
+
+     The 1px rim on `::after` keeps all four sides. It sits exactly on the
+     viewport edge where it is invisible, and taking it to `border-top` alone
+     would reintroduce the Chromium bug this footer already has a comment about
+     — a top border combined with a 40px radius drops part of its own arc. */
+  .u-glass--sheet::before {
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      black 0,
+      transparent var(--glass-rim-band)
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      black 0,
+      transparent var(--glass-rim-band)
+    );
+  }
+
+  /* The specular is re-aimed for a wide pane — and kept FAINT.
+     `.u-glass`'s default is an ellipse at the light source, which on something
+     this wide reads as a bright smudge in one corner. Here it is a broad,
+     shallow bloom along the top edge: the same light, spread along the edge
+     that is actually catching it.
+
+     The first version ran this at 70% white and it was self-defeating. The top
+     of this pane is the ONE strip on the whole element where you can see
+     through to something — the blue band — and a white bloom painted over it
+     washed exactly that away, turning brand blue into a grey-lavender bar. The
+     bloom is light ON the glass; it must not out-shout what is behind it. The
+     rim on ::before is already carrying the edge, so this only has to suggest
+     the surface. */
+  .u-glass--sheet::after {
+    border-color: color-mix(in srgb, var(--color-white) 70%, transparent);
+    background-image:
+      radial-gradient(
+        ellipse 52% 70px at 50% 0%,
+        color-mix(in srgb, var(--color-white) 26%, transparent) 0%,
+        color-mix(in srgb, var(--color-white) 8%, transparent) 50%,
+        transparent 80%
+      ),
+      radial-gradient(
+        ellipse 26% 44px at var(--glass-light-x) 0%,
+        color-mix(in srgb, var(--color-white) 16%, transparent) 0%,
+        transparent 74%
+      );
+  }
+
+  /* ── The one performance concession ─────────────────────────────────────
+     `backdrop-filter` is billed per pixel of the element, per frame, and this
+     material asks for two of them on every card. On a desktop that is fine:
+     the layers are composited on the GPU and never invalidate, because
+     nothing about a resting card changes.
+
+     On a phone it is not fine, and the reason is specific rather than general
+     hand-waving about mobile being slow. The grids on this site are
+     single-column below `md`, so a card is the full width of the screen —
+     the rim band alone is then a ~14px frame around a ~350px box, which is
+     several times the pixel count it covers on the same card in a
+     three-across desktop grid, on a fraction of the fill rate. Every card
+     visible at once is running it.
+
+     So the second pass is dropped there and the body pass is thinned. The
+     material survives — the tint, the specular, the caustic and the rim are
+     all painted rather than filtered and cost nothing. What is lost is the
+     edge lensing, which is also the thing least visible on a screen held at
+     arm's length.
+
+     Keyed on `pointer: coarse` AND width, not width alone: a narrow window on
+     a desktop has the GPU to do this properly, and a tablet at this width
+     does not. */
+  @media (width < 48rem) and (pointer: coarse) {
+    .u-glass::before {
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+
+    .u-glass {
+      --glass-blur: 9px;
+    }
+  }
+
+  /* ── Card glass ─────────────────────────────────────────────────────────
+     The coverflow cards. This is the one card-shaped thing on the site made of
+     this material, and the box at the top of `.u-glass` should be read before
+     anything here is widened: glass needs something behind it to bend, and the
+     grid cards that were reverted had the bare canvas behind them and nothing
+     else.
+
+     ── What these have, honestly stated ──
+
+     This section was a dark band for most of this component's life, and the
+     card had the full argument then: a gradient with a hotspot behind it, the
+     icon watermark, and the other cards. The band is now the page's own canvas,
+     so two of those three are gone. What is left is:
+
+       1. EACH OTHER. The cards overlap, so the outer part of every side card
+          is lensing the card behind it. This is real and it is most of what
+          you see move when the rake turns.
+       2. THE WATERMARK. `.u-stage-field` still lays the site's icon watermark
+          across the section — stroked geometry, which is the best thing a lens
+          can be given. It is very faint on white, so this is a thin claim.
+
+     Which is to say: on this background the material is carried mainly by its
+     PAINTED layers — the rim, the specular, the caustic — rather than by
+     lensing. Those cost nothing and need nothing behind them. The backdrop
+     filter is kept because the overlap genuinely uses it, not because a card
+     with a blur on it is automatically glass. If the overlap were ever removed,
+     the filter should go with it.
+
+     On (3) and Apple's "glass never stacks on glass": that rule is about a
+     glass CONTROL sitting on a glass SURFACE — a button on a panel, where the
+     two are in different layers of the same interface and the stack reads as a
+     mistake. These are peers in one scene at different depths, which is what a
+     row of physical cards does. The giveaway that it is the right call is that
+     the overlap lands on the rim, where the specular already lives, so it
+     reads as edges catching light rather than as haze on haze.
+
+     ── The two numbers that are not aesthetic ──
+
+     --glass-blur is 12px, down from 14. Blur radius is billed per pixel per
+     frame across a (2r)² neighbourhood, and unlike every other glass surface on
+     this site these five MOVE — a drag invalidates all five backdrops on every
+     frame. The nav pill is one static pane; this is five in flight.
+
+     The rim's second filter pass is off for the same reason, and it is the same
+     trade the mobile block above makes for the same reason. What is lost is
+     edge lensing. What is kept is the conic highlight, the dispersion and the
+     specular, all painted — so the rim still reads as a bevel, it just is not
+     sampling through itself. Five filtered layers instead of ten.
+
+     ── Why the body tint is overridden ──
+
+     `.u-glass`'s body gradient is white at --glass-fill: 80%, which is right on
+     a light page and far too solid on this one. 80% white over the stage is an
+     opaque pale panel — the blue behind it stops arriving, and a pane you
+     cannot see through is not glass, it is a white card on a dark band.
+
+     So the tint stays WHITE and the fill comes down hard instead. Around a
+     fifth to a third white is the band where the pane reads as a bright
+     material in its own right while the stage still carries through it — which
+     is the whole trade this section is built on, since the blue arriving
+     through the glass is the only colour the cards have.
+
+     This was a blue-tinted dark pane first. That was the more conservative
+     reading of "glass on a dark background" and it was the wrong one here: a
+     dark card on a dark band separates from it only by its rim, so the rake
+     read as five outlines rather than five objects. White gives the material a
+     body to catch light in, and it is what makes the specular and the caustic
+     on ::after visible at all.
+
+     Text on these cards stays white and the numerals stay blue-200, which the
+     fill is chosen to protect — see the contrast note below. */
+  .u-glass--card {
+    --glass-rim-band: 10px;
+    --glass-blur: 12px;
+    /* Above 1, unlike every other surface here. The note on --glass-brightness
+       in tokens.css says to keep it below 1 so a pane separates from a WHITE
+       page; the reasoning inverts on a dark one, exactly as it does for
+       `.u-glass--sheet` where the only glass part has deep blue behind it.
+       Only just above, though — the white fill below is already doing most of
+       the lifting, and stacking a bright backdrop under a bright tint is what
+       pushes the pane past the contrast ceiling described next. */
+    /* Back below 1, which is the rule for a light page — see
+       --glass-brightness in tokens.css. At 1.14 it was lifting the white
+       canvas behind the card and washing the pane out further. */
+    --glass-brightness: 0.99;
+    --glass-saturate: 200%;
+    --glass-glow: 13rem;
+
+    border-radius: var(--radius-tile-lg);
+
+    /* Sampled from the hero's blue chess piece — the construction, the
+       percentiles and why the specular and the anti-aliased edge are excluded
+       are all recorded on --grad-glass-card in tokens.css.
+
+       It is nearly opaque, and on a light page it has to be. These stops were
+       30–62% while the section behind them was a dark band, and at those
+       values the card was mostly whatever was behind it. That is the correct
+       way to build glass and it only works one way round: 40% blue over
+       near-black is a deep blue pane, and the same 40% over the canvas is pale
+       lavender. Dropping the stage to white without touching them turned all
+       five cards into washed-out grey sheets carrying white text at about 2:1
+       — unreadable, and unreadable in a way that reads as a rendering fault
+       rather than a colour choice.
+
+       So the card supplies its own colour instead of borrowing the section's,
+       and the white copy is measured against the PANE, which is the stable
+       surface either way.
+
+       What is left of the material is the part that still has something to act
+       on: the rim, the specular, the caustic, and the backdrop lensing where
+       cards OVERLAP each other. That is a smaller claim than the dark stage
+       supported, and it is an honest one. */
+    background-image: var(--grad-glass-card);
+  }
+
+  /* ── NO BACKDROP FILTER ON THESE CARDS. IT WAS COSTING FRAMES FOR NOTHING ──
+     Both passes are off — the rim's, and the body's inherited from `.u-glass`.
+
+     The body pass was measured twice before it was removed, once for what it
+     cost and once for what it bought:
+
+       COST   Scrolling the home page, frame time over this section against the
+              rest of it: p95 33.2ms here versus 16.7ms everywhere else, four
+              dropped frames per pass. Deleting the section entirely took it to
+              16.7 / zero. Disabling this one property, and nothing else, also
+              took it to 16.8.
+
+       BOUGHT Nothing. A pixel-for-pixel diff of the section with the filter on
+              and off, same frame, same scroll position: 705,600 pixels
+              compared, largest channel difference 0/255. Not "close" —
+              identical.
+
+     The reason is in `--grad-glass-card`: the tint runs 94–97% opaque, so
+     there is essentially nothing behind the pane left to refract. A
+     backdrop-filter with nothing to sample still re-reads the page behind it
+     on every frame it is on screen, and there were TEN of them — five cards
+     and the five copies the ring needs.
+
+     What draws the card is what was always doing the drawing: the tint, the
+     conic rim, the dispersion, the specular and the caustic. All painted, all
+     free, all unchanged. This is not liquid glass any more and the comment at
+     the top of `.u-glass` is worth re-reading before anyone adds the filter
+     back — glass needs something behind it, and an opaque card has nothing.
+     If the tint ever drops back toward transparent, this decision changes with
+     it, and the diff above is how to check. */
+  .u-glass--card,
+  .u-glass--card::before {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  /* The rim can carry more of the edge than the default without turning into
+     a stroke — this pane is dark and the rim is white.
+
+     ── The specular is turned down, and it is a contrast fix ─────────────────
+
+     `.u-glass`'s specular is a 52%-white ellipse anchored at
+     --glass-light-x/y — 30%/22%, the upper left. On these cards that is not an
+     empty corner: it is exactly where the ghost numeral sits, on every card,
+     because the numeral is the first thing in the card body.
+
+     Measured on the rendered page, brightest pixel under each piece of copy on
+     the centred card:
+
+         region    background there   foreground    ratio
+         numeral   rgb(131,153,212)   blue-200      1.54  FAIL (3:1 floor)
+         title     rgb(73,103,187)    white         5.33  pass
+         list      rgb(44,77,169)     white/80      5.56  pass
+         blurb     rgb(40,70,153)     white/80      6.19  pass
+
+     Note what that background is: the bloom lifts the pane from rgb(40,70,153)
+     to rgb(131,153,212) in that corner, and at that luminance NOTHING light
+     passes — pure white measures 2.81 there. So this was never fixable by
+     changing the numeral's colour, only by moving the light or dimming it.
+
+     The light is not moved. Every specular, rim and caustic on this site
+     resolves through --glass-light-x/y so the glass is lit from the same place
+     as the badges and buttons above it, and a per-card light source would be
+     one surface lit from its own little scene. Dimming it costs the face-bloom
+     only — the rim on ::before, the
+     dispersion and this element's own 1px edge all carry on, and they are what
+     read as glass. The bloom on an opaque pane was closer to a smudge anyway.
+
+     This predates the stage going white; it was failing on the dark band too,
+     and it is invisible to the eye that checks the paragraph and finds it
+     fine. Re-measure it if the pane's tint moves again. */
+  .u-glass--card::after {
+    border-color: color-mix(in srgb, var(--color-white) 40%, transparent);
+    background-image:
+      radial-gradient(
+        var(--glass-glow) var(--glass-glow) at var(--u-px) var(--u-py),
+        color-mix(
+            in srgb,
+            var(--color-white) calc(var(--glass-glow-strength) * var(--u-lit, 0)),
+            transparent
+          )
+          0%,
+        transparent 100%
+      ),
+      radial-gradient(
+        ellipse 44% 28% at var(--glass-light-x) var(--glass-light-y),
+        color-mix(in srgb, var(--color-white) 12%, transparent) 0%,
+        color-mix(in srgb, var(--color-white) 4%, transparent) 46%,
+        transparent 74%
+      ),
+      radial-gradient(
+        ellipse 68% 22% at 52% 104%,
+        color-mix(in srgb, var(--color-white) 14%, transparent) 0%,
+        transparent 78%
+      );
+  }
+
+  /* ── The disciplines stage ──────────────────────────────────────────────
+     The section the coverflow sits on. Plain canvas — it was a full-bleed dark
+     band, which the cards were built against; see the note on `.u-glass--card`
+     for what changed when it went light and what the material rests on now.
+
+     `isolation: isolate` is load-bearing and not boilerplate: the cards'
+     `backdrop-filter` samples the nearest backdrop root, so the stage and the
+     watermark have to be painted inside the same stacking context the cards
+     are in. Note also what is NOT allowed to wrap the carousel — anything
+     carrying `[data-reveal]`, because that selector sets `filter` at all times
+     (see the MOTION block) and a filter forms a backdrop root of its own. The
+     cards would then sample an empty box and render as flat rectangles. The
+     heading above the carousel is revealed; the carousel itself is not. */
+  .u-stage {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background-color: var(--color-canvas);
+  }
+
+  /* The refraction substrate. Faint on purpose — it is not decoration the
+     viewer is meant to read, it is the geometry the lenses bend. Too bright and
+     it competes with the cards; absent and the glass has a smooth gradient
+     behind it, which blurs to the same smooth gradient. */
+  .u-stage-field {
+    position: absolute;
+    inset: -10% -5%;
+    z-index: -1;
+    pointer-events: none;
+    color: var(--color-blue-600);
+    opacity: 0.05;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     COVERFLOW
+     ═══════════════════════════════════════════════════════════════════════
+
+     Geometry only. Every per-card value — position, tilt, depth, opacity and
+     how near the card is to the centre — is written straight onto the element
+     by the paint loop in components/ui/Coverflow.tsx, because sixty React
+     renders a second to move five cards is sixty renders React never needed to
+     see. What lives here is the scene those numbers are written into, and the
+     two derived effects that are cheaper as CSS than as more JS writes.
+
+     ── The one structural rule ──
+
+     `.u-cf-cell` is a POSITIONER and `.u-cf-card` is the glass. They are two
+     elements and they must stay two, because both want `transform` and on
+     different clocks: the cell's is rewritten every animation frame by the
+     drag, and the card's is the hover lift and gel press that `.u-glass` and
+     `.u-glass-interactive` already own. Collapse them into one element and the
+     hover state fights the paint loop — the lift lands for a single frame and
+     is then overwritten. */
+  .u-cf {
+    /* Card WIDTH. Everything else in the scene derives from it — the pitch
+       between cards, how far they recede, the perspective distance — so the
+       whole rake scales with one number instead of needing a breakpoint. */
+    --cf-card: clamp(13.5rem, 21vw, 19rem);
+    --cf-height: calc(var(--cf-card) * 1.36);
+  }
+
+  /* Taller in proportion on a narrow screen, and not for looks: the card is at
+     the bottom of its clamp there, so the same copy wraps to noticeably more
+     lines inside a box that got shorter with it. At 1.36 the blurb and the
+     "Explore" line were clipped by the card's own `overflow: hidden` — the copy
+     was simply gone, with nothing to indicate it. The aspect the rake wants and
+     the aspect the text needs pull in opposite directions as the card narrows;
+     this follows the text, because the rake is flattened at this width anyway.
+
+     The line clamp on the blurb is the belt to this braces. It is what keeps a
+     future edit to `content/pillars.ts` from silently reintroducing the same
+     clipping — the clamp truncates visibly, an overflow does not. */
+  @media (width < 48rem) {
+    .u-cf {
+      --cf-height: calc(var(--cf-card) * 1.78);
+    }
+  }
+
+  .u-cf-frame {
+    /* Block padding, and it is not whitespace: the cards throw a wide ambient
+       shadow, and the frame has to clip the ends of the rake without also
+       clipping those shadows off the top and bottom of every card. Trimmed to
+       the shadow's actual reach — --glass-shadow-lift extends 56px down with a
+       -18px spread, so ~38px of it is visible and 36px of padding covers all
+       but the last faint row. Below about 2rem the lift starts being cut. */
+    padding-block: 2.25rem;
+    outline: none;
+    /* ── ONE HOVER CURSOR FOR THE WHOLE REGION ────────────────────────────
+       This was `grab`, and the cards on top of it are `pointer` — from
+       `.u-glass-interactive`, and again from the UA stylesheet on the anchor
+       filling each one. So the cursor changed several times across one sweep
+       of the rake, and it changed in places nothing had happened: the gaps
+       that open between cards as they scale down are frame, not card, and a
+       card sliding to the centre puts a different element under a hand that
+       is holding perfectly still.
+
+       Matching the cards instead of fighting them is what settles it. The
+       whole frame is one interactive region — every part of it responds to a
+       press, and every card in it responds to a hover — so it gets one hover
+       cursor, and the only thing that changes it is a gesture: `grabbing`,
+       below, once the pointer is actually down.
+
+       `grab` is what is given up, and it was buying less than it looked.
+       Dragging is the third way into this carousel behind hovering and
+       clicking, it is unavailable on touch where the cursor does not exist,
+       and the press still announces itself the moment it begins. */
+    cursor: pointer;
+    /* The horizontal axis is the carousel's. The page keeps the vertical one,
+       so a touch drag down the page still scrolls instead of being swallowed. */
+    touch-action: pan-y;
+    overflow: hidden;
+    perspective: calc(var(--cf-card) * 3.4);
+  }
+
+  .u-cf-frame:active {
+    cursor: grabbing;
+  }
+
+  .u-cf-track {
+    position: relative;
+    height: var(--cf-height);
+    transform-style: preserve-3d;
+    user-select: none;
+  }
+
+  .u-cf-cell {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: var(--cf-card);
+    height: var(--cf-height);
+    /* No `transition` here, deliberately. The paint loop owns this transform
+       and eases it itself; a CSS transition on top would be a second easing
+       function fighting the first, and a drag would then lag the pointer by
+       exactly the transition duration. */
+  }
+
+  /* ── `will-change` is a promise, not a hint, and it is expensive to keep ──
+     This used to sit on `.u-cf-cell` unconditionally, which meant ten cells —
+     five cards and the ring's five copies — each held their own composited
+     layer for the entire life of the page, including the whole time nobody was
+     touching the carousel. Layer count is the thing WebKit is least forgiving
+     about, and this section is the only place on the site that asks for ten.
+
+     The class is added by the paint loop while the spring is running and taken
+     off when it rests, which is what `will-change` is actually for: tell the
+     compositor what is ABOUT to change, then stop telling it.
+
+     ── …but not FIRST while the spring is running ──────────────────────────
+     Promoting a layer is not free and it is not instant: the compositor has to
+     allocate the surface and rasterise the card into it — five gradients, a
+     conic rim and a column of text apiece. Asked for on the first frame of the
+     move, that work lands inside the first frame of the move, which is exactly
+     where a hitch is most legible: the rake sets off, stalls for a frame or
+     two, and then runs. It reads as weight the carousel does not have.
+
+     So the promise is also made on hover of the FRAME — before the pointer has
+     reached a card, and therefore before anything has been asked to move. By
+     the time a hover-intent timer fires 32ms later the layers already exist and
+     the spring's first frame is pure compositing.
+
+     The cost is layers held while a pointer rests over the section, and that is
+     bounded by the `display: none` below: the ring's copies are out of the tree
+     unless the rake actually needs them, so this is five or six surfaces, not
+     ten. The `[data-moving]` half stays because a keyboard user and the
+     pagination dots move the rake without ever hovering it — and it is keyed
+     on `[data-live]` rather than `[data-moving]`, because those two now part
+     company at the end of a move: the rake stops LOOKING as though it is
+     moving a little before the integrator stops moving it, and the layer has
+     to survive the difference or the last sub-pixel of every move repaints.
+
+     ── Both properties, because the loop writes both ────────────────────────
+     `transform` and `opacity` are the only two things a compositor can change
+     without waking a rasteriser, and the paint loop writes exactly those two
+     per frame. Naming only transform promoted the layer but left the opacity
+     write as an ordinary style change — a repaint of the card's gradients and
+     text on every frame of every move, which is precisely what the promotion
+     was bought to avoid. */
+  .u-cf-frame:hover .u-cf-cell,
+  .u-cf-track[data-live='true'] .u-cf-cell {
+    will-change: transform, opacity;
+  }
+
+  /* The glass surface. Rendered by the carousel; carries no content of its own.
+     See the note on CARD_CLASS in components/ui/Coverflow.tsx for why the
+     material wraps the caller's card instead of being applied to it. */
+  .u-cf-card {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  /* ── THE MATERIAL'S HOVER BELONGS TO THE CENTRED CARD ONLY ───────────────
+     This is the single biggest thing that was making the rake feel heavy, and
+     it is not in the motion code at all.
+
+     `.u-cf-card` is `.u-glass-interactive`, so hovering ANY card ran the full
+     glass treatment on it: `--u-sweep` animating 0→360deg for 900ms, which
+     repaints a full-card CONIC GRADIENT every frame; `--u-lit` stepping to 1,
+     which repaints the illumination radial on ::after; and a lift whose
+     box-shadow transitions across --duration-base, repainting a 56px blur.
+
+     Every one of those is a paint, none of them is compositable, and all of
+     them were being started at the exact instant the spring set off — so the
+     one frame budget was being spent twice over on the same card.
+
+     And it compounds, which is why the far cards were the worst of it.
+     Bringing a card in slides OTHER cards under a pointer that has not moved,
+     each `:hover` in turn starts its OWN 900ms sweep, and none of them are
+     finished by the time the next begins. A two-card hover — the end cards, in
+     other words — had three conic gradients repainting per frame on top of the
+     rake itself. That is the "shitty animation on the last card": not a
+     geometry bug, a paint budget spent three times.
+
+     None of it was legible anyway. A side card is rotated up to 58° away and
+     is about to leave; a rim light travelling around its silhouette is detail
+     nobody can resolve on a surface at that angle, moving.
+
+     ── WHAT IS CUT IS THE PAINT WORK, NOT THE ACKNOWLEDGEMENT ──────────────
+
+     The first version of this cut the LIFT as well, and that was wrong in a
+     way worth recording, because it made the rake feel worse in a different
+     way than the sweeps did. A side card then answered a hover with nothing at
+     all: the pointer arrived, 32ms passed, and the whole rake moved. There was
+     no moment in between that connected the two, so the slide read as
+     something the section decided to do rather than something the hover
+     caused.
+
+     The lift is a bare `transform`. It is compositor work, it runs once per
+     hover rather than per frame, and a transform TRANSITION is promoted
+     automatically for its duration — so it costs approximately nothing and it
+     is the entire difference between a rake that responds and one that acts on
+     its own. The gel press is kept for the same reason, and matters more on
+     touch, where it is the only acknowledgement a tap gets before the card
+     starts travelling.
+
+     So the rule below cuts only what repaints. The centred card keeps the
+     whole material, because there the hover is the only thing happening. */
+  .u-cf-cell:not([data-cf-active='true']) .u-cf-card {
+    /* The lift's SHADOW, not the lift. `--glass-shadow-lift` is a 56px blur,
+       and transitioning a shadow that size repaints the card's whole box for
+       the duration; the 3px of travel it accompanies costs nothing. */
+    box-shadow: var(--glass-shadow);
+    /* The illumination on ::after. Pinning it is worth more than the flare it
+       costs: `--u-lit` is read inside a `color-mix` inside a `radial-gradient`,
+       and `.u-glass::after` TRANSITIONS `background-image` — so every change to
+       it cross-fades two freshly rendered gradient images across the whole
+       card, which is the most expensive thing on this element by some way. */
+    --u-lit: 0;
+  }
+
+  .u-cf-cell:not([data-cf-active='true']) .u-cf-card::before {
+    /* The 900ms conic sweep. */
+    animation: none;
+  }
+
+  /* And the rim brightening, which transitions `border-color` and therefore
+     repaints the pseudo-element — its three gradients included — for the whole
+     of --duration-base. The value restated here is the resting one from
+     `.u-glass--card::after`; it is not a new colour. */
+  .u-cf-cell:not([data-cf-active='true']) .u-cf-card::after {
+    border-color: color-mix(in srgb, var(--color-white) 40%, transparent);
+  }
+
+  /* A press anywhere on the rake is a drag until it proves otherwise, so the
+     cards' `pointer` gives way for the duration. Without this the frame's
+     `grabbing` was covered by every card on top of it, and the one gesture
+     where the cursor SHOULD change was the one where it did not. */
+  .u-cf-frame:active .u-cf-card,
+  .u-cf-frame:active .u-cf-card-body {
+    cursor: grabbing;
+  }
+
+  /* ── AND NOTHING REPAINTS WHILE THE RAKE IS IN FLIGHT ────────────────────
+     The rule above leaves one case: `[data-cf-active]` flips on the card
+     ARRIVING at the centre while the spring is still finishing, so the last
+     stretch of every move could still hand a card its sweep and its shadow
+     transition mid-flight.
+
+     While the rake is moving the only thing that may change is what the
+     compositor can do without touching a rasteriser — transform and opacity.
+     So the card keeps its TRANSFORM transition and loses its box-shadow one:
+     the shadow snaps, which at 360ms of travel with five cards turning is not
+     a thing anyone can see, and the frame it buys back is. The transform stays
+     because the hover lift rides on it, and a lift that snaps is a lift that
+     reads as a glitch — it is also free, which is the whole reason the
+     distinction is drawn here rather than suppressing both.
+
+     `.u-cf-detail` is deliberately NOT in here. Its sequence is opacity and
+     transform — compositor-only, so it costs nothing — and it starts while the
+     card is still arriving. Suppressing its transitions until the spring rests
+     would leave the element already holding its final value when they came
+     back, and the sequence would simply never play. */
+  .u-cf-track[data-moving='true'] .u-cf-card {
+    transition: transform var(--duration-base) var(--ease-liquid);
+  }
+
+  .u-cf-track[data-moving='true'] .u-cf-card::before {
+    animation: none;
+  }
+
+  /* The caller's link, filling the glass. It holds the padding and the column
+     layout, so the whole card area is inside the anchor — which is what keeps
+     the link's accessible name the card's own text rather than needing an
+     aria-label, and what makes the entire surface a real click target instead
+     of a stretched overlay. */
+  .u-cf-card-body {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+    padding: 1.5rem;
+    text-align: left;
+  }
+
+  /* ── EVERYTHING A CARD DOES ON ARRIVAL IS A TRANSITION ──────────────────
+     The detail block below, and the lede's rise further down, are both keyed
+     off `[data-cf-active]` — a flag the paint loop flips once per card per
+     move, not a number it writes every frame.
+
+     That is a performance rule as much as a design one, and it is the rule the
+     whole section rests on. The paint loop may write `transform` and `opacity`
+     to a promoted cell and nothing else; anything a CARD does is a CSS
+     transition off a flag. Transitions on transform and opacity are run by the
+     compositor and promote their element automatically, so the arrival
+     sequence costs nothing per frame. A JS-written value feeding the same
+     properties costs a repaint of the card on every frame it changes — see the
+     note on `.u-cf-lede`, which is where that was learned. */
+  /* ── The detail arrives as a SEQUENCE, not a crossfade ───────────────────
+     This used to be `opacity: var(--cf-near)` — the block's opacity tied
+     directly to how near the card was to the middle. It was correct and it was
+     the flattest thing in the section: the card slid in and its whole lower
+     half faded up with it, in lockstep, one gesture with one beat.
+
+     Real arrivals have an order. The card lands, and THEN it fills: the rule
+     and the block behind it first, the blurb, then the invitation to act. Each
+     step is small — 90ms apart, half a centimetre of travel — and together
+     they are the difference between a card that appeared and a card that
+     settled.
+
+     A sequence needs a moment to start from, which is the second reason a flag
+     drives this and not a value that slides continuously with the drag. */
+  .u-cf-detail {
+    opacity: 0;
+    transition: opacity var(--duration-base) var(--ease-brand);
+  }
+
+  .u-cf-cell[data-cf-active='true'] .u-cf-detail {
+    opacity: 1;
+    /* After the card has stopped, not during. */
+    transition-delay: 110ms;
+  }
+
+  .u-cf-detail > * {
+    transform: translateY(0.6rem);
+    transition: transform var(--duration-slow) var(--ease-brand);
+  }
+
+  .u-cf-cell[data-cf-active='true'] .u-cf-detail > * {
+    transform: none;
+  }
+
+  .u-cf-cell[data-cf-active='true'] .u-cf-detail > *:first-child {
+    transition-delay: 150ms;
+  }
+
+  .u-cf-cell[data-cf-active='true'] .u-cf-detail > *:last-child {
+    transition-delay: 240ms;
+  }
+
+  /* Depth of field — see the paint loop for why it is on the copy and not on
+     the pane, and why the value is quantised.
+
+     ── The lens refocuses AFTER the move, not during it ─────────────────────
+
+     A `filter` is the one property here that a compositor cannot honour on its
+     own: changing its value re-RASTERISES the element it is on, and the
+     element it is on is a column of text. Driven per frame from the paint
+     loop — five cards, every frame, for the whole of a move — it was the
+     rake's per-frame cost, and it was being paid on top of everything else
+     happening at that moment.
+
+     It is also the one effect nobody can read while the thing is moving.
+     Depth of field is a cue about where a card IS; five cards mid-slide have
+     not arrived anywhere yet.
+
+     So the loop stops writing `--cf-blur` while the spring runs, the rule
+     below drops the filter outright for the duration, and the blur is written
+     once when the rake lands and eased in from there. What it costs is one
+     transition on four cards with nothing else on screen moving. What it looks
+     like is a lens pulling focus once the shot has settled — which is what the
+     effect was imitating in the first place. */
+  .u-cf-card-body {
+    filter: blur(var(--cf-blur, 0px));
+    transition: filter var(--duration-base) var(--ease-brand);
+  }
+
+  .u-cf-track[data-moving='true'] .u-cf-card-body {
+    filter: none;
+    transition: none;
+  }
+
+  /* The focused card carries no filter at all — not even a zero one. See the
+     note in the paint loop: it is a render surface saved, and subpixel
+     antialiasing restored on the one card whose text is meant to be read. */
+  .u-cf-card[data-sharp='true'] .u-cf-card-body {
+    filter: none;
+  }
+
+  /* The card in focus sits higher. Set as the shadow TOKEN rather than as a
+     box-shadow, so the hover and press states above keep their own values
+     instead of fighting this one on specificity. */
+  .u-cf-cell[data-cf-active='true'] {
+    --glass-shadow: var(--glass-shadow-lift);
+  }
+
+  /* The same arrow behaviour as every other link on the site. It was the one
+     arrow that did not move. */
+  .u-cf-arrow {
+    transition: transform var(--duration-base) var(--ease-brand);
+  }
+
+  .u-cf-card:hover .u-cf-arrow {
+    transform: translateX(4px);
+  }
+
+  /* Rises as the card takes centre, so the copy settles INTO the space the
+     detail block is about to occupy rather than the detail arriving under a
+     block that never moved.
+
+     ── This used to track the distance continuously, and it could not stay ──
+
+     It was `translateY(calc(var(--cf-near) * -0.5rem))`, off a `--cf-near` the
+     paint loop wrote to the card every frame. Both halves of that were costing
+     a repaint of the whole card, per frame, per card:
+
+       • `--cf-near` is a custom property, so it INHERITS — writing it to the
+         card invalidated style on all fifteen elements inside it.
+       • The transform it fed lands on a plain `<span>`, which has no layer of
+         its own. A transform on an unpromoted element is not a compositor
+         change; it is a paint invalidation of whatever layer it sits in — and
+         that layer is the card, gradients and text and all.
+
+     So the one continuously-tracked thing in the scene was also the most
+     expensive, and it was running on the two cards nearest the middle for the
+     whole of every move.
+
+     Keyed off `[data-cf-active]` it is a plain transform TRANSITION, which
+     browsers run on the compositor and promote the element for automatically —
+     the same treatment `.u-cf-detail` above already gets. It also reads better
+     than it measured: the rise is now part of the arrival sequence rather than
+     a fourth thing happening on its own clock. */
+  .u-cf-lede {
+    transition: transform var(--duration-slow) var(--ease-brand);
+  }
+
+  .u-cf-cell[data-cf-active='true'] .u-cf-lede {
+    transform: translateY(-0.5rem);
+  }
+
+  /* ------------------------------------------------------------------ TILE
+     White card separated from the canvas by border + shadow, not by fill —
+     exactly as in the mockups, where canvas and tile are near-identical.
+
+     This is a SOLID surface and is meant to stay one. It was briefly made of
+     `.u-glass`; see the box at the top of that class for what went wrong. */
+  .u-tile {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-tile);
+    box-shadow: var(--shadow-tile);
+    transition:
+      transform var(--duration-base) var(--ease-brand),
+      box-shadow var(--duration-base) var(--ease-brand),
+      border-color var(--duration-base) var(--ease-brand);
+  }
+
+  .u-tile-interactive:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-tile-hover);
+    border-color: var(--color-silver-300);
+  }
+
+  /* ------------------------------------------------------------------ DECK
+     The raked stack of commitments in "Why choose us". Adapted from
+     `display-cards` on 21st.dev — see components/ui/DisplayCards.tsx for what
+     survived the port and what had to be re-derived for a white canvas.
+
+     ── The layout is a fallback with an enhancement on top, not the reverse ──
+
+     The base rule below is a plain card grid. The stack is switched on only
+     inside the media query, and that query asks for three things at once:
+
+       width >= 64rem    the rake needs roughly 30rem of column to exist in
+       hover: hover      \  the deck hides five of six cards behind the sixth,
+       pointer: fine     /  and hover is what gives them back
+
+     The last two are the important pair. A tablet in landscape clears the
+     width test and has no hover, so gating on width alone would ship a device
+     five commitments it has no gesture to read. Written this way, the
+     un-stacked grid is what any device that cannot hover gets — including a
+     desktop browser being driven by touch. */
+  .u-deck {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* The surface itself is `.u-tile`, carried on the same element from the JSX,
+     so the deck cannot drift away from every other card on the site. This
+     class only ever adds the padding and, below, the geometry. */
+  .u-deck__card {
+    padding: 1.125rem 1.25rem 1.25rem;
+  }
+
+  @media (width >= 40rem) {
+    .u-deck {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (width >= 64rem) and (hover: hover) and (pointer: fine) {
+    .u-deck {
+      /* Card width is fluid because the whole scene derives from it: the
+         offsets are absolute, so a fixed card would leave the rake either
+         cramped or overflowing between `lg` and a wide desktop. */
+      --deck-w: clamp(16rem, 26vw, 21.5rem);
+      /*
+       * ── The two numbers that decide whether this is a deck or a staircase ──
+       *
+       * They are a RATIO, not two independent values, and the first pass got
+       * the ratio backwards: 1.5rem across against 4.5rem down. Six cards then
+       * spread over 520px of mostly-vertical travel and the section read as a
+       * ladder of thin strips with a card at the bottom — the thing it is
+       * meant to look like is one object, seen at an angle.
+       *
+       * The reference deck this is adapted from fans WIDER than it falls, and
+       * that is what makes it read as a hand of cards. So: x is up, y is down,
+       * and y is now the smaller of the two. 544px wide against 412px tall.
+       *
+       * x has to be fluid for the same reason the card width is — at `lg` the
+       * column is only ~460px and a fixed 2.5rem step would hang the last card
+       * out of it.
+       */
+      --deck-x: clamp(1.25rem, 2.6vw, 2.5rem);
+      /* Pitch is not a taste value: it is exactly the height of a card's title
+         row — 1.125rem of padding plus the 30px `xs` badge, so 3.0rem — plus
+         a little clearance. What a buried card shows is therefore its badge
+         and its claim, cut off cleanly below them rather than through a line
+         of body copy. Trim it and the next card starts slicing the badge;
+         this is why the badge had to come down to `xs`. */
+      --deck-y: 3.25rem;
+      /* Half the original's 8deg. See DisplayCards.tsx. */
+      --deck-skew: -4deg;
+      /* Open slow, close quicker. Reasoning on `--deck-t` below. */
+      --deck-in: 520ms;
+      --deck-out: 360ms;
+      /* How far the cards behind a raised one step down so its strip stays
+         reachable. Derived below, on the rule that applies it. */
+      --deck-open: 7.5rem;
+
+      grid-template-columns: none;
+      grid-template-areas: 'stack';
+      gap: 0;
+      /* `max-content` + auto margins centres the rake in its column. The two
+         paddings reserve the ground the transforms travel over; without them
+         the last card hangs outside the container and the section below it
+         collides with the deck. */
+      width: max-content;
+      max-width: 100%;
+      margin-inline: auto;
+      padding-right: calc((var(--deck-count) - 1) * var(--deck-x));
+      /* The second term is the OPEN state's travel, reserved at rest.
+         Transforms do not reflow, so without it the opened deck simply
+         overhangs — and it did: measured 16px into the grey band of the
+         section below, where the next section (later in the DOM, and
+         positioned) paints straight over the last card and clips it. Paying
+         for the travel in layout is what keeps an opened deck inside its own
+         section at every width. */
+      padding-bottom: calc((var(--deck-count) - 1) * var(--deck-y) + var(--deck-open));
+      /* The hovered card raises itself above the rest of the deck and nothing
+         else on the page. */
+      isolation: isolate;
+      /*
+       * The open-state reserve above is layout the eye cannot see: it is all
+       * below the cards, so `items-center` on the row centres a box whose
+       * visible mass sits in its top two-thirds, and the deck reads as riding
+       * high against the headline beside it. Handing half the reserve back as
+       * a paint-only offset puts the CARDS' centre on the row's centre rather
+       * than the padded box's.
+       *
+       * A transform and not margin or padding, because either of those would
+       * grow the row by the amount they shift — which re-opens the gap they
+       * were meant to close, and only half-corrects for twice the height.
+       */
+      transform: translateY(calc(var(--deck-open) / 2));
+    }
+
+    .u-deck__card {
+      grid-area: stack;
+      width: var(--deck-w);
+      /* Default `stretch` alignment gives every card the tallest card's
+         height, so the rake stays an even pitch instead of stepping wherever
+         a description runs to three lines. */
+      min-height: 8.5rem;
+      z-index: var(--i);
+      /* Lift is a separate custom property rather than part of the hover's
+         own `transform` because the resting transform IS the layout here.
+         Overriding the whole transform on hover — or nulling it under Reduce
+         Motion, which is what this file does to every other card — would send
+         the card back to the top of the stack instead of lifting it. */
+      --deck-lift: 0rem;
+      --deck-push: 0rem;
+      transform: translate3d(
+          calc(var(--i) * var(--deck-x)),
+          calc(var(--i) * var(--deck-y) - var(--deck-lift) + var(--deck-push)),
+          0
+        )
+        skewY(var(--deck-skew));
+
+      /*
+       * ── Timing ──
+       *
+       * The card is a `.u-tile`, so it arrived with the tile's 260ms
+       * (`--duration-base`). That number is right for what it was written for:
+       * a tile lifting 4px on hover. Here the same 260ms has to carry a card
+       * 20px up AND the five behind it 120px down, and at that distance it
+       * reads as the deck snapping open rather than opening.
+       *
+       * Restated as a rate: the tile moves 4px in 260ms, this moves 120px. It
+       * was never the same gesture, it just inherited the same clock.
+       *
+       * ── Why two durations ──
+       *
+       * Opening is the part meant to feel considered, so it takes the long
+       * one. Closing is not a performance — it is the deck getting out of the
+       * way, usually because the pointer is already on its way somewhere else,
+       * and a 520ms retreat there reads as lag rather than luxury. Moving
+       * between two cards overlaps a 360ms close with a 520ms open, which is
+       * what keeps the deck feeling continuous instead of queued.
+       *
+       * One `--deck-t` read by every transition below, rather than a duration
+       * written out per rule: the card's travel, the dim and the copy have to
+       * land together, and three separately-typed durations are three chances
+       * for one of them to be edited alone.
+       *
+       * ── Why the curve changed too, and why the duration alone was not it ──
+       *
+       * The first pass at this only lengthened 260ms to 520ms and kept
+       * `--ease-brand`. It measured as barely different: half the 120px travel
+       * was still gone in 98ms, because an expo-out spends its duration
+       * settling, not travelling. Doubling the clock doubled the settle and
+       * left the departure exactly as abrupt. `--ease-glide` is the fix —
+       * roughly half the distance at half the time. See app/tokens.css.
+       */
+      --deck-t: var(--deck-out);
+      transition:
+        transform var(--deck-t) var(--ease-glide),
+        box-shadow var(--deck-t) var(--ease-glide),
+        border-color var(--deck-t) var(--ease-glide);
+    }
+
+    /*
+     * Two independent fades, and they are separate for a reason.
+     *
+     * `--deck-dim` recedes a buried card as a whole. 0.55 was the first try
+     * and was too far: the claims stopped reading as receding and started
+     * reading as disabled, and the chrome badges went to a flat grey, which is
+     * the one thing a metal treatment must not do.
+     *
+     * `--deck-copy` hides the body paragraph of a buried card outright, and
+     * that one is a bug fix rather than a refinement. Each card sits 2.5rem to
+     * the LEFT of the one covering it, so a 40px-wide vertical sliver of every
+     * buried card stays visible — wide enough to show two or three characters
+     * of each line of its paragraph and nothing more. Six cards of that down
+     * the left edge of the deck read as a rendering fault, not as depth. With
+     * the paragraph gone the sliver is a clean white card edge with a border
+     * and a shadow on it, which is exactly what the stack is supposed to look
+     * like. The text is still in the DOM, still read in full by a screen
+     * reader, and still one hover or one Tab away.
+     *
+     * Both live on the card and are read by the children, so the state lives
+     * in ONE rule per state instead of three selectors each. `opacity` still
+     * transitions normally — the var is substituted at computed-value time,
+     * so what animates is 0.72 → 1, not the custom property.
+     */
+    .u-deck__card {
+      --deck-dim: 0.72;
+      --deck-copy: 0;
+    }
+
+    .u-deck__body {
+      opacity: var(--deck-dim);
+      transition: opacity var(--deck-t) var(--ease-glide);
+    }
+
+    .u-deck__copy {
+      opacity: var(--deck-copy);
+      /*
+       * The paragraph resolves a beat after the card starts moving, and only
+       * on the way IN. Text fading up while the card is still travelling is
+       * the thing that reads as two animations happening at once; letting the
+       * card commit first reads as one.
+       *
+       * On the way out the lag is zero — the card reverts to `--deck-copy-lag:
+       * 0ms` the instant it stops being hovered — because copy left behind on
+       * a retreating card is the same mismatch in reverse.
+       */
+      transition: opacity var(--deck-t) var(--ease-glide) var(--deck-copy-lag, 0ms);
+    }
+
+    /* The card on top is the one already readable, so it rests at the top of
+       the elevation scale rather than needing a hover to get there. */
+    .u-deck__card:last-child,
+    .u-deck__card:hover,
+    .u-deck__card:focus-visible {
+      --deck-dim: 1;
+      --deck-copy: 1;
+    }
+
+    .u-deck__card:last-child {
+      box-shadow: var(--shadow-tile-hover);
+    }
+
+    .u-deck__card:hover,
+    .u-deck__card:focus-visible {
+      --deck-lift: 1.25rem;
+      z-index: 20;
+      border-color: var(--color-silver-300);
+      box-shadow: var(--shadow-tile-hover);
+    }
+
+    /*
+     * ── The deck has to open, or picking a card buries the next one ──
+     *
+     * A card at rest shows a 3.25rem strip because the card in FRONT of it
+     * covers the rest. Raise one to the top of the stack and it stops being
+     * covered — but it also stops covering, and its full 11rem body now lands
+     * squarely on the strip belonging to the card behind it. That card
+     * disappears completely: not dimmed, not clipped, gone, with no strip left
+     * to aim at. Reported from the live page, and the arithmetic agrees —
+     * one pitch of 3.25rem against a body eight times that.
+     *
+     * So every card after the raised one steps down and the deck opens. The
+     * value is the card's settled height less one pitch, which is what puts
+     * the next strip clear of the raised card's bottom edge rather than merely
+     * near it. It is a tuned constant and not a calc() because the height it
+     * derives from is decided by the tallest card's copy at the current column
+     * width — three lines of it here, four at `lg` where the column is
+     * narrower. 7.5rem covers the four-line case; being a few px short would
+     * only trim the exposed strip, not hide it.
+     *
+     * The travel is reserved in the deck's own padding-bottom — see there.
+     *
+     * ── Why this does not thrash ──
+     *
+     * Opening moves the next strip DOWN to meet the pointer, and the pointer
+     * then leaves the raised card, which closes the deck and moves that strip
+     * back UP by the same 7rem. The obvious fear is a loop. There is none: the
+     * strip is the top of an 11rem card, so wherever in that 7rem of travel
+     * the pointer is, it is still inside the card it just entered — and that
+     * card is now the raised one, on top of everything. Traced in both
+     * directions, down the deck and back up it.
+     *
+     * NOT cancelled under Reduce Motion, for the same reason the z-index swap
+     * is not: it is what makes the next card reachable at all. It simply
+     * arrives instantly there, like every other transition in that block.
+     */
+    .u-deck__card:hover ~ .u-deck__card,
+    .u-deck__card:focus-visible ~ .u-deck__card {
+      --deck-push: var(--deck-open);
+    }
+
+    /*
+     * The open clock, and the siblings have to be on it too.
+     *
+     * The raised card and the five stepping out of its way are one movement,
+     * so if only `:hover` switched to `--deck-in` the card would rise over
+     * 520ms while the deck beneath it opened in 360ms — the deck arriving
+     * before the card it opened for. The `~` selectors are not a nicety here;
+     * they are what makes it a single gesture.
+     *
+     * Reverting is automatic: drop the hover and every one of these elements
+     * falls back to `--deck-t: var(--deck-out)`, so the close takes the short
+     * duration without a second rule describing it.
+     */
+    .u-deck__card:hover,
+    .u-deck__card:focus-visible,
+    .u-deck__card:hover ~ .u-deck__card,
+    .u-deck__card:focus-visible ~ .u-deck__card {
+      --deck-t: var(--deck-in);
+      --deck-copy-lag: 90ms;
+    }
+  }
+
+  /* -------------------------------------------------------------- TIMELINE
+     "How we work", adapted from `3d-interactive-timeline` on 21st.dev. What
+     survived the port and what did not is in components/ui/Timeline.tsx.
+
+     ── Mobile first, and the rail is on the left ──
+
+     The alternating layout needs two card-widths plus a rail, so below `lg`
+     there is one column with the rail down the left and every card beside it.
+     That is not a fallback bolted on afterwards: a centred rail on a phone
+     leaves two ~40% columns, and a photograph plus a heading does not fit in
+     one. */
+  .u-timeline {
+    --rail: 1px;
+    --node: 2.75rem;
+    /* Where the rail sits in single-column mode, and therefore the centre of
+       the node. Everything else in this block is measured off it. */
+    --rail-x: calc(var(--node) / 2);
+    /* The two values the rail's length is computed from. They drive the real
+       spacing immediately below, so the rail and the layout share one source. */
+    --step-gap: 2.5rem;
+    --step-overlap: 0rem;
+
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--step-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /*
+   * The rail is drawn per item, from this item's node to the next one's, and
+   * the last item does not draw one. So it ends exactly at the last node for
+   * any number of steps.
+   *
+   * Two earlier versions of this got it wrong in the same way. The dashed
+   * connector this section used before inset its `right` to a hand-computed
+   * `calc(25% - 1.5rem)`, true only for exactly four items in exactly four
+   * columns. Replacing it with one absolute span over the whole list and a
+   * gradient fading out at 78% just moved the guess into the gradient — it
+   * still overshot the last node by around 270px, and 78% is only "correct"
+   * while there are four steps of roughly equal height.
+   *
+   * The offset below is arithmetic, not a guess: from an item's bottom edge,
+   * the next node's centre is `gap - overlap + node/2` further down, so the
+   * rail's `bottom` inset is the negative of that. Both terms are the same
+   * variables that drive the actual spacing, a few rules down, so the rail
+   * cannot drift out of step with the layout it is describing.
+   */
+  .u-timeline__item:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: var(--rail-x);
+    top: calc(var(--node) / 2);
+    bottom: calc(var(--step-overlap) - var(--step-gap) - var(--node) / 2);
+    width: var(--rail);
+    background-color: var(--color-blue-200);
+    /* Draws downward out of its own node as the step lands, so the line
+       arrives at the next node rather than being there before it. The delay is
+       what sequences the two — card first, then the line it leaves behind. */
+    transform: translateX(var(--rail-shift)) scaleY(var(--rail-grow));
+    transform-origin: top;
+    transition: transform var(--duration-slow) var(--ease-out-soft) 140ms;
+  }
+
+  .u-timeline__item {
+    position: relative;
+    padding-left: calc(var(--node) + 1.5rem);
+
+    /*
+     * ── The reveal ──
+     *
+     * The site's default is a 10px rise over 380ms, which is right for a
+     * paragraph and invisible under a 612px photograph — four of these went
+     * past reading as completely static. So the timeline overrides the two
+     * things that make it read: how far a card travels, and how long it takes.
+     *
+     * `--duration-reveal` is the same custom property the shared [data-reveal]
+     * transition is declared against, so setting it here retimes this element
+     * without a second transition rule that could drift from it.
+     *
+     * The direction is the part worth having: each card enters from ITS OWN
+     * side, which is what the component this is adapted from does
+     * (`x: isEven ? 50 : -50`). Both columns sliding the same way reads as the
+     * page shifting; opposite ways reads as the rail dealing them out.
+     */
+    --duration-reveal: 680ms;
+    --reveal-from: -1.25rem;
+
+    /* Composed transforms, so the reveal can animate the rail and the node
+       without overwriting the offsets that position them. Both are set to
+       their resting values here and only overridden while hidden. */
+    --rail-shift: 0px;
+    --rail-grow: 1;
+    --node-shift: 0px;
+    --node-grow: 1;
+  }
+
+  .u-timeline__node {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: var(--node);
+    height: var(--node);
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-line);
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-tile);
+    font-family: var(--font-display);
+    font-size: var(--text-eyebrow);
+    font-weight: 700;
+    color: var(--color-blue-600);
+    /* Pops in slightly after the card. --ease-gel overshoots, which is the
+       site's own press easing — the numeral seizes the rail rather than
+       fading onto it. */
+    transform: translateX(var(--node-shift)) scale(var(--node-grow));
+    transition: transform var(--duration-base) var(--ease-gel) 180ms;
+  }
+
+  /*
+   * The hidden start state, and it lives behind `scripting: enabled` for the
+   * same reason the shared one does: if the observer never runs, a step must
+   * end up visible rather than permanently invisible. Note that applies to the
+   * rail and the node too — they are scaled to nothing here, so leaving them
+   * outside this query would mean no JS, no line.
+   */
+  @media (scripting: enabled) {
+    .u-timeline__item[data-reveal] {
+      opacity: 0;
+      transform: translate3d(var(--reveal-from), 1.25rem, 0);
+      --rail-grow: 0;
+      --node-grow: 0.4;
+    }
+
+    /*
+     * And back again. This rule is not symmetry for its own sake — without it
+     * the rail and the nodes never return.
+     *
+     * The item's own opacity and transform are restored by the shared
+     * `[data-reveal][data-revealed="true"]` rule in the MOTION layer, and it is
+     * easy to assume that covers the whole element. It cannot: these two values
+     * are consumed by a pseudo-element and by a child, so what has to change is
+     * the custom properties, and nothing else in the file resets them. Left out,
+     * every step reveals perfectly and the timeline settles with no line between
+     * the nodes and four numerals at 40% size — measured exactly that way.
+     *
+     * The selector matches `[data-reveal]` above at equal specificity, so this
+     * has to stay below it.
+     */
+    .u-timeline__item[data-revealed='true'] {
+      --rail-grow: 1;
+      --node-grow: 1;
+    }
+  }
+
+  .u-timeline__card {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-tile);
+    box-shadow: var(--shadow-tile);
+    transition:
+      transform var(--duration-base) var(--ease-brand),
+      box-shadow var(--duration-base) var(--ease-brand),
+      border-color var(--duration-base) var(--ease-brand);
+  }
+
+  .u-timeline__media {
+    position: relative;
+    /* An aspect ratio and not a fixed height, so the photograph keeps its
+       framing as the card narrows instead of cropping tighter and tighter into
+       someone's shoulder. The files are cut to match by pnpm art:steps — the
+       ratio is declared in both places and they have to agree, or the browser
+       re-crops what sharp already cropped. */
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+  }
+
+  .u-timeline__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Pushes in slightly when the card is engaged. Transform only — animating
+       width or height here would re-layout the card on every hover. */
+    transform: scale(1.001);
+    transition: transform var(--duration-slow) var(--ease-out-soft);
+  }
+
+  .u-timeline__tag {
+    position: absolute;
+    right: 0.875rem;
+    top: 0.875rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: var(--radius-pill);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    box-shadow: var(--shadow-tile);
+    font-family: var(--font-display);
+    font-size: var(--text-eyebrow);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-blue-600);
+  }
+
+  .u-timeline__body {
+    padding: 1.375rem 1.5rem 1.5rem;
+  }
+
+  .u-timeline__copy {
+    /*
+     * This 0.75rem is why `.u-timeline__detail-inner` exists.
+     *
+     * The gap between the title and the description has to vanish with the
+     * description, and neither margin nor padding on the CLIPPED element can
+     * do that. A margin sits outside the border box, so it keeps contributing
+     * after the row collapses. Padding is inside it, but `box-sizing:
+     * border-box` means a box with 12px of padding has a used height of 12px
+     * however hard the row squeezes it. Both were measured at exactly 12px of
+     * description still showing on all four closed cards.
+     *
+     * So the spacing sits one level in, on an element the clipper is free to
+     * cut to nothing.
+     */
+    padding-top: 0.75rem;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--color-ink-body);
+  }
+
+  /* The progress bar the original fills on hover. Scale rather than width, so
+     it composites instead of laying out. */
+  .u-timeline__progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left;
+    background-color: var(--color-blue-600);
+    transition: transform var(--duration-slow) var(--ease-out-soft);
+  }
+
+  .u-timeline__card:hover .u-timeline__progress,
+  .u-timeline__card:focus-visible .u-timeline__progress {
+    transform: scaleX(1);
+  }
+
+  /* ── Two columns, tilt, and the description behind a hover ──
+     All three are gated on the same query, and on the same reasoning as the
+     deck: hiding copy behind a hover is only acceptable where a hover exists
+     to give it back. A tablet clears the width test and has no pointer, so
+     width alone would ship it four unreadable cards. */
+  @media (width >= 64rem) and (hover: hover) and (pointer: fine) {
+    /*
+     * The list stays ONE column and the card is sized to half of it.
+     *
+     * The two-column version of this — a real 2-track grid with each item
+     * spanning both and placing its card via `subgrid` — was written first and
+     * is the wrong tool. Every item has to span 1/-1 anyway to keep the steps
+     * in sequence (auto-placement would sit steps 01 and 02 side by side in
+     * one row, and the rail's whole job is to say they happen in order), so
+     * the second track never places anything. It was two extra mechanisms to
+     * express `width: 50%` and `margin-left: auto`.
+     */
+    .u-timeline {
+      --rail-x: 50%;
+      /* Space between a card's inner edge and the rail. */
+      --gutter: 3.5rem;
+      /* Consecutive cards overlap, which is what makes the eye zig-zag down
+         the rail rather than read two independent columns. Safe because
+         neighbours are on opposite sides: the only thing they overlap is
+         empty gutter. */
+      --step-gap: 0rem;
+      --step-overlap: 5rem;
+    }
+
+    /* The offset goes through the variable rather than replacing `transform`,
+       which would drop the scaleY the reveal animates. */
+    .u-timeline__item {
+      --rail-shift: -50%;
+      --node-shift: -50%;
+    }
+
+    /* Each card enters from the side it lives on. */
+    .u-timeline__item--start {
+      --reveal-from: -2.5rem;
+    }
+
+    .u-timeline__item--end {
+      --reveal-from: 2.5rem;
+    }
+
+    .u-timeline__item {
+      padding-left: 0;
+    }
+
+    .u-timeline__item + .u-timeline__item {
+      margin-top: calc(-1 * var(--step-overlap));
+    }
+
+    /*
+     * ── The card is capped, and the square is why ──
+     *
+     * A card used to be exactly half the container: 612px at this width. The
+     * media band is the full width of the card, so at 1:1 that is a 612px
+     * photograph, a 690px card, and a section 2520px tall — one card taller
+     * than a laptop viewport. The zig-zag stops being legible at that point,
+     * because you can only ever see one side of it.
+     *
+     * So the width is capped rather than the ratio compromised. At 26rem the
+     * photograph is 416px, the card 494px, and the section 1736px — a third
+     * shorter than before the squares, with the alternation still readable in
+     * one screen. `min()` keeps the old behaviour below that: on a narrower
+     * desktop the card is still half the container and simply gets smaller.
+     *
+     * ── And why the margins changed with it ──
+     *
+     * `margin-left: auto` on one side was enough while a card filled its half
+     * exactly. Once it can be narrower than that, the leftover space has to be
+     * put somewhere deliberate, and the two options are opposites: push cards
+     * to the OUTER edges and the middle of the section hollows out around the
+     * rail; pull them to the INNER edges and they hang off it. The rail is the
+     * thing this section is about, so they hang off it, and the slack goes to
+     * the outside where it reads as margin.
+     */
+    .u-timeline {
+      --card-w: 26rem;
+    }
+
+    .u-timeline__card {
+      width: min(var(--card-w), calc(50% - var(--gutter) / 2));
+    }
+
+    .u-timeline__item--start .u-timeline__card {
+      margin-left: auto;
+      margin-right: calc(50% + var(--gutter) / 2);
+    }
+
+    .u-timeline__item--end .u-timeline__card {
+      margin-left: calc(50% + var(--gutter) / 2);
+    }
+
+    .u-timeline__node {
+      left: 50%;
+    }
+
+    /*
+     * The tilt.
+     *
+     * `--tilt-x` / `--tilt-y` are written to the field wrapper by
+     * <PointerTilt> and inherit down. `--side` flips the horizontal sign so
+     * the two columns lean TOWARD the pointer rather than both leaning the
+     * same way — parallel tilt reads as the page being crooked, not as depth.
+     *
+     * perspective() sits in the card's own transform rather than as a
+     * `perspective` property on the list, deliberately: on the parent it would
+     * establish one vanishing point for all four cards, and cards in the right
+     * column two rows down would be seen from an angle that shears them.
+     */
+    .u-timeline__card {
+      --side: 1;
+      transform: perspective(1200px)
+        rotateY(calc(var(--tilt-x, 0) * var(--side) * 3.5deg))
+        rotateX(calc(var(--tilt-y, 0) * -3.5deg));
+    }
+
+    .u-timeline__item--end .u-timeline__card {
+      --side: -1;
+    }
+
+    .u-timeline__card:hover,
+    .u-timeline__card:focus-visible {
+      z-index: 2;
+      border-color: var(--color-silver-300);
+      box-shadow: var(--shadow-tile-hover);
+    }
+
+    .u-timeline__card:hover .u-timeline__img,
+    .u-timeline__card:focus-visible .u-timeline__img {
+      transform: scale(1.06);
+    }
+
+    /*
+     * The description, closed.
+     *
+     * `grid-template-rows: 0fr → 1fr` animates to a real auto height. The
+     * original animates `height: 0 → 'auto'`, which framer-motion can only do
+     * by measuring and writing a pixel value — so a longer sentence, a
+     * narrower card or a different font all silently clip it. This cannot:
+     * there is no number to be wrong.
+     *
+     * `min-height: 0` on the child is not optional. A grid item's automatic
+     * minimum is its content, so without it the row never collapses and the
+     * card simply renders open.
+     */
+    .u-timeline__detail {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows var(--duration-base) var(--ease-brand);
+    }
+
+    .u-timeline__detail-inner {
+      min-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity var(--duration-fast) var(--ease-brand);
+    }
+
+    .u-timeline__card:hover .u-timeline__detail,
+    .u-timeline__card:focus-visible .u-timeline__detail {
+      grid-template-rows: 1fr;
+    }
+
+    .u-timeline__card:hover .u-timeline__detail-inner,
+    .u-timeline__card:focus-visible .u-timeline__detail-inner {
+      opacity: 1;
+    }
+  }
+
+  /* ----------------------------------------------------------------- BENTO
+     The home page capability grid.
+
+     ── Three things make this section read as designed rather than assembled,
+        and all three are in this block ──
+
+     1. AN ELEVATION SCALE, NOT ONE SHADOW.
+        The first version gave all six cards the same `--shadow-tile`. Six
+        identical cards in a grid have no focal point, and a composition
+        without a focal point reads as a template no matter how good the
+        content is. There are now three tiers: the feature card sits highest,
+        the white cards rest, and the graphics inside them sit flat on the
+        card with no elevation at all.
+
+     2. THE SHADOWS ARE BLUE, NOT GREY.
+        Tinted with rgb(11 47 146) — the brand blue — which is what
+        tokens.css says a tile shadow should be, and what --shadow-tile is
+        not. On a blue-tinted band a blue-tinted shadow reads as light in a
+        room; a neutral grey one reads as a drop shadow in a mockup. The
+        difference is small per card and obvious across six.
+
+     3. NO NESTED BOXES.
+        The graphics used to sit in a bordered grey well: a box, inside a
+        white card, inside a grey band. Three nesting levels is a dashboard
+        widget. Now a full-bleed hairline separates the graphic from the copy
+        and the graphic sits on the card's own white — the same move a
+        printed spec sheet makes, and the single biggest lift in this pass. */
+
+  /* ── Tier 2: the resting white card ─────────────────────────────────── */
+  .u-bento-card {
+    position: relative;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-tile-lg);
+    /* Two shadows doing different jobs: a 1px contact shadow that seats the
+       card on the band, and a wide soft one lifted with a negative spread so
+       it stays under the card instead of haloing out past its edges. */
+    box-shadow:
+      0 1px 2px rgb(11 47 146 / 0.05),
+      0 12px 32px -14px rgb(11 47 146 / 0.16);
+    transition:
+      transform var(--duration-base) var(--ease-brand),
+      box-shadow var(--duration-base) var(--ease-brand),
+      border-color var(--duration-base) var(--ease-brand);
+  }
+
+  .u-bento-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--color-blue-200);
+    box-shadow:
+      0 2px 4px rgb(11 47 146 / 0.06),
+      0 26px 52px -18px rgb(11 47 146 / 0.26);
+  }
+
+  /* ── Tier 1: the one filled card ────────────────────────────────────── */
+  .u-bento-feature {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border-radius: var(--radius-tile-lg);
+    background-image: var(--grad-cta);
+    color: var(--color-white);
+    /* Deliberately heavier than .u-bento-card — this is what makes it the
+       focal point rather than just the blue one. */
+    box-shadow:
+      0 2px 4px rgb(4 17 52 / 0.16),
+      0 24px 56px -18px rgb(11 47 146 / 0.45);
+    transition:
+      transform var(--duration-base) var(--ease-brand),
+      box-shadow var(--duration-base) var(--ease-brand);
+  }
+
+  /* Corner specular — the same off-centre light source as the glossy badges
+     (--grad-badge-blue lights from 30%/22%). Without it the card is a flat
+     rectangle of blue and the chrome elsewhere on the page makes it look
+     unfinished by comparison. */
+  .u-bento-feature::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: radial-gradient(
+      120% 88% at 12% 0%,
+      rgb(255 255 255 / 0.17) 0%,
+      rgb(255 255 255 / 0.04) 42%,
+      transparent 68%
+    );
+  }
+
+  /* A drafting grid in the corner the light does not reach, masked so it
+     fades out before it reaches the copy. Barely visible by design: it is
+     texture, and the moment it is legible as a grid it has become a pattern
+     competing with the ledger. */
+  .u-bento-feature::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.038) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.038) 1px, transparent 1px);
+    background-size: 46px 46px;
+    /* The mask has to reach transparent well INSIDE the card. At 72% the fade
+       finished close enough to the edge that the last visible gridlines were
+       still at ~40% strength when they were cut off, and the boundary read as
+       a rendering seam rather than as a fade. */
+    -webkit-mask-image: radial-gradient(
+      86% 78% at 100% 100%,
+      black 0%,
+      transparent 100%
+    );
+    mask-image: radial-gradient(
+      86% 78% at 100% 100%,
+      black 0%,
+      transparent 100%
+    );
+  }
+
+  .u-bento-feature:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      0 3px 6px rgb(4 17 52 / 0.18),
+      0 34px 68px -20px rgb(11 47 146 / 0.52);
+  }
+
+  /* ── The showcase panel ───────────────────────────────────────────────
+     Same gradient-plus-specular recipe as `.u-bento-feature` above — the
+     brand surface a piece of art sits on — used as an image slot rather than
+     an interactive card. No `:hover` rule here: the anchor around this panel
+     owns the lift (a plain `group-hover:-translate-y-*`), so the surface
+     itself stays passive and the two never fight over the same transform. */
+  .u-showcase-panel {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border-radius: var(--radius-tile-lg);
+    background-image: var(--grad-cta);
+    box-shadow:
+      0 2px 4px rgb(4 17 52 / 0.16),
+      0 24px 56px -18px rgb(11 47 146 / 0.45);
+  }
+
+  .u-showcase-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: radial-gradient(
+      120% 88% at 12% 0%,
+      rgb(255 255 255 / 0.17) 0%,
+      rgb(255 255 255 / 0.04) 42%,
+      transparent 68%
+    );
+  }
+
+  /* No drafting-grid pseudo-element here, deliberately — an earlier pass
+     added one, and a dot/line grid behind every card is exactly the
+     stock-template tell this section exists to avoid. The mockup on top of
+     each panel is what carries the surface now; the gradient and the
+     specular above are texture enough. */
+
+  /* ── The icon tile ──────────────────────────────────────────────────────
+     A flat blue squircle, NOT the glossy chrome sphere used on the pillar
+     rows. At the 44px those badges run elsewhere they are a lit 3D object;
+     at card scale, in a corner, they render as a grey blob with a hairline
+     and drag the whole card down with them. Flat and brand-coloured holds up
+     at 36px, and filling it on hover gives every card a state change that
+     costs no layout. */
+  .u-bento-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 11px;
+    background-color: var(--color-blue-50);
+    border: 1px solid var(--color-blue-100);
+    color: var(--color-blue-600);
+    transition:
+      background-color var(--duration-fast) var(--ease-brand),
+      border-color var(--duration-fast) var(--ease-brand),
+      color var(--duration-fast) var(--ease-brand);
+  }
+
+  .u-bento-card:hover .u-bento-icon {
+    background-color: var(--color-blue-600);
+    border-color: var(--color-blue-600);
+    color: var(--color-white);
+  }
+
+  /* The rule between a card's copy and its graphic. Full-bleed — it runs to
+     the card's edges rather than stopping inside the padding, which is what
+     makes it read as a division of the card rather than as a line drawn on
+     it. The negative inline margin is the card's own padding, so the two
+     have to stay in step. */
+  .u-bento-rule {
+    display: block;
+    height: 1px;
+    margin-inline: -1.5rem;
+    background-color: var(--color-line);
+  }
+
+  .u-bento-rule--onDark {
+    background-color: rgb(255 255 255 / 0.14);
+  }
+
+  /* --------------------------------------------------------------- BUTTONS
+     These classes ARE the brand surface. Any component dropped into
+     components/ui/ can adopt the exact gloss by using them — no need to
+     re-derive gradients or shadows. */
+  /* HEIGHT IS FIXED, NOT DERIVED FROM PADDING.
+     The pill surface is a 9-slice of the mockup's own render (see .u-btn--blue
+     below) whose end caps are semicircles. `border-image-width` is a length, so
+     a cap stays a true semicircle only while it is exactly half the button's
+     height — which means the height cannot be allowed to float. With vertical
+     padding it did: any taller child (an icon, a spinner) pushed the content box
+     past the text's own height, so buttons rendered a few px apart and the caps
+     on the shorter ones came out as ellipses. Height is therefore explicit per
+     size, --btn-cap is half of it, and padding is inline-only. */
+  .u-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    height: 3.25rem; /* 52 */
+    --btn-cap: 26px; /* half of it — keeps the cap circular */
+    border-radius: var(--radius-pill);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.9375rem;
+    letter-spacing: -0.005em;
+    line-height: 1;
+    padding-inline: 1.75rem;
+    white-space: nowrap;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition:
+      box-shadow var(--duration-fast) var(--ease-brand),
+      transform var(--duration-fast) var(--ease-brand),
+      color var(--duration-fast) var(--ease-brand);
+  }
+
+  .u-btn:active {
+    transform: translateY(1px);
+  }
+
+  .u-btn:disabled,
+  .u-btn[aria-disabled="true"] {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* ────────────────────────────────────────────────────────────────────────
+     THE TWO PILLS ARE THE MOCKUP'S OWN PIXELS, 9-SLICED. NOT GRADIENTS.
+
+     There are exactly two buttons on this site, both straight off
+     assets/source/mockup-1-hero.png. (`white` and `ghost` variants used to live
+     here for the dark CTA band; they were a third and fourth button colour that
+     appear in no mockup, and they are gone.)
+
+     This was first built as stacked CSS gradients and rebuilt several times —
+     don't go back. The surface is measurably not reproducible that way. Fitting
+     the mockup pill to a separable model (a function of y times a function of x,
+     which is all any stack of linear-gradients can express) leaves:
+
+         median error   ~1.5/255      the flat body fits fine
+         p99 error      33 (blue), 88 (chrome)
+         max error      108 (blue), 163 (chrome)
+
+     That error is not noise, it is structure: a curved specular sheen that wraps
+     the end caps. It bends, so it is not separable, and no number of gradient
+     layers will produce it. Zoom the caps in the mockup and it is obvious.
+
+     So the pill surface is the render itself, cut as a 9-slice:
+       · both end caps are the mockup's pixels, untouched
+       · the middle is synthesised text-free by interpolating between the two cap
+         boundary columns along the measured left-to-right falloff, so it is
+         seamless by construction and stretches to any button width
+       · the right cap is the left cap mirrored, then relit by the falloff ratio;
+         the mockup's own right cap has the arrow glyph through it, and both caps
+         carry their bright arc on the OUTER edge, so a mirror is correct
+       · alpha is an analytically antialiased capsule, and pixels on that edge
+         take their colour from 2.5px inboard so the mockup's white-blended
+         boundary is not baked in underneath our own alpha
+
+     Regenerate with scripts/gen-button-sprites.py if the source art changes.
+
+     border-image is not clipped by border-radius — the sprite's alpha is the
+     shape. border-radius stays anyway so box-shadow and the focus ring follow
+     the capsule. --btn-cap must remain half the button height; see .u-btn. */
+  .u-btn--blue,
+  .u-btn--chrome {
+    border-style: solid;
+    border-color: transparent;
+    border-image-width: 0 var(--btn-cap);
+    background-image: none;
+  }
+
+  .u-btn--blue {
+    border-image-source: url("/art/btn-blue.png");
+    border-image-slice: 0 64 fill;
+    color: var(--color-white);
+    box-shadow: var(--shadow-btn-blue);
+  }
+
+  .u-btn--blue:hover {
+    border-image-source: url("/art/btn-blue-hover.png");
+    box-shadow: var(--shadow-btn-blue-hover);
+  }
+
+  .u-btn--chrome {
+    border-image-source: url("/art/btn-chrome.png");
+    border-image-slice: 0 56 fill;
+    color: var(--color-ink);
+    box-shadow: var(--shadow-btn-chrome);
+  }
+
+  .u-btn--chrome:hover {
+    border-image-source: url("/art/btn-chrome-hover.png");
+    box-shadow: var(--shadow-btn-chrome-hover);
+  }
+
+  .u-btn--sm {
+    height: 2.625rem; /* 42 */
+    --btn-cap: 21px;
+    padding-inline: 1.25rem;
+    font-size: 0.875rem;
+  }
+
+  .u-btn--lg {
+    height: 3.5rem; /* 56 */
+    --btn-cap: 28px;
+    padding-inline: 2rem;
+    font-size: 1rem;
+  }
+
+  /* ---------------------------------------------------------------- BADGES
+     Glossy circular icon holders. Blue and chrome alternate down a list,
+     which is what gives the mockup's service rows their rhythm. */
+  .u-badge {
+    display: grid;
+    place-items: center;
+    flex: none;
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-badge);
+  }
+
+  .u-badge--blue {
+    background-image: var(--grad-badge-blue);
+    color: var(--color-white);
+  }
+
+  .u-badge--chrome {
+    background-image: var(--grad-badge-chrome);
+    color: var(--color-silver-800);
+    border: 1px solid var(--color-silver-300);
+  }
+
+  /* --------------------------------------------------------------- EYEBROW */
+  .u-eyebrow {
+    font-family: var(--font-display);
+    font-size: var(--text-eyebrow);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-blue-600);
+  }
+
+  /* The 40×3 blue rule that sits under every section heading. */
+  /* ── THE RULE IS THE SITE'S SCROLL SIGNATURE ────────────────────────────
+     A 40×3 blue bar sits under every heading on all 28 pages. It is already
+     the most repeated mark in the design, and it was the only one that never
+     moved — so it is the one that draws.
+
+     ── Why this and not a set piece ──
+
+     There used to be a liquid-glass water drop on the single seam between the
+     hero and the disciplines, and 423 lines of CSS behind it. It read as
+     random, and the reason was structural rather than aesthetic: it happened
+     ONCE, at one seam, and nothing before or after it referred to it. A viewer
+     could not infer a rule from it. Meanwhile the actual section-to-section
+     transition — the thing that happens seven more times on the home page
+     alone — was a 10px fade-up, which is the default animation of the entire
+     web. A set piece plus a default is not a motion system; it is one effect
+     and no idea.
+
+     Its metaphor was foreign too. This brand is chess, chrome and Chess Blue.
+     Nothing on the site is about water.
+
+     So: one gesture, on every section, forever. It is transform-only, it needs
+     no JavaScript beyond the observer the site already runs, and it is the
+     brand's own mark rather than an imported effect. Repetition is what turns
+     it from an animation into a signature — the same reason the rule works
+     visually in the first place. */
+  .u-rule {
+    display: block;
+    width: 40px;
+    height: 3px;
+    border-radius: 2px;
+    background-color: var(--color-blue-600);
+    /* Left, because that is where reading starts. A centred heading overrides
+       it below — a centred rule drawing off its own left edge reads as
+       misaligned rather than as drawn. */
+    transform-origin: left center;
+  }
+
+  [data-centred] .u-rule {
+    transform-origin: center;
+  }
+
+  /* Gated behind `scripting: enabled` for the same reason the reveal's hidden
+     state is: if the observer never runs, a rule left at scaleX(0) is a rule
+     that is simply missing, on every heading, permanently. */
+  @media (scripting: enabled) {
+    [data-reveal] .u-rule {
+      transform: scaleX(0);
+      /* Deliberately slower than the block it lives in, and starting after it.
+         The section arrives first and the rule strikes across it — one beat,
+         then the other. Fire them together and there is nothing to notice. */
+      transition: transform var(--duration-rule) var(--ease-brand)
+        var(--duration-reveal);
+    }
+
+    [data-reveal][data-revealed='true'] .u-rule {
+      transform: scaleX(1);
+    }
+  }
+
+  /* ------------------------------------------------------------------ CTA */
+  .u-cta-band {
+    background-image: var(--grad-cta);
+    color: var(--color-white);
+  }
+
+
+
+  /* ------------------------------------------------------------ ARROW LINK */
+  .u-arrow-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--color-blue-600);
+    transition: color var(--duration-fast) var(--ease-brand);
+  }
+
+  .u-arrow-link:hover {
+    color: var(--color-blue-500);
+  }
+
+  .u-arrow-link__icon {
+    transition: transform var(--duration-fast) var(--ease-brand);
+  }
+
+  .u-arrow-link:hover .u-arrow-link__icon {
+    transform: translateX(4px);
+  }
+
+  /* ------------------------------------------------------------------ ART
+     The chess renders keep their white background (see
+     scripts/extract-art.mjs). This feather fades their edges into whatever
+     section they sit on, so no rectangle is ever visible.
+
+     Two masks intersected, not one:
+
+       • the radial softens the corners and sides
+       • the linear kills the bottom edge specifically
+
+     The bottom needs its own treatment because the source renders are cropped
+     mid-reflection — the mockups place a stat bar right where the floor
+     reflection would continue, so there is nothing below to crop. Without the
+     linear pass the radial leaves the bottom centre fully opaque and the
+     abrupt cut through the reflection is clearly visible. */
+  .u-art-feather {
+    /*
+     * A rectangular vignette, NOT a radial one.
+     *
+     * The first version used a radial gradient sized 112% with an opaque stop
+     * at 52%. That maths never feathered the sides: at the horizontal
+     * mid-edges the normalised radius is 0.5 / 1.12 = 44.6%, which is inside
+     * the opaque stop — so the left and right edges stayed fully opaque and
+     * any piece touching a side edge was sliced off with a hard vertical cut.
+     * A QA pass found it on five separate renders.
+     *
+     * Two linear fades intersected are both simpler and correct: they fade
+     * every edge that a subject can actually reach, by a predictable amount,
+     * regardless of the image's aspect ratio.
+     *
+     * The top is left opaque on purpose — the renders have empty space there,
+     * and fading it would eat into the hero's headroom.
+     */
+    --art-x: linear-gradient(
+      to right,
+      transparent 0%,
+      black 7%,
+      black 93%,
+      transparent 100%
+    );
+    --art-y: linear-gradient(to bottom, black 0%, black 84%, transparent 100%);
+
+    -webkit-mask-image: var(--art-x), var(--art-y);
+    -webkit-mask-composite: source-in;
+    mask-image: var(--art-x), var(--art-y);
+    mask-composite: intersect;
+  }
+}
+
+/* ==========================================================================
+   MOTION
+   ========================================================================== */
+@layer components {
+  /* Scroll reveal.
+
+     The hidden state is gated behind `scripting: enabled` so that if JS is
+     unavailable — or fails — the content is simply visible rather than
+     permanently invisible. Never wrap above-the-fold hero content in this:
+     the hidden start state would delay LCP. */
+  @media (scripting: enabled) {
+    [data-reveal] {
+      opacity: 0;
+      /* 16px → 10px. The shorter the travel, the sooner the element is
+         readable, and the less it competes with the scroll itself. */
+      transform: translateY(10px);
+      /* MATERIALISE — see the block of the same name below. Gated behind
+         `scripting: enabled` with the opacity, for the same reason: if the
+         observer never runs, nothing may be left permanently out of focus. */
+      --u-materialize: 5px;
+    }
+  }
+
+  [data-reveal] {
+    /* `filter`, not `backdrop-filter`. This blurs the ELEMENT, which is a
+       one-shot cost that ends when the transition does — unlike a backdrop
+       filter, which re-samples the page behind it on every frame for as long
+       as it is on screen. That distinction is the whole reason this survived
+       the removal of the glass cards. */
+    /* ── The filter is removed once it has finished doing anything ─────────
+       `blur(0px)` is not free. It is still a filter, so the element still gets
+       its own render surface, and this selector matches every revealed element
+       on the page — 68 of them on the home page alone, each holding a surface
+       for the entire session to express a blur of zero.
+
+       `data-settled` is written by RevealObserver once the transition has run,
+       so the materialise still happens and then stops costing anything. The
+       property is dropped rather than zeroed, because zero is the expensive
+       part. */
+    filter: blur(var(--u-materialize, 0px));
+    transition:
+      opacity var(--duration-reveal) var(--ease-out-soft),
+      transform var(--duration-reveal) var(--ease-out-soft),
+      /* Slower than the fade it accompanies, and on the softer curve. The
+         opacity finishes while the blur is still resolving, and that order is
+         what reads as "coming into focus" rather than as two properties
+         animating for different lengths of time. */
+        --u-materialize calc(var(--duration-reveal) * 1.6) var(--ease-liquid);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  [data-reveal][data-revealed="true"] {
+    opacity: 1;
+    transform: none;
+    --u-materialize: 0px;
+  }
+
+  /* Set by RevealObserver once the transition has finished — see the note on
+     the filter above. Dropping the property is the point; `blur(0px)` still
+     costs the element a render surface, and there are dozens of these. */
+  [data-reveal][data-settled="true"] {
+    filter: none;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     LIQUID GLASS — MOTION
+     ═══════════════════════════════════════════════════════════════════════ */
+
+  /* ── Registration ───────────────────────────────────────────────────────
+     A custom property is an unparsed string unless it is registered, and an
+     unparsed string cannot be interpolated — it steps from one value to the
+     next at the halfway point. All three of these are animated, so all three
+     have to be declared here or the motion happens in jumps.
+
+     `inherits: true` on all of them. `.u-glass` reads --u-sweep and --u-lit on
+     the element, on ::before and on ::after, and the reveal system sets
+     --u-materialize on a WRAPPER several levels above what it blurs — none of
+     which works if the value stops at the element it was declared on.
+
+     --u-px / --u-py are deliberately NOT registered. They position the
+     illumination, and registering them would make it interpolate toward a new
+     position over --duration-fast instead of simply being there. */
+  /* ── LIGHT SWEEP ────────────────────────────────────────────────────────
+     Apple: "lights move in space, causing light to travel around the material
+     and define its silhouette." This is that, and `--u-sweep` is the only
+     thing it animates — the conic gradient on `.u-glass::before` is authored
+     `from calc(315deg + var(--u-sweep))`, so rotating the offset walks the lit
+     arc all the way round the rim and back to where it started.
+
+     Ending at 360deg rather than at some pleasing intermediate angle is not
+     tidiness: the rule that starts this is a `:hover`, and CSS animations are
+     torn off the instant the selector stops matching. Landing on a value
+     congruent to the start means a pointer that leaves mid-sweep produces no
+     jump, because there is nothing to jump back to. */
+  @keyframes u-glass-sweep {
+    from {
+      --u-sweep: 0deg;
+    }
+    to {
+      --u-sweep: 360deg;
+    }
+  }
+
+  /* ── MATERIALISE ────────────────────────────────────────────────────────
+     Apple's glass does not fade in. It "gradually modulates the light bending
+     and lensing" — the pane is already there and comes into focus, which is a
+     different event from a rectangle becoming opaque. Content arriving on
+     scroll borrows that idea: it resolves rather than appears.
+
+     ── Why this outlived the glass cards ──
+
+     When the cards were glass this was `backdrop-filter`, and it was free,
+     because the filter was already there and materialising only changed its
+     radius. The cards are solid again, so it is now a `filter` on the element
+     itself. That is a different cost and it was worth checking rather than
+     assuming: a backdrop filter re-samples the page behind it every frame for
+     as long as it is on screen, whereas an element filter is paid while the
+     transition runs and then stops. One is a permanent tax on scrolling and
+     the other is bounded work with an end. Only the bounded one is here.
+
+     5px, not the 14 it used to be. A backdrop blur is looking THROUGH the
+     element at the page behind it, where a large radius reads as depth; an
+     element blur is the content itself out of focus, and past a few pixels
+     that stops looking like arriving and starts looking like a rendering
+     fault. It also keeps the one-shot cost small on the home page's 68
+     revealed elements.
+
+     It rides the EXISTING reveal system rather than adding a second one: the
+     value is set on `[data-reveal]` and released by the same `data-revealed`
+     attribute the IntersectionObserver already writes. Anything not inside a
+     reveal wrapper reads the 0px initial value and never does this at all.
+
+     The declarations live with the rest of the reveal system at the top of
+     this layer, not here, so there is one place describing what a revealing
+     element does. */
+
+  /* Marquee — pure CSS, zero JS. The track holds two identical copies of the
+     content, so translating by exactly -50% loops seamlessly. */
+  @keyframes u-marquee {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  .u-marquee-track {
+    display: flex;
+    width: max-content;
+    animation: u-marquee var(--marquee-duration, 40s) linear infinite;
+  }
+
+  .u-marquee:hover .u-marquee-track {
+    animation-play-state: paused;
+  }
+
+  /* The process trail's connecting line — pure CSS, same trick as the marquee
+     above: an infinite loop needs the travel distance to be a multiple of the
+     dash pattern (8 + 6 = 14), so the seam is invisible. */
+  @keyframes u-flow-dash {
+    to {
+      stroke-dashoffset: -28;
+    }
+  }
+
+  .u-flow-path {
+    stroke-dasharray: 8 6;
+    animation: u-flow-dash 1.6s linear infinite;
+  }
+
+  /* Edges fade out instead of hard-clipping. */
+  .u-marquee-mask {
+    mask-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      black 8%,
+      black 92%,
+      transparent 100%
+    );
+  }
+
+  /* ---------------------------------------------------------- REVEAL MOTION
+     The drop, in four beats, all on one clock.
+
+       0 → 30%   the surface swells and a bead pulls up out of it, growing
+                 TALLER THAN IT IS WIDE — that is surface tension, and it is
+                 the single detail that makes this read as liquid rather than
+                 as a circle being scaled up
+       30 → 46%  the neck: the bead's width collapses while its height keeps
+                 climbing, and the swell starts retracting beneath it
+       46 → 64%  it breaks free — width springs back and it rounds out, the
+                 way a real drop snaps to a sphere the instant it separates
+       64 → 100% it floats clear and fades while the waterline settles flat
+
+     The overshoot at 46% is deliberate: the bead rounds out slightly WIDER
+     than its final size before easing back. Nothing in nature separates and
+     then just sits there; the rebound is what sells the break. */
+
+
+
+
+
+
+  /* The section surfacing through the drop's own silhouette, on the same clock
+     and to the same beats as the bead.
+
+     Beat for beat against `u-reveal-drop`: narrow and tall while the bead
+     stretches, still gathering while it necks, and then — at 64%, the frame
+     the bead breaks free — it floods. The break in surface tension is what
+     releases the section, so the two ranges are identical and the flood
+     keyframe sits exactly on the separation keyframe. Move either and it stops
+     being one event.
+
+     ── Why the last two frames are so violent ──
+
+     The opaque core of the mask is only 62% of its radius, and this element is
+     the WHOLE section — potentially 2500px tall on a phone — every pixel of
+     which has to end up fully opaque, including the part still far below the
+     fold. So the final radii are not a size, they are a guarantee: big enough
+     that the gradient's transparent tail is nowhere near any real content at
+     any viewport. The visible flood is finished at 78%; everything after that
+     is the mask getting out of the way, and none of it is on screen.
+
+     `translateY` is on the same keyframes rather than a second animation so
+     the rise cannot drift out of phase with the opening. */
+
+
+}
+
+/* ==========================================================================
+   FOCUS RING — unlayered on purpose.
+   ==========================================================================
+   Tailwind's `transition-colors` includes `outline-color` in its property
+   list, so every element carrying it animated its focus ring from
+   currentColor to brand blue over ~200ms. The ring appeared instantly but was
+   the wrong colour for the first fifth of a second, which is exactly when a
+   keyboard user needs to see it.
+
+   This block is deliberately OUTSIDE any @layer: unlayered CSS wins over all
+   cascade layers, including Tailwind's utilities, so it beats the transition
+   utility without needing !important or a specificity hack.
+   ========================================================================== */
+:focus-visible {
+  outline: 2px solid var(--color-blue-600);
+  outline-offset: 2px;
+  transition-property:
+    color, background-color, border-color, fill, stroke, box-shadow, transform,
+    opacity;
+}
+
+/* ==========================================================================
+   LIQUID GLASS — ACCESSIBILITY
+   ==========================================================================
+
+   Apple ships three automatic modifiers for this material, because glass
+   trades legibility for beauty and some people cannot afford the trade. Each
+   has a web media query that means the same thing, so each is honoured rather
+   than approximated:
+
+     Reduce Transparency  →  prefers-reduced-transparency: reduce
+     Increase Contrast    →  prefers-contrast: more
+     Reduce Motion        →  prefers-reduced-motion: reduce   (below)
+
+   This is a much smaller job than it was: the material is on three navigation
+   elements, not on every card, so there is one class to switch off. The nav
+   pill's fallback is `--color-surface` with the hairline and shadow it had
+   before it was glass, which is a surface with a measured contrast record.
+
+   Unlayered on purpose, so it beats the Tailwind utilities the nav pill
+   carries without needing !important on each declaration.
+   ========================================================================== */
+
+@media (prefers-reduced-transparency: reduce) {
+  .u-glass {
+    background-image: none;
+    background-color: var(--color-surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  /* The rim lens is a second backdrop-filter with nothing left to sample. The
+     painted specular on ::after stays — it costs nothing and it is what keeps
+     the pill from flattening into a plain rounded rectangle. */
+  .u-glass::before {
+    display: none;
+  }
+
+  .u-glass::after {
+    border-color: var(--color-line);
+  }
+}
+
+/* Increase Contrast. Apple's rule is that elements become predominantly black
+   or white with a contrasting border — the material stops being subtle and
+   becomes a clearly delineated object. */
+@media (prefers-contrast: more) {
+  .u-glass {
+    background-image: none;
+    background-color: var(--color-surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .u-glass::before {
+    display: none;
+  }
+
+  .u-glass::after {
+    border-color: var(--color-ink-strong);
+  }
+}
+
+/* Honour the OS setting. Nothing below animates; everything stays reachable. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    /* Must be forced, not left to the blanket `transition-duration: 0.01ms`
+       above. That override only makes the transition instant — it does not
+       change the START value, and the start value here is a real blur written
+       by a rule this block does not touch. Without this line, a user who asks
+       for less motion gets every revealed element on the site permanently out
+       of focus. */
+    --u-materialize: 0px !important;
+    filter: none !important;
+  }
+
+  /* The rule is a mark, not a decoration — it has to be there. Drawing is the
+     part that stops. */
+  [data-reveal] .u-rule {
+    transform: none !important;
+  }
+
+  /* Glass keeps its material and loses its behaviour, which is what Apple's
+     own Reduce Motion modifier does: "decreases the intensity of the effect
+     and disables elastic properties." The pane, the lensing, the rim and the
+     specular all stay. What stops is the part that moves — the lift, the gel
+     compression and the travelling highlight.
+
+     The sweep has to be cancelled by name. It is triggered by `:hover`, so it
+     starts long after page load, and `animation-duration: 0.01ms` would make
+     it fire as an instantaneous jump of the rim light on every hover rather
+     than not fire at all. */
+  .u-glass-interactive:is(:hover, :focus-visible, :focus-within, :active),
+  .u-tile-interactive:hover,
+  .u-bento-card:hover,
+  .u-bento-feature:hover {
+    transform: none !important;
+    --u-lit: 0 !important;
+  }
+
+  /* The deck loses its lift and keeps everything else, and the distinction
+     matters more here than anywhere else in this block.
+
+     `transform: none` is the wrong tool: the deck's resting transform is its
+     LAYOUT, so nulling it would collapse six cards onto one another in the
+     top-left corner. Only the 1.25rem of travel is cancelled.
+
+     What must not be cancelled is the z-index swap on the same selector. That
+     is what actually uncovers a buried card's copy — the lift is decoration
+     on top of it — so a reader who asked for less motion still gets the full
+     text of every commitment, it simply arrives without moving. */
+  .u-deck__card:hover,
+  .u-deck__card:focus-visible {
+    --deck-lift: 0rem !important;
+  }
+
+  /*
+   * The timeline's rail and node have to be forced back to full size, and this
+   * is the same trap `--u-materialize` above is a note about.
+   *
+   * The blanket `transition-duration: 0.01ms` at the top of this block only
+   * makes a transition instant — it does not change the START value. The rail
+   * starts at `scaleY(0)` and the node at `scale(0.4)`, both written by a rule
+   * this block does not otherwise touch, and `[data-reveal] { transform: none
+   * }` cannot reach them because they are on the pseudo-element and the child,
+   * not on the revealed item. Without these two lines a reader who asked for
+   * less motion gets a timeline with no line and four shrunken numerals.
+   */
+  .u-timeline__item[data-reveal] {
+    --rail-grow: 1 !important;
+    --node-grow: 1 !important;
+  }
+
+  .u-glass::before {
+    animation: none !important;
+  }
+
+  .u-marquee-track {
+    animation: none !important;
+  }
+
+  /* The drop is removed, not frozen. Freezing an animation whose start frame
+     is `opacity: 0` would leave an invisible glass pane parked on the seam
+     with a live backdrop-filter under it — invisible, but still compositing on
+     every frame. Nothing here is hidden behind it, so taking it out costs the
+     page nothing. */
+
+  /* The surfacing has to be cancelled EXPLICITLY, and this is the one rule in
+     this block that would cause real damage if it were missed. The global
+     `animation-duration: 0.01ms` override above does not apply to a
+     scroll-driven animation — its progress comes from scroll position, not
+     from time — so the section would be left frozen at whatever frame the
+     scroll happened to sit on, which at the start of the range is
+     `opacity: 0`. An invisible section, permanently, for exactly the users who
+     asked for less motion. */
+}
+
+/* ==========================================================================
+   NO-SCRIPT FALLBACK FOR THE MOTION-DRIVEN FOOTER
+   ==========================================================================
+
+   `components/ui/footer-section.tsx` animates with `motion`, which writes its
+   `initial` state as an INLINE style into the prerendered HTML — the footer
+   ships as `opacity:0;filter:blur(4px)` and only becomes visible once ~66KB of
+   JS has loaded, hydrated and the viewport observer has fired. If that JS
+   fails, the footer is permanently invisible.
+
+   This is the same failure the `[data-reveal]` system avoids by gating its
+   hidden state behind `scripting: enabled` (see MOTION above). The dropped-in
+   footer cannot use that gate, because its hidden state is inline rather than
+   in a stylesheet — so the fallback has to override it here.
+
+   Unlayered and `!important` because an inline style outranks every cascade
+   layer; this is one of the few places that genuinely requires it.
+   ========================================================================== */
+@media not (scripting: enabled) {
+  /* Matches on `opacity`, not `blur`: the footer animation used to start at
+     filter: blur(4px) and no longer does, and a selector keyed to the old
+     property would quietly stop matching and leave the footer invisible.
+     opacity: 0 is the one thing every motion `initial` here writes. */
+  footer [style*="opacity"] {
+    filter: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

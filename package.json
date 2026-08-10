@@ -1,0 +1,42 @@
+{
+  "name": "agency-website",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "art": "node scripts/extract-art.mjs",
+    "check:tokens": "node scripts/check-tokens.mjs",
+    "check:content": "tsx scripts/check-content.ts",
+    "verify": "pnpm typecheck && pnpm lint && pnpm check:tokens && pnpm check:layout && pnpm check:content",
+    "check:layout": "node scripts/check-layout.mjs",
+    "art:steps": "node scripts/fetch-step-art.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.112.1",
+    "lucide-react": "^1.28.0",
+    "motion": "^13.0.0",
+    "next": "16.3.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "server-only": "^0.0.1",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.0",
+    "sharp": "^0.35.3",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.7",
+    "typescript": "^5.9.3"
+  },
+  "packageManager": "pnpm@11.20.0"
+}
