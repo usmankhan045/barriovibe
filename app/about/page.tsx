@@ -12,11 +12,10 @@ import {
 import { IconBadge } from '@/components/ui/IconBadge';
 import { Reveal } from '@/components/ui/Reveal';
 import { Button } from '@/components/ui/Button';
-import { CtaBand } from '@/components/layout/CtaBand';
 import { JsonLd, breadcrumbSchema, organizationSchema } from '@/lib/jsonld';
 import { DIFFERENTIATORS, PROCESS } from '@/content/differentiators';
 import { PILLARS } from '@/content/pillars';
-import { SERVICE_COUNT, SERVICE_COUNT_WORD } from '@/content/services';
+import { SERVICE_COUNT } from '@/content/services';
 import { pageMetadata } from '@/lib/seo';
 
 export const metadata = pageMetadata({
@@ -46,7 +45,7 @@ export default function AboutPage() {
               <SectionHeading
                 level={1}
                 eyebrow="About us"
-                lines={['Five disciplines.', 'One']}
+                lines={['Three practices.', 'One']}
                 accent="accountable team"
               />
               <Lead className="mt-7 max-w-[56ch]">
@@ -110,7 +109,7 @@ export default function AboutPage() {
           <Reveal>
             <SectionHeading
               eyebrow="What we cover"
-              lines={['Five teams,', 'one']}
+              lines={['Seven teams,', 'one']}
               accent="point of contact"
             />
             <Lead className="mt-7">
@@ -119,19 +118,11 @@ export default function AboutPage() {
             </Lead>
           </Reveal>
 
-          <ul className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+          <ul className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {PILLARS.map((pillar, i) => (
               <Reveal key={pillar.slug} as="li" index={i} className="h-full">
                 <div className="u-tile flex h-full flex-col p-7">
-                  <div className="flex items-center justify-between">
-                    <IconBadge icon={pillar.icon} variant={pillar.badge} size="sm" />
-                    <span
-                      className="font-display text-ghost text-ink-ghost"
-                      aria-hidden="true"
-                    >
-                      {pillar.number}
-                    </span>
-                  </div>
+                  <IconBadge icon={pillar.icon} variant={pillar.badge} size="sm" />
                   <h3 className="mt-5 font-display text-h3 text-ink">{pillar.title}</h3>
                   <p className="mt-2.5 flex-1 text-[14.5px] leading-[1.6] text-ink-body">
                     {pillar.blurb}
@@ -206,11 +197,6 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      <CtaBand
-        title="Start with one service. Add the rest only if it earns it."
-        body={`No minimum, no bundle, no lock-in. Tell us the problem and we will tell you which of the ${SERVICE_COUNT_WORD.toLowerCase()} applies.`}
-        primaryLabel="Get in touch"
-      />
     </main>
   );
 }

@@ -13,20 +13,25 @@ import {
   IconWatermark,
 } from '@/components/primitives';
 import { Icon } from '@/components/icons';
-import { IconBadge } from '@/components/ui/IconBadge';
 import { Reveal } from '@/components/ui/Reveal';
 import { Button } from '@/components/ui/Button';
-import { CtaBand } from '@/components/layout/CtaBand';
 import { FaqAccordion } from '@/components/sections/FaqList';
 import { JsonLd, breadcrumbSchema, faqSchema, serviceSchema } from '@/lib/jsonld';
 import { PILLAR_BY_SLUG } from '@/content/pillars';
-import { SERVICES, getService, serviceHref, relatedServices } from '@/content/services';
+import { PRACTICE_OF_PILLAR } from '@/content/practices';
+import {
+  SERVICES,
+  getService,
+  serviceHref,
+  practiceHref,
+  relatedServices,
+} from '@/content/services';
 import { pageMetadata } from '@/lib/seo';
 import type { ArtName } from '@/lib/art';
 import { cx } from '@/lib/cx';
 
 /**
- * The service page template — one file, eighteen prerendered pages.
+ * The service page template, one file, one prerendered page per service.
  *
  * Every service renders the identical section order, which is deliberate: a
  * visitor comparing two services should find the same information in the same
@@ -39,7 +44,7 @@ import { cx } from '@/lib/cx';
  */
 export function generateStaticParams() {
   return SERVICES.map((service) => ({
-    pillar: service.pillar,
+    category: service.pillar,
     service: service.slug,
   }));
 }
@@ -52,7 +57,11 @@ export const dynamicParams = false;
  */
 const ART_ROTATION: ArtName[] = ['pawn', 'formation', 'cluster', 'victory', 'hero', 'pawn'];
 
-type Params = Promise<{ pillar: string; service: string }>;
+/* `category` is the parent segment's name, which carries a practice slug on
+   the two practice pages. A service always sits under its DISCIPLINE, so the
+   only value that resolves here is a pillar slug; anything else 404s on the
+   guard below. */
+type Params = Promise<{ category: string; service: string }>;
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { service: slug } = await params;
@@ -67,7 +76,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 }
 
 export default async function ServicePage({ params }: { params: Params }) {
-  const { pillar: pillarSlug, service: serviceSlug } = await params;
+  const { category: pillarSlug, service: serviceSlug } = await params;
   const service = getService(serviceSlug);
 
   // Guard against a service being reached through the wrong pillar's path,
@@ -81,9 +90,20 @@ export default async function ServicePage({ params }: { params: Params }) {
   );
   const art = ART_ROTATION[artIndex % ART_ROTATION.length] ?? 'pawn';
 
+  /* The practice sits between Services and the discipline, but only where it
+     has a page of its own: for Software & AI the practice page and the
+     discipline page are the same URL, so a crumb for it would repeat the next
+     one. */
+  const practice = PRACTICE_OF_PILLAR[service.pillar];
+  const practiceCrumb =
+    practice && practice.pillars.length > 1
+      ? [{ label: practice.shortTitle, href: practiceHref(practice.slug) }]
+      : [];
+
   const crumbs = [
     { label: 'Home', href: '/' },
     { label: 'Services', href: '/services' },
+    ...practiceCrumb,
     { label: pillar.shortTitle, href: `/services/${pillar.slug}` },
     { label: service.title, href: serviceHref(service) },
   ];
@@ -101,11 +121,15 @@ export default async function ServicePage({ params }: { params: Params }) {
 
           <div className="mt-8 grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.2fr_0.8fr]">
             <div className="relative z-10">
-              <div className="mb-6 flex items-center gap-4">
-                <IconBadge icon={service.icon} variant={pillar.badge} size="md" />
+              {/* The discipline, as a link, with no icon badge beside it. The
+                  badge was decoration over the title on every page of this
+                  kind and it is gone from all of them. */}
+              <div className="mb-6">
+                {/* `u-tap` for the touch floor. A 12px eyebrow makes a 15px
+                    target, and this is the link up to the discipline. */}
                 <Link
                   href={`/services/${pillar.slug}`}
-                  className="u-eyebrow transition-colors hover:text-blue-500"
+                  className="u-tap u-eyebrow transition-colors hover:text-blue-500"
                 >
                   {pillar.title}
                 </Link>
@@ -115,13 +139,6 @@ export default async function ServicePage({ params }: { params: Params }) {
               <Rule className="mt-6" />
 
               <p className="mt-6 max-w-[60ch] text-body-lg text-ink-body">{service.intro}</p>
-
-              <div className="mt-7 flex flex-wrap gap-2">
-                <Chip>
-                  <Icon name="clock" size={14} className="mr-1.5 text-ink-body" />
-                  {service.turnaround}
-                </Chip>
-              </div>
 
               <div className="mt-8 flex flex-wrap gap-3">
                 <Button href={`/contact?service=${service.slug}`} size="lg">
@@ -216,11 +233,14 @@ export default async function ServicePage({ params }: { params: Params }) {
             {service.steps.map((step, i) => (
               <Reveal key={step.title} as="li" index={i} className="h-full">
                 <div className="u-tile flex h-full flex-col p-7">
+                  {/* The numeral alone. A duration chip used to sit opposite
+                      it, which is why this is a justify-between row with one
+                      child; kept as a row so the ghost numeral stays on the
+                      same baseline it always had. */}
                   <div className="flex items-center justify-between gap-3">
                     <span className="font-display text-ghost text-ink-ghost" aria-hidden="true">
                       {String(i + 1).padStart(2, '0')}
                     </span>
-                    <Chip className="text-[12.5px]">{step.duration}</Chip>
                   </div>
                   <h3 className="mt-4 font-display text-h3 text-ink">{step.title}</h3>
                   <p className="mt-2.5 text-[14.5px] leading-[1.6] text-ink-body">
@@ -238,7 +258,7 @@ export default async function ServicePage({ params }: { params: Params }) {
         <Container>
           {/*
             The column count follows the CONTENT, not the section.
-            Eleven of the eighteen services have no documents requirement, and
+            Many of the services have no documents requirement at all, and
             a fixed two-column grid left the right half of the band visibly
             empty on all of them — which reads as a card that failed to render
             rather than as a deliberate single-column layout.
@@ -300,25 +320,32 @@ export default async function ServicePage({ params }: { params: Params }) {
         </Container>
       </Section>
 
-      {/* ── 7. Turnaround ─────────────────────────────────────────────── */}
-      {/* Was "Timeline & pricing": a two-column block, turnaround beside a
-          "Starting from" figure. The pricing half is gone sitewide, so this is
-          turnaround and the CTA. Kept as its own band rather than folded into
-          the hero — it is the last thing before the FAQ and it is what carries
-          the CTA at the bottom of a long page. */}
+      {/* ── 7. Next step ──────────────────────────────────────────────── */}
+      {/* This block has now lost both of its original halves. It began as
+          "Timeline & pricing", a turnaround figure beside a "Starting from"
+          price; the price went when the site stopped publishing figures, and
+          the turnaround went with the rest of the site's timings (see
+          content/types.ts). What is left is the thing it was always really
+          for: the CTA at the bottom of a long page, before the FAQ.
+
+          The left half now states the commitment the removed figures used to
+          imply, which is that both are agreed in writing per engagement rather
+          than published as a number nobody has scoped. */}
       <Section tight>
         <Container>
           <Reveal>
             <div className="u-tile flex flex-col gap-8 p-8 lg:flex-row lg:items-center lg:justify-between lg:p-10">
               <div>
-                <Eyebrow>Turnaround</Eyebrow>
-                <p className="mt-2 font-display text-h3 text-ink">{service.turnaround}</p>
+                <Eyebrow>Next step</Eyebrow>
+                <p className="mt-2 max-w-[46ch] font-display text-h3 text-ink">
+                  Tell us your situation and we will scope it.
+                </p>
               </div>
 
               <div className="flex flex-col items-start gap-3 lg:items-end">
                 <Button href={`/contact?service=${service.slug}`}>Talk to us about it</Button>
                 <p className="text-[13px] text-ink-body">
-                  Scope and dates confirmed in writing before anything starts.
+                  Scope, fee and dates confirmed in writing before anything starts.
                 </p>
               </div>
             </div>
@@ -370,15 +397,6 @@ export default async function ServicePage({ params }: { params: Params }) {
         </Container>
       </Section>
 
-      <CtaBand
-        // Not `.toLowerCase()` — that mangled proper nouns and acronyms into
-        // "agentic ai development" and "shopify store development". The
-        // sentence is shaped so the title keeps its own casing.
-        title={`Ready to get started with ${service.title}?`}
-        body="Send us the details and you will have a scope and a date within one working day."
-        primaryLabel="Start a project"
-        service={service.slug}
-      />
     </main>
   );
 }

@@ -11,8 +11,8 @@ import { PRIMARY_NAV, MEGA_MENU_COLUMNS } from '@/content/nav';
  * tree, which is derived from the content layer.
  *
  * When both lived in one `'use client'` file, importing the nav tree dragged
- * all eighteen services' full text — every intro, FAQ answer and step
- * description — into the browser bundle: 25KB gzipped, on every page, to
+ * every service's full text, every intro, FAQ answer and step description,
+ * into the browser bundle: tens of kilobytes gzipped, on every page, to
  * render a menu that uses a label and an href per link.
  *
  * So this Server Component reduces the content to the handful of strings the
@@ -26,17 +26,23 @@ import { PRIMARY_NAV, MEGA_MENU_COLUMNS } from '@/content/nav';
  */
 export function Header() {
   const nav: NavData = {
-    primary: PRIMARY_NAV.map(({ label, href }) => ({ label, href })),
+    primary: PRIMARY_NAV.map(({ label, href, practice }) => ({ label, href, practice })),
     columns: MEGA_MENU_COLUMNS.map((column) => ({
-      slug: column.pillar.slug,
-      title: column.pillar.title,
+      slug: column.practice.slug,
+      title: column.practice.shortTitle,
       href: column.href,
-      icon: column.pillar.icon,
-      // Neither the services' `oneLiner` nor the pillars' `blurb` is passed.
-      // The menu renders no prose at all now — just tab labels and link
-      // labels — and eighteen sentences plus five paragraphs is exactly the
-      // kind of thing that quietly ends up in a bundle unrendered.
-      links: column.links.map(({ label, href }) => ({ label, href })),
+      icon: column.practice.icon,
+      // Neither the services' `oneLiner` nor the practices' and disciplines'
+      // `blurb` is passed. The menu renders no prose at all, just tab labels,
+      // discipline headings and link labels, and a sentence per service plus a
+      // paragraph per group is exactly the kind of thing that quietly ends up
+      // in a bundle unrendered.
+      groups: column.groups.map((group) => ({
+        slug: group.pillar.slug,
+        title: group.pillar.title,
+        href: group.href,
+        links: group.links.map(({ label, href }) => ({ label, href })),
+      })),
     })),
   };
 

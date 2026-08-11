@@ -31,9 +31,12 @@ export function Breadcrumb({ items }: { items: Crumb[] }) {
                   {item.label}
                 </span>
               ) : (
+                /* `u-tap` for the 44px touch floor. The crumbs measured 21px
+                   tall, and they are the only way back up the tree from a
+                   service page on a phone. See globals.css. */
                 <Link
                   href={item.href}
-                  className="text-ink-body transition-colors hover:text-blue-600"
+                  className="u-tap text-ink-body transition-colors hover:text-blue-600"
                 >
                   {item.label}
                 </Link>

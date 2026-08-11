@@ -1,12 +1,15 @@
 import type { Service } from '../types';
 
 /**
- * Pillar 05 — E-commerce & Marketplaces.
+ * Discipline 03: E-commerce & Marketplaces.
  *
- * Split out of Growth & Marketing: building and running a storefront is an
- * operations discipline (catalogue, stock, orders, returns), not a demand one.
- * Copy here stays concrete about what the client ends up owning, because the
- * common fear with an agency-built store is being locked out of it later.
+ * Split out of Growth & Marketing because building and running a storefront is
+ * an operations job, meaning catalogue, stock, orders and returns, rather than
+ * a demand one.
+ *
+ * Copy here stays concrete about what the client ends up owning. The usual
+ * fear with an agency-built store is being locked out of it afterwards, and
+ * every page in this file answers that directly rather than by implication.
  */
 export const ECOMMERCE_SERVICES: Service[] = [
   {
@@ -15,43 +18,39 @@ export const ECOMMERCE_SERVICES: Service[] = [
     title: 'Shopify Store Development',
     navLabel: 'Shopify Development',
     oneLiner:
-      'A fast, conversion-focused Shopify store built, launched and maintained, including the apps, payments and shipping setup.',
+      'A Shopify store built, launched and maintained, with the theme, catalogue, payments and shipping configured around how you actually sell.',
     intro:
-      'We build Shopify stores that load quickly and convert, not just ones that look finished. That means a theme built or customised around your catalogue, a checkout configured for the payment methods your customers actually use, and product pages structured to answer objections before they cost you the sale.',
+      'A store that looks finished and a store that sells are different builds. We do the second one: a theme built or customised around your catalogue, a checkout configured for the payment methods your customers will actually use, and product pages written to answer the objection before it costs you the sale. Page speed is treated as a conversion problem rather than a technical one, because a slow store loses buyers before it ever gets to persuade them.',
     icon: 'shopping-bag',
     included: [
-      'Theme development or deep customisation, built mobile-first',
+      'Theme development or deep customisation, designed from the phone layout first',
       'Product catalogue setup with variants, collections and metafields',
-      'Payment gateway integration for local and international methods',
+      'Payment gateway integration for both local and international methods',
       'Shipping zones, rates and courier integration',
-      'Conversion-focused product and cart pages with reviews and trust signals',
-      'Speed optimisation, app audit, and analytics and pixel configuration',
+      'Product and cart pages built around reviews, trust signals and the questions buyers ask',
+      'Speed optimisation, an app audit, and analytics and pixels configured and tested',
     ],
     audience: ['New D2C brands launching', 'Retailers moving online', 'Stores that load slowly'],
     steps: [
       {
         title: 'Plan',
         description:
-          'Catalogue structure, customer journey and required integrations mapped, so the build has a spec rather than a mood board.',
-        duration: '3–5 days',
+          'Catalogue structure, customer journey and integrations mapped, so the build starts from a specification rather than a mood board.',
       },
       {
         title: 'Build',
         description:
           'Theme developed, products loaded, and payments, shipping and taxes configured on a password-protected store.',
-        duration: '2–4 weeks',
       },
       {
-        title: 'Test & launch',
+        title: 'Test and launch',
         description:
-          'Full checkout tested on real devices, speed audited, tracking verified end to end, then the store goes live.',
-        duration: '3–5 days',
+          'The whole checkout tested on real devices, speed audited, tracking verified from ad click to order confirmation, then the store goes live.',
       },
       {
         title: 'Optimise',
         description:
-          'Post-launch monitoring of conversion rate, drop-off points and page speed, with fixes prioritised by revenue impact.',
-        duration: 'Ongoing',
+          'Conversion rate, drop-off points and page speed watched after launch, with fixes ordered by what they are worth in revenue.',
       },
     ],
     deliverables: [
@@ -62,18 +61,17 @@ export const ECOMMERCE_SERVICES: Service[] = [
       'A 30-day post-launch support window',
     ],
     documents: [],
-    turnaround: '3–6 weeks from brief to launch',
     related: ['ecommerce-management', 'performance-marketing', 'sales-tax-registration-filing'],
     faqs: [
       {
         question: 'Do you use a paid theme or build custom?',
         answer:
-          'Usually a well-chosen premium theme, customised. A fully custom theme is a much larger build and rarely converts better. We recommend custom only when your catalogue or merchandising genuinely does not fit any existing theme, and we will tell you honestly when it does fit.',
+          'Usually a well-chosen premium theme, customised. A theme built from scratch is a far larger job and rarely converts any better. We recommend a custom build only where your catalogue or your merchandising genuinely will not fit an existing theme, and we will tell you when it fits.',
       },
       {
         question: 'Which payment gateways work in Pakistan?',
         answer:
-          'Shopify Payments is not available in Pakistan. Local options include PayFast, Safepay and bank-integrated gateways; cash on delivery remains significant for the domestic market. For international sales, 2Checkout and Paddle are the usual routes. We configure what fits where you actually sell.',
+          'Shopify Payments is not available to Pakistani merchants, so the checkout is built on a local gateway instead. Safepay and PayFast are the two most commonly used with Shopify here, and Safepay covers JazzCash, Easypaisa, bank transfer and local card schemes through a single integration, which matters because Shopify does not support the wallets natively. Cash on delivery is still a large share of domestic orders and gets configured alongside, not instead. If you also sell abroad, that usually needs a separate international route, which we scope against where your orders actually come from.',
       },
       {
         question: 'Who owns the store afterwards?',
@@ -96,41 +94,37 @@ export const ECOMMERCE_SERVICES: Service[] = [
     oneLiner:
       'Day-to-day running of your online store and marketplace channels: listings, inventory, orders, returns and reporting.',
     intro:
-      'Once a store is live, the work becomes operational: listings kept current, stock synchronised across channels, orders shipped, returns processed, and someone actually watching the numbers. We run that operation across Shopify, Daraz, Amazon and marketplace channels so you can focus on product and supply.',
+      'Once a store is live the job turns operational. Listings have to stay current, stock has to match across channels, orders ship, returns get processed, and somebody has to be watching the numbers while all of it happens. We run that operation across Shopify, Daraz and Amazon so your attention goes to product and supply instead.',
     icon: 'cart',
     included: [
-      'Product listing creation and optimisation across every sales channel',
-      'Inventory synchronisation and low-stock alerting',
+      'Product listings created and optimised on every channel you sell through',
+      'Inventory kept in sync across channels, with low-stock alerts',
       'Order processing, fulfilment coordination and courier management',
-      'Returns, refunds and customer query handling',
-      'Marketplace account health monitoring across Daraz and Amazon metrics',
-      'Weekly reporting on revenue, margin, best sellers and dead stock',
+      'Returns, refunds and customer queries handled',
+      'Marketplace account health watched against Daraz and Amazon seller metrics',
+      'A weekly report on revenue, margin, best sellers and dead stock',
     ],
     audience: ['Multi-channel sellers', 'Brands without an ops team', 'Stores losing money to stockouts'],
     steps: [
       {
         title: 'Audit',
         description:
-          'Current listings, pricing, stock accuracy and account health reviewed, with the revenue leaks identified and quantified.',
-        duration: '3–5 days',
+          'Listings, pricing, stock accuracy and account health reviewed, and the revenue leaks written down with a number against each one.',
       },
       {
         title: 'Clean-up',
         description:
-          'Listings corrected and enriched, inventory reconciled to physical stock, and channel settings fixed.',
-        duration: '1–2 weeks',
+          'Listings corrected and filled out, inventory reconciled against physical stock, and channel settings fixed.',
       },
       {
         title: 'Run',
         description:
-          'Daily order processing, stock updates, customer responses and channel monitoring.',
-        duration: 'Daily',
+          'Daily order processing, stock updates, customer replies and channel monitoring.',
       },
       {
-        title: 'Report & improve',
+        title: 'Report and improve',
         description:
-          'Weekly numbers reviewed with you, and next actions agreed on pricing, promotions, delisting or restocking.',
-        duration: 'Weekly',
+          'The weekly numbers reviewed with you, then decisions taken on pricing, promotions, delisting or restocking.',
       },
     ],
     deliverables: [
@@ -140,7 +134,6 @@ export const ECOMMERCE_SERVICES: Service[] = [
       'Documented fulfilment and returns process your team can follow',
     ],
     documents: [],
-    turnaround: 'Ongoing, with daily order handling',
     related: ['shopify-store-development', 'performance-marketing', 'bookkeeping'],
     faqs: [
       {
@@ -151,12 +144,12 @@ export const ECOMMERCE_SERVICES: Service[] = [
       {
         question: 'Do you handle warehousing and shipping physically?',
         answer:
-          'No. We manage the digital operation and coordinate with your warehouse or 3PL and couriers. Physical storage and delivery stay with your existing partners, or we can help you select one.',
+          'No. We run the digital side and coordinate with your warehouse or third-party logistics provider and the couriers. Physical storage and delivery stay with your existing partners, and we can help you choose one if you do not have any yet.',
       },
       {
         question: 'How is this different from Shopify development?',
         answer:
-          'Development builds the store once. Management runs it every day afterwards. Most brands need the build first and then ongoing management, but plenty of businesses already have a store and only need the second.',
+          'Development builds the store once. Management runs it every day after that. Most brands want the build and then the running of it, but plenty already have a store and only need the second half.',
       },
     ],
     seo: {

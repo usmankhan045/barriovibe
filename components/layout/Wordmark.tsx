@@ -23,9 +23,14 @@ export function Wordmark({
   onDark?: boolean;
 }) {
   return (
+    /* `u-tap` for the touch floor. The header's copy gets there anyway through
+       the glass plate it carries below lg (see HeaderClient.tsx), but the
+       footer renders this bare, where the lockup measured 154x36 and is the
+       link home. Coarse pointers only, so the desktop lockup is untouched and
+       the header's plate is unaffected either way. */
     <Link
       href="/"
-      className={cx('group inline-flex items-center gap-2.5', className)}
+      className={cx('u-tap group inline-flex items-center gap-2.5', className)}
       aria-label={`${BRAND.name} home`}
     >
       {/* Stand-in mark: a chess pawn in the brand gradient, matching the

@@ -11,7 +11,6 @@ import {
 import { Icon } from '@/components/icons';
 import { Reveal } from '@/components/ui/Reveal';
 import { Button } from '@/components/ui/Button';
-import { CtaBand } from '@/components/layout/CtaBand';
 import { JsonLd, breadcrumbSchema } from '@/lib/jsonld';
 import { CASE_STUDIES, CASES_ENABLED } from '@/content/cases';
 import { PILLAR_BY_SLUG } from '@/content/pillars';
@@ -166,18 +165,24 @@ export default function WorkPage() {
             />
           </Reveal>
 
-          <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+          <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {SERVICE_GROUPS.map(({ pillar, services }, i) => (
               <Reveal key={pillar.slug} index={i}>
                 <div className="u-tile flex h-full flex-col p-7">
-                  <Eyebrow>{pillar.number}</Eyebrow>
+                  <Eyebrow>{services.length} services</Eyebrow>
                   <h3 className="mt-2 font-display text-h3 text-ink">{pillar.title}</h3>
                   <ul className="mt-5 flex flex-1 flex-col gap-2">
                     {services.map((service) => (
                       <li key={service.slug}>
                         <Link
                           href={serviceHref(service)}
-                          className="group flex items-center justify-between gap-3 py-1 text-[14px] text-ink-body transition-colors hover:text-blue-600"
+                          /* `u-tap` for the touch floor; these rows measured
+                             31px. Its `display: inline-flex` is overridden by
+                             `flex` here, which lands in the utilities layer and
+                             therefore wins, so the row keeps its full-width
+                             `justify-between` and only the min-height applies.
+                             See the tap-target note in globals.css. */
+                          className="u-tap group flex items-center justify-between gap-3 py-1 text-[14px] text-ink-body transition-colors hover:text-blue-600"
                         >
                           {service.title}
                           <Icon
@@ -196,11 +201,6 @@ export default function WorkPage() {
         </Container>
       </Section>
 
-      <CtaBand
-        title="Be the first case study."
-        body="Early clients get our full attention and a rate that reflects it. In exchange we would like to write it up, with your approval on every word."
-        primaryLabel="Start a conversation"
-      />
     </main>
   );
 }

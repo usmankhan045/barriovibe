@@ -13,6 +13,7 @@
  */
 
 import { PILLARS } from '../content/pillars';
+import { PRACTICES } from '../content/practices';
 import { SERVICES, SERVICE_COUNT, SERVICE_COUNT_WORD, serviceHref } from '../content/services';
 import { MEGA_MENU_COLUMNS } from '../content/nav';
 import type { Service } from '../content/types';
@@ -32,7 +33,6 @@ const REQUIRED_STRINGS: (keyof Service)[] = [
   'oneLiner',
   'intro',
   'icon',
-  'turnaround',
 ];
 
 const REQUIRED_ARRAYS: { key: keyof Service; min: number }[] = [
@@ -96,8 +96,8 @@ for (const service of SERVICES) {
   }
 
   for (const step of service.steps) {
-    if (!step.title || !step.description || !step.duration) {
-      fail(`${id}: a step is missing title, description or duration.`);
+    if (!step.title || !step.description) {
+      fail(`${id}: a step is missing its title or description.`);
     }
   }
 
@@ -139,11 +139,126 @@ for (const pillar of PILLARS) {
   if (count === 0) {
     fail(`Pillar "${pillar.slug}" has no services. It would render as an empty page.`);
   }
+
+  // Both headlines render as an H1 or an H2 with nothing else in it, so an
+  // empty one is a heading-shaped hole rather than a visible mistake.
+  for (const [key, headline] of [
+    ['headline', pillar.headline],
+    ['servicesHeadline', pillar.servicesHeadline],
+  ] as const) {
+    if (headline.lines.length === 0 || headline.lines.some((l) => !l.trim())) {
+      fail(`Pillar "${pillar.slug}": "${key}.lines" is empty. Its heading would render blank.`);
+    }
+    if (!headline.accent.trim()) {
+      fail(`Pillar "${pillar.slug}": "${key}.accent" is empty. The blue half of the heading carries it.`);
+    }
+  }
+
+  if (pillar.servicesHeadline.accent === pillar.headline.accent) {
+    warn(
+      `Pillar "${pillar.slug}": "servicesHeadline" repeats "headline". Both appear on its page, a screen apart.`,
+    );
+  }
+}
+
+// ── The practice → discipline edge ──────────────────────────────────────────
+//
+// `content/practices.ts` is the only record of which discipline sits under
+// which practice, and the navigation reads it while the About grid, the 404
+// cards and the contact dropdown read PILLARS directly. A discipline missing
+// from every practice would therefore vanish from the menu and the footer
+// while still appearing on those pages, which is the "nothing hidden" failure
+// arriving by a side door. These three checks close it.
+const claimed = new Map<string, string[]>();
+for (const practice of PRACTICES) {
+  if (practice.pillars.length === 0) {
+    fail(`Practice "${practice.slug}" lists no disciplines. Its mega-menu tab would be empty.`);
+  }
+  for (const pillarSlug of practice.pillars) {
+    claimed.set(pillarSlug, [...(claimed.get(pillarSlug) ?? []), practice.slug]);
+  }
+}
+
+for (const pillar of PILLARS) {
+  const owners = claimed.get(pillar.slug) ?? [];
+  if (owners.length === 0) {
+    fail(
+      `Pillar "${pillar.slug}" belongs to no practice. It would be missing from the mega-menu and the footer.`,
+    );
+  }
+  if (owners.length > 1) {
+    fail(
+      `Pillar "${pillar.slug}" is listed by ${owners.length} practices (${owners.join(', ')}). Every service under it would appear twice in the menu.`,
+    );
+  }
+}
+
+// ── Practices that have a page of their own ─────────────────────────────────
+//
+// `/services/{practice}` exists for any practice holding more than one
+// discipline, and `/services/{pillar}` for all seven disciplines. Both live in
+// the same dynamic segment, so a practice slug that also names a discipline
+// would shadow that discipline's page and take its services off the site.
+// Software & AI is exactly that case today and is safe only because it holds
+// one discipline, which is what makes the slug refer to the same page either
+// way. Adding a second discipline under it without renaming would break it.
+for (const practice of PRACTICES) {
+  if (practice.pillars.length <= 1) continue;
+
+  if (pillarSlugs.has(practice.slug)) {
+    fail(
+      `Practice "${practice.slug}" has ${practice.pillars.length} disciplines and shares its slug ` +
+        `with a discipline. /services/${practice.slug} would render the practice and the ` +
+        'discipline page would be unreachable. Rename one of them.',
+    );
+  }
+
+  if (!practice.headline || practice.headline.lines.length === 0 || !practice.headline.accent) {
+    fail(
+      `Practice "${practice.slug}" has a page at /services/${practice.slug} but no "headline". ` +
+        'Its H1 would be empty.',
+    );
+  }
+}
+
+// Every practice's navigation destination must cover every service under it.
+// This is the check that would have caught the original bug: the mega-menu tab
+// for a practice pointed at its first discipline, so clicking "Marketing &
+// E-commerce" reached a page holding three of its six services.
+for (const practice of PRACTICES) {
+  const column = MEGA_MENU_COLUMNS.find((c) => c.practice.slug === practice.slug);
+  if (!column) {
+    fail(`Practice "${practice.slug}" has no mega-menu column.`);
+    continue;
+  }
+
+  const expected =
+    practice.pillars.length > 1
+      ? `/services/${practice.slug}`
+      : `/services/${practice.pillars[0]}`;
+
+  if (column.href !== expected) {
+    fail(
+      `Practice "${practice.slug}" links to ${column.href}, which does not cover all ` +
+        `${practice.pillars.length} of its disciplines. Expected ${expected}.`,
+    );
+  }
+}
+
+const pillarOrder = PILLARS.map((p) => p.slug).join(' > ');
+const practiceOrder = PRACTICES.flatMap((p) => p.pillars).join(' > ');
+if (pillarOrder !== practiceOrder) {
+  fail(
+    'PILLARS order does not follow PRACTICES order. Sort content/pillars.ts to match, ' +
+      `or the site ranks disciplines differently from the navigation.\n      pillars.ts:   ${pillarOrder}\n      practices.ts: ${practiceOrder}`,
+  );
 }
 
 // This is the check that directly enforces "nothing hidden": every service in
 // the data must be present in the navigation the user can actually click.
-const menuHrefs = new Set(MEGA_MENU_COLUMNS.flatMap((c) => c.links.map((l) => l.href)));
+const menuHrefs = new Set(
+  MEGA_MENU_COLUMNS.flatMap((c) => c.groups.flatMap((g) => g.links.map((l) => l.href))),
+);
 for (const service of SERVICES) {
   const href = serviceHref(service);
   if (!menuHrefs.has(href)) {
@@ -172,6 +287,6 @@ if (failures.length > 0) {
 
 console.log(
   `\n  ✓ Content check passed — ${SERVICE_COUNT_WORD.toLowerCase()} (${SERVICE_COUNT}) services, ` +
-    `all complete and reachable across ${PILLARS.length} pillars`,
+    `all complete and reachable across ${PILLARS.length} disciplines in ${PRACTICES.length} practices`,
 );
 console.log('');

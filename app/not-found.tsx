@@ -9,8 +9,8 @@ import { IconBadge } from '@/components/ui/IconBadge';
  *
  * Carries the full service list rather than a bare "page not found". If
  * someone landed here from a stale link or a typo, the thing they were looking
- * for is almost certainly one of these eighteen — so show them, instead of
- * making them navigate back to a menu.
+ * for is almost certainly one of these, so show them, instead of making them
+ * navigate back to a menu.
  */
 export default function NotFound() {
   return (
@@ -45,18 +45,18 @@ export default function NotFound() {
       </Section>
 
       {/*
-        Five pillar cards, not the full 18-link directory.
+        Seven discipline cards, not the full 32-link directory.
 
         The first version listed every service here — directly above a footer
         that lists every service. Two visually identical multi-column link grids
         stacked back to back read as a rendering fault, not as a sitemap. The
-        pillars give a lost visitor a route in without duplicating what is
+        disciplines give a lost visitor a route in without duplicating what is
         already six inches below.
       */}
       <Section band tight>
         <Container>
-          <h2 className="font-display text-h3 text-ink">Try one of the five disciplines</h2>
-          <ul className="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+          <h2 className="font-display text-h3 text-ink">Try one of the seven disciplines</h2>
+          <ul className="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {SERVICE_GROUPS.map(({ pillar, services }) => (
               <li key={pillar.slug} className="h-full">
                 <Link

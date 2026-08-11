@@ -26,8 +26,8 @@ const NO_SUBSCRIBE = () => () => {};
 export interface ContactFormProps {
   /**
    * Built on the server and passed down. Importing SERVICE_GROUPS here instead
-   * pulled all eighteen services' full text — every FAQ, every step
-   * description — into the client bundle: 24KB gzipped to populate a dropdown
+   * pulled every service's full text, every FAQ, every step description,
+   * into the client bundle: tens of kilobytes gzipped to populate a dropdown
    * that needs two fields per option.
    */
   serviceOptions: { value: string; label: string }[];

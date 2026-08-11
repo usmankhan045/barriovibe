@@ -40,8 +40,8 @@ export function WhyUs() {
           <Reveal>
             <SectionHeading
               eyebrow="Why choose us"
-              lines={['Anyone can claim it.', 'We put ours in']}
-              accent="writing"
+              lines={['Six commitments,', 'every one of them']}
+              accent="checkable"
             />
             <Lead className="mt-7">
               Six commitments, each one you can hold us to. No adjectives, nothing that

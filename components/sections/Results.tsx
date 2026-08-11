@@ -29,8 +29,8 @@ export function Results() {
           <Reveal>
             <SectionHeading
               eyebrow="Our work"
-              lines={['Results that', 'speak for']}
-              accent="themselves"
+              lines={['The work, with', 'the numbers']}
+              accent="attached"
             />
             <Lead className="mt-7">
               Every number below is one we can evidence. Ask us for the working.

@@ -9,11 +9,17 @@ import { SERVICE_COUNT } from '@/content/services';
 /**
  * Mega footer.
  *
- * Every one of the 18 services is linked here, in five columns. That is
- * partly the site's internal-linking backbone for search — every service page
- * is one hop from every other page — and partly the last guarantee that
- * nothing is hidden: a visitor who scrolls to the bottom of any page sees the
- * complete offering.
+ * Every service is linked here, one column per practice with the disciplines
+ * as headings inside it. That is partly the site's internal-linking backbone
+ * for search — every service page is one hop from every other page — and
+ * partly the last guarantee that nothing is hidden: a visitor who scrolls to
+ * the bottom of any page sees the complete offering.
+ *
+ * Three columns rather than the seven a per-discipline layout would need. At
+ * seven, the columns were too narrow for a nav label and the grid wrapped into
+ * a ragged second row on every breakpoint below xl. Grouping under the
+ * practices puts the width back and makes the footer agree with the mega-menu
+ * rather than presenting a different taxonomy at the other end of the page.
  */
 export function Footer() {
   const year = new Date().getFullYear();
@@ -22,37 +28,53 @@ export function Footer() {
     <footer className="border-t border-line bg-band">
       <Container>
         {/* ── Service columns ─────────────────────────────────────────── */}
-        <div className="grid grid-cols-2 gap-x-8 gap-y-10 py-16 md:grid-cols-3 xl:grid-cols-5">
+        {/* items-start, or the three columns stretch to the tallest and the
+            practice headings stop aligning with each other. */}
+        <div className="grid grid-cols-1 items-start gap-x-8 gap-y-12 py-16 sm:grid-cols-2 lg:grid-cols-3">
           {MEGA_MENU_COLUMNS.map((column) => (
-            <div key={column.pillar.slug}>
-              <Link
-                href={column.href}
-                // min-height reserves two lines. "Corporate & Compliance" and
-                // "E-commerce & Marketplaces" wrap at 390px while the others do not,
-                // which put the underline rules and link lists at different
-                // heights across each row of the 2×2 mobile grid.
-                className="mb-4 flex min-h-[3.25rem] items-baseline gap-2 border-b border-silver-300 pb-3 transition-colors hover:text-blue-600"
+            <div key={column.practice.slug}>
+              <div
+                // min-height reserves two lines. "Performance Marketing &
+                // E-commerce" wraps at every column width the grid produces
+                // while the other two do not, which would otherwise put the
+                // underline rules and link lists at different heights across
+                // the row.
+                className="mb-5 flex min-h-[3.25rem] items-baseline gap-2 border-b border-silver-300 pb-3"
               >
-                <span className="font-display text-[11px] font-bold tabular text-ink-body">
-                  {column.pillar.number}
-                </span>
                 <span className="font-display text-caption font-bold text-ink">
-                  {column.pillar.title}
+                  {column.practice.title}
                 </span>
-              </Link>
+              </div>
 
-              <ul className="flex flex-col gap-2.5">
-                {column.links.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-caption text-ink-body transition-colors hover:text-blue-600"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
+              <div className="flex flex-col gap-5">
+                {column.groups.map((group) => (
+                  <div key={group.pillar.slug}>
+                    {/* Suppressed when the practice holds a single discipline:
+                        a heading repeating the column head above it adds a
+                        rule and a line of type and no information. */}
+                    {column.groups.length > 1 && (
+                      <Link
+                        href={group.href}
+                        className="mb-2 block font-display text-[11px] font-bold uppercase tracking-[0.08em] text-ink-body transition-colors hover:text-blue-600"
+                      >
+                        {group.pillar.title}
+                      </Link>
+                    )}
+                    <ul className="flex flex-col gap-2.5">
+                      {group.links.map((link) => (
+                        <li key={link.href}>
+                          <Link
+                            href={link.href}
+                            className="text-caption text-ink-body transition-colors hover:text-blue-600"
+                          >
+                            {link.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
           ))}
         </div>

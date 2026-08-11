@@ -41,7 +41,7 @@ export const ART = {
     alt: 'A blue chess queen standing ahead of a row of silver pawns',
     decorative: true,
   },
-  /** "Five disciplines" — a blue king among silver pieces. */
+  /** The disciplines — a blue king among silver pieces. */
   cluster: {
     src: chessCluster,
     alt: 'A blue chess king surrounded by silver pieces',

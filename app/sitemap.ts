@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { SERVICES, serviceHref } from '@/content/services';
+import { SERVICES, serviceHref, PRACTICE_PAGES } from '@/content/services';
 import { PILLARS } from '@/content/pillars';
 import { absoluteUrl } from '@/lib/seo';
 
@@ -34,6 +34,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       changeFrequency,
       priority,
+    })),
+    // Practice pages rank above the disciplines under them: they are what the
+    // navbar leads with, and each one covers a whole practice.
+    ...PRACTICE_PAGES.map(({ practice }) => ({
+      url: absoluteUrl(`/services/${practice.slug}`),
+      lastModified,
+      changeFrequency: 'monthly' as const,
+      priority: 0.85,
     })),
     ...PILLARS.map((pillar) => ({
       url: absoluteUrl(`/services/${pillar.slug}`),

@@ -177,7 +177,9 @@
      therefore paints UNDERNEATH both pseudo-elements and is swallowed by the
      rim lens. `border: 1px solid transparent` stays to hold the geometry; the
      rim you can actually see is drawn by ::after, which paints last. */
-  .u-glass {
+  .u-glass,
+  .u-tile-interactive,
+  .u-bento-card {
     position: relative;
     /* backdrop-filter already makes this a stacking context, but state it: the
        whole layer scheme depends on one existing, and an edit that drops the
@@ -264,7 +266,9 @@
      bounce is the same feature the blue button pill has at 95% (see
      --grad-blue in tokens.css); it is a brand detail, not a generic glass one,
      and it is why the conic has four stops rather than two. */
-  .u-glass::before {
+  .u-glass::before,
+  .u-tile-interactive::before,
+  .u-bento-card::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -336,7 +340,9 @@
        3. CAUSTIC. Light that has passed THROUGH the pane and refocused on the
           far side, low and wide. With only the specular a glass surface reads
           as a soap bubble; the caustic is what gives it thickness. */
-  .u-glass::after {
+  .u-glass::after,
+  .u-tile-interactive::after,
+  .u-bento-card::after {
     content: "";
     position: absolute;
     inset: 0;
@@ -379,11 +385,15 @@
      `:focus-within` alongside `:hover` deliberately: these elements contain
      their own focusable controls, and a keyboard user has to get the same
      feedback the mouse gets. */
-  .u-glass-interactive {
+  .u-glass-interactive,
+  .u-tile-interactive,
+  .u-bento-card {
     cursor: pointer;
   }
 
-  .u-glass-interactive:is(:hover, :focus-visible, :focus-within) {
+  .u-glass-interactive:is(:hover, :focus-visible, :focus-within),
+  .u-tile-interactive:is(:hover, :focus-visible, :focus-within),
+  .u-bento-card:is(:hover, :focus-visible, :focus-within) {
     transform: translateY(-3px);
     box-shadow: var(--glass-shadow-lift);
     /* --u-lit is a registered <number>, so this interpolates rather than
@@ -391,7 +401,9 @@
     --u-lit: 1;
   }
 
-  .u-glass-interactive:is(:hover, :focus-visible, :focus-within)::after {
+  .u-glass-interactive:is(:hover, :focus-visible, :focus-within)::after,
+  .u-tile-interactive:is(:hover, :focus-visible, :focus-within)::after,
+  .u-bento-card:is(:hover, :focus-visible, :focus-within)::after {
     border-color: color-mix(
       in srgb,
       var(--color-white) 74%,
@@ -403,7 +415,9 @@
      light that keeps orbiting is a loading spinner. `forwards` parks it back
      where it started, and 360deg is congruent with 0deg so a pointer leaving
      mid-sweep produces no jump. */
-  .u-glass-interactive:is(:hover, :focus-visible, :focus-within)::before {
+  .u-glass-interactive:is(:hover, :focus-visible, :focus-within)::before,
+  .u-tile-interactive:is(:hover, :focus-visible, :focus-within)::before,
+  .u-bento-card:is(:hover, :focus-visible, :focus-within)::before {
     animation: u-glass-sweep var(--duration-sweep) var(--ease-out-soft) forwards;
   }
 
@@ -480,6 +494,55 @@
     --glass-fill-edge: 74%;
   }
 
+  /* ── Glass below lg only ────────────────────────────────────────────────
+     For an element that needs the material on a phone and must not have it on
+     a desktop. One user: the header wordmark, whose full argument is at its
+     render site in HeaderClient.tsx. In short: the header carries no surface
+     of its own, so each of its elements carries its own material, and the
+     wordmark's desktop exemption is that it fades out on scroll. That fade is
+     `lg`-scoped, so below it the wordmark was ink sitting on whatever scrolled
+     under it. It takes the material instead.
+
+     Above lg the plate has to go completely, not merely go quiet: the wordmark
+     there is a lockup on bare canvas at the top of the page, and a pill of
+     glass drawn around it would be a box around nothing.
+
+     This is the same switch-off the Reduce Transparency and Increase Contrast
+     blocks at the foot of this file make, and it is written the same way for
+     the same reasons, including the prefixed backdrop-filter FIRST, without
+     which Lightning CSS drops the standard property and the material stays on
+     in Firefox at every width. Read the box on `.u-glass` before editing.
+
+     The shadow is Tailwind's `shadow-bar` on the element rather than a
+     declaration here, because a utility in the utilities layer would otherwise
+     win against this rule and re-add a shadow to a plate that no longer
+     exists. It is set below instead. */
+  @media (width >= 64rem) {
+    .u-plate-to-lg {
+      padding: 0;
+      border-radius: 0;
+      background-image: none;
+      background-color: transparent;
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+      box-shadow: none;
+    }
+
+    /* Both pseudo-elements, not just the rim lens. ::after draws the visible
+       rim, and a rim with no pane behind it is a stray rounded outline around
+       the lockup. */
+    .u-plate-to-lg::before,
+    .u-plate-to-lg::after {
+      display: none;
+    }
+  }
+
+  @media (width < 64rem) {
+    .u-plate-to-lg {
+      box-shadow: var(--shadow-bar);
+    }
+  }
+
   /* ── Sheet glass ────────────────────────────────────────────────────────
      A large pane lifted over rich content, rather than a small control
      floating on it. Used by the footer, which is pulled up over the deep blue
@@ -543,14 +606,48 @@
        grey. It read as a dull stripe below the blue rather than as the blue
        fading out, and it put a second soft edge under the band's own hard one.
        Landing at 92% by 52px makes the fill's transition and the backdrop's
-       transition the same event, so there is one edge instead of two. */
-    background-image: linear-gradient(
-      to bottom,
-      color-mix(in srgb, var(--color-white) 26%, transparent) 0px,
-      color-mix(in srgb, var(--color-white) 52%, transparent) 28px,
-      color-mix(in srgb, var(--color-white) 92%, transparent) 52px,
-      color-mix(in srgb, var(--color-white) 95%, transparent) 100%
-    );
+       transition the same event, so there is one edge instead of two.
+
+       ── The blue edge, and why this sheet needs one painted now ──
+
+       The blue along the top of this pane used to be REAL: the footer is pulled
+       up 48px over the CTA band, so its curved edge had deep blue genuinely
+       behind it and the ramp above exists to let that through. The home page no
+       longer has a CTA band, so on that one page the ramp was letting through
+       the canvas, which is white: a white sheet lying on a white page, with a
+       top edge you could only find by looking for it.
+
+       So the blue is painted as well as refracted. One gradient, on the top edge
+       only, falling off over 76px, and it is the same edge every card on the
+       site now carries: white body, blue where the material turns away from you.
+       It is the first layer in the stack, so it sits OVER the white ramp and
+       tints whatever the ramp lets through, which is the correct order for an
+       edge that is meant to read as the thickness of the glass rather than as a
+       stripe painted under it.
+
+       Top only, for the same reason the bevel on ::before is top only: the left
+       and right sides of this pane run off the viewport and its bottom is the
+       end of the document, so a fade on those three would be blue strips down
+       the screen edges with nothing physical behind them. That reasoning is
+       written out in full above ::before.
+
+       On the five pages that still close with the CTA band, this lands on top
+       of deep blue seen through glass and reads as a slightly deeper edge.
+       Harmless there, and load-bearing on the home page. */
+    background-image:
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--color-blue-600) 18%, transparent) 0px,
+        color-mix(in srgb, var(--color-blue-600) 7%, transparent) 30px,
+        transparent 76px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--color-white) 26%, transparent) 0px,
+        color-mix(in srgb, var(--color-white) 52%, transparent) 28px,
+        color-mix(in srgb, var(--color-white) 92%, transparent) 52px,
+        color-mix(in srgb, var(--color-white) 95%, transparent) 100%
+      );
   }
 
   /* The rim is on the TOP EDGE ONLY.
@@ -788,7 +885,11 @@
      If the tint ever drops back toward transparent, this decision changes with
      it, and the diff above is how to check. */
   .u-glass--card,
-  .u-glass--card::before {
+  .u-glass--card::before,
+  .u-tile-interactive,
+  .u-tile-interactive::before,
+  .u-bento-card,
+  .u-bento-card::before {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
@@ -796,51 +897,38 @@
   /* The rim can carry more of the edge than the default without turning into
      a stroke — this pane is dark and the rim is white.
 
-     ── The specular is turned down, and it is a contrast fix ─────────────────
+     ── NO POINTER BLOOM ON THIS CARD ──────────────────────────────────────
+     `.u-glass`'s first ::after layer is a 13rem white radial that tracks the
+     cursor through --u-px/--u-py and fades up on --u-lit. It is not in the
+     list below, and that is deliberate: on this pane it read as a white smear
+     sliding around under the copy rather than as light on a surface.
 
-     `.u-glass`'s specular is a 52%-white ellipse anchored at
-     --glass-light-x/y — 30%/22%, the upper left. On these cards that is not an
-     empty corner: it is exactly where the ghost numeral sits, on every card,
-     because the numeral is the first thing in the card body.
+     It is a bloom built for a TRANSLUCENT pane, where it lights the material
+     from within. --grad-glass-card is 98.5% opaque, so there is no material
+     for it to be inside — it just lies on top of the blue as white paint. The
+     same reasoning already took backdrop-filter off this element (see the
+     block above): an opaque pane is not glass, and the parts of the material
+     that need something behind them have nothing to act on.
 
-     Measured on the rendered page, brightest pixel under each piece of copy on
-     the centred card:
+     What is kept is the light that does not move: the specular at
+     --glass-light-x/y and the caustic along the bottom edge. Those are the
+     page's one light source, and they are what still reads as a lit surface.
+     The rim on ::before and its conic sweep are untouched, so hovering a card
+     is still acknowledged — by the edge, which is where this material's glass
+     actually lives. Every other glass surface on the site keeps its bloom;
+     this override is scoped to `.u-glass--card`.
 
-         region    background there   foreground    ratio
-         numeral   rgb(131,153,212)   blue-200      1.54  FAIL (3:1 floor)
-         title     rgb(73,103,187)    white         5.33  pass
-         list      rgb(44,77,169)     white/80      5.56  pass
-         blurb     rgb(40,70,153)     white/80      6.19  pass
-
-     Note what that background is: the bloom lifts the pane from rgb(40,70,153)
-     to rgb(131,153,212) in that corner, and at that luminance NOTHING light
-     passes — pure white measures 2.81 there. So this was never fixable by
-     changing the numeral's colour, only by moving the light or dimming it.
-
-     The light is not moved. Every specular, rim and caustic on this site
-     resolves through --glass-light-x/y so the glass is lit from the same place
-     as the badges and buttons above it, and a per-card light source would be
-     one surface lit from its own little scene. Dimming it costs the face-bloom
-     only — the rim on ::before, the
-     dispersion and this element's own 1px edge all carry on, and they are what
-     read as glass. The bloom on an opaque pane was closer to a smudge anyway.
-
-     This predates the stage going white; it was failing on the dark band too,
-     and it is invisible to the eye that checks the paragraph and finds it
-     fine. Re-measure it if the pane's tint moves again. */
+     The contrast problem the old note here recorded goes with it. The bloom
+     lifted the pane from rgb(40,70,153) to rgb(131,153,212) in the upper-left
+     corner — exactly where the ghost numeral sits on every card — and at that
+     luminance nothing light passed: blue-200 measured 1.54 against a 3:1
+     floor, and pure white only 2.81. It was dimmed rather than moved, because
+     a per-card light source would be one surface lit from its own little
+     scene. With the bloom gone the numeral sits on the resting pane at
+     5.30:1 and the copy on it at 9.65:1. */
   .u-glass--card::after {
     border-color: color-mix(in srgb, var(--color-white) 40%, transparent);
     background-image:
-      radial-gradient(
-        var(--glass-glow) var(--glass-glow) at var(--u-px) var(--u-py),
-        color-mix(
-            in srgb,
-            var(--color-white) calc(var(--glass-glow-strength) * var(--u-lit, 0)),
-            transparent
-          )
-          0%,
-        transparent 100%
-      ),
       radial-gradient(
         ellipse 44% 28% at var(--glass-light-x) var(--glass-light-y),
         color-mix(in srgb, var(--color-white) 12%, transparent) 0%,
@@ -852,6 +940,307 @@
         color-mix(in srgb, var(--color-white) 14%, transparent) 0%,
         transparent 78%
       );
+  }
+
+  /* ── Card glass, white body ─────────────────────────────────────────────
+     `.u-glass--card` paints a near-opaque blue solid sampled from the chess
+     piece (see --grad-glass-card). That is right on the coverflow, where the
+     card IS the subject and there is nothing inside it but type. It is wrong
+     wherever a card CONTAINS something: a white mockup pane, a block of ink
+     copy. A saturated blue field around white content makes the content the
+     only thing the eye can land on, and a row of them reads as a row of mats
+     rather than as a row of products.
+
+     Two sections are built on it, which is why it lives here next to
+     `.u-glass--card` rather than inside either of them:
+
+       SoftwareShowcase   six cards, each carrying a white mockup pane
+       RevenueEngine      five cards, each carrying ink copy on white
+
+     Everything below is the material. What a section then does with a pointer
+     on it belongs in that section's own block.
+
+     So the body inverts and the EDGE keeps the blue. Three layers, painted,
+     no filter, in the order they stack:
+
+       the rim on ::before    the same feathered 10px band the material always
+                              had, retinted from white to brand blue. This is
+                              the "faded edge": the mask fades it inward over
+                              10px, so it is an edge that falls off rather than
+                              a stroke that stops. On the blue card the rim is
+                              white because the body is dark; the rule is that
+                              the rim is whatever the body is not.
+       the vignette           blue gathering in the outer eighth of the body
+                              itself, under the rim, so the two read as one
+                              thickness of glass rather than as a border sat on
+                              a white box.
+       the body               white, lit at --glass-light-x/y like every other
+                              surface on the page, cooling a few points toward
+                              blue as it runs away from the light.
+
+     The alphas stay under 1 for the same reason the blue card's do: where two
+     cards or a card and the watermark overlap, there is still something to
+     lens. Copy on this card is --color-ink and --color-ink-body, which is the
+     page's own text pair, measured against white: 19.57:1 and 5.01:1. The
+     white-text contrast note on `.u-glass--card` does not apply here, and the
+     Reduce Transparency fallback (white surface, hairline border) is now the
+     same reading as the card itself rather than a different one. */
+  .u-glass--white,
+  .u-tile-interactive,
+  .u-bento-card {
+    background-image:
+      radial-gradient(
+        120% 120% at 50% 46%,
+        transparent 54%,
+        color-mix(in srgb, var(--color-blue-600) 5%, transparent) 82%,
+        color-mix(in srgb, var(--color-blue-600) 13%, transparent) 100%
+      ),
+      radial-gradient(
+        132% 132% at var(--glass-light-x) var(--glass-light-y),
+        rgb(255 255 255 / 0.98) 0%,
+        rgb(252 253 255 / 0.98) 46%,
+        rgb(245 248 254 / 0.97) 78%,
+        rgb(238 243 253 / 0.97) 100%
+      );
+  }
+
+  .u-glass--white::before,
+  .u-tile-interactive::before,
+  .u-bento-card::before {
+    background-image: conic-gradient(
+      from calc(315deg + var(--u-sweep, 0deg)) at 50% 50%,
+      color-mix(in srgb, var(--color-blue-600) 40%, transparent) 0deg,
+      color-mix(in srgb, var(--color-blue-600) 15%, transparent) 88deg,
+      color-mix(in srgb, var(--color-blue-600) 15%, transparent) 142deg,
+      /* the bounce, as on the parent: light coming back up off the surface
+         below, which is the brand's own pill detail */
+        color-mix(in srgb, var(--color-blue-400) 32%, transparent) 196deg,
+      color-mix(in srgb, var(--color-blue-600) 15%, transparent) 252deg,
+      color-mix(in srgb, var(--color-blue-600) 15%, transparent) 304deg,
+      color-mix(in srgb, var(--color-blue-600) 40%, transparent) 360deg
+    );
+    /* Dispersion, warmed one step. The silver fringe carried the far edge on a
+       dark pane and does nothing against white, so the blue does more of it. */
+    box-shadow:
+      inset 1px 1px 3px
+        color-mix(in srgb, var(--color-blue-400) 34%, transparent),
+      inset -1px -1px 3px
+        color-mix(in srgb, var(--color-silver-400) 30%, transparent);
+  }
+
+  /* The illumination layer is GONE from this card, and that is deliberate:
+     `.u-lens` below is the illumination now, and two of them would be one
+     surface lit twice. See the note on `.u-lens` for the argument. */
+  .u-glass--white::after,
+  .u-tile-interactive::after,
+  .u-bento-card::after {
+    border-color: color-mix(in srgb, var(--color-blue-600) 20%, transparent);
+    background-image:
+      /* specular. Still white, still at the light source: it is the one layer
+         that has to be lighter than the body, and the body is only 98% white
+         in that corner, so it does read. */
+        radial-gradient(
+          ellipse 44% 28% at var(--glass-light-x) var(--glass-light-y),
+          color-mix(in srgb, var(--color-white) 60%, transparent) 0%,
+          color-mix(in srgb, var(--color-white) 20%, transparent) 46%,
+          transparent 74%
+        ),
+      /* caustic. Inverted for the same reason: light refocusing below a white
+         pane shows up as a cool pool, not as a brighter white. */
+        radial-gradient(
+          ellipse 68% 22% at 52% 104%,
+          color-mix(in srgb, var(--color-blue-500) 11%, transparent) 0%,
+          transparent 78%
+        );
+  }
+
+  /* The hover edge brightens toward the brand rather than toward white, which
+     is the same move `.u-glass-interactive` makes, read the other way up. */
+  .u-glass--white:is(:hover, :focus-visible, :focus-within)::after,
+  .u-tile-interactive:is(:hover, :focus-visible, :focus-within)::after,
+  .u-bento-card:is(:hover, :focus-visible, :focus-within)::after {
+    border-color: color-mix(in srgb, var(--color-blue-600) 34%, transparent);
+  }
+
+  /* ── THE DROP ───────────────────────────────────────────────────────────
+     A drop of the material travels across the card under the pointer.
+     components/ui/LiquidLens.tsx is the physics; this is the object it moves.
+
+     ── What it replaced, twice ──
+
+     First a blue radial wash anchored at --u-px/--u-py, which is what the
+     material ships and what every other glass surface on this site still uses.
+     It is the right layer for a pill or a panel, where the glow says "this
+     surface is under the pointer" and there is nothing else to say. On a card
+     the size of a postcard it says something the material does not mean: light
+     on a surface, when Liquid Glass is an OBJECT with a rim, a thickness and a
+     weight. You cannot tune a gradient into an object, because a gradient has
+     no edge to catch light on.
+
+     Then, briefly, six drops in a chasing chain: one leader and five smaller
+     ones strung out behind it. It worked and it was the wrong thing. A trail
+     draws the GESTURE, and the gesture is not what this section is about; six
+     rims sliding over a mockup competed with the mockup, which is the thing the
+     card exists to show. One drop says everything the trail said about the
+     material and takes nothing from the screen underneath.
+
+     ── One object, three layers ──
+
+     The same three the material is built from, at the scale of a droplet:
+
+       THE RIM       a faint blue ring that cuts the silhouette out of the white
+                     card, with the light on it painted as two offset inset
+                     crescents rather than a second ring. See the note on the
+                     box-shadow below for why a ring of even weight is the one
+                     thing that would read as a border.
+       THE BODY      a specular at --glass-light-x/y and the bounce under it,
+                     the same pair `.u-glass::after` paints on every pane on the
+                     site. The drop is lit from the page's light source, not
+                     from the pointer: it is an object moving through a lit
+                     scene, and an object does not carry its own sun.
+       THE WEIGHT    a blue shade pooled at the bottom and a real drop shadow,
+                     so it sits ON the card rather than being printed into it.
+
+     The geometry inside it is in `em` off `font-size: var(--lens-size)`, so one
+     custom property resizes the whole thing, shadows included. That is what
+     made the size cheap to argue about, and it was argued about three times:
+     192px, then 160, then 144, and now 96. Each one was still reading as a
+     second surface laid over the card rather than as a bead of something
+     sitting on it. The rim stays 1px at every size, because a hairline is a
+     hairline at any scale.
+
+     ── The one backdrop-filter on this page, and why it earns it ──
+
+     Read the block above `.u-glass--card` first: the filter was measured off
+     these cards because at 94–97% opacity there was nothing behind them to
+     refract, and it cost 33.2ms/frame to sample a backdrop it could not use.
+     Every word of that still holds for the CARD. It is why this is on the drop.
+
+       IT HAS SOMETHING TO BEND. The drop passes over the mockup, which is the
+       densest geometry in the section: type at 7–11px, hairlines, a chart, a
+       phone. That is the best thing a lens can be given, and it is the one
+       claim the card itself could never make.
+       IT IS ONE ELEMENT, AND ONLY WHILE HOVERED. 96px across, `visibility:
+       hidden` until a pointer arrives, on the one card under it, and briefly on
+       two while a crossing is in flight. The removed version was ten full-card
+       layers, all of them resident, on every frame of every scroll past the
+       section. This is about a fiftieth of that area and it exists only while
+       someone is looking at it.
+
+     `saturate` and `contrast` rather than the usual `blur` and `brightness`,
+     and that is a legibility decision as much as an aesthetic one. A lens
+     CONCENTRATES: colour comes back stronger and the darks come back darker,
+     which is what contrast above 1 does. Brightness above 1 does the opposite
+     to text, and it is measurable: the body copy is --color-ink-body at 5.01:1
+     on white, and `brightness(1.06)` under a drop crossing a paragraph takes it
+     to 4.47:1, under the 4.5 floor. `contrast(1.08)` moves it the other way.
+     Blur is left out for the same reason and one more: blurred type under a
+     travelling circle reads as a rendering fault, not as glass.
+
+     ── Layering ──
+
+     `z-index: 2` on the well puts the drop over the mockup and over the copy,
+     which is where a droplet on the surface of a card belongs. The well is what
+     clips it: `overflow: hidden` with the card's own radius, so the drop is cut
+     by the card's edge exactly as the material would cut it, and the card keeps
+     its own `overflow` semantics. That clip is also half of how a drop crosses
+     from one card to the next, which is the long note in LiquidLens.
+     `pointer-events: none` throughout, because the whole card is a link and
+     nothing here may interrupt that.
+
+     `will-change` is scoped to `[data-lit]` rather than sat on the class. Six
+     permanently promoted layers to serve one drop at a time is the trade this
+     whole section keeps refusing. */
+  .u-lens-well {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    overflow: hidden;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  .u-lens {
+    /* 96px against a ~370px card. The history of this number is in the note
+       above; it only ever moved one way. */
+    --lens-size: 6rem;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--lens-size);
+    height: var(--lens-size);
+    /* Half its own size back and up, so the transform LiquidLens writes is the
+       drop's centre and not its corner. A margin rather than a translate in the
+       transform chain: the squash and stretch scale everything after them, and
+       an offset that scales with the deformation would slide the drop off its
+       own position exactly when it is moving fastest. */
+    margin: calc(var(--lens-size) / -2) 0 0 calc(var(--lens-size) / -2);
+    border-radius: 50%;
+
+    /* The scale every `em` below is measured in. These spans hold no text, so
+       font-size is free to be what it is here: one dial that resizes the whole
+       drop, geometry included, from a single custom property. */
+    font-size: var(--lens-size);
+
+    /* Both zeroed until a pointer arrives. `visibility` and not `display`,
+       because the element has to keep its box for the transform to be written
+       against and for LiquidLens to measure its width at birth, and not opacity
+       alone, because a backdrop-filter on a zero-opacity element is work the
+       compositor may still do. */
+    opacity: 0;
+    visibility: hidden;
+
+    /* PREFIXED FIRST. See the box on `.u-glass` for why that order is not a
+       style preference: Lightning CSS drops whichever of the two comes first,
+       and standard-first ships Firefox nothing. */
+    -webkit-backdrop-filter: saturate(1.7) contrast(1.08);
+    backdrop-filter: saturate(1.7) contrast(1.08);
+
+    /* Two marks, both small. The first draft spread the specular across half
+       the drop and the result was a frosted disc: a droplet's highlight is a
+       tight bright spot with clear glass around it, and it is the CLEAR part
+       that lets you see the lensing underneath. */
+    background-image:
+      radial-gradient(
+        ellipse 30% 22% at var(--glass-light-x) var(--glass-light-y),
+        color-mix(in srgb, var(--color-white) 60%, transparent) 0%,
+        color-mix(in srgb, var(--color-white) 8%, transparent) 56%,
+        transparent 78%
+      ),
+      radial-gradient(
+        ellipse 50% 16% at 54% 97%,
+        color-mix(in srgb, var(--color-white) 26%, transparent) 0%,
+        transparent 72%
+      );
+
+    /* ── The rim is where the object lives ──────────────────────────────
+       On a white card a white rim is nothing, and a stroke of even weight is
+       the one thing that instantly reads as "border" rather than "edge of a
+       solid" (the same note is on `.u-glass::before`, at forty times the
+       size). So the ring is faint and BLUE, which is what actually cuts the
+       silhouette out of the white, and the light on it is two offset inset
+       crescents rather than a second ring: one on the upper left where the
+       edge faces --glass-light-x/y, one on the lower right where the surface
+       below bounces light back up. That pair is the whole reason this reads as
+       a bead and not as a patch of fog. */
+    box-shadow:
+      /* the silhouette. 1px at every size, because a hairline is a hairline */
+      inset 0 0 0 1px rgb(11 47 146 / 0.11),
+      inset 0.0125em 0.019em 0.019em -0.0125em rgb(255 255 255 / 0.95),
+      inset -0.019em -0.025em 0.025em -0.019em rgb(255 255 255 / 0.72),
+      /* the thickness: light that has run through the drop and pooled at the
+         bottom, and the shadow the far wall casts into it */
+      inset 0 -0.0875em 0.125em -0.0875em rgb(11 47 146 / 0.4),
+      inset 0.05em 0.05em 0.0875em -0.075em rgb(15 64 199 / 0.3),
+      /* and the drop shadow, which is the line that says it is sitting ON the
+         card rather than being printed into it */
+      0 0.05em 0.125em -0.0625em rgb(11 47 146 / 0.3);
+  }
+
+  [data-lit] .u-lens {
+    visibility: visible;
+    will-change: transform, opacity;
   }
 
   /* ── The disciplines stage ──────────────────────────────────────────────
@@ -891,22 +1280,35 @@
      COVERFLOW
      ═══════════════════════════════════════════════════════════════════════
 
-     Geometry only. Every per-card value — position, tilt, depth, opacity and
-     how near the card is to the centre — is written straight onto the element
-     by the paint loop in components/ui/Coverflow.tsx, because sixty React
-     renders a second to move five cards is sixty renders React never needed to
-     see. What lives here is the scene those numbers are written into, and the
-     two derived effects that are cheaper as CSS than as more JS writes.
+     Geometry only. Every per-card value, meaning position, tilt, depth and
+     opacity, comes from components/ui/Coverflow.tsx rather than from here,
+     because sixty React renders a second to move five cards is sixty renders
+     React never needed to see. What lives here is the scene those numbers are
+     written into, and the derived effects that are cheaper as CSS than as more
+     JS.
+
+     ── How a move actually runs, because it decides what may go in this file ──
+
+     A move is not a loop. The spring is solved in one pass and handed to the
+     browser as keyframes, so the compositor carries the cards and the main
+     thread is free for the whole of the travel. See `springPath` in
+     Coverflow.tsx for why that, and not the arithmetic, is what separates this
+     section from the deck in "Why choose us".
+
+     The consequence for this file: while the rake is moving, the ONLY things
+     that may change are what a compositor can change without a rasteriser,
+     which is transform and opacity. Everything else a card does is a CSS
+     transition off a flag, fired once. `[data-moving]` below is what enforces
+     that, and it is not an optimisation to be traded away.
 
      ── The one structural rule ──
 
      `.u-cf-cell` is a POSITIONER and `.u-cf-card` is the glass. They are two
      elements and they must stay two, because both want `transform` and on
-     different clocks: the cell's is rewritten every animation frame by the
-     drag, and the card's is the hover lift and gel press that `.u-glass` and
-     `.u-glass-interactive` already own. Collapse them into one element and the
-     hover state fights the paint loop — the lift lands for a single frame and
-     is then overwritten. */
+     different clocks: the cell's belongs to the carousel, and the card's is the
+     hover lift and gel press that `.u-glass` and `.u-glass-interactive` already
+     own. Collapse them into one element and the hover state fights the
+     carousel: the lift lands for a single frame and is then overwritten. */
   .u-cf {
     /* Card WIDTH. Everything else in the scene derives from it — the pitch
        between cards, how far they recede, the perspective distance — so the
@@ -915,20 +1317,96 @@
     --cf-height: calc(var(--cf-card) * 1.36);
   }
 
-  /* Taller in proportion on a narrow screen, and not for looks: the card is at
-     the bottom of its clamp there, so the same copy wraps to noticeably more
-     lines inside a box that got shorter with it. At 1.36 the blurb and the
-     "Explore" line were clipped by the card's own `overflow: hidden` — the copy
-     was simply gone, with nothing to indicate it. The aspect the rake wants and
-     the aspect the text needs pull in opposite directions as the card narrows;
-     this follows the text, because the rake is flattened at this width anyway.
+  /* ── The narrow-screen scene ────────────────────────────────────────────
+     Both numbers change together below 48rem, and they have to: the aspect is
+     a function of how much the copy wraps, and the width is what decides that.
+     Changing one without re-measuring the other is how this card ends up
+     clipping its own text again.
 
-     The line clamp on the blurb is the belt to this braces. It is what keeps a
-     future edit to `content/pillars.ts` from silently reintroducing the same
-     clipping — the clamp truncates visibly, an overflow does not. */
+     ── The width ──
+
+     `--cf-card`'s clamp above is authored for the rake: 21vw is the pitch that
+     makes a receding row read as depth, and the 13.5rem floor is there so the
+     card does not collapse once 21vw stops being enough. On a desktop that is
+     exactly right.
+
+     On a phone it is the wrong number twice over. 21vw of a 393px screen is
+     82px, so the floor is always what wins, and the floor was chosen as a
+     minimum rather than as a width anyone picked for this case: measured on an
+     iPhone 14 Pro it laid a 216px card on a 393px screen, leaving the blurb to
+     wrap inside a 141px column and hit its line clamp two words into the second
+     sentence. The truncation was working. There was simply far more room
+     available than the card was asking for.
+
+     And the reason the clamp is tuned for the rake does not apply here, because
+     THERE IS NO RAKE AT THIS WIDTH: this same 48rem query is mirrored in JS,
+     where `NARROW` flattens the scene. What is left is a flat peek-carousel,
+     and a peek-carousel wants the card as wide as the screen allows while still
+     showing enough of its neighbour to say "there is more this way".
+
+     THE PEEK IS THE BINDING CONSTRAINT, and it closes faster than it looks
+     like it should. In flat mode `place()` spaces cards at
+     `offset * width * 1.06`, so the pitch is a multiple of the card's own
+     width: every pixel added to the card pushes its neighbour 1.06px further
+     out while only bringing 0.5px of its own edge closer. The neighbour is also
+     SCALED DOWN by the per-step shrink, which pulls its near edge away again by
+     half the width it loses.
+
+     That second term is easy to forget and it dominates. Do not derive this
+     number; measure it. Measured at 393px, sweeping the width:
+
+         60vw    card 236x335    peek 47px
+         64vw    card 252x357    peek 36px
+         66vw    card 259x368    peek 32px
+         68vw    card 267x379    peek 27px   <- these values
+         70vw    card 275x391    peek 22px
+         72vw    card 283x402    peek 17px
+         76vw    card 299x424    peek  6px
+
+     76vw was tried and rejected: a 6px sliver of a card that is also scaled and
+     faded is not a peek, and the carousel stopped announcing that it had more in
+     it. 68vw keeps a 27px edge, which reads as a card, while still taking the
+     text column from the old 216px card's ~168px up to ~219px.
+
+     Anything that changes the 1.06 pitch or the shrink in `place()` invalidates
+     the whole table. The 22rem ceiling stops a 744px tablet, still inside this
+     query, being handed one enormous card.
+
+     ── The aspect ──
+
+     1.78 was the aspect the 216px card needed, and it was not a look either: at
+     the desktop 1.36 the blurb and the "Explore" line were clipped by the
+     card's own `overflow: hidden`, so the copy was simply gone with nothing to
+     indicate it. That measurement belonged to a text column DevTools reported
+     at 141px.
+
+     The card is now 267px against `.u-cf-card-body`'s 1.5rem of padding either
+     side, so the column is ~219px rather than ~168px. The copy wraps to fewer
+     lines than 1.78 was sized for, and leaving the aspect there put a third of
+     the card's height into empty blue above the badge.
+
+     1.5 is what the five-line clamp needs. Disciplines.tsx clamps the blurb to
+     five lines below md rather than four (the reason is at that call site), and
+     1.42 was tried first: it fits five lines of blurb and then pushes the
+     "N services" action row 4-8px past the card's bottom edge, where
+     `overflow: hidden` eats it. Losing the call to action is the specific
+     failure the clamp was added to prevent, so the aspect has to pay for the
+     line the clamp allows. At 1.5 the card is 400px at 393px and the worst of
+     the three practices, Performance Marketing & E-commerce, clears the bottom
+     edge with room to spare.
+
+     Re-measure all three practices if either number changes, and check the
+     action row rather than the blurb: the blurb truncates visibly and the action
+     row disappears silently. Width, aspect and clamp are one decision in three
+     declarations, not three independent knobs.
+
+     The line clamp on the blurb remains the belt to this braces. It is what
+     keeps a future edit to `content/pillars.ts` from silently reintroducing the
+     clipping: a clamp truncates visibly, an overflow does not. */
   @media (width < 48rem) {
     .u-cf {
-      --cf-height: calc(var(--cf-card) * 1.78);
+      --cf-card: min(68vw, 22rem);
+      --cf-height: calc(var(--cf-card) * 1.5);
     }
   }
 
@@ -982,13 +1460,22 @@
   .u-cf-cell {
     position: absolute;
     top: 0;
+    /* Centred in LAYOUT rather than by a -50% inside the transform, and that is
+       not tidying. Every move is handed to the compositor as keyframes (see
+       `springPath` in components/ui/Coverflow.tsx), and a percentage inside an
+       animated transform is a value that depends on the element's own box, so
+       it is the one thing that can quietly disqualify the animation from
+       running off the main thread. Paid for once here in layout, the keyframes
+       are pure pixels and there is nothing left to resolve per frame. */
     left: 50%;
+    margin-left: calc(var(--cf-card) / -2);
     width: var(--cf-card);
     height: var(--cf-height);
-    /* No `transition` here, deliberately. The paint loop owns this transform
-       and eases it itself; a CSS transition on top would be a second easing
-       function fighting the first, and a drag would then lag the pointer by
-       exactly the transition duration. */
+    /* No `transition` here, deliberately. The carousel owns this transform:
+       a move is a compositor animation carrying the spring's own path, and a
+       drag is written straight to the element per pointer event. A CSS
+       transition on top would be a second easing function fighting the first,
+       and a drag would then lag the pointer by exactly its duration. */
   }
 
   /* ── `will-change` is a promise, not a hint, and it is expensive to keep ──
@@ -998,40 +1485,39 @@
      touching the carousel. Layer count is the thing WebKit is least forgiving
      about, and this section is the only place on the site that asks for ten.
 
-     The class is added by the paint loop while the spring is running and taken
-     off when it rests, which is what `will-change` is actually for: tell the
-     compositor what is ABOUT to change, then stop telling it.
+     `[data-live]` is set by the carousel for as long as a move is running and
+     taken off when it lands, which is what `will-change` is actually for: tell
+     the compositor what is ABOUT to change, then stop telling it.
 
-     ── …but not FIRST while the spring is running ──────────────────────────
+     ── …but not FIRST while the move is running ────────────────────────────
      Promoting a layer is not free and it is not instant: the compositor has to
-     allocate the surface and rasterise the card into it — five gradients, a
+     allocate the surface and rasterise the card into it, five gradients, a
      conic rim and a column of text apiece. Asked for on the first frame of the
      move, that work lands inside the first frame of the move, which is exactly
      where a hitch is most legible: the rake sets off, stalls for a frame or
      two, and then runs. It reads as weight the carousel does not have.
 
-     So the promise is also made on hover of the FRAME — before the pointer has
-     reached a card, and therefore before anything has been asked to move. By
-     the time a hover-intent timer fires 32ms later the layers already exist and
-     the spring's first frame is pure compositing.
+     So the promise is also made on hover of the FRAME, before the pointer has
+     reached a card and therefore before anything has been asked to move. By the
+     time the hover-intent timer fires the layers already exist and the first
+     frame of the move is pure compositing.
 
      The cost is layers held while a pointer rests over the section, and that is
      bounded by the `display: none` below: the ring's copies are out of the tree
      unless the rake actually needs them, so this is five or six surfaces, not
-     ten. The `[data-moving]` half stays because a keyboard user and the
-     pagination dots move the rake without ever hovering it — and it is keyed
-     on `[data-live]` rather than `[data-moving]`, because those two now part
-     company at the end of a move: the rake stops LOOKING as though it is
-     moving a little before the integrator stops moving it, and the layer has
-     to survive the difference or the last sub-pixel of every move repaints.
+     ten. The `[data-live]` half stays because a keyboard user and the
+     pagination dots move the rake without ever hovering it, and it is keyed on
+     `[data-live]` rather than `[data-moving]` because those two part company at
+     the end of a move: the rake stops LOOKING as though it is moving a little
+     before the spring stops moving it, and the layer has to survive the
+     difference or the last sub-pixel of every move repaints.
 
-     ── Both properties, because the loop writes both ────────────────────────
+     ── Both properties, because the keyframes carry both ────────────────────
      `transform` and `opacity` are the only two things a compositor can change
-     without waking a rasteriser, and the paint loop writes exactly those two
-     per frame. Naming only transform promoted the layer but left the opacity
-     write as an ordinary style change — a repaint of the card's gradients and
-     text on every frame of every move, which is precisely what the promotion
-     was bought to avoid. */
+     without waking a rasteriser, and they are exactly the two a move animates.
+     Naming only transform promoted the layer but left opacity as an ordinary
+     style change, a repaint of the card's gradients and text on every frame of
+     every move, which is precisely what the promotion was bought to avoid. */
   .u-cf-frame:hover .u-cf-cell,
   .u-cf-track[data-live='true'] .u-cf-cell {
     will-change: transform, opacity;
@@ -1098,12 +1584,12 @@
        and transitioning a shadow that size repaints the card's whole box for
        the duration; the 3px of travel it accompanies costs nothing. */
     box-shadow: var(--glass-shadow);
-    /* The illumination on ::after. Pinning it is worth more than the flare it
-       costs: `--u-lit` is read inside a `color-mix` inside a `radial-gradient`,
-       and `.u-glass::after` TRANSITIONS `background-image` — so every change to
-       it cross-fades two freshly rendered gradient images across the whole
-       card, which is the most expensive thing on this element by some way. */
-    --u-lit: 0;
+    /* The illumination on ::after used to be pinned here too, and no longer
+       needs to be: `.u-glass--card::after` does not paint the pointer bloom at
+       all now, so nothing on this card reads --u-lit and there is no
+       background-image cross-fade left to suppress. Restore the pin along with
+       the bloom if it ever comes back — it was the most expensive thing on
+       this element by some way. */
   }
 
   .u-cf-cell:not([data-cf-active='true']) .u-cf-card::before {
@@ -1172,45 +1658,98 @@
 
   /* ── EVERYTHING A CARD DOES ON ARRIVAL IS A TRANSITION ──────────────────
      The detail block below, and the lede's rise further down, are both keyed
-     off `[data-cf-active]` — a flag the paint loop flips once per card per
-     move, not a number it writes every frame.
+     off `[data-cf-active]`, a flag the carousel flips once per card per move
+     rather than a number it writes continuously.
 
      That is a performance rule as much as a design one, and it is the rule the
-     whole section rests on. The paint loop may write `transform` and `opacity`
-     to a promoted cell and nothing else; anything a CARD does is a CSS
-     transition off a flag. Transitions on transform and opacity are run by the
-     compositor and promote their element automatically, so the arrival
-     sequence costs nothing per frame. A JS-written value feeding the same
-     properties costs a repaint of the card on every frame it changes — see the
-     note on `.u-cf-lede`, which is where that was learned. */
+     whole section rests on. A move may animate `transform` and `opacity` on a
+     promoted cell and nothing else; anything a CARD does is a CSS transition
+     off a flag. Transitions on transform and opacity are run by the compositor
+     and promote their element automatically, so the arrival sequence costs
+     nothing per frame. A continuously written value feeding the same properties
+     costs a repaint of the card every time it changes: see the note on
+     `.u-cf-lede`, which is where that was learned. */
   /* ── The detail arrives as a SEQUENCE, not a crossfade ───────────────────
-     This used to be `opacity: var(--cf-near)` — the block's opacity tied
+     This used to be `opacity: var(--cf-near)`, the block's opacity tied
      directly to how near the card was to the middle. It was correct and it was
      the flattest thing in the section: the card slid in and its whole lower
      half faded up with it, in lockstep, one gesture with one beat.
 
      Real arrivals have an order. The card lands, and THEN it fills: the rule
-     and the block behind it first, the blurb, then the invitation to act. Each
-     step is small — 90ms apart, half a centimetre of travel — and together
-     they are the difference between a card that appeared and a card that
-     settled.
+     and the block behind it first, the blurb, then the invitation to act.
+     Together they are the difference between a card that appeared and a card
+     that settled.
 
      A sequence needs a moment to start from, which is the second reason a flag
-     drives this and not a value that slides continuously with the drag. */
+     drives this and not a value that slides continuously with the drag.
+
+     ── THE NUMBERS BELOW ARE A CLOCK, AND THE RAKE OWNS IT ──────────────────
+
+     Every delay here is measured from `[data-cf-active]` flipping, which the
+     carousel does at `activeAt`: the moment the rake comes within 0.4 of a card
+     of its destination. So these are not free-floating taste, they are offsets
+     into a move whose length is set by OMEGA in components/ui/Coverflow.tsx.
+     For a one-card hover on a desktop that flag flips 200ms in, the rake looks
+     to have landed at 810ms, and the spring stops at 980ms.
+
+     The sequence was cut for a spring that landed at 500ms, and against the
+     slower one it ran out early: the blurb was fully in at 570ms with the card
+     still visibly travelling for another quarter second, so the arrival split
+     into a card still moving and a card already finished. Restretched, it now
+     runs 200ms to 1.20s, which is one continuous unfold:
+
+       200ms   lede begins its rise, with the card                (600ms)
+       400ms   the rule and the detail block begin to appear      (520ms)
+       420ms   the blurb begins to settle                         (640ms)
+       560ms   "Explore" follows it                               (640ms)
+       810ms   the card has arrived; the lede has finished with it
+       920ms   the block is fully in
+       1.20s   the last line comes to rest
+
+     The one thing not to do here is shorten these back to make the whole thing
+     "finish sooner". They are the tail of the gesture, not a separate one, and
+     a card whose copy has settled before the card has is what this section
+     already looked like.
+
+     ── AND THE CURVE HAD TO CHANGE WITH THE CLOCK, OR THE CLOCK DOES NOTHING ─
+
+     Every one of these was --ease-brand, an expo-out, which is the right shape
+     for something answering an input: it leaves instantly and spends its
+     duration settling. Stretched to 520 and 640ms it stops being a shape at
+     all. Half the travel is gone in the first 90ms and the remaining 6px are
+     spread over half a second at well under a pixel a frame, which is to say
+     invisibly. The copy would have snapped into place while the card was still
+     three quarters of a second from arriving, and the longer durations above
+     would have bought precisely nothing.
+
+     --ease-glide is the token this site already keeps for that exact
+     diagnosis. It eases in as well as out, roughly half the travel at half the
+     time, so the movement stays legible for as long as it lasts. Its own note
+     in tokens.css reaches it from distance rather than duration; it is the
+     same failure, since what makes an expo-out read as a snap is travel per
+     frame either way.
+
+     None of these is answering an input. The input was the hover, the rake
+     answered it 200ms ago, and this is the follow-through. */
   .u-cf-detail {
     opacity: 0;
-    transition: opacity var(--duration-base) var(--ease-brand);
+    transition: opacity 520ms var(--ease-glide);
   }
 
   .u-cf-cell[data-cf-active='true'] .u-cf-detail {
     opacity: 1;
-    /* After the card has stopped, not during. */
-    transition-delay: 110ms;
+    /* Once the destination is no longer in doubt, not once it is reached. */
+    transition-delay: 200ms;
   }
 
+  /* 0.75rem rather than 0.6rem, and the extra 2.4px is the slower clock's
+     doing. A distance that reads as a settle at 600ms reads as a drift at
+     640ms unless it grows with the time it is given: the eye judges the two
+     together, and travel too small for its duration is the exact thing that
+     makes slow motion look sluggish instead of deliberate. */
   .u-cf-detail > * {
-    transform: translateY(0.6rem);
-    transition: transform var(--duration-slow) var(--ease-brand);
+    transform: translateY(0.75rem);
+    transition: transform 640ms var(--ease-glide);
   }
 
   .u-cf-cell[data-cf-active='true'] .u-cf-detail > * {
@@ -1218,11 +1757,11 @@
   }
 
   .u-cf-cell[data-cf-active='true'] .u-cf-detail > *:first-child {
-    transition-delay: 150ms;
+    transition-delay: 220ms;
   }
 
   .u-cf-cell[data-cf-active='true'] .u-cf-detail > *:last-child {
-    transition-delay: 240ms;
+    transition-delay: 360ms;
   }
 
   /* Depth of field — see the paint loop for why it is on the copy and not on
@@ -1245,11 +1784,22 @@
      below drops the filter outright for the duration, and the blur is written
      once when the rake lands and eased in from there. What it costs is one
      transition on four cards with nothing else on screen moving. What it looks
-     like is a lens pulling focus once the shot has settled — which is what the
-     effect was imitating in the first place. */
+     like is a lens pulling focus once the shot has settled, which is what the
+     effect was imitating in the first place.
+
+     520ms rather than --duration-base, and for the same reason the sequence
+     above was restretched: a rack focus is the slowest thing a camera does, and
+     at 260ms this was the one moment in the whole gesture that still moved at
+     the old spring's speed. It fires with the rake stopped and nothing else on
+     screen changing, so the duration costs nothing but itself.
+
+     --ease-glide for the reason given in that block, and with an extra one of
+     its own: a lens is a mechanism, it is turned, and it starts and stops. An
+     expo-out here would put nearly all of the defocus in the first tenth of a
+     second, which is a cut and not a pull. */
   .u-cf-card-body {
     filter: blur(var(--cf-blur, 0px));
-    transition: filter var(--duration-base) var(--ease-brand);
+    transition: filter 520ms var(--ease-glide);
   }
 
   .u-cf-track[data-moving='true'] .u-cf-card-body {
@@ -1273,6 +1823,27 @@
 
   /* The same arrow behaviour as every other link on the site. It was the one
      arrow that did not move. */
+  /* ── The practice's chess piece ─────────────────────────────────────────
+     Kept at a tenth of white, which is the whole point of it: it is a
+     watermark the card is lit through, not an object sitting on the card. The
+     badge it replaced was chrome — the brightest thing on a deep blue pane,
+     spent on the least meaningful element.
+
+     It lifts to 0.17 as the card takes centre, on the same clock as everything
+     else the rake does. That is a plain opacity transition, so it runs on the
+     compositor and joins the arrival sequence for free; --duration-slow and
+     --ease-glide are the lede's own values, so the mark and the copy under it
+     arrive together rather than on two clocks. */
+  .u-cf-mark {
+    color: var(--color-white);
+    opacity: 0.1;
+    transition: opacity var(--duration-slow) var(--ease-glide);
+  }
+
+  .u-cf-cell[data-cf-active='true'] .u-cf-mark {
+    opacity: 0.17;
+  }
+
   .u-cf-arrow {
     transition: transform var(--duration-base) var(--ease-brand);
   }
@@ -1306,9 +1877,17 @@
      browsers run on the compositor and promote the element for automatically —
      the same treatment `.u-cf-detail` above already gets. It also reads better
      than it measured: the rise is now part of the arrival sequence rather than
-     a fourth thing happening on its own clock. */
+     a fourth thing happening on its own clock.
+
+     This is the first beat of that sequence and the only one with no delay, so
+     it begins the instant the destination stops being in doubt and finishes at
+     600ms, which is within a frame or two of the card itself coming to rest.
+     The lede rides the card in. Everything else follows it. --ease-glide for
+     the reason set out on `.u-cf-detail`: at 600ms an expo-out would have this
+     8px done inside a tenth of a second and then hold still while the card
+     travelled for another half. */
   .u-cf-lede {
-    transition: transform var(--duration-slow) var(--ease-brand);
+    transition: transform var(--duration-slow) var(--ease-glide);
   }
 
   .u-cf-cell[data-cf-active='true'] .u-cf-lede {
@@ -1320,7 +1899,23 @@
      exactly as in the mockups, where canvas and tile are near-identical.
 
      This is a SOLID surface and is meant to stay one. It was briefly made of
-     `.u-glass`; see the box at the top of that class for what went wrong. */
+     `.u-glass`; see the box at the top of that class for what went wrong. */  /* ── Two tiers of card, and which is which ─────────────────────────────
+     `.u-tile` is the generic surface on this site: forty-one of them, on every
+     page. For one pass every last one was the glass the home page is made of,
+     and that was too much of it. A material with an edge, a rim and a lit face
+     is an OBJECT, and a page whose every panel is an object has no hierarchy
+     left: the six services you can click and the box explaining what happens
+     after you send the form carried the same weight, so nothing did.
+
+     So the material follows the CLICK. `.u-tile-interactive` is glass, and
+     every rule above that names `.u-glass--white` names it alongside. A plain
+     `.u-tile` is a flat white surface with a hairline and a soft shadow, which
+     is what this class always was and what a panel holding copy should be.
+
+     Worth stating as a rule, because it is the one to apply to the next card:
+     if it GOES somewhere it is glass, if it EXPLAINS something it is white.
+     That lines up with what a visitor is scanning for on any page of this site,
+     which is the grid of things they can open. */
   .u-tile {
     background-color: var(--color-surface);
     border: 1px solid var(--color-line);
@@ -1332,10 +1927,73 @@
       border-color var(--duration-base) var(--ease-brand);
   }
 
-  .u-tile-interactive:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-tile-hover);
-    border-color: var(--color-silver-300);
+  .u-tile-interactive {
+    /* A notch tighter than `.u-glass--card`'s --radius-tile-lg, and a narrower
+       rim band, because a service card is smaller than a showcase card. */
+    border-radius: var(--radius-tile);
+    --glass-rim-band: 9px;
+    /* The flat tile's own border, fill and shadow have to be handed back:
+       `.u-glass` paints a 1px rim on ::after and carries --glass-shadow, and
+       the two stacked read as a card with two edges. */
+    border-color: transparent;
+    background-color: transparent;
+    box-shadow: var(--glass-shadow);
+  }
+
+  .u-tile-interactive,
+  .u-bento-card {
+    /* ── The edge fade, stated as a distance ──────────────────────────────
+       `.u-glass--white`'s body gathers its blue in an ellipse sized in
+       PERCENTAGES of the box, which is right for the card it was cut for: six
+       cards of one shape in one grid. It is wrong for a class used at every
+       shape there is. On the contact page's 400x90 detail cards
+       the same percentages put the falloff 130px in from the left and right and
+       15px in from the top, so the blue stopped being an edge and washed across
+       both ends of the card.
+
+       So these state the fade as a distance instead: four linear
+       gradients, one per edge, each falling off over a set number of pixels.
+       A distance CAPPED BY a percentage, `min(2.5rem, 10%)`, which is the pair
+       rather than either alone. A percentage on its own is what went wrong in
+       the paragraph above. A fixed length on its own fails the other way: 40px
+       is a twentieth of an 800px bento cell and nearly half of a 90px contact
+       card, so the same number that reads as an edge on one washes across the
+       other. Whichever is smaller holds at both ends, and the range these two
+       classes have to cover runs from 90px to 800px.
+
+       `.u-feat-row` states its own numbers rather than sharing these, because
+       it is one known shape and can say exactly what that shape needs.
+
+       The white body underneath is inherited, lit at --glass-light-x/y like
+       every other pane on the site. */
+    background-image:
+      linear-gradient(
+        to right,
+        color-mix(in srgb, var(--color-blue-600) 10%, transparent) 0,
+        transparent min(2.5rem, 10%)
+      ),
+      linear-gradient(
+        to left,
+        color-mix(in srgb, var(--color-blue-600) 10%, transparent) 0,
+        transparent min(2.5rem, 10%)
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--color-blue-600) 7%, transparent) 0,
+        transparent min(1.75rem, 16%)
+      ),
+      linear-gradient(
+        to top,
+        color-mix(in srgb, var(--color-blue-600) 7%, transparent) 0,
+        transparent min(1.75rem, 16%)
+      ),
+      radial-gradient(
+        132% 132% at var(--glass-light-x) var(--glass-light-y),
+        rgb(255 255 255 / 0.98) 0%,
+        rgb(252 253 255 / 0.98) 46%,
+        rgb(245 248 254 / 0.97) 78%,
+        rgb(238 243 253 / 0.97) 100%
+      );
   }
 
   /* ------------------------------------------------------------------ DECK
@@ -2107,30 +2765,15 @@
         and the graphic sits on the card's own white — the same move a
         printed spec sheet makes, and the single biggest lift in this pass. */
 
-  /* ── Tier 2: the resting white card ─────────────────────────────────── */
+  /* ── Tier 2: the resting card ────────────────────────────────────────
+     The same glass as `.u-tile` and the three home sections: every rule above
+     that names `.u-glass--white` names this too. It kept its own white surface,
+     hairline and blue-tinted shadow pair for a while, which was the right card
+     before there was one card. All that is left here is its radius, which is
+     the larger one because a bento cell is a large card. */
   .u-bento-card {
-    position: relative;
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-line);
     border-radius: var(--radius-tile-lg);
-    /* Two shadows doing different jobs: a 1px contact shadow that seats the
-       card on the band, and a wide soft one lifted with a negative spread so
-       it stays under the card instead of haloing out past its edges. */
-    box-shadow:
-      0 1px 2px rgb(11 47 146 / 0.05),
-      0 12px 32px -14px rgb(11 47 146 / 0.16);
-    transition:
-      transform var(--duration-base) var(--ease-brand),
-      box-shadow var(--duration-base) var(--ease-brand),
-      border-color var(--duration-base) var(--ease-brand);
-  }
-
-  .u-bento-card:hover {
-    transform: translateY(-3px);
-    border-color: var(--color-blue-200);
-    box-shadow:
-      0 2px 4px rgb(11 47 146 / 0.06),
-      0 26px 52px -18px rgb(11 47 146 / 0.26);
+    --glass-rim-band: 9px;
   }
 
   /* ── Tier 1: the one filled card ────────────────────────────────────── */
@@ -2203,42 +2846,6 @@
       0 3px 6px rgb(4 17 52 / 0.18),
       0 34px 68px -20px rgb(11 47 146 / 0.52);
   }
-
-  /* ── The showcase panel ───────────────────────────────────────────────
-     Same gradient-plus-specular recipe as `.u-bento-feature` above — the
-     brand surface a piece of art sits on — used as an image slot rather than
-     an interactive card. No `:hover` rule here: the anchor around this panel
-     owns the lift (a plain `group-hover:-translate-y-*`), so the surface
-     itself stays passive and the two never fight over the same transform. */
-  .u-showcase-panel {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    border-radius: var(--radius-tile-lg);
-    background-image: var(--grad-cta);
-    box-shadow:
-      0 2px 4px rgb(4 17 52 / 0.16),
-      0 24px 56px -18px rgb(11 47 146 / 0.45);
-  }
-
-  .u-showcase-panel::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background-image: radial-gradient(
-      120% 88% at 12% 0%,
-      rgb(255 255 255 / 0.17) 0%,
-      rgb(255 255 255 / 0.04) 42%,
-      transparent 68%
-    );
-  }
-
-  /* No drafting-grid pseudo-element here, deliberately — an earlier pass
-     added one, and a dot/line grid behind every card is exactly the
-     stock-template tell this section exists to avoid. The mockup on top of
-     each panel is what carries the surface now; the gradient and the
-     specular above are texture enough. */
 
   /* ── The icon tile ──────────────────────────────────────────────────────
      A flat blue squircle, NOT the glossy chrome sphere used on the pillar
@@ -2392,7 +2999,7 @@
 
   .u-btn--chrome {
     border-image-source: url("/art/btn-chrome.png");
-    border-image-slice: 0 56 fill;
+    border-image-slice: 0 62 fill;
     color: var(--color-ink);
     box-shadow: var(--shadow-btn-chrome);
   }
@@ -2514,7 +3121,146 @@
     color: var(--color-white);
   }
 
+  /* ────────────────────────────────────────────────────────────────────────
+     THE FLOATING WHATSAPP BUTTON
 
+     components/ui/WhatsAppFab.tsx decides WHEN it is there and the note at the
+     top of it is that argument. This is the object.
+
+     ── It is a badge, not a new thing ──
+
+     --grad-badge-blue, which is the lit sphere every icon badge on the site is
+     made of, at 3.5rem with the same light source. Nothing here is invented:
+     a floating action button is a circular icon holder, the site already has
+     one, and giving this its own gradient would have put a second blue sphere
+     on the page lit from somewhere else.
+
+     ── Hidden means out of the tab order ──
+
+     `visibility: hidden` and not opacity alone. A link at 0% opacity is still
+     focusable, so a keyboard user tabbing the page would land on a button that
+     is not on screen and be sent to WhatsApp by a Return they could not have
+     meant. The visibility flip carries a delay equal to the exit duration, so
+     it lands after the fade rather than cutting it.
+
+     ── Enter and exit are not the same length ──
+
+     220ms in, 160ms out, which is the asymmetry every appearing thing on this
+     site uses: arriving is the event and is allowed to be seen, leaving is
+     housekeeping and should be over. It grows from 0.92 and 8px low, never from
+     nothing: something that scales up from zero came from nowhere, and nothing
+     in the world does that.
+
+     ── Where it sits ──
+
+     Below the header's z-50 on purpose. The nav pill is fixed too, and if these
+     ever meet on a short viewport the navigation is the one that has to win.
+     The bottom inset carries `env(safe-area-inset-bottom)` so it clears the
+     home indicator on an iPhone rather than sitting under it. */
+  .u-fab {
+    position: fixed;
+    z-index: 40;
+    right: clamp(1rem, 3vw, 2rem);
+    bottom: calc(clamp(1rem, 3vw, 2rem) + env(safe-area-inset-bottom, 0px));
+
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: var(--radius-pill);
+
+    background-image: var(--grad-badge-blue);
+    color: var(--color-white);
+    box-shadow: var(--shadow-btn-blue);
+
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.92) translateY(8px);
+    transition:
+      opacity var(--duration-fast) var(--ease-brand),
+      transform var(--duration-fast) var(--ease-brand),
+      box-shadow var(--duration-fast) var(--ease-brand),
+      visibility 0s var(--duration-fast);
+  }
+
+  .u-fab[data-shown] {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition:
+      opacity 220ms var(--ease-out-soft),
+      transform 220ms var(--ease-out-soft),
+      box-shadow var(--duration-fast) var(--ease-brand),
+      visibility 0s;
+  }
+
+  .u-fab:hover {
+    box-shadow: var(--shadow-btn-blue-hover);
+    transform: translateY(-2px);
+  }
+
+  /* The press has to be immediate to read as contact. Same 0.97 every pressable
+     thing on this site uses. */
+  .u-fab:active {
+    transform: scale(0.97);
+    transition-duration: 90ms;
+  }
+
+
+
+  /* ----------------------------------------------------------- TAP TARGETS
+     A 44px floor for text links, applied on TOUCH DEVICES ONLY.
+
+     ── Why this class exists at all ──
+
+     Type-sized links are the right size on a desktop and too small on a phone,
+     and the gap is not marginal. Measured across the site on an iPhone 14 Pro:
+     the footer's legal links were 16px tall, breadcrumb crumbs 21px, the arrow
+     links that carry in-page navigation ("All 19 services in this practice")
+     20px, the footer's four link columns 34px and its social marks 33x33. The
+     floor for a touch target is 44px in Apple's HIG and 48dp in Material, and
+     none of those clear either. They are not decorative links either; the arrow
+     links and the footer columns are how a phone visitor moves around the site.
+
+     ── Why the box grows, rather than an invisible hit area over it ──
+
+     The tidier trick is a transparent ::after stretched to 44px, which hits the
+     accessibility number and changes nothing on screen. It was rejected here
+     for a specific reason: most of these links sit in STACKED LISTS with 2-4px
+     between them, so a 44px hit area centred on a 34px link overlaps its
+     neighbours by ~4px top and bottom. That does not fail an audit and it does
+     fail a user, who taps a label and opens the one above it. Overlapping
+     targets are worse than small ones.
+
+     So the real box grows, spacing the list out as well as enlarging it. On a
+     phone that is the correct trade: a mobile footer being taller costs a
+     scroll a visitor is already making, and buys unambiguous targets.
+
+     ── Scoped to `pointer: coarse` ──
+
+     Desktop density is deliberate and stays exactly as it was. Keyed on the
+     input device rather than on width, so a narrow desktop window keeps its
+     tight footer and a tablet at 1024px gets the touch sizing.
+
+     `min-height`, so nothing shrinks: a link that already clears 44px, or one
+     whose own padding puts it over, is untouched. `inline-flex` is what makes
+     min-height apply at all, since it does nothing on an inline box, and the
+     centring keeps the label optically where it was rather than at the top of a
+     taller box. */
+  @media (pointer: coarse) {
+    .u-tap {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.75rem; /* 44 */
+    }
+
+    /* For a link whose content is a square mark rather than a line of type, so
+       the target has to grow in both axes. The site's social marks are 33x33. */
+    .u-tap--square {
+      justify-content: center;
+      min-width: 2.75rem;
+    }
+  }
 
   /* ------------------------------------------------------------ ARROW LINK */
   .u-arrow-link {
@@ -2525,6 +3271,15 @@
     font-weight: 700;
     color: var(--color-blue-600);
     transition: color var(--duration-fast) var(--ease-brand);
+  }
+
+  /* Every arrow link on the site is in-page navigation, so they all take the
+     touch floor without each call site having to remember `u-tap`. Measured at
+     20-26px tall before this. */
+  @media (pointer: coarse) {
+    .u-arrow-link {
+      min-height: 2.75rem;
+    }
   }
 
   .u-arrow-link:hover {
@@ -2586,6 +3341,751 @@
     mask-image: var(--art-x), var(--art-y);
     mask-composite: intersect;
   }
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     THE SOFTWARE SHOWCASE CARDS
+     ═══════════════════════════════════════════════════════════════════════
+
+     Six glass cards in a 3×2 grid, each carrying one of the mockups from
+     components/sections/SoftwareShowcase.tsx.
+
+     The material is `.u-glass--card` plus `.u-glass--white`, and both live up
+     with the rest of the glass rather than here, because RevenueEngine is built
+     on the same pair. So is `.u-lens`, the drop the pointer drags across a
+     card. What is left in this block is only what is true of THIS section: the
+     three things one of its cards does when a pointer is on it, and only the
+     last of those is new geometry.
+
+     ── Why the polish is on hover rather than on the resting card ──
+
+     The resting state was never the problem. Six identical panes at rest is a
+     grid, and a grid is what this section is: six services, six cards, nothing
+     conditional. Three replacements were tried that made one card bigger by
+     hiding five, and all three were worse. See the note at the top of the
+     section for what happened.
+
+     So the work went where a visitor's attention actually is, which is one card
+     at a time. */
+
+  /* ── The screen leans in ────────────────────────────────────────────────
+     The mockup lifts a little further than the card does and its shadow
+     deepens with it, so the pane reads as sitting ON the glass rather than
+     printed into it. Two pixels and a shadow: the whole trick is that the
+     card and the thing it carries move by DIFFERENT amounts, which is what
+     parallax is and what a single translate on the card cannot express.
+
+     `transform` and `box-shadow` only. The screen's own class list is a
+     Tailwind arbitrary shadow, so this overrides it on hover and hands it back
+     on the way out. */
+  .u-showcase-screen {
+    transition:
+      transform var(--duration-base) var(--ease-liquid),
+      filter var(--duration-base) var(--ease-brand);
+  }
+
+  .u-showcase-card:is(:hover, :focus-visible) .u-showcase-screen {
+    transform: translateY(-4px) scale(1.012);
+    /* Not a glow: a slightly stronger contact shadow under a pane that has just
+       come up off the surface. Painted with the section's own blue, never
+       neutral black, the same rule as --shadow-tile.
+
+       A third of the opacity it carried on the blue card. The same shadow that
+       reads as contact against navy reads as dirt against white. */
+    filter: drop-shadow(0 12px 20px rgb(11 47 146 / 0.18));
+  }
+
+  /* ── The badge turns to the light ───────────────────────────────────────
+     The badge is a lit sphere (see --grad-badge-blue, and the note in the
+     component for why this one is blue where the rest of the site is chrome).
+     Rotating it a few degrees under the pointer is the cheapest possible way
+     to say the light source and the object are in the same scene, and it costs
+     one transform on a 30px element. */
+  .u-showcase-badge {
+    transition: transform var(--duration-base) var(--ease-liquid);
+  }
+
+  .u-showcase-card:is(:hover, :focus-visible) .u-showcase-badge {
+    transform: rotate(-8deg) scale(1.08);
+  }
+
+  /* ── The rule over "Explore" draws itself ───────────────────────────────
+     It replaces a static `border-top`, and the difference is the point: a
+     border is a line that was always there, and this is the site's signature
+     gesture, the 40×3 blue rule that draws in under every heading on all 28
+     pages (see `.u-rule`). At card scale, on the one row that says the card is
+     a link, and now in the brand blue itself rather than in white: on a white
+     body the site's own mark is the honest colour for it.
+
+     `transform-origin: left` so it draws in the reading direction. Full width
+     at rest but at a fraction of its final weight, because a rule that appears
+     from nothing leaves the card's lower edge unresolved until you touch it:
+     the geometry is always there, the emphasis is what arrives. */
+  .u-showcase-rule {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: var(--color-line);
+  }
+
+  .u-showcase-rule::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: color-mix(in srgb, var(--color-blue-600) 70%, transparent);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform var(--duration-rule) var(--ease-brand);
+  }
+
+  .u-showcase-card:is(:hover, :focus-visible) .u-showcase-rule::after {
+    transform: scaleX(1);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     REVENUE ENGINE  —  practice 02 on the home page
+     ═══════════════════════════════════════════════════════════════════════
+
+     components/sections/RevenueEngine.tsx is the section; the note at the top
+     of it is the design argument. This is the construction.
+
+     ── Three sections, three constructions ──
+
+     This sits between SoftwareShowcase and FeaturedServices, and all three name
+     services. They are told apart by their ground before a single word is read:
+     the grey band, then the plain canvas, then the one dark band. So this
+     section adds no background of its own. What it adds is a texture and a
+     bloom, both of which stop well short of the section's edges, so the canvas
+     is still visibly the canvas.
+
+     ── Everything animated here is transform, opacity or clip-path ──
+
+     The first two for the reason the rest of the site gives: they skip layout
+     and paint. `clip-path` is the exception and it is a deliberate one. It is
+     the only property that can move a boundary ACROSS content, which is the
+     whole effect: the copy inverts along the edge of the fill instead of
+     cross-fading behind it. Five cards, one at a time, on hover. */
+  .u-rev {
+    position: relative;
+    /* The dot field sits at z-index -1 and would fall behind the page
+       background without a stacking context here. */
+    isolation: isolate;
+    overflow: clip;
+  }
+
+  /* The measured grid. A texture, not a graphic: at this size and opacity it
+     reads as the page having a surface, and the moment it resolves into
+     visible dots it is too strong.
+
+     Masked to an ellipse so it never meets an edge. A field that runs to the
+     section boundary draws the boundary, and this section's whole relationship
+     to its neighbours is that it does not have one: it is the canvas, between
+     a grey band and a blue one.
+
+     The bloom on top is the same light source as every other surface on the
+     site (--glass-light-x), thrown from below rather than above, because the
+     dark band underneath this section is lit from its own top edge and the two
+     glows would otherwise collide on the seam. */
+  .u-rev-field {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      radial-gradient(
+        70% 46% at 78% 108%,
+        color-mix(in srgb, var(--color-blue-400) 12%, transparent) 0%,
+        transparent 70%
+      ),
+      radial-gradient(circle at 1px 1px, var(--color-silver-400) 1px, transparent 0);
+    background-size:
+      100% 100%,
+      30px 30px;
+    -webkit-mask-image: radial-gradient(
+      86% 76% at 50% 44%,
+      black 0%,
+      transparent 76%
+    );
+    mask-image: radial-gradient(86% 76% at 50% 44%, black 0%, transparent 76%);
+    opacity: 0.42;
+  }
+
+  /* ── The rail ───────────────────────────────────────────────────────────
+     Five cards, three arrangements.
+
+       base    one column. The step would be a vertical gap, which is a gap.
+       sm      two columns, and the fifth spans both. Four cards and a widow is
+               the arrangement a five-item grid falls into by default and it
+               reads as one card left over; spanning it makes it the row the
+               list lands on.
+       xl      five columns in one row, stepping downward.
+
+     There is no three-column state on purpose. Five into three is 3 + 2, which
+     is a shape, but it is SoftwareShowcase's shape one section earlier at a
+     slightly different width. Two columns holds until there is room for all
+     five. */
+  .u-rev-rail {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin-top: 4rem;
+  }
+
+  @media (width >= 40rem) {
+    .u-rev-rail {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .u-rev-rail > li:last-child {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (width >= 80rem) {
+    .u-rev-rail {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 1.125rem;
+    }
+
+    /* `:last-child` and not `> li`. The two-column rule above spans the fifth
+       card across both tracks, and it is the more specific selector, so a
+       plain `> li { grid-column: auto }` here loses to it and leaves a row of
+       four with a full-width card underneath. */
+    .u-rev-rail > li:last-child {
+      grid-column: auto;
+    }
+
+    /* Two lines of height whether the title needs two or not. At five across,
+       four of the five titles wrap and one does not, so without this the notes
+       under them start on two different baselines and the row reads as being
+       slightly out of register with itself.
+
+       Only here. Below `xl` the cards are wide enough that every title is one
+       line, and reserving a second would open a visible gap under all five for
+       no reason. */
+    .u-rev-card__title {
+      min-height: 2.9rem;
+    }
+  }
+
+  /* ── The card ───────────────────────────────────────────────────────────
+     The same glass as SoftwareShowcase's, at this section's own size:
+     `u-glass u-glass--card u-glass--white u-glass-interactive`, with the drop
+     the pointer drags across it. The material is documented up with the rest of
+     the glass; what is here is the three things this section does to it.
+
+     ── What it replaced, and why the replacement is smaller ──
+
+     The card used to invert. Hovering flooded it with brand blue from the
+     bottom edge, and the copy inverted along the moving edge rather than
+     cross-fading behind it: the whole card rendered twice, once in ink on white
+     and once in white on blue, the second clipped by the same `clip-path` that
+     drew the fill. It was a good trick and it is gone, along with the duplicate
+     markup, the six `__lit` colour rules and the touch-device opt-out it needed.
+
+     Two reasons, and the second is the one that decided it:
+
+       IT SAID THE WRONG THING. A card that turns solid blue on hover is a card
+       announcing itself. These five name services and hand you to them; the
+       announcement was louder than the content and it happened five times in a
+       row across one screen.
+       IT WAS A THIRD LANGUAGE. The section above lifts glass cards under a
+       travelling drop. Doing something unrelated here made the two read as two
+       sites. Sharing the material and the drop is what makes them read as one
+       page with two arrangements on it, which is the argument at the top of the
+       component: the ARRANGEMENTS differ, five stepped cards against a 3×2
+       grid, and that is difference enough.
+
+     ── The row is level, and the descent it used to have is worth recording ──
+
+     At `xl` each card sat 20px lower than the one before it, so the row
+     descended left to right: the funnel drawn, three services that build demand
+     and then two that take the order. The idea was good and it never once
+     shipped. The offset lived on `--rev-offset`, which the base `.u-rev-card`
+     rule set to 0 and the `xl` rule set to the step, both at one class of
+     specificity, and a media query adds none: the later rule won at every
+     width, so five cards that were meant to step sat in a straight line for the
+     life of the section.
+
+     It is deliberate now rather than accidental. A staircase of five is a
+     composition that has to be right at every width to be worth anything, and
+     what it bought was a diagonal fighting the one thing this section is for,
+     which is five cards you can compare at a glance. `--rev-step`,
+     `--rev-offset`, the `--i` the component wrote and the bottom margin that
+     compensated for the descent are all gone with it.
+
+     What that leaves is worth stating: `transform` on this card belongs
+     entirely to the material. The lift and the gel press are
+     `.u-glass-interactive`'s, and no rule in this block writes over them. */
+  .u-rev-card {
+    position: relative;
+    display: block;
+    height: 100%;
+    min-height: 15rem;
+    /* One notch tighter than `.u-glass--card`'s --radius-tile-lg. Five cards
+       across is a smaller card than three, and a 24px radius on it starts to
+       eat into the corner of the copy. */
+    border-radius: var(--radius-tile);
+  }
+
+  .u-rev-card__body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 1.5rem 1.375rem;
+  }
+
+  /* ── Inside the card ────────────────────────────────────────────────────
+     Ink on white, once. This was two sets of colours, one per face, back when
+     the card inverted; the note above is what happened to the second set. */
+  .u-rev-card__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4375rem;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-ink-body);
+  }
+
+  .u-rev-card__title {
+    margin-top: 1.75rem;
+    font-family: var(--font-display);
+    font-size: 1.1875rem;
+    font-weight: 700;
+    line-height: 1.22;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+    color: var(--color-ink);
+  }
+
+  .u-rev-card__note {
+    margin-top: 0.625rem;
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--color-ink-body);
+  }
+
+  /* Pinned to the bottom of the card by `margin-top: auto`, which is what puts
+     all five footers on one line across a row of cards whose titles wrap to
+     different numbers of lines. The hairline over it is the same mark the
+     showcase card draws over "Explore", and it is what turns five separate
+     footers into one band running across the section. Blue rather than
+     --color-line: on a white glass body every other line already is. */
+  .u-rev-card__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: auto;
+    padding-top: 1.0625rem;
+    border-top: 1px solid color-mix(in srgb, var(--color-blue-600) 9%, transparent);
+  }
+
+  /* ── The platform marks ─────────────────────────────────────────────────
+     Logos where there is one and the name where there is not, both built to
+     the same 20px line so the row reads as one band either way. The component
+     note in RevenueEngine.tsx has the rule for which is which.
+
+     Monochrome, and the reason is in components/icons/brands.tsx: four
+     saturated marks per card would be the loudest thing in a section made of
+     white glass, and their hex values could not live in this repo anyway.
+
+     Ink, and at rest. These were silver-600 with the hovered card taking its
+     own marks up to ink, which was a nice reveal and the wrong reading: it made
+     the logos a reward for hovering when they are one of the two things on the
+     card a visitor is actually scanning for. The other is the title, and that
+     is ink at rest too. A row of marks is a claim about what the work runs on,
+     so it is stated once, at full weight, on all five cards at once.
+
+     Nothing here changes on hover any more, which is why there is no transition
+     to go with the colour: the card's own lift, its rim sweep and the drop are
+     the hover, and a fourth thing moving was one too many. */
+  .u-rev-card__marks {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--color-ink);
+  }
+
+  .u-rev-card__mark {
+    display: inline-flex;
+    align-items: center;
+    height: 1.25rem;
+  }
+
+  /* A wordmark, and set as one: smaller than the glyphs beside it and tracked
+     out, which is how a word holds its own in a row of symbols instead of
+     reading as a logo that failed to load. */
+  .u-rev-card__mark--word {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .u-rev-card__arrow {
+    flex: none;
+    color: var(--color-blue-600);
+    transition: transform var(--duration-base) var(--ease-brand);
+  }
+
+  .u-rev-card:is(:hover, :focus-visible) .u-rev-card__arrow {
+    transform: translate(3px, -3px);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     FEATURED SERVICES  —  the home page's shortlist of six
+     ═══════════════════════════════════════════════════════════════════════
+
+     components/sections/FeaturedServices.tsx is the section; the note at the
+     top of it is the design argument. This is the construction.
+
+     ── This section used to be the one dark band on the page ──
+
+     It was a full-bleed deep blue: --grad-cta with the site's light source
+     thrown across the top of it, white titles, blue-100 copy, blue-200 marks.
+     The argument for it was that it sat directly under SoftwareShowcase and a
+     second light section under a light one would read as the same idea twice.
+
+     It is white now, on the client's call, and the argument above did not
+     survive the page changing underneath it. RevenueEngine landed between the
+     two, so this no longer sits under the showcase at all, and the sequence is
+     now grey band, canvas, canvas. What separates the last two is their
+     construction rather than their ground: a five-card rail with a stepped
+     descent, then a sticky heading beside an index of hairline rows. Those do
+     not read as the same idea.
+
+     What the page loses is its one full inversion, and that is a real loss
+     rather than a neutral swap. If it is ever wanted back, everything needed is
+     in this block's history: the ground was --grad-cta plus one radial at
+     --glass-light-x, and the three foreground roles were white, blue-100 and
+     blue-200, measured at 14.9:1, 7.3:1 and 5.4:1 against the lit top of it.
+
+     ── Contrast on the ground it actually has ──
+
+         foreground              on white
+         ink          (title)     19.6:1
+         ink-body     (note)       5.0:1
+         blue-600     (accents)   11.4:1
+         ink-decorative (numeral)  2.95:1, and aria-hidden, which is the only
+                                   reason it is allowed. See the note on that
+                                   token in tokens.css. */
+  .u-feat {
+    position: relative;
+    /* The `.u-feat-field` watermark sits at z-index -1. Without a stacking
+       context of its own it would fall behind the section's background and
+       disappear. */
+    isolation: isolate;
+    /* `clip`, NOT `hidden`, and this is load-bearing rather than a preference.
+       `overflow: hidden` makes an element a scroll container, and a sticky
+       descendant sticks to its nearest scrollport — so the heading column
+       would be sticky inside a box that never scrolls, which is the same as
+       not being sticky at all. `overflow: clip` clips without creating one.
+       (The same distinction is why <body> uses `overflow-x: clip`.) */
+    overflow: clip;
+    /* The hairline is doing the work the dark ground used to do. Two canvas
+       sections meeting with nothing between them have no seam at all, and the
+       eye reads one very long section rather than two. A full-bleed rule is the
+       site's own quietest separator and it is already the language this
+       section speaks in: six of them run between its rows. */
+    border-top: 1px solid var(--color-line);
+  }
+
+  /* The same stroked field that sits behind the coverflow. It is left in its
+     own colours now: <IconWatermark> paints its group silver at 22%, which is
+     what it is for on a light ground, and the section used to override both the
+     colour and the opacity because neither survived a deep blue band.
+
+     Note what is NOT set here: `inset`. `.u-stage-field` writes one and it does
+     not take, because <IconWatermark> carries `inset-0` as a Tailwind utility
+     and utilities outrank this layer. The svg keeps its aspect ratio and
+     centres itself in the section, which is what that component does
+     everywhere else on the site and is fine here. */
+  .u-feat-field {
+    z-index: -1;
+    /* Measured on the rendered section rather than picked, on the dark ground
+       and again on this one. Texture is what is wanted, and texture is what you
+       only notice when it is gone: at anything stronger the arcs and the
+       scattered glyphs resolve into drawings, and the eye tries to read a
+       dashed circle running through the service rows.
+
+       This multiplies <IconWatermark>'s own 0.22, so the strokes land at about
+       0.06 against the canvas. The number is lower than it looks it should be
+       because the field is huge: a stroke that is invisible in isolation is
+       still a shape when it is 600px across. */
+    opacity: 0.28;
+  }
+
+  /* ── The heading stays ───────────────────────────────────────────────────
+     Sticky rather than scrolling away, and that is the whole reason this is a
+     split composition instead of a centred header over a list. A heading that
+     leaves at the second row abandons the last four; a heading that is still
+     there at the sixth is what makes the list read as six answers to one
+     question.
+
+     Below `lg` it is a plain block above the list, because there is no second
+     column for it to sit beside and a sticky heading in a single-column layout
+     is a heading that covers the thing it introduces. */
+  @media (width >= 64rem) {
+    .u-feat-aside {
+      position: sticky;
+      /* Clear of the floating nav pill, plus enough that the heading is not
+         wedged against the top edge of the viewport while it is pinned. */
+      top: calc(var(--header-h) + 3rem);
+      align-self: start;
+    }
+  }
+
+  /* Six cards in one column, and the gap is the whole change from what this
+     was. It was hairline rows: a rule over each entry and one under the last so
+     the index closed, with the row's own wash separating it while you were on
+     it. Rules are how you separate lines that share a ground. Cards have their
+     own ground, so what separates them is the ground showing between them, and
+     a rule as well would be the same job done twice.
+
+     0.75rem, which is smaller than either card section's gap (1.25rem and
+     1.125rem) and is deliberate: those are grids of tiles and this is a stack
+     of lines. Too much air here and six cards stop reading as one list. */
+  .u-feat-list {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  /* ── The row ────────────────────────────────────────────────────────────
+     Entry, category, arrow, which is the anatomy of a line in a register and is
+     what this section still is on the inside. The whole card is the anchor: a
+     row whose only target is its arrow gives the thumb a 17px box, which is the
+     same mistake the capability cards avoid by making the tile the link.
+
+     It opened with a numeral until the client asked for them out, and the
+     reason they went is worth keeping rather than the numerals: the numeral was
+     `aria-hidden`, it was not a rank, it was not part of the service's name,
+     and it held the position the eye starts from on every line. Six services
+     each wearing a number is six invitations to read them as scored, which is
+     the same argument that took the numerals off the revenue cards. What it
+     bought was the sense of a numbered shortlist, and the copy beside the list
+     says that in words: "These six are the ones businesses ask for first.".
+
+     Named areas rather than column counts, because the CATEGORY moves rather
+     than disappears. Below `xl` it sits over the title, in the first row of a
+     two-row grid with the arrow beside it; at `xl` it takes a column of its own
+     at the far end and the row becomes one line. Same
+     markup, same reading order, two arrangements, which a column-count grid
+     cannot express without either hiding the category or reordering the DOM.
+
+     `xl` and not `lg`, which is where the split itself starts, because the
+     register needs width to be a register. The right column at 1024px is 527px
+     wide, and a four-column row inside it puts "UAE Taxation & Bookkeeping"
+     over two lines with "INTERNATIONAL" jammed against it: the arrangement that
+     reads as precise at 1280 reads as cramped 250px earlier. The stacked form
+     holds that gap, which is what it is for.
+
+     ── Why the far end and not over the title ──
+
+     At `lg` this row is around 700px wide with the title at its left end, so
+     everything from the end of the title to the arrow was empty and the arrow
+     read as belonging to nothing. Filling it with the one other fact the row
+     has is what turns a wide line of type into an index entry: the name at one
+     end, what kind of thing it is at the other. It also stops the six titles
+     and the six arrows being the only two vertical alignments in the section.
+
+     ── It is the same glass as the other two sections ──
+
+     `u-glass u-glass--card u-glass--white u-glass-interactive`, and the drop
+     with it. This was a hairline row with a blue wash that wiped in from the
+     left and a 2px accent that grew from its edge, both of which were built to
+     separate a row from the rows around it on a shared ground. A card brings
+     its own ground, so both came out: the wash and the edge on a lifting pane
+     with a lens travelling over it is three answers to one question.
+
+     What the material replaces them with is the lift, the rim sweep, the gel
+     press and the drop, none of which is written here. What is written here is
+     only the part that is still this section's own: the arrow travels, and the
+     category picks up the blue.
+
+     `position: relative` stays because the lens well is absolute inside it.
+     `isolation: isolate` comes from `.u-glass` and is load-bearing there. */
+  .u-feat-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "label arrow"
+      "body  body";
+    align-items: start;
+    /* The row gap is the space under the category while it is stacked. At `xl`
+       the grid is one row deep and it costs nothing. */
+    gap: 0.375rem 1rem;
+    /* One notch tighter than `.u-glass--card`'s --radius-tile-lg, matching the
+       revenue cards: a 24px radius on a landscape card starts to cut into the
+       corner the numeral sits in. */
+    border-radius: var(--radius-tile);
+    padding: 1.25rem 1.25rem;
+
+    /* ── The edge fade, re-cut for a card that is wider than it is tall ────
+       `.u-glass--white`'s body is a white pane with the blue gathered in an
+       ellipse at its edges, sized in PERCENTAGES of the box. On the portrait
+       cards it was built for that reads as a rim: 120% of a 240x310 box puts
+       the falloff a similar distance in on every side. On a 720x130 card the
+       same percentages put it 127px in from the left and right and 21px in from
+       the top and bottom, so the blue stops being an edge and becomes a wash
+       across the two ends of the card, which is what made these read as tinted
+       rather than as white glass.
+
+       So this one states the fade as a DISTANCE instead: four linear gradients,
+       one per edge, each falling off over a fixed number of pixels. The result
+       is the same material at the same strength with an even inset on all four
+       sides at any width, which is the thing a percentage cannot express on a
+       box whose aspect ratio is not fixed. The vertical pair is shorter and
+       weaker than the horizontal one for the same reason it always is: there is
+       less card to cross.
+
+       The white body underneath is unchanged, lit from --glass-light-x/y like
+       every other pane on the site. */
+    background-image:
+      linear-gradient(
+        to right,
+        color-mix(in srgb, var(--color-blue-600) 11%, transparent) 0,
+        transparent 3rem
+      ),
+      linear-gradient(
+        to left,
+        color-mix(in srgb, var(--color-blue-600) 11%, transparent) 0,
+        transparent 3rem
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--color-blue-600) 7%, transparent) 0,
+        transparent 2rem
+      ),
+      linear-gradient(
+        to top,
+        color-mix(in srgb, var(--color-blue-600) 7%, transparent) 0,
+        transparent 2rem
+      ),
+      radial-gradient(
+        132% 132% at var(--glass-light-x) var(--glass-light-y),
+        rgb(255 255 255 / 0.98) 0%,
+        rgb(252 253 255 / 0.98) 46%,
+        rgb(245 248 254 / 0.97) 78%,
+        rgb(238 243 253 / 0.97) 100%
+      );
+
+    /* Eight rather than ten. The rim's feathered band is a length too, and on a
+       130px-tall card ten leaves the top and bottom bands nearly touching. */
+    --glass-rim-band: 8px;
+  }
+
+  @media (width >= 80rem) {
+    .u-feat-row {
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      grid-template-areas: "body label arrow";
+      gap: 0 1.75rem;
+      /* Inset from a card edge rather than from a hairline, which is a
+         different job: a rule needs the copy near it to read as one row, and a
+         pane needs the copy off its edge to read as sitting inside it. */
+      padding: 1.4375rem 1.75rem;
+    }
+  }
+
+  .u-feat-row__body {
+    grid-area: body;
+    min-width: 0;
+  }
+
+  /* Which team runs it. This is the ONLY place the discipline appears in this
+     section, and it is deliberately at label scale: the coverflow one section
+     above is where the five disciplines are the subject, and repeating that
+     structure here at any larger size is what made the first version of this
+     section a second copy of it.
+
+     `white-space: nowrap` because it is a column at `lg` and a category that
+     wraps is a column that changes width per row. `align-self: start` with the
+     margin sitting it on the title's cap height, so the two ends of the entry
+     are on one optical line rather than one being centred against a block. */
+  .u-feat-row__label {
+    grid-area: label;
+    display: flex;
+    align-items: center;
+    align-self: start;
+    gap: 0.4375rem;
+    white-space: nowrap;
+    font-family: var(--font-display);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-ink-body);
+    transition: color var(--duration-base) var(--ease-brand);
+  }
+
+  @media (width >= 80rem) {
+    .u-feat-row__label {
+      margin-top: 0.4375rem;
+    }
+  }
+
+  /* The service's name, at the largest size on the row. On a section whose job
+     is to highlight six services rather than four disciplines, this is the
+     thing being highlighted, so it gets the type. */
+  .u-feat-row__title {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(1.125rem, 1.4vw, 1.3125rem);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+  }
+
+  /* Wide enough to hold every note on two lines at `lg` and never wider: a
+     measure that runs to the category column would close the gap the row is
+     built around. */
+  .u-feat-row__note {
+    display: block;
+    margin-top: 0.375rem;
+    max-width: 52ch;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--color-ink-body);
+  }
+
+
+  /* Present at rest, not summoned by the hover. An arrow that appears from
+     nothing is a row that did not look like a link until you were already on
+     it. */
+  .u-feat-row__arrow {
+    grid-area: arrow;
+    align-self: start;
+    margin-top: 0.125rem;
+    flex: none;
+    /* Stated rather than inherited. The section used to set `color: white` on
+       itself and every mark in it fell out of that; on the canvas the inherited
+       colour is body grey, which reads as a disabled arrow. */
+    color: var(--color-blue-600);
+    opacity: 0.42;
+    transition:
+      opacity var(--duration-base) var(--ease-brand),
+      transform var(--duration-base) var(--ease-brand);
+  }
+
+  /* One selector list for both states. `:focus-visible` is not an afterthought
+     here: six links in a column are a real thing to tab through, so the
+     keyboard gets everything the pointer does except the drop, which is a
+     pointer's own. Same pairing `.u-glass-interactive` makes. */
+  .u-feat-row:is(:hover, :focus-visible) .u-feat-row__label {
+    color: var(--color-blue-600);
+  }
+
+  .u-feat-row:is(:hover, :focus-visible) .u-feat-row__arrow {
+    opacity: 1;
+    transform: translate(3px, -3px);
+  }
+
 }
 
 /* ==========================================================================
@@ -2879,6 +4379,14 @@
   .u-glass::after {
     border-color: var(--color-line);
   }
+
+  /* The bead is a lens and nothing else: take its transparency away and there
+     is no honest thing left for it to be. LiquidLens still runs and still
+     writes to it, which costs one transform on a hidden element and keeps this
+     a one-line rule rather than a second opt-out to keep in sync. */
+  .u-lens {
+    display: none;
+  }
 }
 
 /* Increase Contrast. Apple's rule is that elements become predominantly black
@@ -2898,6 +4406,13 @@
 
   .u-glass::after {
     border-color: var(--color-ink-strong);
+  }
+
+  /* Same as above, and for a second reason: this setting exists to stop
+     anything getting between the reader and the text, and the bead's whole job
+     is to pass over it. */
+  .u-lens {
+    display: none;
   }
 }
 
@@ -2953,6 +4468,18 @@
     --u-lit: 0 !important;
   }
 
+  /* The floating button keeps its fade and loses its travel, which is the
+     distinction this whole block is built on: the button appearing is
+     information, the 8px it rose through is decoration. The blanket
+     `transition-duration` at the top of the block already makes the fade
+     instant; what has to be said by name is the resting transform, because it
+     is a START value and nothing above reaches it. Without this the button
+     would sit permanently 8px low and 8% small. */
+  .u-fab,
+  .u-fab:is(:hover, :active) {
+    transform: none !important;
+  }
+
   /* The deck loses its lift and keeps everything else, and the distinction
      matters more here than anywhere else in this block.
 
@@ -2967,6 +4494,24 @@
   .u-deck__card:hover,
   .u-deck__card:focus-visible {
     --deck-lift: 0rem !important;
+  }
+
+  /*
+   * The revenue-engine cards need one line, and the absence of the rest of what
+   * used to be here is the point.
+   *
+   * They are glass now, so the lift and the gel press are cancelled by the
+   * `.u-glass-interactive` rule above along with every other pane on the site,
+   * and the drop is never created at all (LiquidLens reads this same query and
+   * returns). What that rule does is `transform: none`, which used to be
+   * unusable here: the step down the row was composed INTO the transform, so
+   * cancelling the motion would have flattened the composition. The step is
+   * `top` now, and nothing in this block can reach it.
+   *
+   * Which leaves the arrow.
+   */
+  .u-rev-card:is(:hover, :focus-visible) .u-rev-card__arrow {
+    transform: none !important;
   }
 
   /*
@@ -2993,6 +4538,28 @@
   .u-marquee-track {
     animation: none !important;
   }
+
+  /* The showcase cards' bead needs no rule here, and the absence is worth
+     stating. LiquidLens reads this same query and returns before it makes an
+     element visible, so under Reduce Motion no bead is ever created: there is
+     no resting state to strand and nothing to switch off. That is the correct
+     treatment rather than a shortcut, because a decoration that chases the
+     pointer is the definition of what this setting asks for. The cards keep
+     their lift, their rim and their rule, which are the parts that carry
+     meaning, and those are covered by the `.u-glass-interactive` rule further
+     down this block. */
+
+  /*
+   * The featured-services rows need nothing here, and that is worth stating
+   * rather than leaving as an absence. Everything they do is a transition on
+   * transform and opacity off `:hover` / `:focus-visible`, with no start value
+   * written by a rule this block does not reach and no delay to strand — so the
+   * blanket override at the top of this block is the whole treatment. They stop
+   * moving and keep working, which is the outcome, and the traps that needed
+   * explicit lines above (`--u-materialize`, the timeline's rail, the deck's
+   * lift) are all cases where the RESTING state was the animated one. None of
+   * these is.
+   */
 
   /* The drop is removed, not frozen. Freezing an animation whose start frame
      is `opacity: 0` would leave an invisible glass pane parked on the seam
@@ -3038,4 +4605,23 @@
     opacity: 1 !important;
     transform: none !important;
   }
+
+  /* ── And the stack falls back to a plain list of the six ─────────────────
+     Which service is in front is React state, so with no script the rail is six
+     dead buttons over a stage frozen on the first mockup, and the other five
+     services exist only as copy nobody can reach.
+
+     So the stage goes entirely and all six copy blocks stack down the page:
+     name, sentence, who it is for, link. That is the honest fallback — the
+     mockups are decoration standing in for screenshots, and dropping them costs
+     a visitor nothing they can act on, whereas dropping five of the six
+     services would cost them the section.
+
+     Unlayered and `!important` because the rules being undone are transitions
+     and stacked-grid placement in the components layer, and utilities and
+     later source order both outrank it otherwise. */
+  /* The showcase cards need nothing here. They are six links with a picture
+     and a paragraph in each, server-rendered; the only client code in that
+     section moves a highlight around, and a highlight that never moves is a
+     highlight at its resting position. */
 }

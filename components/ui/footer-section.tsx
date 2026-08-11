@@ -61,6 +61,11 @@ interface FooterLink {
 interface FooterSection {
   label: string;
   links: FooterLink[];
+  /**
+   * Renders the column as a row of marks with no labels. Social only: the
+   * reasoning is on that section below.
+   */
+  marksOnly?: boolean;
 }
 
 /* ADAPTED 2 — link data.
@@ -74,7 +79,7 @@ const footerLinks: FooterSection[] = [
   {
     label: 'Services',
     links: MEGA_MENU_COLUMNS.map((column) => ({
-      title: column.pillar.title,
+      title: column.practice.shortTitle,
       href: column.href,
     })),
   },
@@ -102,8 +107,20 @@ const footerLinks: FooterSection[] = [
       },
     ],
   },
+  /* Marks only, and laid out across rather than down.
+   *
+   * These four are the only entries in the footer whose name is redundant: a
+   * LinkedIn mark beside the word LinkedIn is the same fact twice, and it is
+   * the one column where the glyph is more recognisable than the label. With
+   * the words gone the column would be four icons stacked in a 14px-wide strip,
+   * which is a column of dots, so it turns and runs as one row instead.
+   *
+   * The names stay in the accessibility tree as `sr-only` text. A row of four
+   * unlabelled links is four links called "link" to a screen reader.
+   */
   {
     label: 'Social',
+    marksOnly: true,
     links: (Object.keys(BRAND_MARKS) as BrandName[]).map((name) => ({
       title: name,
       href: '#',
@@ -146,8 +163,17 @@ const footerLinks: FooterSection[] = [
  * width of "E-commerce & Marketplaces". Shrink-to-fit keeps the tint on the
  * words. It was `justify-between` while a right-aligned arrow anchored the far
  * edge; with the arrow gone there is nothing to push apart. */
+/* `u-tap` takes these to 44px on a touch device and leaves the desktop seat
+   at its measured 34px. See the tap-target note in globals.css. */
 const FOOTER_LINK =
-  'inline-flex items-center rounded-pill px-2.5 py-1.5' +
+  'u-tap inline-flex items-center rounded-pill px-2.5 py-1.5' +
+  ' transition-colors duration-200 hover:bg-blue-50 hover:text-blue-600';
+
+/* The same seat with equal padding on all four sides, because what sits in it
+ * is a square mark rather than a line of type. The pill's own radius makes it
+ * a circle at this size, which is what a social mark's target should be. */
+const FOOTER_MARK_LINK =
+  'u-tap u-tap--square inline-flex items-center justify-center rounded-pill p-2' +
   ' transition-colors duration-200 hover:bg-blue-50 hover:text-blue-600';
 
 export function Footer() {
@@ -166,21 +192,21 @@ export function Footer() {
      * container's 1280px content box + gutters, so the wordmark lines up with
      * the one in the header.
      *
-     * ADAPTED 5 — the footer is a SHEET OF GLASS lifted over the CTA band.
+     * ADAPTED 5 — the footer is a SHEET OF GLASS lifted over the page.
      *
      * It was `bg-band` with a painted white bloom faking light spilling over
      * its top edge. It is now `.u-glass .u-glass--sheet`, and the light is
-     * real: the footer is pulled up over the deep blue CTA band, so its curved
-     * top edge has that gradient genuinely behind it, refracted and lensed
-     * rather than approximated. See `.u-glass--sheet` in globals.css for why
-     * this element qualifies for the material when a card does not — the whole
-     * test is whether there is something behind it.
+     * real: the footer is pulled up over whatever section closes the page, so
+     * its curved top edge has that ground genuinely behind it, refracted and
+     * lensed rather than approximated. See `.u-glass--sheet` in globals.css for
+     * why this element qualifies for the material when a card does not: the
+     * whole test is whether there is something behind it.
      *
      * `-mt-12` rather than `-mt-10`: the overlap is now load-bearing instead of
      * decorative, and 48px is what the fill ramp in `.u-glass--sheet` is keyed
-     * to. It is also the most that can be taken — CtaBand's bottom padding is
-     * `py-20` (80px), so this leaves 32px of clearance under its buttons on
-     * mobile. Deeper starts cutting into the CTA's own layout.
+     * to. It is also the most that can be taken. Sections close on `py-20`
+     * (80px) at the tightest, so this leaves 32px of clearance under their last
+     * line on mobile. Deeper starts cutting into the section's own layout.
      *
      * The old top hairline is gone with the bloom. `.u-glass::after` draws the
      * rim, and unlike a `border-t` it follows the 40px radius around both
@@ -212,7 +238,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="transition-colors duration-200 hover:text-blue-600"
+                    className="u-tap transition-colors duration-200 hover:text-blue-600"
                   >
                     {link.label}
                   </Link>
@@ -233,11 +259,35 @@ export function Footer() {
 				    size each column to its own content so the set packs. */}
           <div className="grid grid-cols-2 gap-x-10 gap-y-10 sm:grid-cols-[repeat(4,auto)] lg:gap-x-14">
             {footerLinks.map((section, index) => (
-              <AnimatedContainer key={section.label} delay={0.1 + index * 0.1}>
+              /* The marks column spans both mobile columns.
+                 With the marks at the 44px touch floor (`u-tap--square`), four
+                 of them need 176px and a half-width column at 393px gives about
+                 152px, so the fourth wrapped onto a second row and the set read
+                 as 3 + 1. Given the whole row is four glyphs, the honest fix is
+                 to give it the width rather than to shrink the targets back
+                 below the floor they were just raised to. Two columns from sm
+                 up, where the grid is four auto tracks and this never applied. */
+              <AnimatedContainer
+                key={section.label}
+                delay={0.1 + index * 0.1}
+                className={section.marksOnly ? 'col-span-2 sm:col-span-1' : undefined}
+              >
                 <h3 className="font-display text-[11px] font-bold tracking-[0.14em] text-ink-strong uppercase">
                   {section.label}
                 </h3>
-                <ul className="-ml-2.5 mt-4 space-y-0.5 text-[13.5px] text-ink-body">
+                {/* Both of the marks row's offsets are matched to the text
+                    columns rather than eyeballed. The same `mt-4` puts the
+                    glyph centres within a pixel of the first link in every
+                    other column, and the negative margin equals the seat's own
+                    padding, so the marks line up under the heading exactly the
+                    way the labels do. */}
+                <ul
+                  className={
+                    section.marksOnly
+                      ? '-ml-2 mt-4 flex flex-wrap items-center gap-0.5 text-ink-body'
+                      : '-ml-2.5 mt-4 space-y-0.5 text-[13.5px] text-ink-body'
+                  }
+                >
                   {section.links.map((link) => (
                     <li key={link.title}>
                       {/* Only in-app routes go through next/link. mailto:, wa.me and
@@ -253,14 +303,21 @@ export function Footer() {
                           {...(link.href.startsWith('http')
                             ? { target: '_blank', rel: 'noopener noreferrer' }
                             : {})}
-                          className={FOOTER_LINK}
+                          className={section.marksOnly ? FOOTER_MARK_LINK : FOOTER_LINK}
                         >
-                          <span className="inline-flex items-center">
-                            {link.brand && (
-                              <BrandMark name={link.brand} className="me-2 size-3.5 flex-none" />
-                            )}
-                            {link.title}
-                          </span>
+                          {section.marksOnly && link.brand ? (
+                            <>
+                              <BrandMark name={link.brand} className="size-[17px] flex-none" />
+                              <span className="sr-only">{link.title}</span>
+                            </>
+                          ) : (
+                            <span className="inline-flex items-center">
+                              {link.brand && (
+                                <BrandMark name={link.brand} className="me-2 size-3.5 flex-none" />
+                              )}
+                              {link.title}
+                            </span>
+                          )}
                         </a>
                       )}
                     </li>

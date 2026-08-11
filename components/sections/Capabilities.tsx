@@ -157,9 +157,10 @@ function Card({
 // ── The six graphics ────────────────────────────────────────────────────────
 
 /**
- * One mark per service, grouped by discipline — eighteen marks in total,
- * counted from the service data rather than typed. Add a nineteenth service
- * and a nineteenth mark appears here.
+ * One mark per service, grouped by discipline, every service in the
+ * catalogue represented,
+ * counted from the service data rather than typed. Add another service and
+ * its mark appears here automatically.
  */
 function ContractLedger() {
   return (

@@ -1,11 +1,18 @@
 import type { Service } from '../types';
 
 /**
- * Pillar 02 — Finance & Tax.
+ * Discipline 04: Finance & Tax.
  *
- * Copy is written for the Pakistan market: FBR IRIS, NTN, STRN, withholding
- * statements under s.165, annual return deadlines. Terminology is deliberately
- * concrete — a business owner should recognise their own paperwork in it.
+ * Written for the Pakistan market: FBR IRIS, NTN, STRN, withholding statements
+ * under section 165, the Active Taxpayer List. The terminology is deliberately
+ * specific, because a business owner should recognise their own paperwork in it
+ * rather than read a generic description of accounting.
+ *
+ * The statutory dates in this file are real and checkable, so treat them as
+ * facts to verify rather than copy to polish: 30 September for individuals and
+ * AOPs, 31 December for companies, Annexure C on the 10th, payment on the 15th
+ * and the sales tax return on the 18th, and section 165 withholding statements
+ * within 20 days of each quarter end.
  */
 export const FINANCE_TAX_SERVICES: Service[] = [
   {
@@ -16,7 +23,7 @@ export const FINANCE_TAX_SERVICES: Service[] = [
     oneLiner:
       'Monthly management accounts and year-end financial statements you can hand to a bank or an investor.',
     intro:
-      'We maintain your general ledger, close the books every month, and produce a full set of financial statements: profit and loss, balance sheet, and cash flow. Prepared under IFRS for SMEs, reconciled to the last rupee, and delivered on a fixed date each month rather than whenever it gets done.',
+      'We maintain your general ledger, close the books each month, and produce a full set of financial statements: profit and loss, balance sheet and cash flow. They are prepared under IFRS for SMEs, reconciled to the rupee, and delivered on a fixed working day every month rather than whenever the month happens to get finished.',
     icon: 'calculator',
     included: [
       'Chart of accounts designed around how your business actually earns and spends',
@@ -36,25 +43,21 @@ export const FINANCE_TAX_SERVICES: Service[] = [
         title: 'Books review',
         description:
           'We examine your current records, whatever state they are in, and give you a written assessment of what is missing or misstated.',
-        duration: '2–3 days',
       },
       {
-        title: 'Set up & catch up',
+        title: 'Set up and catch up',
         description:
           'Chart of accounts built, opening balances established, and any backlog brought current before we start monthly work.',
-        duration: '1–3 weeks',
       },
       {
         title: 'Monthly close',
         description:
           'Transactions recorded, accounts reconciled, and statements issued by a fixed working day every month.',
-        duration: 'By the 10th',
       },
       {
-        title: 'Review & report',
+        title: 'Review and report',
         description:
           'A monthly call walking you through the numbers, the variances, and what needs a decision.',
-        duration: 'Monthly',
       },
     ],
     deliverables: [
@@ -71,8 +74,7 @@ export const FINANCE_TAX_SERVICES: Service[] = [
       'Loan and lease agreements',
       'Prior year financial statements, if any',
     ],
-    turnaround: 'Statements by the 10th of each month',
-    related: ['bookkeeping', 'income-tax-filing', 'corporate-secretarial-compliance'],
+    related: ['bookkeeping', 'statutory-audit-support', 'corporate-secretarial-compliance'],
     faqs: [
       {
         question: 'Which accounting software do you use?',
@@ -110,7 +112,7 @@ export const FINANCE_TAX_SERVICES: Service[] = [
     oneLiner:
       'Every sale, expense and bank transaction recorded and reconciled weekly, so nothing is ever reconstructed from memory.',
     intro:
-      'Bookkeeping is the daily discipline that makes everything downstream possible: tax filings, financing, valuations, even knowing whether you made money last month. We record and categorise every transaction, reconcile your accounts on a weekly cycle, and chase the documents you forgot to send.',
+      'Every filing, loan application and valuation downstream depends on the books being right, and so does the simpler question of whether you made money last month. We record and categorise every transaction, reconcile your accounts weekly, and chase you for the documents you forgot to send, which is the part most bookkeepers leave to you and is why most books fall behind.',
     icon: 'ledger',
     included: [
       'Weekly recording and categorisation of all sales, purchases and expenses',
@@ -127,28 +129,24 @@ export const FINANCE_TAX_SERVICES: Service[] = [
     ],
     steps: [
       {
-        title: 'Access & setup',
+        title: 'Access and setup',
         description:
           'Read-only bank feeds connected, software configured, and a document-sharing folder set up so you stop emailing receipts.',
-        duration: '2–4 days',
       },
       {
         title: 'Backlog clearance',
         description:
           'Historic transactions recorded and reconciled up to today, so we start from a verified position rather than a guess.',
-        duration: '1–4 weeks',
       },
       {
         title: 'Weekly cycle',
         description:
           'Transactions categorised, accounts reconciled, and a short list of anything we could not identify sent to you.',
-        duration: 'Every week',
       },
       {
         title: 'Monthly handover',
         description:
           'Closed books passed to the accounting and tax teams so filings never wait on data entry.',
-        duration: 'Monthly',
       },
     ],
     deliverables: [
@@ -163,7 +161,6 @@ export const FINANCE_TAX_SERVICES: Service[] = [
       'Payment gateway and marketplace settlement reports',
       'Petty cash records',
     ],
-    turnaround: 'Weekly reconciliation cycle',
     related: ['financial-accounting', 'sales-tax-registration-filing', 'ecommerce-management'],
     faqs: [
       {
@@ -197,14 +194,14 @@ export const FINANCE_TAX_SERVICES: Service[] = [
     oneLiner:
       'NTN registration, annual income tax returns and wealth statements filed through FBR IRIS, correctly and before the deadline.',
     intro:
-      'We handle income tax end to end for individuals, AOPs and companies: registration, computation, filing, and the notices that sometimes follow. Every return is filed with a computation you can actually follow, and we keep the working papers in case FBR asks a question two years from now.',
+      'We handle income tax end to end for individuals, AOPs and companies, covering registration, the computation, the filing and any notice that follows. Every return goes out with a computation you can follow line by line, and the working papers are archived, because FBR can come back to a filed year long after you have stopped thinking about it.',
     icon: 'receipt',
     included: [
-      'NTN registration for individuals, AOPs and companies',
-      'Annual income tax return preparation and filing through FBR IRIS',
+      'NTN registration for salaried individuals, sole proprietors, AOPs, companies and not-for-profits',
+      'Annual return filing through FBR IRIS for salaried individuals, sole proprietors, partnerships and companies',
       'Wealth statement and reconciliation for individuals',
-      'Quarterly advance tax computation under section 147',
-      'Withholding tax statements under section 165',
+      'Quarterly advance tax computed under section 147',
+      'Quarterly withholding statements under section 165, filed within 20 days of each quarter end',
       'Response and representation on FBR notices and audit queries',
     ],
     audience: ['Salaried individuals and freelancers', 'Private limited companies', 'AOPs and partnerships'],
@@ -213,25 +210,21 @@ export const FINANCE_TAX_SERVICES: Service[] = [
         title: 'Position review',
         description:
           'We review your income sources, prior filings and current filer status, then tell you exactly what is due and what is at risk.',
-        duration: '1–2 days',
       },
       {
         title: 'Computation',
         description:
           'Taxable income calculated, every allowable deduction, credit and exemption applied, and the working shared with you before anything is submitted.',
-        duration: '2–4 days',
       },
       {
         title: 'Filing',
         description:
           'Return submitted through FBR IRIS, tax paid via CPR, and your Active Taxpayer List status confirmed.',
-        duration: '1 day',
       },
       {
         title: 'Aftercare',
         description:
           'Working papers archived and any subsequent FBR notice answered on your behalf, included for the tax year we filed.',
-        duration: 'Ongoing',
       },
     ],
     deliverables: [
@@ -249,7 +242,6 @@ export const FINANCE_TAX_SERVICES: Service[] = [
       'Details of assets acquired or disposed during the year',
       'Prior year return, if previously filed',
     ],
-    turnaround: '3–7 working days from complete documents',
     related: ['sales-tax-registration-filing', 'financial-accounting', 'corporate-secretarial-compliance'],
     faqs: [
       {
@@ -270,7 +262,7 @@ export const FINANCE_TAX_SERVICES: Service[] = [
       {
         question: 'When is the deadline?',
         answer:
-          'For individuals and AOPs, 30 September following the tax year. For companies, 31 December. FBR sometimes extends these, but we work to the original date, because an extension you were counting on and did not get is an expensive surprise.',
+          'Individuals and AOPs file by 30 September following the tax year. Companies file by 31 December. FBR does sometimes extend those dates, and every year a number of businesses plan around an extension that then does not arrive or arrives shorter than expected. We work to the original date for that reason.',
       },
     ],
     seo: {
@@ -291,9 +283,10 @@ export const FINANCE_TAX_SERVICES: Service[] = [
       'Sales tax in Pakistan is filed monthly and split across federal and provincial authorities depending on whether you sell goods or services. We register you with the right authority, file every monthly return on time, and make sure you actually claim the input tax you are entitled to instead of leaving it on the table.',
     icon: 'percent',
     included: [
-      'Sales tax registration with FBR, and with SRB, PRA, KPRA or BRA as applicable',
-      'Monthly sales tax return filing before the 18th',
-      'Input tax reconciliation and claim maximisation',
+      'GST registration with FBR for goods, for individuals, partnerships and companies',
+      'Provincial services tax registration with SRB, PRA, KPRA or BRA, including reactivating a suspended registration',
+      'The monthly cycle filed to FBR’s calendar: Annexure C by the 10th, payment by the 15th, return e-filed by the 18th',
+      'Input tax reconciled and claimed in full',
       'Annexure C sales invoice reporting and buyer-supplier matching',
       'Sales tax withholding compliance for withholding agents',
       'Refund claim preparation and follow-up for zero-rated and export supplies',
@@ -308,25 +301,21 @@ export const FINANCE_TAX_SERVICES: Service[] = [
         title: 'Liability assessment',
         description:
           'We determine which authority you fall under, federal for goods or provincial for services, and whether registration is mandatory or optional for you.',
-        duration: '1–2 days',
       },
       {
         title: 'Registration',
         description:
           'STRN obtained, business premises verification arranged, and your e-filing profile configured.',
-        duration: '5–10 days',
       },
       {
         title: 'Monthly filing',
         description:
-          'Output and input tax reconciled, annexures prepared, return filed and payment challan issued before the 18th.',
-        duration: 'Monthly',
+          'Output and input tax reconciled and the annexures prepared, so Annexure C goes in by the 10th, the payment by the 15th and the return by the 18th.',
       },
       {
         title: 'Reconciliation',
         description:
           'Supplier declarations matched against your input claims so mismatches are caught before FBR raises them.',
-        duration: 'Monthly',
       },
     ],
     deliverables: [
@@ -344,7 +333,6 @@ export const FINANCE_TAX_SERVICES: Service[] = [
       'Purchase and sales invoices for the filing month',
       'Import documents and GDs, if applicable',
     ],
-    turnaround: 'Registration 5–10 days · returns filed monthly by the 18th',
     related: ['income-tax-filing', 'import-export-license', 'bookkeeping'],
     faqs: [
       {
@@ -367,6 +355,183 @@ export const FINANCE_TAX_SERVICES: Service[] = [
       title: 'Sales Tax Registration & Monthly Filing in Pakistan',
       description:
         'Sales tax registration with FBR, SRB, PRA, KPRA and BRA, plus monthly return filing, input tax reconciliation and refund claims.',
+    },
+  },
+
+  {
+    slug: 'statutory-audit-support',
+    pillar: 'finance-tax',
+    title: 'Statutory Audit Support',
+    navLabel: 'Audit Support',
+    oneLiner:
+      "Your accounts made audit-ready, your independent auditor's queries answered, and the signed report delivered before your SECP filing deadline.",
+    intro:
+      'Under the Companies Act 2017 most companies must have their annual financial statements audited, and the auditor has to be independent of whoever kept the books. We prepare the audit-ready file, build every schedule your auditor is going to ask for, and run the correspondence with them, so the audit happens on a calendar instead of turning into a scramble in the weeks before the AGM.',
+    icon: 'audit',
+    included: [
+      'Audit-readiness review of your existing books before your auditor sees them',
+      'Full schedule pack: fixed assets, receivables and payables ageing, provisions, related-party transactions',
+      'Coordination with your independent auditor from planning through fieldwork',
+      'Prepared-by-client (PBC) list management, so nothing is chased at the last minute',
+      'Response drafting for audit queries and management letter points',
+      'Introduction to an independent audit firm if you do not already have one',
+    ],
+    audience: [
+      'Companies with a statutory audit requirement',
+      'Businesses raising debt or equity',
+      'Companies behind on a prior year audit',
+    ],
+    steps: [
+      {
+        title: 'Readiness review',
+        description:
+          'We go through your books against what an auditor will actually ask for, and flag what is missing while there is still time to fix it.',
+      },
+      {
+        title: 'Schedule preparation',
+        description:
+          'Every supporting schedule built: fixed asset register, ageing reports, reconciliations and disclosures.',
+      },
+      {
+        title: 'Fieldwork support',
+        description:
+          "We sit alongside your auditor's fieldwork, answering queries same-day rather than letting them stack up.",
+      },
+      {
+        title: 'Sign-off',
+        description:
+          'Management letter points closed out and the signed audit report delivered in time for your Form A filing.',
+      },
+    ],
+    deliverables: [
+      'Full audit schedule pack',
+      'A PBC list tracked to completion',
+      'Written responses to every audit query raised',
+      'The signed independent audit report',
+    ],
+    documents: [
+      'Trial balance and general ledger for the audit period',
+      'Bank statements and reconciliations for all accounts',
+      'Fixed asset register and supporting purchase documentation',
+      'Prior year audited financial statements, if any',
+      'Board resolutions and minutes for the period',
+    ],
+    related: ['financial-accounting', 'income-tax-filing', 'corporate-secretarial-compliance'],
+    faqs: [
+      {
+        question: 'Do you carry out the audit yourselves?',
+        answer:
+          'No, and that is the point of the arrangement. The audit opinion has to come from an auditor who is independent of whoever prepared the books, so that nobody is marking their own work. We build the audit-ready file and run the process; your independent auditor signs the opinion.',
+      },
+      {
+        question: 'Does every company need an audit?',
+        answer:
+          'Not every one. A private company whose paid-up capital does not exceed Rs 1 million falls outside the audit requirement. Above that it applies, and the size of the company decides who is allowed to sign: up to Rs 3 million of paid-up capital either a chartered accountant or a cost and management accountant may act, and once paid-up capital passes Rs 10 million it has to be a practising chartered accountant or a firm of them. Filing is a separate test again, with companies above Rs 7.5 million of share capital required to file their audited accounts with the registrar. Any company going to a bank, an investor or a tender is usually better off with a full statutory audit whichever bracket it sits in. We will tell you which one you are in before you spend anything.',
+      },
+      {
+        question: "We don't have an auditor yet. Can you help?",
+        answer:
+          'Yes. We will introduce you to an independent firm qualified to sign for a company of your size, and get the file in order before you engage them, so the first thing they see is a prepared set of books rather than a shoebox of receipts.',
+      },
+      {
+        question: "What if last year's audit found problems?",
+        answer:
+          "We read the prior management letter and prior year queries first, and build this year's schedules specifically to close them out, rather than repeating the same fire drill twelve months later.",
+      },
+    ],
+    seo: {
+      title: 'Statutory Audit Support & Audit-Ready Accounts',
+      description:
+        'Audit-ready financial statements and full schedule packs, plus coordination with your independent ICAP-licensed auditor ahead of your SECP Form A deadline.',
+    },
+  },
+
+  {
+    slug: 'financial-advisory',
+    pillar: 'finance-tax',
+    title: 'Financial Advisory',
+    navLabel: 'Financial Advisory',
+    oneLiner:
+      'Feasibility studies, cost and profitability analysis, internal controls and written SOPs: the work that answers whether a plan actually holds.',
+    intro:
+      'Bookkeeping records what already happened. This work answers whether the thing you are about to do is worth doing. We build feasibility studies a lender or an investment committee will accept, take the cost base apart to find where margin is leaking, design the controls that stop money going missing quietly, and write the operating and accounting manuals that let a business run the same way when the owner is not in the room.',
+    icon: 'chart',
+    included: [
+      'Financial feasibility studies and investment appraisals, with the assumptions stated and stress-tested',
+      'Profitability and cost reduction studies: product, channel and customer level margin analysis',
+      'Business process and internal control review, including fraud risk and segregation of duties',
+      'Operational and accounting manuals, written as SOPs your team can actually follow',
+      'Physical verification of fixed assets, inventory and investments, reconciled back to the ledger',
+      'Credit evaluation and advice on the accounting treatment behind a specific transaction or standard',
+    ],
+    audience: [
+      'Businesses appraising a new investment',
+      'Owners whose margin is falling without explanation',
+      'Companies preparing for external scrutiny',
+    ],
+    steps: [
+      {
+        title: 'Scoping',
+        description:
+          'We agree the question the engagement has to answer, in one sentence, and what evidence would count as an answer. Vague scopes produce reports nobody acts on.',
+      },
+      {
+        title: 'Fieldwork',
+        description:
+          'Records examined, processes walked end to end with the people who run them, and assets or stock physically verified where the engagement calls for it.',
+      },
+      {
+        title: 'Analysis',
+        description:
+          'The numbers modelled, the assumptions tested against what would have to be true, and the findings ranked by what they are actually worth.',
+      },
+      {
+        title: 'Report and handover',
+        description:
+          'A written report with the recommendation, the working behind it, and the manual or model handed over in a form you can keep using.',
+      },
+    ],
+    deliverables: [
+      'A written report stating the recommendation and the reasoning behind it',
+      'The financial model or costing analysis, live and editable, in your ownership',
+      'A ranked list of control weaknesses with the fix for each',
+      'Operational and accounting manuals, where the engagement includes them',
+      'A verification report reconciling physical assets or stock to the ledger',
+    ],
+    documents: [
+      'Financial statements and management accounts for the last two to three years',
+      'The business plan, budget or projection under review',
+      'Cost sheets, price lists and supplier contracts',
+      'Existing process documentation or SOPs, in whatever state they are in',
+      'Fixed asset register and stock records, for a verification engagement',
+    ],
+    related: ['financial-accounting', 'statutory-audit-support', 'company-registration'],
+    faqs: [
+      {
+        question: 'How is this different from your accounting service?',
+        answer:
+          'Accounting records and reports what has already happened, on a monthly cycle, forever. Advisory is a defined piece of work that answers one forward-looking question and then ends. Most clients need the accounting permanently and the advisory occasionally, and the advisory is far better when the accounting underneath it is already clean.',
+      },
+      {
+        question: 'Will a bank accept your feasibility study?',
+        answer:
+          'A feasibility study is accepted on the strength of its assumptions, not its cover page. We state every assumption explicitly, show the sensitivity around the ones that actually move the answer, and reference the source for each. That is what a credit committee reads. We will not write a study that reaches a predetermined conclusion, and if the numbers do not support the project we will tell you before you take it to a lender.',
+      },
+      {
+        question: 'Do you find fraud, or just controls weaknesses?',
+        answer:
+          'The engagement is designed to find control weaknesses, the gaps through which money can leave without being noticed. That review does sometimes surface transactions that need explaining, and when it does we tell you plainly and separately. A full forensic investigation into a specific suspicion is different work and is scoped on its own.',
+      },
+      {
+        question: 'What do SOPs actually get us?',
+        answer:
+          'They make the business independent of the person currently holding it together. A written manual is what lets you delegate a function without losing control of it, what a new hire is trained against, and what an auditor or a buyer asks to see when they want evidence the process is real rather than remembered.',
+      },
+    ],
+    seo: {
+      title: 'Financial Advisory & Business Analysis Services',
+      description:
+        'Feasibility studies, cost and profitability analysis, internal control and fraud risk review, SOP development and physical asset verification.',
     },
   },
 ];

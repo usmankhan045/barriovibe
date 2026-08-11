@@ -5,8 +5,8 @@ import type { IconName, PillarSlug } from './types';
  *
  * ── Why this section exists, and what it deliberately is NOT ──
  *
- * It replaced a section that listed all eighteen services by name with a
- * one-liner each. That version was honest but it was a directory: five columns
+ * It replaced a section that listed all services by name with a
+ * one-liner each. That version was honest but it was a directory: columns
  * of small type, ~60 lines of copy, and nothing for the eye to hold. The full
  * catalogue lives on /services and in the mega-menu — both of which
  * `pnpm check:content` still enforces — so nothing is hidden by summarising it
@@ -15,7 +15,7 @@ import type { IconName, PillarSlug } from './types';
  * Three sections on the home page talk about the offering, and they must not
  * repeat one another:
  *
- *   · Disciplines  — the five CATEGORIES. What the teams are called.
+ *   · Disciplines  — the three PRACTICES. What the teams are called.
  *   · this section — the CAPABILITY. What the work actually consists of,
  *                    named systems and named platforms, one card per team.
  *   · WhyUs        — the COMMITMENTS. How we behave, checkably.
@@ -51,7 +51,7 @@ export interface Capability {
    * above the title, resolved through PILLARS so the wording cannot drift from
    * the pillar pages — which is also why it is a slug and not a string.
    *
-   * `null` on the lead card only: that one is about all five at once.
+   * `null` on the lead card only: that one is about all of them at once.
    */
   pillar: PillarSlug | null;
   /** 2–5 words. */
@@ -69,15 +69,15 @@ export interface Capability {
 }
 
 /** The lead card's label, standing in for a pillar name. */
-export const ALL_DISCIPLINES_LABEL = 'All five disciplines';
+export const ALL_DISCIPLINES_LABEL = 'All three practices';
 
 export const CAPABILITIES: Capability[] = [
   {
     id: 'one-contract',
     icon: 'knight',
     pillar: null,
-    title: 'Five disciplines, one contract',
-    body: 'Finance, compliance, growth, commerce and software on a single agreement, a single invoice and one point of contact.',
+    title: 'Three practices, one contract',
+    body: 'Software, marketing and the corporate back office on a single agreement, a single invoice and one point of contact.',
     panelLabel: 'What the contract covers',
     href: '/services',
   },
@@ -93,11 +93,11 @@ export const CAPABILITIES: Capability[] = [
   {
     id: 'registrations',
     icon: 'shield',
-    pillar: 'corporate-compliance',
+    pillar: 'corporate-legal',
     title: 'Registered, not just filed',
-    body: 'Trademarks, import–export licensing and SECP incorporation, carried through the examination stage rather than dropped at filing.',
+    body: 'SECP incorporation, PSEB and chamber membership, import–export licensing and trademarks, carried through the examination stage rather than dropped at filing.',
     panelLabel: 'Filing to registration',
-    href: '/services/corporate-compliance',
+    href: '/services/corporate-legal',
   },
   {
     id: 'campaigns',

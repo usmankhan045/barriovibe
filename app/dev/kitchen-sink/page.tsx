@@ -161,9 +161,9 @@ export default function KitchenSinkPage() {
           {/* ── Type scale ──────────────────────────────────────────── */}
           <Row title="Type scale" note="Satoshi for display, Inter for body. Both self-hosted variable fonts.">
             <div className="flex w-full flex-col gap-5">
-              <p className="text-display text-ink">Display · Books balanced.</p>
+              <p className="text-display text-ink">Display · One firm for everything.</p>
               <p className="text-h1 text-ink">H1 · Growth engineered.</p>
-              <p className="text-h2 text-ink">H2 · One agency. Five disciplines.</p>
+              <p className="text-h2 text-ink">H2 · One agency. Three practices.</p>
               <p className="text-h3 text-ink">H3 · What&rsquo;s included</p>
               <Eyebrow>Eyebrow · Finance · Compliance · Commerce</Eyebrow>
               <p className="text-body-lg text-ink-body">Body large · 18px, the lead paragraph size.</p>
@@ -342,7 +342,7 @@ export default function KitchenSinkPage() {
           {/* ── Marquee ─────────────────────────────────────────────── */}
           <Row
             title="Coverflow"
-            note="SLOT. Drag it, hover a side card to bring it in, or use ← →. The centred card is the only one showing its detail, which is `[data-cf-active]`, flipped by the paint loop and transitioned by CSS. Needs the dark stage behind it: the cards are `.u-glass`, and glass with nothing behind it is glassmorphism. Flattens to a plain row under prefers-reduced-motion and below 48rem."
+            note="SLOT. Drag it, hover a side card to bring it in, or use ← →. The centred card is the only one showing its detail, which is `[data-cf-active]`, flipped once per move by the carousel and transitioned by CSS. Needs the dark stage behind it: the cards are `.u-glass`, and glass with nothing behind it is glassmorphism. Flattens to a plain row under prefers-reduced-motion and below 48rem."
           >
             <div className="u-stage w-full overflow-hidden rounded-tile-lg py-6">
               <IconWatermark className="u-stage-field" />
@@ -353,13 +353,7 @@ export default function KitchenSinkPage() {
                   label: pillar.title,
                   card: (
                     <Link href={pillarHref(pillar.slug)} className="u-cf-card-body">
-                      <span className="flex items-center justify-between">
-                        <span
-                          className="font-display text-ghost tabular text-ink-ghost-on-glass"
-                          aria-hidden="true"
-                        >
-                          {pillar.number}
-                        </span>
+                      <span className="flex items-center">
                         <IconBadge icon={pillar.icon} variant={pillar.badge} size="md" />
                       </span>
                       <span className="u-cf-lede mt-auto block">

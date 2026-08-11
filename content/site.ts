@@ -1,3 +1,5 @@
+import { SERVICE_COUNT_WORD } from './services';
+
 /**
  * Site-wide constants.
  *
@@ -49,11 +51,31 @@ export const SOCIALS = [
 
 /**
  * The positioning line. Used as the metadata description default and in the
- * footer. Deliberately lists the five disciplines by name — a visitor who
- * reads only this sentence still knows what the agency does.
+ * footer.
+ *
+ * It names the DISCIPLINES rather than the three practices. A practice name is
+ * a category, and someone who reads only this sentence in a search result
+ * should come away knowing what the firm actually does.
  */
 export const TAGLINE =
-  'Web, apps and AI. Accounting, tax and corporate compliance. Marketing, e-commerce and monetization. Nineteen services, one accountable team.';
+  `Web, apps and AI. Marketing, e-commerce and monetization. Accounting, tax, company registration, IP and overseas setup. ${SERVICE_COUNT_WORD} services, one accountable team.`;
 
 export const SHORT_TAGLINE =
-  'One agency for software, AI, finance, compliance and growth.';
+  'One agency for software and AI, performance marketing and e-commerce, and corporate and advisory.';
+
+/**
+ * The hero subhead. Separate from TAGLINE, which it used to reuse.
+ *
+ * TAGLINE is written for a search result: a dense, comma-separated list of
+ * what the firm sells, because that is what a snippet has to do in 160
+ * characters with no page around it. Under a headline it read as a list rather
+ * than as a sentence, and the hero is the one place on the site with a
+ * visitor's full attention.
+ *
+ * So this one makes the argument instead of listing the inventory: what the
+ * firm covers, and the reason that breadth is worth anything, which is that it
+ * comes under one contract with one team answerable for it. The list is one
+ * scroll below in the coverflow, and the full catalogue is a click away.
+ */
+export const HERO_SUBHEAD =
+  `Software and AI, performance marketing and e-commerce, and the corporate, tax and legal work behind them. ${SERVICE_COUNT_WORD} services, one contract, and one team that cannot point at another vendor when something goes wrong.`;

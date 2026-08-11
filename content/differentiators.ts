@@ -21,7 +21,7 @@ export const DIFFERENTIATORS: Differentiator[] = [
   {
     title: 'One accountable team',
     description:
-      'Your accountant, your marketer and your developer sit in the same firm. Nobody gets to blame the other vendor.',
+      'Your accountant, your marketer and your developer work at the same firm and answer to the same account lead. There is no other vendor to blame.',
     icon: 'knight',
     badge: 'chrome',
   },
@@ -56,7 +56,7 @@ export const DIFFERENTIATORS: Differentiator[] = [
   {
     title: 'We say no',
     description:
-      'If a cheaper tool or a different firm serves you better, we tell you. A bad fit costs us more than it saves.',
+      'If a cheaper tool or a different firm suits you better, we say so. Taking on work we are wrong for costs us more than the fee is worth.',
     icon: 'award',
     badge: 'chrome',
   },
@@ -92,7 +92,7 @@ export const PROCESS: ProcessStep[] = [
   },
   {
     number: '02',
-    title: 'Scope & schedule',
+    title: 'Scope and schedule',
     description:
       'A written scope listing what is included, what is not, and the date it lands. You approve before anything starts.',
     tag: 'In writing',

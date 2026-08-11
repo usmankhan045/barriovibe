@@ -2,9 +2,11 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { Container, Section, SectionHeading } from '@/components/primitives';
 import { Icon } from '@/components/icons';
+import type { IconName } from '@/content/types';
 import { IconBadge } from '@/components/ui/IconBadge';
 import { Reveal } from '@/components/ui/Reveal';
 import { Button } from '@/components/ui/Button';
+import { LiquidLens } from '@/components/ui/LiquidLens';
 import { cx } from '@/lib/cx';
 import { getService, serviceHref, pillarHref } from '@/content/services';
 import { SOFTWARE_SHOWCASE } from '@/content/softwareShowcase';
@@ -14,259 +16,161 @@ import { SOFTWARE_SHOWCASE } from '@/content/softwareShowcase';
  * discipline (see content/pillars.ts). Disciplines names the five teams;
  * this section is the one that actually shows the work.
  *
- * ── One card, not a mockup sitting above a caption ──
+ * ## The same material as the coverflow cards, inverted
  *
- * The first pass here built each card as a brand-colour mockup panel with a
- * plain caption underneath it, on the section's own white band — the pattern
- * a lot of enterprise marketing sites use. Sitting directly under the
- * Disciplines carousel, that read as two different card languages on one
- * page: Disciplines is one glossy blue tile carrying everything — numeral,
- * badge, copy, the "Explore" link — and this section was a picture with a
- * label. So the card is now built the same way Disciplines is: the gradient
- * and the specular run the full height, the mockup sits in the top band, and
- * the title, description and "Explore" link sit in white/blue-100 text on
- * the same surface, closed off with a hairline exactly like the carousel's
- * detail pane. One material for both, not two.
+ * The card is `u-glass u-glass--card u-glass-interactive`: the literal classes
+ * Coverflow puts on the practice cards (see `CARD_CLASS` in
+ * Coverflow.tsx), not a lookalike. Sitting a section below the rake, a card
+ * that only borrowed Disciplines' typography would read as a flat imitation
+ * next to the real thing. See the long comment on `.u-glass--card` in
+ * globals.css for why that variant carries no backdrop-filter and is therefore
+ * safe on six cards where raw `.u-glass` is not.
  *
- * The six mockups — an agent trace, a persona badge, a node graph, a chat
- * exchange, a phone, a browser — stand in for screenshots this agency does
- * not have a product to take, built from the same tokens (`--grad-cta`, the
- * blue/silver scale) as every other surface on the page.
+ * What `.u-glass--white` then changes is the body and nothing else: white
+ * here, blue on the coverflow, with the blue kept in the rim so the edge still
+ * falls off the way the material always did. RevenueEngine, one section down,
+ * is built on the same pair. The reason is what is INSIDE this
+ * card and not inside that one. Each of these carries a white mockup pane, and
+ * a saturated blue field around a white screen leaves the eye nowhere to go
+ * but the screen: six cards that read as six blue mats. Making the card the
+ * same white as the pane puts the mockup back in the card instead of on it,
+ * and the copy underneath goes to the page's own ink pair. The argument and
+ * the three layers are recorded on `.u-glass--white` in globals.css.
  *
- * The whole card is the link and lifts on hover; every mockup is a Server
- * Component with zero client JS, same as everywhere else here.
+ * ## The grid was rebuilt away from and back to
+ *
+ * Three replacements were tried and all three were worse, which is worth
+ * recording so the fourth is not attempted: a tab strip, a rail over a hero
+ * stack, and a six-panel concertina. Each of them made one mockup bigger by
+ * putting the other five behind a control, and a control on a home page is a
+ * thing most visitors never touch — so five of the six services stopped being
+ * on the page in any practical sense.
+ *
+ * Six cards shows six services. That is not a compromise, it is the point, and
+ * the work belongs in making each card better rather than in making five of
+ * them conditional.
+ *
+ * ## What was added rather than replaced
+ *
+ * The one thing the grid genuinely lacked was a reason to move. It now has
+ * three, and all of them are on the card the pointer is actually over:
+ *
+ *   the light follows the pointer   `.u-glass::after` has always painted an
+ *                                   illumination layer anchored at --u-px /
+ *                                   --u-py. Those two properties were left in
+ *                                   globals.css as a seam, with a note saying a
+ *                                   listener would be worth it "if glass ever
+ *                                   lands somewhere that earns it". Six cards
+ *                                   is that place. See LiquidLens, which took
+ *                                   the seam and then went past it.
+ *   the screen leans in             the mockup lifts and its shadow deepens
+ *                                   under the card's own lift, so the card
+ *                                   reads as having depth rather than as a flat
+ *                                   pane that translated.
+ *   the rim sweeps                  already in the material: one pass of the
+ *                                   travelling highlight around the silhouette,
+ *                                   which is what `.u-glass-interactive` does
+ *                                   everywhere else on the site.
+ *
+ * ## Why the mockups are framed screens and not floating chips
+ *
+ * The first version drew each mockup straight onto the glass: a chip here, a
+ * node graph there, a phone somewhere else, each one guessing its own inset
+ * inside a full-bleed band clipped by the card. Six different drawings at six
+ * different scales, several of them running off their own edges, which is
+ * exactly what made the row read as unfinished next to the coverflow.
+ *
+ * So every mockup now sits in the same `Screen`: one inset white pane, one
+ * fixed face, one internal type scale, one window bar at the top. The row
+ * reads as six screenshots of one design system rather than six sketches, and
+ * nothing can bleed past a card edge because nothing is positioned against a
+ * card edge any more. The pane's fixed height is what keeps all six the same
+ * size at every column width, so the titles under them share a baseline; see
+ * the note on `Screen` for why it is a height and not a ratio.
+ *
+ * The chrome varies with the thing being shown, and only there: four app
+ * windows, one phone on a shelf, one browser. That is the honest signal for
+ * what each service ships, and it costs the family nothing because the frame,
+ * the palette and the inner scale are shared.
+ *
+ * They stand in for screenshots this agency does not have a product to take.
+ * Every mockup below is a Server Component with zero client JS, and the whole
+ * card is the link: `u-glass-interactive` owns its hover and focus state, so
+ * nothing here reimplements a lift. The only client code in this section is
+ * components/ui/LiquidLens.tsx, which moves one bead.
  */
 
-function MockupArea({ children }: { children: ReactNode }) {
-  // overflow-hidden of its own, not just the outer card's: the outer clip
-  // only catches what escapes the CARD, and this band sits flush against the
-  // text below it with no seam between them — without its own clip, a tall
-  // rotated mockup (the phone) bleeds straight into the title underneath it.
-  return <div className="relative h-48 w-full flex-none overflow-hidden sm:h-52">{children}</div>;
-}
+// ── The shared frame ────────────────────────────────────────────────────────
 
-/** A small floating mockup card, the shared unit most mockups below compose
- *  with: rounded, on its own white, lightly rotated so it reads as placed
- *  rather than pinned to the grid. */
-function Chip({ className, children }: { className?: string; children: ReactNode }) {
+/**
+ * The white pane every mockup is drawn inside.
+ *
+ * ## Why a fixed height and not an aspect ratio
+ *
+ * `aspect-[4/3]` was the obvious choice and it is the wrong one here. An
+ * aspect-sized pane is as tall as the column is wide, so the pane loses about
+ * 50px of height between the three-column layout and the one-column one, while
+ * everything drawn inside it is sized in px and loses nothing. Below `lg` the
+ * agent trace and the chat thread were taller than their own pane, and since a
+ * `flex-1` body will not shrink under its content, what got pushed out of the
+ * clip was the footer under it: the input bar and the systems row simply
+ * vanished on mobile.
+ *
+ * A fixed 14.25rem face fits the tallest of the six at every width, keeps all six
+ * on one baseline so the titles under them line up, and reads as a screenshot
+ * either way. `min-h-0` on each body is the second half of the fix: if a body
+ * ever does outgrow the pane it now clips itself rather than ejecting the bar
+ * below it.
+ *
+ * `overflow-hidden` of its own, so a device or a bar that runs to the pane's
+ * edge is cut by the pane rather than by the card. `flex-none` so the screen
+ * keeps its face when the copy under it wraps a line further on one card than
+ * another.
+ *
+ * ## The hairline is what separates it from the card now
+ *
+ * A white pane on a blue card needed nothing but its own shadow. On the white
+ * card (see `.u-showcase-card` in globals.css) that shadow was doing two jobs
+ * badly: it was the only edge the pane had, and at the depth it needed to be
+ * an edge it read as a smudge. So the separation moved to a hairline, the same
+ * one the window bar and every divider inside the mockups use, and the shadow
+ * went back to being a shadow: shallower, and blue rather than near-black.
+ */
+function Screen({ children }: { children: ReactNode }) {
   return (
-    <div
-      className={cx(
-        'absolute rounded-xl bg-white p-3.5 shadow-[0_12px_28px_-8px_rgb(4_17_52_/_0.45)]',
-        className,
-      )}
-    >
-      {children}
+    <div className="relative h-[14.25rem] w-full flex-none overflow-hidden rounded-[1rem] border border-line bg-white shadow-[0_10px_24px_-12px_rgb(11_47_146_/_0.28)]">
+      <div className="flex h-full flex-col">{children}</div>
     </div>
   );
 }
 
-/** 1 — AI agents: a live trace, mid-shift — one card, centred, rather than
- *  two stacked chips guessing they will not collide. Task-scoped — the agent
- *  completes a process. Digital FTE, next, is person-scoped: the distinction
- *  the two cards exist to make visible. */
-function AgentPanel() {
-  return (
-    <MockupArea>
-      <div className="flex h-full items-center justify-center px-5">
-        <div className="w-full max-w-[15rem] -rotate-1 rounded-xl bg-white p-4 shadow-[0_12px_28px_-8px_rgb(4_17_52_/_0.45)]">
-          <span className="flex items-center gap-1.5">
-            <span className="relative flex size-1.5 flex-none items-center justify-center">
-              <span className="absolute size-1.5 animate-pulse rounded-full bg-blue-600" aria-hidden="true" />
-            </span>
-            <span className="text-[10.5px] font-bold uppercase tracking-[0.12em] text-blue-600">
-              Agent · live
-            </span>
-          </span>
-          <ul className="mt-2.5 flex flex-col gap-1.5">
-            <li className="flex items-center gap-2 text-[12px] font-medium text-ink">
-              <Icon name="check" size={12} className="flex-none text-blue-600" />
-              Order matched to Shopify record
-            </li>
-            <li className="flex items-center gap-2 text-[12px] font-medium text-ink">
-              <Icon name="check" size={12} className="flex-none text-blue-600" />
-              Refund policy checked against terms
-            </li>
-            <li className="flex items-center gap-2 text-[12px] font-medium text-ink-body">
-              <span className="size-3 flex-none rounded-full border-2 border-blue-200" aria-hidden="true" />
-              Held for approval
-            </li>
-          </ul>
-          <div className="mt-2.5 flex items-center justify-between border-t border-line pt-2">
-            <span className="text-[10.5px] text-ink-body">3 systems connected</span>
-            <span className="flex gap-1" aria-hidden="true">
-              <span className="size-1.5 rounded-full bg-blue-600" />
-              <span className="size-1.5 rounded-full bg-blue-200" />
-              <span className="size-1.5 rounded-full bg-blue-200" />
-            </span>
-          </div>
-        </div>
-      </div>
-    </MockupArea>
-  );
-}
-
-/** 2 — Digital FTE: an identity, not a task trace — a persona badge for the
- *  person this was built around, then a day's worth of what it actually
- *  handled, counted rather than described.
- *
- *  The badge row and the card below it are two siblings in a `flex-col`, not
- *  two independently-positioned elements each guessing the other's height —
- *  that was the version that let the card grow tall enough to cover the
- *  badge's second line. Flex layout can compress the gap between them; it
- *  cannot make them overlap. */
-function DigitalFtePanel() {
-  return (
-    <MockupArea>
-      <div className="flex h-full flex-col justify-between p-4 sm:p-5">
-        <div className="flex items-center gap-3">
-          <span className="relative flex-none">
-            <span className="grid size-10 place-items-center rounded-full bg-white text-blue-600 shadow-[0_10px_20px_-6px_rgb(4_17_52_/_0.5)]">
-              <Icon name="users" size={17} />
-            </span>
-            <span className="absolute -bottom-1 -right-1 grid size-4 place-items-center rounded-full bg-blue-600 text-white shadow-[0_4px_10px_-2px_rgb(4_17_52_/_0.6)]">
-              <Icon name="sparkles" size={9} />
-            </span>
-          </span>
-          <span className="flex flex-col">
-            <span className="text-[12px] font-bold text-white">Coach’s Digital FTE</span>
-            <span className="text-[10px] text-blue-100">Modelled on one person</span>
-          </span>
-        </div>
-
-        <div className="-rotate-1 rounded-xl bg-white p-3.5 shadow-[0_12px_28px_-8px_rgb(4_17_52_/_0.45)]">
-          <div className="flex items-center gap-1.5">
-            <span className="relative flex size-1.5 flex-none items-center justify-center">
-              <span className="absolute size-1.5 animate-pulse rounded-full bg-blue-600" aria-hidden="true" />
-            </span>
-            <span className="text-[10.5px] font-bold uppercase tracking-[0.12em] text-blue-600">
-              Today, handled
-            </span>
-          </div>
-          <ul className="mt-2 flex flex-col gap-1.5">
-            <li className="flex items-center justify-between text-[12px] font-medium text-ink">
-              <span>Client messages replied</span>
-              <span className="tabular text-ink-body">12</span>
-            </li>
-            <li className="flex items-center justify-between text-[12px] font-medium text-ink">
-              <span>Session notes drafted</span>
-              <span className="tabular text-ink-body">3</span>
-            </li>
-            <li className="flex items-center justify-between text-[12px] font-medium text-ink-body">
-              <span>Escalated for a decision</span>
-              <span className="tabular">1</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </MockupArea>
-  );
-}
-
-/** 3 — Workflow automation: a hub and four spokes, drawn directly on the
- *  surface rather than boxed in a card — the diagram is the point. */
-function AutomationPanel() {
-  const items: { icon: 'document' | 'chat' | 'cart' | 'calculator'; label: string; x: number; y: number }[] = [
-    { icon: 'document', label: 'Inbox', x: 14, y: 18 },
-    { icon: 'chat', label: 'Support', x: 86, y: 16 },
-    { icon: 'cart', label: 'Orders', x: 88, y: 82 },
-    { icon: 'calculator', label: 'Accounts', x: 12, y: 84 },
-  ];
-  const hub = { x: 50, y: 50 };
-
-  return (
-    <MockupArea>
-      <svg
-        className="absolute inset-0 h-full w-full"
-        viewBox="0 0 100 100"
-        preserveAspectRatio="none"
-        aria-hidden="true"
-      >
-        {items.map((item) => (
-          <line
-            key={item.icon}
-            x1={hub.x}
-            y1={hub.y}
-            x2={item.x}
-            y2={item.y}
-            stroke="rgb(255 255 255 / 0.35)"
-            strokeWidth="0.6"
-            strokeDasharray="1.5 3"
-          />
-        ))}
-      </svg>
-
-      {items.map((item) => (
-        <span
-          key={item.icon}
-          className="absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1.5"
-          style={{ left: `${item.x}%`, top: `${item.y}%` }}
-        >
-          <span className="grid size-10 place-items-center rounded-full bg-white text-blue-600 shadow-[0_10px_20px_-6px_rgb(4_17_52_/_0.5)]">
-            <Icon name={item.icon} size={17} />
-          </span>
-          <span className="rounded-pill bg-white/10 px-2 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.08em] text-blue-100">
-            {item.label}
-          </span>
-        </span>
-      ))}
-
-      <span
-        className="absolute grid size-14 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white text-blue-600 shadow-[0_14px_28px_-6px_rgb(4_17_52_/_0.55)]"
-        style={{ left: `${hub.x}%`, top: `${hub.y}%` }}
-      >
-        <span className="absolute inset-0 rounded-full border border-blue-200 animate-pulse" aria-hidden="true" />
-        <Icon name="workflow" size={22} />
-      </span>
-    </MockupArea>
-  );
-}
-
-/** 4 — AI chatbots: a real exchange, not a testimonial — no faces, the site
- *  does not fabricate people any more than it fabricates numbers. Three
- *  messages, not four: the card sits inside a padded flex column that fills
- *  the mockup band exactly, so there is no percentage-guessed inset left to
- *  get wrong as the band's own height changes. */
-function ChatPanel() {
-  return (
-    <MockupArea>
-      <div className="flex h-full flex-col p-4 sm:p-5">
-        <div className="flex h-full flex-col -rotate-1 rounded-xl bg-white p-3.5 shadow-[0_12px_28px_-8px_rgb(4_17_52_/_0.45)]">
-          <div className="flex items-center gap-2 border-b border-line pb-2">
-            <span className="relative flex size-1.5 flex-none items-center justify-center">
-              <span className="absolute size-1.5 animate-pulse rounded-full bg-blue-600" aria-hidden="true" />
-            </span>
-            <span className="text-[10.5px] font-bold uppercase tracking-[0.12em] text-blue-600">
-              WhatsApp · live
-            </span>
-          </div>
-          <div className="mt-2.5 flex flex-1 flex-col justify-center gap-1.5">
-            <span className="max-w-[85%] rounded-lg rounded-bl-sm bg-band px-2.5 py-1.5 text-[11.5px] font-medium text-ink-strong">
-              Where is order 4471?
-            </span>
-            <span className="ml-auto max-w-[85%] rounded-lg rounded-br-sm bg-blue-600 px-2.5 py-1.5 text-[11.5px] font-medium text-white">
-              Out for delivery, arriving today
-            </span>
-            <span className="max-w-[85%] rounded-lg rounded-bl-sm bg-band px-2.5 py-1.5 text-[11.5px] font-medium text-ink-strong">
-              Can I change the address?
-            </span>
-          </div>
-        </div>
-      </div>
-    </MockupArea>
-  );
-}
-
-/** A small gradient chip: an app icon, an avatar, a nav-mark. One shape, three
- *  jobs, so the mobile and web mockups below stop leaning on flat grey bars
- *  for everything and start looking like screens with real interface on them. */
-function GradientChip({
-  className,
-  children,
+/** The window bar the four app screens share: an app mark, a title, a state. */
+function WindowBar({
+  icon,
+  title,
+  status,
 }: {
-  className?: string;
-  children?: ReactNode;
+  icon: IconName;
+  title: string;
+  status: string;
 }) {
+  return (
+    <div className="flex flex-none items-center gap-2 border-b border-line px-3 py-2">
+      <span className="grid size-5 flex-none place-items-center rounded-[6px] bg-blue-50 text-blue-600">
+        <Icon name={icon} size={11} />
+      </span>
+      <span className="truncate text-[11px] font-bold text-ink">{title}</span>
+      <span className="ml-auto flex flex-none items-center gap-1.5 rounded-pill bg-blue-50 px-1.5 py-[2px] text-[8.5px] font-bold uppercase tracking-[0.1em] text-blue-600">
+        <span className="size-1 animate-pulse rounded-full bg-blue-600" aria-hidden="true" />
+        {status}
+      </span>
+    </div>
+  );
+}
+
+/** A gradient tile: an app icon, an avatar, a nav mark. One shape, three jobs,
+ *  so the phone and the browser stop leaning on grey bars for everything. */
+function GradientChip({ className, children }: { className?: string; children?: ReactNode }) {
   return (
     <span
       className={cx('grid flex-none place-items-center text-white', className)}
@@ -278,176 +182,437 @@ function GradientChip({
   );
 }
 
-/** 5 — Mobile applications: a real screen, not a wireframe — a status bar, an
- *  app icon and an account avatar, two stats, a usage chart, two client rows
- *  with initials in place of a stock photo, and a tab bar with real icons. A
- *  second, dimmer phone behind it carries the composition into the corners. */
-function MobilePanel() {
-  const bars = [40, 65, 50, 80, 60, 35];
+// ── The six screens ─────────────────────────────────────────────────────────
+
+/** 1: AI agents. One run, traced. Task-scoped, the agent completes a process.
+ *  Digital FTE, next, is person-scoped: the distinction the two cards exist to
+ *  make visible. The third step is the one that matters, so it is the one left
+ *  open. */
+function AgentScreen() {
+  const steps = [
+    { label: 'Order matched in Shopify', meta: 'Orders API', done: true },
+    { label: 'Refund policy checked', meta: 'Your terms', done: true },
+    { label: 'Held for approval', meta: 'Waiting on a human', done: false },
+  ];
 
   return (
-    <MockupArea>
-      <div className="absolute inset-0 grid place-items-center">
-        <div
-          className="absolute h-[92%] w-[46%] translate-x-[36%] translate-y-[8%] rotate-[9deg] rounded-[1.5rem] bg-white/15 p-2 backdrop-blur-sm"
-          aria-hidden="true"
-        >
-          <div className="h-full rounded-[1.1rem] bg-white/10" />
+    <Screen>
+      <WindowBar icon="sparkles" title="Refund request 4471" status="Live" />
+
+      {/* The run's own progress, above the trace. Two thirds of a bar is what
+          makes the open third step read as a run still going rather than as a
+          list with one item unticked. */}
+      <div className="flex-none px-3.5 pt-2.5">
+        <div className="flex items-baseline justify-between">
+          <span className="text-[9.5px] font-semibold text-ink">2 of 3 steps done</span>
+          <span className="text-[9px] font-medium text-ink-body">18s</span>
+        </div>
+        <span className="mt-1 block h-[3px] w-full overflow-hidden rounded-pill bg-blue-100">
+          <span className="block h-full w-2/3 rounded-pill bg-blue-600" aria-hidden="true" />
+        </span>
+      </div>
+
+      <ol className="flex min-h-0 flex-1 flex-col justify-center px-3.5 py-2.5">
+        {steps.map((step, i) => (
+          <li key={step.label} className="flex gap-2.5">
+            <span className="flex flex-none flex-col items-center">
+              <span
+                className={cx(
+                  'grid size-4 flex-none place-items-center rounded-full',
+                  step.done ? 'bg-blue-600 text-white' : 'border-2 border-blue-200 bg-white',
+                )}
+                aria-hidden="true"
+              >
+                {step.done && <Icon name="check" size={9} />}
+              </span>
+              {i < steps.length - 1 && (
+                <span className="w-px flex-1 bg-blue-100" aria-hidden="true" />
+              )}
+            </span>
+
+            <span className={cx('flex flex-col', i < steps.length - 1 && 'pb-2.5')}>
+              <span
+                className={cx(
+                  'text-[11px] font-semibold leading-tight',
+                  step.done ? 'text-ink' : 'text-blue-600',
+                )}
+              >
+                {step.label}
+              </span>
+              <span className="text-[9.5px] leading-tight text-ink-body">{step.meta}</span>
+            </span>
+          </li>
+        ))}
+      </ol>
+
+      <div className="flex flex-none items-center gap-2 border-t border-line px-3.5 py-2">
+        <span className="text-[9.5px] font-medium text-ink-body">3 systems connected</span>
+        <span className="ml-auto flex items-center gap-1" aria-hidden="true">
+          {(['cart', 'receipt', 'mail'] as const).map((icon) => (
+            <span
+              key={icon}
+              className="grid size-4 place-items-center rounded-[5px] bg-band text-ink-body"
+            >
+              <Icon name={icon} size={9} />
+            </span>
+          ))}
+        </span>
+      </div>
+    </Screen>
+  );
+}
+
+/** 2: Digital FTE. An identity, not a task trace. A day's work counted, then
+ *  what the persona was actually built from. */
+function DigitalFteScreen() {
+  const counters = [
+    { value: '12', label: 'Replied' },
+    { value: '3', label: 'Drafted' },
+    { value: '1', label: 'Escalated' },
+  ];
+  const trained = [
+    'Their own replies and tone',
+    'The calls they make on their own',
+    'Where they escalate, and to whom',
+  ];
+
+  return (
+    <Screen>
+      <WindowBar icon="users" title="Coach’s Digital FTE" status="On shift" />
+
+      <div className="flex min-h-0 flex-1 flex-col justify-center gap-2 p-3">
+        <div className="grid grid-cols-3 gap-2">
+          {counters.map((counter) => (
+            <div key={counter.label} className="rounded-md bg-band px-2 py-1.5">
+              <span className="block font-display text-[16px] font-extrabold leading-none tabular text-blue-600">
+                {counter.value}
+              </span>
+              <span className="mt-0.5 block text-[8.5px] font-medium leading-tight text-ink-body">
+                {counter.label}
+              </span>
+            </div>
+          ))}
         </div>
 
-        <div className="relative h-[96%] w-[52%] -translate-x-[6%] rotate-[-4deg] rounded-[1.6rem] bg-white p-1.5 shadow-[0_28px_50px_-12px_rgb(4_17_52_/_0.6)]">
-          <div className="flex h-full flex-col overflow-hidden rounded-[1.2rem] bg-white">
-            {/* Status bar */}
-            <div className="flex items-center justify-between px-3 pt-2">
-              <span className="text-[8px] font-bold tabular text-ink">9:41</span>
-              <div className="flex items-center gap-0.5" aria-hidden="true">
-                <span className="h-1.5 w-2 rounded-[1px] bg-ink" />
-                <span className="h-1.5 w-2 rounded-[1px] bg-ink" />
-                <span className="h-1.5 w-2.5 rounded-[2px] border border-ink" />
-              </div>
+        <div className="rounded-md border border-line p-2">
+          <span className="text-[8.5px] font-bold uppercase tracking-[0.12em] text-blue-600">
+            Modelled on
+          </span>
+          <ul className="mt-1 flex flex-col gap-1">
+            {trained.map((line) => (
+              <li key={line} className="flex items-center gap-1.5">
+                <Icon name="check" size={10} className="flex-none text-blue-600" />
+                <span className="text-[10px] font-medium leading-tight text-ink">{line}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </Screen>
+  );
+}
+
+/** 3: Workflow automation. A builder canvas: the handoffs that used to be
+ *  manual, drawn as the steps they became. */
+function AutomationScreen() {
+  const nodes: { icon: IconName; label: string; tag: string }[] = [
+    { icon: 'cart', label: 'Order placed', tag: 'Trigger' },
+    { icon: 'receipt', label: 'Invoice raised', tag: 'Ledger' },
+    { icon: 'chat', label: 'Customer notified', tag: 'WhatsApp' },
+  ];
+
+  return (
+    <Screen>
+      <WindowBar icon="workflow" title="Order to invoice" status="Auto" />
+
+      <div className="flex min-h-0 flex-1 flex-col justify-center px-3.5 py-2.5">
+        {nodes.map((node, i) => (
+          <div key={node.label} className="flex flex-col">
+            <div className="flex items-center gap-2 rounded-md border border-line bg-white px-2 py-1.5 shadow-[0_4px_10px_-6px_rgb(4_17_52_/_0.35)]">
+              <span className="grid size-5 flex-none place-items-center rounded-[5px] bg-blue-50 text-blue-600">
+                <Icon name={node.icon} size={10} />
+              </span>
+              <span className="text-[10.5px] font-semibold text-ink">{node.label}</span>
+              <span className="ml-auto rounded-pill bg-band px-1.5 py-0.5 text-[8.5px] font-semibold text-ink-body">
+                {node.tag}
+              </span>
             </div>
 
-            {/* App bar: icon, name, account avatar */}
-            <div className="mt-2 flex items-center gap-2 px-3 pb-2">
-              <GradientChip className="size-6 rounded-[7px]">
-                <Icon name="sparkles" size={12} />
+            {/* The connector is drawn on the node's own icon axis: 10px of
+                padding plus half of a 24px tile. Anything centred on the box
+                instead lands between two nodes that are not centred on it. */}
+            {i < nodes.length - 1 && (
+              <span
+                className="ml-[1.125rem] h-2.5 w-0.5 rounded-pill bg-blue-200"
+                aria-hidden="true"
+              />
+            )}
+          </div>
+        ))}
+      </div>
+
+      <div className="flex flex-none items-center gap-2 border-t border-line px-3.5 py-2">
+        <Icon name="check" size={10} className="flex-none text-blue-600" />
+        <span className="text-[9.5px] font-medium text-ink-body">
+          Runs on every order, reports itself
+        </span>
+      </div>
+    </Screen>
+  );
+}
+
+/** 4: AI chatbots. A real exchange, no faces: the site does not fabricate
+ *  people any more than it fabricates numbers. */
+function ChatScreen() {
+  return (
+    <Screen>
+      <WindowBar icon="whatsapp" title="Support" status="Online" />
+
+      {/* Centred rather than bottom-aligned. A thread pinned to the input bar
+          leaves the top third of the pane empty, which on a card this size
+          reads as a rendering fault rather than as an empty conversation. */}
+      <div className="flex min-h-0 flex-1 flex-col justify-center gap-1.5 bg-band px-3 py-2.5">
+        <span className="max-w-[80%] self-start rounded-lg rounded-bl-sm bg-white px-2.5 py-1.5 text-[10.5px] font-medium text-ink shadow-[0_2px_6px_-2px_rgb(4_17_52_/_0.25)]">
+          Where is order 4471?
+        </span>
+        <span className="max-w-[85%] self-end rounded-lg rounded-br-sm bg-blue-600 px-2.5 py-1.5 text-[10.5px] font-medium text-white">
+          Out for delivery, arriving today
+        </span>
+        <span className="max-w-[80%] self-start rounded-lg rounded-bl-sm bg-white px-2.5 py-1.5 text-[10.5px] font-medium text-ink shadow-[0_2px_6px_-2px_rgb(4_17_52_/_0.25)]">
+          Can I change the address?
+        </span>
+        <span
+          className="flex items-center gap-1 self-end rounded-lg rounded-br-sm bg-blue-600 px-2.5 py-1.5"
+          aria-hidden="true"
+        >
+          <span className="size-1 animate-pulse rounded-full bg-white/90" />
+          <span className="size-1 animate-pulse rounded-full bg-white/60" />
+          <span className="size-1 animate-pulse rounded-full bg-white/40" />
+        </span>
+      </div>
+
+      <div className="flex flex-none items-center gap-2 border-t border-line px-3 py-2">
+        <span className="flex-1 rounded-pill bg-band px-2.5 py-1 text-[10px] text-ink-body">
+          Message
+        </span>
+        <span className="grid size-6 flex-none place-items-center rounded-full bg-blue-600 text-white">
+          <Icon name="arrow-right" size={11} />
+        </span>
+      </div>
+    </Screen>
+  );
+}
+
+/** 5: Mobile applications. A device on a shelf rather than a window: a phone
+ *  with a real screen on it, and two of the app's own surfaces floating beside
+ *  it at the scale they would be inside it. */
+function MobileScreen() {
+  const bars = [42, 68, 52, 84, 61, 38];
+
+  return (
+    <Screen>
+      <div className="relative h-full bg-band">
+        {/* The phone. Positioned in percentages of the pane, not of the card,
+            so it holds its proportions at every column width. */}
+        <div className="absolute bottom-[5%] left-[6%] top-[5%] w-[36%] rounded-[1.15rem] bg-blue-900 p-[3px] shadow-[0_18px_30px_-12px_rgb(4_17_52_/_0.55)]">
+          <div className="flex h-full flex-col overflow-hidden rounded-[0.95rem] bg-white">
+            <div className="flex flex-none items-center justify-between px-2 pt-1.5">
+              <span className="text-[6.5px] font-bold tabular text-ink">9:41</span>
+              <span className="flex items-center gap-[2px]" aria-hidden="true">
+                <span className="h-1 w-1.5 rounded-[1px] bg-ink" />
+                <span className="h-1 w-2 rounded-[1px] border border-ink" />
+              </span>
+            </div>
+
+            <div className="mt-1.5 flex flex-none items-center gap-1.5 px-2">
+              <GradientChip className="size-4 rounded-[5px]">
+                <Icon name="sparkles" size={9} />
               </GradientChip>
-              <span className="flex-1 text-[10.5px] font-bold text-ink">Coach App</span>
-              <GradientChip className="size-6 rounded-full text-[8px] font-bold">AK</GradientChip>
+              <span className="flex-1 text-[7.5px] font-bold text-ink">Coach</span>
+              <GradientChip className="size-4 rounded-full text-[5.5px] font-bold">AK</GradientChip>
             </div>
 
-            {/* Stat row */}
-            <div className="flex items-center gap-2 px-3">
-              <div className="flex-1 rounded-lg bg-band px-2 py-1.5">
-                <span className="block font-display text-[15px] font-extrabold tabular text-blue-600">
-                  24
-                </span>
-                <span className="text-[7px] font-medium text-ink-body">Active clients</span>
-              </div>
-              <div className="flex-1 rounded-lg bg-band px-2 py-1.5">
-                <span className="block font-display text-[15px] font-extrabold tabular text-ink">6</span>
-                <span className="text-[7px] font-medium text-ink-body">Sessions today</span>
-              </div>
+            <div className="mx-2 mt-1.5 flex-none rounded-md bg-blue-600 px-2 py-1.5">
+              <span className="block font-display text-[12px] font-extrabold leading-none tabular text-white">
+                24
+              </span>
+              <span className="mt-0.5 block text-[6px] font-medium text-blue-100">
+                Active clients
+              </span>
             </div>
 
-            {/* Usage chart, unlabelled — the shape, not a claimed number */}
-            <div className="mt-2 flex h-6 items-end gap-1 px-3" aria-hidden="true">
-              {bars.map((h, i) => (
+            <div className="mt-1.5 flex h-4 flex-none items-end gap-[3px] px-2" aria-hidden="true">
+              {bars.map((height, i) => (
                 <span
                   key={i}
-                  className={cx('flex-1 rounded-t-[2px]', i === 3 ? 'bg-blue-600' : 'bg-blue-100')}
-                  style={{ height: `${h}%` }}
+                  className={cx('flex-1 rounded-t-[1px]', i === 3 ? 'bg-blue-600' : 'bg-blue-100')}
+                  style={{ height: `${height}%` }}
                 />
               ))}
             </div>
 
-            {/* Content rows */}
-            <div className="mt-2 flex flex-1 flex-col gap-1.5 px-3">
-              <div className="flex items-center gap-2 rounded-lg bg-blue-50 px-2 py-1.5">
-                <GradientChip className="size-5 rounded-full text-[7px] font-bold">JM</GradientChip>
-                <div className="flex-1">
-                  <span className="block h-1.5 w-[60%] rounded-pill bg-blue-200" aria-hidden="true" />
-                  <span className="mt-1 block h-1 w-[40%] rounded-pill bg-blue-100" aria-hidden="true" />
-                </div>
+            {/* Two session rows, so the tab bar sits under content rather than
+                under a hole. Initials, not faces: the site does not invent
+                people to put in its own mockups. */}
+            <div className="mt-2 flex flex-col gap-1 px-2">
+              <div className="flex items-center gap-1.5 rounded-md bg-blue-50 px-1.5 py-1">
+                <GradientChip className="size-3.5 rounded-full text-[5px] font-bold">
+                  JM
+                </GradientChip>
+                <span className="flex-1">
+                  <span className="block h-1 w-[70%] rounded-pill bg-blue-200" aria-hidden="true" />
+                  <span
+                    className="mt-[3px] block h-[3px] w-[45%] rounded-pill bg-blue-100"
+                    aria-hidden="true"
+                  />
+                </span>
               </div>
-              <div className="flex items-center gap-2 rounded-lg px-2 py-1.5">
-                <span className="grid size-5 flex-none place-items-center rounded-full bg-silver-300 text-[7px] font-bold text-white">
+              <div className="flex items-center gap-1.5 rounded-md px-1.5 py-1">
+                <span
+                  className="grid size-3.5 flex-none place-items-center rounded-full bg-silver-300 text-[5px] font-bold text-white"
+                  aria-hidden="true"
+                >
                   RS
                 </span>
-                <div className="flex-1">
-                  <span className="block h-1.5 w-[50%] rounded-pill bg-silver-300" aria-hidden="true" />
-                  <span className="mt-1 block h-1 w-[32%] rounded-pill bg-silver-200" aria-hidden="true" />
-                </div>
+                <span className="flex-1">
+                  <span
+                    className="block h-1 w-[58%] rounded-pill bg-silver-300"
+                    aria-hidden="true"
+                  />
+                  <span
+                    className="mt-[3px] block h-[3px] w-[38%] rounded-pill bg-silver-200"
+                    aria-hidden="true"
+                  />
+                </span>
               </div>
             </div>
 
-            {/* Tab bar, real icons */}
-            <div className="mt-auto flex items-center justify-around border-t border-line py-2">
-              <span className="grid size-6 place-items-center rounded-full bg-blue-600 text-white">
-                <Icon name="chart" size={12} />
+            <div className="mt-auto flex flex-none items-center justify-around border-t border-line py-1.5">
+              <span className="grid size-4 place-items-center rounded-full bg-blue-600 text-white">
+                <Icon name="chart" size={9} />
               </span>
-              <Icon name="chat" size={13} className="text-silver-400" />
-              <Icon name="calculator" size={13} className="text-silver-400" />
-              <Icon name="users" size={13} className="text-silver-400" />
+              <Icon name="chat" size={10} className="text-ink-body" />
+              <Icon name="users" size={10} className="text-ink-body" />
+            </div>
+          </div>
+        </div>
+
+        {/* Two of the app's own surfaces, lifted off the shelf. */}
+        <div className="absolute right-[7%] top-1/2 flex w-[47%] -translate-y-1/2 flex-col gap-2">
+          <div className="flex items-center gap-2 rounded-lg bg-white p-2 shadow-[0_10px_22px_-10px_rgb(4_17_52_/_0.45)]">
+            <span className="grid size-6 flex-none place-items-center rounded-md bg-blue-50 text-blue-600">
+              <Icon name="clock" size={12} />
+            </span>
+            <span className="flex flex-col">
+              <span className="text-[10px] font-bold leading-tight text-ink">New booking</span>
+              <span className="text-[8.5px] leading-tight text-ink-body">Today, 4:30pm</span>
+            </span>
+          </div>
+
+          <div className="rounded-lg bg-white p-2 shadow-[0_10px_22px_-10px_rgb(4_17_52_/_0.45)]">
+            <span className="text-[8px] font-bold uppercase tracking-[0.12em] text-blue-600">
+              One codebase
+            </span>
+            <div className="mt-1 flex items-center gap-1.5">
+              <span className="flex items-center gap-1 rounded-pill bg-band px-1.5 py-0.5 text-[8.5px] font-semibold text-ink">
+                <Icon name="phone" size={9} className="text-blue-600" />
+                iOS
+              </span>
+              <span className="flex items-center gap-1 rounded-pill bg-band px-1.5 py-0.5 text-[8.5px] font-semibold text-ink">
+                <Icon name="phone" size={9} className="text-blue-600" />
+                Android
+              </span>
             </div>
           </div>
         </div>
       </div>
-    </MockupArea>
+    </Screen>
   );
 }
 
-/** 6 — Full-stack web development: a real page, not a wireframe — a nav bar
- *  with a logo mark, a hero with two calls to action, a row of feature cards
- *  with icons, and an analytics widget peeking from behind the browser
- *  window for the same depth every other mockup here already has. */
-function WebPanel() {
-  const bars = [30, 55, 40, 70, 50];
-
+/** 6: Full-stack web development. A browser rather than an app window, and a
+ *  page inside it with the parts a real one has: nav, hero, two calls to
+ *  action, a feature row. */
+function WebScreen() {
   return (
-    <MockupArea>
-      <div
-        className="absolute right-3 top-3 flex w-24 items-end gap-1 rounded-xl bg-white/15 p-3 backdrop-blur-sm"
-        style={{ transform: 'rotate(6deg)' }}
-        aria-hidden="true"
-      >
-        {bars.map((h, i) => (
-          <span key={i} className="h-6 flex-1 rounded-t-[2px] bg-white/40" style={{ height: `${h}%` }} />
-        ))}
+    <Screen>
+      {/* Browser chrome, in place of the window bar the app screens carry. */}
+      <div className="flex flex-none items-center gap-1.5 border-b border-line bg-band px-3 py-2">
+        <span className="size-1.5 rounded-full bg-silver-300" aria-hidden="true" />
+        <span className="size-1.5 rounded-full bg-silver-300" aria-hidden="true" />
+        <span className="size-1.5 rounded-full bg-silver-300" aria-hidden="true" />
+        <span className="ml-1.5 flex flex-1 items-center gap-1.5 rounded-pill bg-white px-2 py-0.5">
+          <Icon name="shield" size={8} className="flex-none text-blue-600" />
+          <span className="h-[3px] w-12 rounded-pill bg-silver-200" aria-hidden="true" />
+        </span>
       </div>
 
-      <Chip className="inset-x-5 top-9 bottom-[8%] flex flex-col rotate-[1.2deg]">
-        {/* Browser chrome */}
-        <div className="flex items-center gap-1.5 border-b border-line pb-2.5">
-          <span className="size-2 rounded-full bg-silver-300" aria-hidden="true" />
-          <span className="size-2 rounded-full bg-silver-300" aria-hidden="true" />
-          <span className="size-2 rounded-full bg-blue-600" aria-hidden="true" />
-          <span className="ml-2 h-2.5 flex-1 rounded-pill bg-band" aria-hidden="true" />
-        </div>
-
+      {/* Set as a page with real words rather than as grey bars. A wireframe
+          says "a layout exists"; a page with type on it says "a site shipped",
+          which is the claim the card underneath is actually making. */}
+      <div className="flex min-h-0 flex-1 flex-col px-3 py-2.5">
         {/* Nav */}
-        <div className="mt-2.5 flex items-center gap-2 border-b border-line pb-2">
-          <GradientChip className="size-3 rounded-[4px]" />
-          <span className="h-1.5 w-8 rounded-pill bg-band" aria-hidden="true" />
-          <span className="h-1.5 w-8 rounded-pill bg-band" aria-hidden="true" />
-          <span className="h-1.5 w-8 rounded-pill bg-band" aria-hidden="true" />
-          <span className="ml-auto h-4 w-12 rounded-pill bg-blue-600" aria-hidden="true" />
+        <div className="flex flex-none items-center gap-2 border-b border-line pb-2">
+          <GradientChip className="size-3.5 rounded-[4px]" />
+          <span className="text-[7px] font-semibold text-ink">Work</span>
+          <span className="text-[7px] font-semibold text-ink-body">Services</span>
+          <span className="text-[7px] font-semibold text-ink-body">About</span>
+          <span className="ml-auto rounded-pill bg-blue-600 px-1.5 py-[3px] text-[7px] font-bold text-white">
+            Get a quote
+          </span>
         </div>
 
         {/* Hero */}
-        <div className="mt-3 flex flex-1 flex-col gap-2">
-          <span className="h-3.5 w-[80%] rounded-pill bg-ink-strong" aria-hidden="true" />
-          <span className="h-3.5 w-[55%] rounded-pill bg-ink-strong" aria-hidden="true" />
-          <span className="mt-1 h-2 w-[65%] rounded-pill bg-band" aria-hidden="true" />
-          <div className="mt-1.5 flex gap-2">
-            <span className="h-6 w-16 rounded-lg bg-blue-600" aria-hidden="true" />
-            <span className="h-6 w-16 rounded-lg border border-line" aria-hidden="true" />
-          </div>
-
-          {/* Feature row */}
-          <div className="mt-auto flex gap-2 border-t border-line pt-2.5">
-            {(['code', 'phone', 'sparkles'] as const).map((icon) => (
-              <div key={icon} className="flex-1 rounded-lg bg-band p-2">
-                <span className="grid size-5 place-items-center rounded-md bg-white text-blue-600 shadow-[0_2px_6px_-1px_rgb(4_17_52_/_0.2)]">
-                  <Icon name={icon} size={11} />
-                </span>
-                <span className="mt-1.5 block h-1 w-[70%] rounded-pill bg-silver-300" aria-hidden="true" />
-              </div>
-            ))}
+        <div className="mt-2 flex flex-1 flex-col justify-center">
+          <span className="block font-display text-[13px] font-extrabold leading-[1.15] tracking-[-0.02em] text-ink">
+            Built to load fast
+            <br />
+            and <span className="text-blue-600">convert</span>.
+          </span>
+          <span className="mt-1 block text-[7px] leading-snug text-ink-body">
+            Frontend, backend and the infrastructure under both.
+          </span>
+          <div className="mt-2 flex items-center gap-1.5">
+            <span className="rounded-[5px] bg-blue-600 px-2 py-1 text-[7px] font-bold text-white">
+              Start a project
+            </span>
+            <span className="rounded-[5px] border border-line px-2 py-1 text-[7px] font-bold text-ink">
+              See the work
+            </span>
           </div>
         </div>
-      </Chip>
-    </MockupArea>
+
+        {/* Feature row */}
+        <div className="mt-2 flex flex-none gap-1.5 border-t border-line pt-2">
+          {(
+            [
+              { icon: 'code', label: 'Typed' },
+              { icon: 'chart', label: 'Measured' },
+              { icon: 'shield', label: 'Hardened' },
+            ] as const
+          ).map((feature) => (
+            <div key={feature.label} className="flex-1 rounded-md bg-band p-1.5">
+              <span className="grid size-4 place-items-center rounded-[5px] bg-white text-blue-600 shadow-[0_2px_6px_-2px_rgb(4_17_52_/_0.3)]">
+                <Icon name={feature.icon} size={9} />
+              </span>
+              <span className="mt-1 block text-[7px] font-semibold leading-tight text-ink">
+                {feature.label}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </Screen>
   );
 }
 
-const PANELS: Record<string, () => ReactNode> = {
-  'agentic-ai-development': AgentPanel,
-  'digital-fte': DigitalFtePanel,
-  'workflow-automation': AutomationPanel,
-  'chatbot-development': ChatPanel,
-  'app-development': MobilePanel,
-  'web-development': WebPanel,
+const SCREENS: Record<string, () => ReactNode> = {
+  'agentic-ai-development': AgentScreen,
+  'digital-fte': DigitalFteScreen,
+  'workflow-automation': AutomationScreen,
+  'chatbot-development': ChatScreen,
+  'app-development': MobileScreen,
+  'web-development': WebScreen,
 };
 
 export function SoftwareShowcase() {
@@ -457,33 +622,91 @@ export function SoftwareShowcase() {
         <Reveal>
           <SectionHeading
             eyebrow="Software & AI"
-            lines={['Software, engineered.']}
-            accent="AI, shipped to production"
+            lines={['What we build,']}
+            accent="and what it does in production"
           />
         </Reveal>
 
-        <div className="mx-auto mt-12 grid max-w-5xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Capped a step in from the container. Three cards across the full
+            1,280px came out at coverflow width, which is right for a card that
+            is the only thing on screen and too heavy for six of them in a
+            grid: the row read as a wall. This is the same composition one
+            notch down.
+
+            <LiquidLens> wraps the grid rather than each card: one pointer
+            listener for the whole section, and the six cards inside it stay
+            Server Components. See the component for the physics, and for why
+            everything it writes goes on one card and never on this wrapper. */}
+        <LiquidLens className="mx-auto mt-12 grid max-w-6xl grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {SOFTWARE_SHOWCASE.map((item, i) => {
             const service = getService(item.slug);
-            const PanelGraphic = PANELS[item.slug];
-            if (!service || !PanelGraphic) return null;
+            const ScreenGraphic = SCREENS[item.slug];
+            if (!service || !ScreenGraphic) return null;
 
             return (
               <Reveal key={item.slug} index={i}>
                 <Link
                   href={serviceHref(service)}
-                  className="u-showcase-panel group flex h-full flex-col transition-transform duration-300 ease-brand hover:-translate-y-1"
+                  // `data-glass` is what LiquidLens's `closest()` looks for.
+                  // An attribute rather than the class, because the class names
+                  // a MATERIAL and this names the thing the pointer lights,
+                  // and a future card made of the same material should not
+                  // silently join a listener it was never wired into.
+                  data-glass
+                  className="u-glass u-glass--card u-glass--white u-glass-interactive u-showcase-card group flex h-full flex-col p-4 sm:p-[1.125rem]"
                 >
-                  <PanelGraphic />
-                  <div className="flex flex-1 flex-col p-5">
-                    <div className="flex items-start justify-between gap-3">
-                      <h3 className="font-display text-[1.0625rem] font-bold text-white">{item.title}</h3>
-                      <IconBadge icon={service.icon} variant="chrome" size="xs" className="flex-none" />
-                    </div>
-                    <p className="mt-1.5 flex-1 text-[13px] leading-[1.5] text-blue-100">
-                      {item.description}
-                    </p>
-                    <span className="mt-3 flex items-center gap-2 border-t border-white/15 pt-3 font-display text-[13px] font-bold text-white">
+                  {/* The drop the pointer drags across the card, and the well
+                      that clips it to the card's own radius. Both inert markup:
+                      LiquidLens writes a transform and an opacity onto the
+                      inner span and nothing else in this tree is client code.
+                      `z-index: 2` on the well in globals.css, because a drop on
+                      the surface of a card is over the screen and over the copy,
+                      not under them, and that clip is also what lets one drop
+                      cross from card to card without either end showing a seam. */}
+                  <span className="u-lens-well" aria-hidden="true">
+                    <span className="u-lens" />
+                  </span>
+
+                  <div className="u-showcase-screen">
+                    <ScreenGraphic />
+                  </div>
+
+                  {/* Title and badge, the sentence, Explore. The numeral and
+                      the dotted highlights the coverflow carries are the right
+                      rhythm for a card with nothing else on it; under a screen
+                      that is already doing the explaining they were just more
+                      text competing with it. */}
+                  <div className="mt-4 flex items-start justify-between gap-3">
+                    <h3 className="font-display text-[1.0625rem] font-bold leading-tight text-ink">
+                      {item.title}
+                    </h3>
+                    {/* Blue, where every other badge on the site is chrome.
+                        The chrome sphere is a white ball with a silver rim and
+                        it is meant to be read against colour: on this card's
+                        white body it is a smudge, and the one mark that names
+                        the service disappears. Blue is the same sphere lit the
+                        same way, and it is the accent the card otherwise only
+                        has at its edges. */}
+                    <IconBadge
+                      icon={service.icon}
+                      variant="blue"
+                      size="xs"
+                      className="u-showcase-badge flex-none"
+                    />
+                  </div>
+
+                  <p className="mt-2 line-clamp-3 text-[12.5px] leading-[1.5] text-ink-body">
+                    {item.description}
+                  </p>
+
+                  <div className="mt-auto pt-4">
+                    <span className="relative flex items-center gap-2 pt-3.5 font-display text-[12.5px] font-bold text-ink">
+                      {/* The rule over "Explore" draws in from the left on
+                          hover instead of sitting there as a border. It is the
+                          same gesture as `.u-rule` under every heading on the
+                          site, at card scale, and it is the one mark on the
+                          card that says the whole thing is a link. */}
+                      <span className="u-showcase-rule" aria-hidden="true" />
                       Explore
                       <Icon
                         name="arrow-right"
@@ -496,12 +719,17 @@ export function SoftwareShowcase() {
               </Reveal>
             );
           })}
-        </div>
+        </LiquidLens>
 
         <Reveal index={5}>
+          {/* Blue, because it is the only button in the section and therefore
+              its primary action. Chrome is for the SECOND button beside a blue
+              one (the hero, WhyUs, the CTA band all pair them that way); a lone
+              chrome button is a section whose one call to action is dressed as
+              the alternative to something that is not there. */}
           <div className="mt-14 flex justify-center lg:mt-16">
-            <Button href={pillarHref('software-ai')} variant="chrome">
-              View every software & AI service
+            <Button href={pillarHref('software-ai')}>
+              View every software &amp; AI service
             </Button>
           </div>
         </Reveal>

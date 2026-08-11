@@ -11,6 +11,13 @@
  * of scene-setting. Same rule as content/capabilities.ts: mechanism words,
  * not adjectives.
  *
+ * Kept to one sentence of roughly the same length across all six, on purpose.
+ * The card clamps this to two lines so six different sentence lengths cannot
+ * turn into six different amounts of leftover white space, but a sentence
+ * written to already fit in two lines reads whole — a sentence written long
+ * and then cut off mid-clause reads broken. Fitting the copy to the card
+ * beats relying on the clamp to hide the mismatch.
+ *
  * Digital FTE sits second, right after AI agents, on purpose: it is the
  * client's most distinctive offering inside software and AI, a persona-built
  * clone of one specific person rather than a task-scoped agent, and the two
@@ -32,36 +39,36 @@ export const SOFTWARE_SHOWCASE: SoftwareShowcaseItem[] = [
     slug: 'agentic-ai-development',
     title: 'AI agents',
     description:
-      'Software that plans, acts and completes real, multi-step work across your systems, escalating to a person only where judgement is required.',
+      'Plans, acts and completes real, multi-step work across your systems, with a human check built in.',
   },
   {
     slug: 'digital-fte',
     title: 'Digital FTE',
     description:
-      'A persona-built AI modelled on one specific person, a coach, a founder, an advisor, trained on their judgement and voice to run a defined slice of their work.',
+      'A persona-built AI modelled on one specific person, trained on their own judgement and voice.',
   },
   {
     slug: 'workflow-automation',
     title: 'Workflow automation',
     description:
-      'Manual handoffs re-engineered into monitored, self-reporting workflows connecting every tool your team runs.',
+      'Manual handoffs re-engineered into monitored, self-reporting workflows across every tool you use.',
   },
   {
     slug: 'chatbot-development',
     title: 'AI chatbots',
     description:
-      'Support and sales conversations grounded in your own data, deployed to WhatsApp, web and social with a clean handover to your team.',
+      'Support and sales conversations grounded in your own data, deployed to WhatsApp, web and social.',
   },
   {
     slug: 'app-development',
     title: 'Mobile applications',
     description:
-      'Native-grade iOS and Android products engineered from a single codebase and shipped through both stores.',
+      'Native-grade iOS and Android apps engineered from a single codebase, shipped through both stores.',
   },
   {
     slug: 'web-development',
     title: 'Full-stack web development',
     description:
-      'Marketing sites and web applications, frontend and backend, engineered for load speed, search visibility and a measurable conversion rate.',
+      'Marketing sites and web apps, frontend and backend, engineered for speed and conversion.',
   },
 ] as const;

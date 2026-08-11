@@ -171,10 +171,29 @@
 
   /* --------------------------------------------------------- TYPE SCALE
      Fluid clamps. Min = mobile, max = desktop. */
-  /* 44 → 76. Capped at 76 rather than 88 because the hero's copy column is
+  /* 40 → 76. Capped at 76 rather than 88 because the hero's copy column is
      ~62% of the container; at 88 an 18-character line overflows and wraps
-     mid-phrase, breaking the three-line headline structure. */
-  --text-display: clamp(2.75rem, 5.4vw, 4.75rem);
+     mid-phrase, breaking the three-line headline structure.
+
+     THE FLOOR HAS THE SAME CONSTRAINT AS THE CEILING, and it was 44 when it
+     should not have been. On a phone the copy column is the whole container,
+     which is 345px at 393px, and the hero's longest line measured 338px there:
+     seven pixels of slack on the one line that decides whether a three-line
+     headline stays three lines. The comment in Hero.tsx calls line length a
+     hard constraint and it is right, but the number it was protecting only had
+     headroom at the top of the scale.
+
+     40 gives that line 307px against 345px, so there is 38px to absorb a
+     rename or a fallback font metric. It also lifts the hero's primary CTA
+     above the fold on a 660px viewport, which is the second thing the old floor
+     was costing: the button sat at y=622 and was cut in half by the bottom of
+     the screen.
+
+     Measured, three-line structure intact, at 360 / 375 / 390 / 393 / 414 /
+     430. 360 is the tightest at 5px of slack, and it is also the narrowest
+     phone still sold. Below it the floor has to step again; see the 22.5rem
+     query at the foot of this file. */
+  --text-display: clamp(2.5rem, 5.4vw, 4.75rem);
   --text-display--line-height: 0.98;
   --text-display--letter-spacing: -0.035em;
   --text-display--font-weight: 900;
@@ -208,8 +227,12 @@
   --text-ghost--line-height: 1;
   --text-ghost--font-weight: 700;
 
-  --text-body-lg: 1.125rem; /* 18 */
-  --text-body-lg--line-height: 1.6;
+  /* 17/1.55 on a phone, 18/1.6 from 40rem up. Stepped at the foot of this file
+     alongside --gutter, which is the other token that changes for the same
+     reason. The argument is there; the short version is that 18/1.6 is set for
+     a desktop measure and a phone does not have one. */
+  --text-body-lg: 1.0625rem; /* 17 */
+  --text-body-lg--line-height: 1.55;
 
   --text-body: 1rem; /* 16 */
   --text-body--line-height: 1.65;
@@ -240,8 +263,17 @@
     0 6px 16px rgb(11 47 146 / 0.3), 0 2px 4px rgb(6 26 81 / 0.22);
   --shadow-btn-blue-hover:
     0 10px 24px rgb(11 47 146 / 0.36), 0 3px 6px rgb(6 26 81 / 0.24);
-  --shadow-btn-chrome: 0 4px 12px rgb(11 12 14 / 0.14);
-  --shadow-btn-chrome-hover: 0 8px 20px rgb(11 12 14 / 0.16);
+  /* Chrome casts DOWN, not outward. Measured off the mockup, the silver pill
+     has no shadow at its sides at all: 2px out from the cap it is 0.01 of the
+     background and past that it is nothing. A blur far wider than the offset
+     (this was 4px down against 12px of blur) puts a grey halo right around the
+     pill instead, which on a light surface on a white page reads as a black
+     outline traced around the button. An offset larger than the blur, plus
+     negative spread, keeps it underneath. */
+  --shadow-btn-chrome:
+    0 1px 2px rgb(11 12 14 / 0.3), 0 8px 6px -3px rgb(11 12 14 / 0.32);
+  --shadow-btn-chrome-hover:
+    0 1px 2px rgb(11 12 14 / 0.3), 0 14px 12px -6px rgb(11 12 14 / 0.34);
   --shadow-badge: 0 6px 14px rgb(11 12 14 / 0.14);
   --shadow-bar:
     0 1px 2px rgb(11 12 14 / 0.04), 0 12px 32px rgb(11 12 14 / 0.07);
@@ -680,12 +712,56 @@
      The alpha is what keeps it glass: a hair under opaque, so the pane still
      lenses where cards overlap each other, which on a white page is the only
      place there is anything behind a card to bend. Do not take it to 1. */
+  /* ── THE STOPS BELOW ARE PRE-DIVIDED. READ THIS BEFORE EDITING THEM ──────
+     They are NOT the colours the card shows. They are the colours that, once
+     composited at this alpha over the white page, LAND on the piece's ramp.
+
+     The stops used to be the piece's percentiles written straight in at
+     0.94–0.97, which quietly could not work. Compositing at alpha `a` over
+     white puts a floor of (1-a)·255 under every channel, and the piece's red
+     channel is 0 through almost its whole body — #000229, #00053B, #00196D,
+     #07298D. At 0.94 that floor is 15, so no stop could render redder-free
+     than rgb(15 …) no matter what was written. Measured on the page, the card
+     came out at 77–79% saturation against the piece's 88–100%: the same hue
+     and roughly the right lightness, greyed by white bleeding through. That is
+     what read as "not the same blue".
+
+     So each stop is solved backwards, S = (C - (1-a)·255) / a, for the target
+     C taken off the piece, and alpha went to 0.985 because the floor has to be
+     lower than the target's red channel for the equation to have an answer at
+     all. Worst residual across all four stops is 3.8/255.
+
+         stop   piece pct   RENDERS AS          S     L
+           0%      p80       #123AA5           80%   36%
+          40%      p57       #00207B          100%   24%
+          72%      p34       #001156          100%   17%
+         100%      p18       #000C3F          100%   12%
+
+     Sampling of the piece is unchanged in method from before — every pixel of
+     public/art/chess-hero.webp in the 210–245° hue band above 55% saturation,
+     67,145 of them, sorted by luminance. The saturation floor is what excludes
+     the anti-aliased edge where the piece meets the silver pawns, and the
+     0.06–0.65 lightness window excludes the contact shadow and the crown's
+     specular. The specular is excluded because `.u-glass::after` already
+     paints one at --glass-light-x/y; baking a second into the body would put
+     two lights on one object.
+
+     132% -> 112% for the same reason the stops moved. At 132%, with the light
+     at 30%/22%, the card's far corner only reaches 79% along the ramp, so the
+     last stop was never on screen and the pane spanned 8 points of lightness
+     against the piece's 30. 112% puts the far corner at ~94%.
+
+     The alpha still is not 1, and should not be: it is what lets a card lens
+     the card behind it where the rake overlaps, which on a white page is the
+     only place there is anything behind a card at all. But it can no longer be
+     chosen freely — moving it means re-solving every stop through the equation
+     above, or the pane greys out again. */
   --grad-glass-card: radial-gradient(
-    132% 132% at var(--glass-light-x) var(--glass-light-y),
-    rgb(11 46 155 / 0.94) 0%,
-    rgb(1 32 119 / 0.95) 46%,
-    rgb(3 20 96 / 0.96) 78%,
-    rgb(0 15 76 / 0.97) 100%
+    112% 112% at var(--glass-light-x) var(--glass-light-y),
+    rgb(14 55 164 / 0.985) 0%,
+    rgb(0 29 121 / 0.985) 40%,
+    rgb(0 13 83 / 0.985) 72%,
+    rgb(0 8 60 / 0.985) 100%
   );
 
   /* Hairline that fades at both ends — used under the sticky header and
@@ -848,6 +924,60 @@
   --section-y-tight: clamp(3rem, 5vw, 5rem); /* 48 → 80  */
   --tile-gap: 1.25rem; /* 20px */
   --header-h: 4.5rem; /* 72px */
+}
+
+/* ── The 320px floor ───────────────────────────────────────────────────────
+   --text-display's own clamp is documented where it is declared: 40px is the
+   floor because the hero's three-line headline is load-bearing and its longest
+   line has to fit the container. That holds down to 360px, the narrowest phone
+   still sold, at 5px of slack.
+
+   It does not hold at 320px, which is an original iPhone SE and the width every
+   responsive baseline still treats as the bottom. There the container is 272px
+   and a 40px line measures 307px, so the headline broke into five rows and the
+   composition the hero is built on was gone.
+
+   No clamp fixes this from the middle term: at 320px, 5.4vw is 17px, so the
+   FLOOR is what governs, and any floor large enough to be right at 393px is too
+   large at 320px. It has to be a step.
+
+   34px puts the longest line at 261px against 272px. The ratio behind both
+   numbers is that this line inks at about 7.7x the font size in Satoshi Black
+   at this tracking, so a new floor can be checked against a container width
+   without rendering it. Re-measure if the headline copy changes. */
+@media (width < 22.5rem) {
+  :root {
+    --text-display: 2.125rem; /* 34 */
+  }
+}
+
+/* ── Lead paragraphs step up once there is a measure to fill ───────────────
+   --text-body-lg is the site's lead size: hero subhead, section leads, service
+   intros. At 18px/1.6 it is set for a desktop measure, and below 40rem there
+   is no such thing.
+
+   The container is the whole screen on a phone, so with a 24px gutter the
+   measure is 345px at 393px wide. At 18px that came out at roughly 38
+   characters a line, against the 45-75 that is comfortable to read. A measure
+   that short is not merely a typographic preference: every line costs a line
+   break, so the same paragraph runs to more lines in a taller block, and the
+   service-page intros were measuring eight and nine lines each. The page was
+   not saying more, it was scrolling more to say it.
+
+   17px takes it to ~41 characters, and the leading comes down with it. 1.6 is
+   generous leading for a long line, where the eye needs help finding the start
+   of the next one; on a short line it is what makes a paragraph read as loose.
+   The two move together because they are the same decision.
+
+   Stepped rather than clamped, matching --gutter below it: a clamp would ramp
+   through fractional pixel sizes across every width in between, and there is
+   no intermediate size wanted here, just the two. 40rem is where the container
+   stops being the whole screen. */
+@media (width >= 40rem) {
+  :root {
+    --text-body-lg: 1.125rem; /* 18 */
+    --text-body-lg--line-height: 1.6;
+  }
 }
 
 @media (width >= 64rem) {

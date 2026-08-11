@@ -44,7 +44,7 @@ const DIRECT_CHANNELS = [
 export default function ContactPage() {
   // Built here, on the server, and handed to the client form as plain data.
   // See the note in ContactForm — importing the content layer client-side put
-  // all eighteen services' full text into the browser bundle.
+  // every service's full text into the browser bundle.
   const serviceOptions = [
     { value: 'not-sure', label: "I'm not sure yet" },
     ...SERVICE_GROUPS.flatMap(({ pillar, services }) =>

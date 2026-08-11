@@ -12,49 +12,129 @@ import {
   IconWatermark,
 } from '@/components/primitives';
 import { Icon } from '@/components/icons';
-import { IconBadge } from '@/components/ui/IconBadge';
 import { Reveal } from '@/components/ui/Reveal';
 import { Button } from '@/components/ui/Button';
-import { CtaBand } from '@/components/layout/CtaBand';
+import { ServiceTiles } from '@/components/sections/ServiceTiles';
 import { FaqAccordion } from '@/components/sections/FaqList';
 import { JsonLd, breadcrumbSchema, faqSchema, itemListSchema } from '@/lib/jsonld';
 import { PILLARS, PILLAR_BY_SLUG } from '@/content/pillars';
-import { servicesByPillar, serviceHref, SERVICE_GROUPS } from '@/content/services';
-import type { PillarSlug } from '@/content/types';
+import { PRACTICE_OF_PILLAR } from '@/content/practices';
+import {
+  servicesByPillar,
+  servicesByPractice,
+  serviceHref,
+  practiceHref,
+  pillarHref,
+  getPracticePage,
+  PRACTICE_PAGES,
+} from '@/content/services';
+import type { Pillar, Practice, PillarSlug } from '@/content/types';
 import { pageMetadata } from '@/lib/seo';
 import type { ArtName } from '@/lib/art';
 
 /**
- * Pillar pages — five of them, all prerendered from content/pillars.ts.
+ * The category route. One template, two kinds of page.
  *
- * `generateStaticParams` + `dynamicParams = false` means these five routes are
- * baked to HTML at build time and anything else 404s at the edge rather than
- * invoking a server.
+ * `/services/{slug}` resolves to a PRACTICE page when the slug names a
+ * practice holding more than one discipline, and to a DISCIPLINE page
+ * otherwise. Nine routes in total: seven disciplines plus Marketing &
+ * E-commerce and Corporate & Advisory.
+ *
+ * ── Why one segment carries both ──
+ *
+ * Not by preference. `software-ai` is the slug of a practice AND of the
+ * discipline inside it, so the two levels cannot occupy separate dynamic
+ * segments at the same depth without one shadowing the other. Resolving both
+ * here also keeps the URL shape flat, which is what the breadcrumbs, the
+ * mega-menu and every existing inbound link already assume.
+ *
+ * The segment is named `category` rather than `pillar` for that reason: the
+ * value is whichever level of the tree the slug names.
+ *
+ * `generateStaticParams` + `dynamicParams = false` bakes all nine to HTML at
+ * build time and 404s anything else at the edge rather than invoking a server.
  */
 export function generateStaticParams() {
-  return PILLARS.map((pillar) => ({ pillar: pillar.slug }));
+  return [
+    ...PILLARS.map((pillar) => ({ category: pillar.slug })),
+    ...PRACTICE_PAGES.map(({ practice }) => ({ category: practice.slug })),
+  ];
 }
 
 export const dynamicParams = false;
 
-/** One render per pillar so no two pages share art — five pillars, five renders. */
+/* One render per discipline so pages within a practice do not share art.
+ *
+ * There are seven disciplines and five renders, so two reuses are unavoidable.
+ * They are placed ACROSS practices rather than within one: Intellectual
+ * Property and International Expansion sit beside Corporate & Legal and
+ * Finance & Tax in the same practice, so they borrow from the two disciplines
+ * furthest from them in the navigation instead. Two adjacent tabs opening onto
+ * the same illustration is the thing this map exists to avoid. */
 const PILLAR_ART: Record<PillarSlug, ArtName> = {
-  'finance-tax': 'hero',
-  'corporate-compliance': 'formation',
+  'software-ai': 'cluster',
   'growth-marketing': 'victory',
   ecommerce: 'pawn',
-  'software-ai': 'cluster',
+  'finance-tax': 'hero',
+  'corporate-legal': 'formation',
+  'intellectual-property': 'pawn',
+  'international-expansion': 'victory',
 };
 
-type Params = Promise<{ pillar: string }>;
+/* The three navbar tabs open onto `cluster` (the Software & AI discipline
+   page), `hero` and `formation`. Distinct across the tab strip is the rule that
+   matters most here: those three pages are one click apart from each other, so
+   two of them sharing a render is the reuse a visitor would actually notice.
+   Corporate & Advisory reuses its Corporate & Legal discipline's render, which
+   is four scrolls down its own page rather than beside it in the nav. */
+const PRACTICE_ART: Record<string, ArtName> = {
+  'marketing-ecommerce': 'hero',
+  'corporate-advisory': 'formation',
+};
+
+type Params = Promise<{ category: string }>;
+
+/**
+ * The two questions every visitor has before enquiring, surfaced as an FAQ
+ * block rather than left to be asked. `subject` is the thing they would be
+ * buying one of: a discipline on a discipline page, a practice on a practice
+ * page.
+ */
+function categoryFaqs(subject: string) {
+  return [
+    {
+      question: `Can I take just one ${subject} service?`,
+      answer:
+        'Yes. Every service on this page is available on its own, with no minimum and no bundle. Most clients start with one and add others only when there is a reason to.',
+    },
+    {
+      question: 'How quickly can you start?',
+      answer:
+        'We reply to every enquiry within one working day and can usually scope within two. We do not publish a turnaround per service, because the honest answer depends on your documents and, for anything filed with a regulator, on the regulator. You get a firm date in writing before any work begins.',
+    },
+  ];
+}
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
-  const { pillar: slug } = await params;
+  const { category: slug } = await params;
+
+  const practiceEntry = getPracticePage(slug);
+  if (practiceEntry) {
+    const { practice, groups } = practiceEntry;
+    const services = servicesByPractice(practice.slug);
+    return pageMetadata({
+      title: practice.title,
+      description: `${services.length} services across ${groups
+        .map((g) => g.pillar.title)
+        .join(' and ')}: ${services.map((s) => s.title).join(', ')}.`.slice(0, 158),
+      path: `/services/${practice.slug}`,
+    });
+  }
+
   const pillar = PILLAR_BY_SLUG[slug as PillarSlug];
   if (!pillar) return {};
 
   const services = servicesByPillar(pillar.slug);
-
   return pageMetadata({
     title: pillar.title,
     description: `${pillar.blurb} ${services.length} services: ${services
@@ -64,34 +144,184 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   });
 }
 
-export default async function PillarPage({ params }: { params: Params }) {
-  const { pillar: slug } = await params;
+export default async function CategoryPage({ params }: { params: Params }) {
+  const { category: slug } = await params;
+
+  const practiceEntry = getPracticePage(slug);
+  if (practiceEntry) return <PracticeView {...practiceEntry} />;
+
   const pillar = PILLAR_BY_SLUG[slug as PillarSlug];
   if (!pillar) notFound();
 
-  const services = servicesByPillar(pillar.slug);
+  return <PillarView pillar={pillar} />;
+}
+
+/* ── The practice page ─────────────────────────────────────────────────────
+ *
+ * Everything under one navbar tab, on the page that tab opens. The services
+ * are grouped by discipline rather than run together as one grid of six or
+ * thirteen: the grouping is the reason the practice exists, and a visitor who
+ * came for a Shopify store should be able to see where the marketplace work
+ * stops and the paid campaigns start.
+ */
+function PracticeView({
+  practice,
+  groups,
+}: {
+  practice: Practice;
+  groups: { pillar: Pillar; services: ReturnType<typeof servicesByPillar> }[];
+}) {
+  const services = servicesByPractice(practice.slug);
   const crumbs = [
     { label: 'Home', href: '/' },
     { label: 'Services', href: '/services' },
+    { label: practice.title, href: `/services/${practice.slug}` },
+  ];
+
+  const faqs = categoryFaqs(practice.shortTitle.toLowerCase());
+
+  return (
+    <main id="main" tabIndex={-1}>
+      <JsonLd data={breadcrumbSchema(crumbs)} />
+      <JsonLd data={itemListSchema(practice.title, services.map(serviceHref))} />
+      <JsonLd data={faqSchema(faqs)} />
+
+      {/* ── Hero ──────────────────────────────────────────────────────── */}
+      <section className="relative overflow-hidden pb-20 pt-10 md:pt-14">
+        <Container>
+          <Breadcrumb items={crumbs} />
+
+          <div className="mt-8 grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.15fr_0.85fr]">
+            <div className="relative z-10">
+              <SectionHeading
+                level={1}
+                size="display"
+                eyebrow={practice.title}
+                lines={practice.headline!.lines}
+                accent={practice.headline!.accent}
+              />
+
+              <Lead className="mt-7 max-w-[58ch]">{practice.intro}</Lead>
+
+              {/* The disciplines, named before the fold. This is the line that
+                  was missing: the tab says two things, so the page has to show
+                  both of them above the grid rather than only in it. */}
+              <ul className="mt-8 flex flex-wrap gap-2.5">
+                {groups.map(({ pillar, services: pillarServices }) => (
+                  <li key={pillar.slug}>
+                    {/* `u-tap` on the anchor, not the Chip. The anchor is what
+                        takes the tap and it was an inline box collapsed to 19px
+                        around the Chip inside it, so the visible pill was bigger
+                        than the thing that answered to a finger. See the
+                        tap-target note in globals.css. */}
+                    <Link href={`#${pillar.slug}`} className="u-tap">
+                      <Chip className="gap-2 transition-colors hover:border-blue-200 hover:text-blue-600">
+                        {pillar.title}
+                        <span className="font-normal text-ink-body">{pillarServices.length}</span>
+                      </Chip>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-9 flex flex-wrap gap-3">
+                <Button href="/contact" size="lg">
+                  Start a project
+                </Button>
+                <Button href="#services" variant="chrome" size="lg">
+                  {services.length} services in this practice
+                </Button>
+              </div>
+            </div>
+
+            <div className="relative hidden lg:block">
+              <IconWatermark />
+              <ChessArt
+                name={PRACTICE_ART[practice.slug] ?? 'formation'}
+                sizes="45vw"
+                className="relative mx-auto max-w-[460px]"
+              />
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* ── Every service in the practice, one block per discipline ──────
+          No section heading over the top of these. Each discipline announces
+          itself at full size, and a "What's included" header above them would
+          be a second heading competing with the first block's own. */}
+      <Section id="services" band>
+        <Container>
+          {groups.map(({ pillar, services: pillarServices }, i) => (
+            <div
+              key={pillar.slug}
+              id={pillar.slug}
+              className={i === 0 ? 'scroll-mt-28' : 'scroll-mt-28 pt-20'}
+            >
+              <Reveal>
+                <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                  <div>
+                    <SectionHeading
+                      level={3}
+                      size="h2"
+                      eyebrow={pillar.title}
+                      lines={pillar.servicesHeadline.lines}
+                      accent={pillar.servicesHeadline.accent}
+                    />
+                    <p className="mt-7 max-w-[64ch] text-body-lg text-ink-body">{pillar.blurb}</p>
+                  </div>
+                  <Link
+                    href={pillarHref(pillar.slug)}
+                    className="u-arrow-link flex-none self-start text-caption lg:self-auto lg:pb-2"
+                  >
+                    About this discipline
+                    <Icon name="arrow-right" size={15} className="u-arrow-link__icon" />
+                  </Link>
+                </div>
+              </Reveal>
+
+              <ServiceTiles services={pillarServices} />
+            </div>
+          ))}
+        </Container>
+      </Section>
+
+      {/* ── FAQ ───────────────────────────────────────────────────────── */}
+      <Section tight>
+        <Container>
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+            <Reveal>
+              <SectionHeading eyebrow="Questions" lines={['Before you']} accent="ask" />
+            </Reveal>
+            <FaqAccordion faqs={faqs} />
+          </div>
+        </Container>
+      </Section>
+    </main>
+  );
+}
+
+/* ── The discipline page ─────────────────────────────────────────────────── */
+function PillarView({ pillar }: { pillar: Pillar }) {
+  const services = servicesByPillar(pillar.slug);
+  const practice = PRACTICE_OF_PILLAR[pillar.slug];
+
+  /* The practice crumb is only worth a level when the practice has a page of
+     its own. For Software & AI that page IS this one, so adding it would be a
+     breadcrumb linking to itself. */
+  const practiceCrumb =
+    practice && practice.pillars.length > 1
+      ? [{ label: practice.shortTitle, href: practiceHref(practice.slug) }]
+      : [];
+
+  const crumbs = [
+    { label: 'Home', href: '/' },
+    { label: 'Services', href: '/services' },
+    ...practiceCrumb,
     { label: pillar.title, href: `/services/${pillar.slug}` },
   ];
 
-  // The other four pillars, for cross-discipline discovery at the foot.
-  const otherPillars = SERVICE_GROUPS.filter((g) => g.pillar.slug !== pillar.slug);
-
-  // Surfaced as an FAQ block so the page answers the two questions every
-  // visitor has before enquiring, rather than making them ask.
-  const pillarFaqs = [
-    {
-      question: `Can I take just one ${pillar.shortTitle.toLowerCase()} service?`,
-      answer: `Yes. Every service on this page is available on its own, with no minimum and no bundle. Most clients start with one and add others only when there is a reason to.`,
-    },
-    {
-      question: 'How quickly can you start?',
-      answer:
-        'We reply to every enquiry within one working day and can usually scope within two. Turnaround per service is listed on each card above, and we give you a firm date in writing before any work begins.',
-    },
-  ];
+  const pillarFaqs = categoryFaqs(pillar.shortTitle.toLowerCase());
 
   return (
     <main id="main" tabIndex={-1}>
@@ -106,15 +336,9 @@ export default async function PillarPage({ params }: { params: Params }) {
 
           <div className="mt-8 grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.15fr_0.85fr]">
             <div className="relative z-10">
-              <div className="mb-7 flex items-center gap-4">
-                <IconBadge icon={pillar.icon} variant={pillar.badge} />
-                <span className="font-display text-ghost text-ink-ghost" aria-hidden="true">
-                  {pillar.number}
-                </span>
-              </div>
-
               <SectionHeading
                 level={1}
+                size="display"
                 eyebrow={pillar.title}
                 lines={pillar.headline.lines}
                 accent={pillar.headline.accent}
@@ -130,6 +354,22 @@ export default async function PillarPage({ params }: { params: Params }) {
                   {services.length} services in this discipline
                 </Button>
               </div>
+
+              {/* One discipline of several under a tab that names the practice.
+                  Without this line the page is a dead end for a visitor who
+                  clicked "Marketing & E-commerce" and wants the other half. */}
+              {practice && practice.pillars.length > 1 && (
+                <p className="mt-7 text-[14px] text-ink-body">
+                  Part of{' '}
+                  <Link href={practiceHref(practice.slug)} className="u-arrow-link">
+                    {practice.title}
+                    <Icon name="arrow-right" size={15} className="u-arrow-link__icon" />
+                  </Link>{' '}
+                  <span className="text-ink-ghost">
+                    ({servicesByPractice(practice.slug).length} services in the practice)
+                  </span>
+                </p>
+              )}
             </div>
 
             <div className="relative hidden lg:block">
@@ -150,52 +390,14 @@ export default async function PillarPage({ params }: { params: Params }) {
           <Reveal>
             <SectionHeading
               eyebrow="What's included"
-              lines={[`${services.length} services under`]}
-              accent={pillar.shortTitle}
+              lines={pillar.servicesHeadline.lines}
+              accent={pillar.servicesHeadline.accent}
             />
           </Reveal>
 
-          <ul className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {services.map((service, i) => (
-              <Reveal key={service.slug} as="li" index={i} className="h-full">
-                <Link
-                  href={serviceHref(service)}
-                  className="u-tile u-tile-interactive group flex h-full flex-col p-7"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <h3 className="font-display text-h3 text-ink transition-colors group-hover:text-blue-600">
-                      {service.title}
-                    </h3>
-                    <Icon
-                      name="arrow-up-right"
-                      size={18}
-                      className="mt-1 flex-none text-ink-body transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-blue-600"
-                    />
-                  </div>
-
-                  <p className="mt-3 text-[15px] leading-[1.6] text-ink-body">
-                    {service.oneLiner}
-                  </p>
-
-                  <ul className="mt-5 flex flex-1 flex-col gap-2">
-                    {service.included.slice(0, 3).map((item) => (
-                      <li key={item} className="flex items-start gap-2.5">
-                        <Icon name="check" size={15} className="mt-1 flex-none text-blue-600" />
-                        <span className="text-[13.5px] leading-[1.5] text-ink-body">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="mt-6 flex flex-wrap items-center gap-2 border-t border-line pt-5">
-                    <Chip>
-                      <Icon name="clock" size={13} className="mr-1.5 text-ink-body" />
-                      {service.turnaround}
-                    </Chip>
-                  </div>
-                </Link>
-              </Reveal>
-            ))}
-          </ul>
+          <div className="mt-4">
+            <ServiceTiles services={services} />
+          </div>
         </Container>
       </Section>
 
@@ -210,42 +412,6 @@ export default async function PillarPage({ params }: { params: Params }) {
           </div>
         </Container>
       </Section>
-
-      {/* ── Other disciplines ─────────────────────────────────────────── */}
-      <Section band tight>
-        <Container>
-          <Reveal>
-            <h2 className="font-display text-h3 text-ink">The other four disciplines</h2>
-          </Reveal>
-          <ul className="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
-            {otherPillars.map(({ pillar: other, services: otherServices }, i) => (
-              <Reveal key={other.slug} as="li" index={i} className="h-full">
-                <Link
-                  href={`/services/${other.slug}`}
-                  className="u-tile u-tile-interactive group flex h-full flex-col p-6"
-                >
-                  <IconBadge icon={other.icon} variant={other.badge} size="sm" />
-                  <h3 className="mt-4 font-display text-[17px] font-bold text-ink transition-colors group-hover:text-blue-600">
-                    {other.title}
-                  </h3>
-                  <p className="mt-2 flex-1 text-[14px] leading-[1.55] text-ink-body">
-                    {other.blurb}
-                  </p>
-                  <p className="mt-4 text-caption font-medium text-blue-600">
-                    {otherServices.length} services →
-                  </p>
-                </Link>
-              </Reveal>
-            ))}
-          </ul>
-        </Container>
-      </Section>
-
-      <CtaBand
-        title={`Need help with ${pillar.shortTitle.toLowerCase()}?`}
-        body={pillar.blurb}
-        primaryLabel="Start a project"
-      />
     </main>
   );
 }

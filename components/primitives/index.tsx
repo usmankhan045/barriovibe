@@ -93,6 +93,7 @@ export function SectionHeading({
   lines,
   accent,
   level = 2,
+  size,
   rule = true,
   onDark = false,
   centred = false,
@@ -104,7 +105,21 @@ export function SectionHeading({
   lines: string[];
   /** Final line, rendered in brand blue with a trailing period. */
   accent: string;
-  level?: 1 | 2;
+  level?: 1 | 2 | 3;
+  /**
+   * Type size, when it should not be the one the level implies.
+   *
+   * Separate from `level` because the two answer different questions: `level`
+   * is what the heading IS in the document outline, `size` is how loudly it is
+   * set. The category pages are the case that needs both: they are h1s, like
+   * every other page title, and they are set at `display` because a page whose
+   * whole job is to name a practice or a discipline should open at the same
+   * volume as the home page rather than a step below it. A discipline block
+   * inside a practice page is the mirror case: an h3 under the section's h2,
+   * set at `h2` because it heads a whole list of services rather than a
+   * paragraph.
+   */
+  size?: 'display' | 'h1' | 'h2' | 'h3';
   rule?: boolean;
   /**
    * Re-keys the three brand colours for a dark surface.
@@ -138,8 +153,15 @@ export function SectionHeading({
   className?: string;
   id?: string;
 }) {
-  const Heading = level === 1 ? 'h1' : 'h2';
-  const sizeClass = level === 1 ? 'text-h1' : 'text-h2';
+  const Heading = ({ 1: 'h1', 2: 'h2', 3: 'h3' } as const)[level];
+  /* Written out rather than composed as `text-${size}`: Tailwind scans source
+     for whole class names, and an interpolated one is not emitted at all. */
+  const sizeClass = {
+    display: 'text-display',
+    h1: 'text-h1',
+    h2: 'text-h2',
+    h3: 'font-display text-h3',
+  }[size ?? (({ 1: 'h1', 2: 'h2', 3: 'h3' } as const)[level])];
 
   return (
     <div
@@ -196,23 +218,41 @@ export function Chip({
 /**
  * The `·`-separated summary line used under service and pillar names.
  *
- * The separator carries REAL spaces (`{' · '}`) rather than being a bare `·`
- * spaced with margins. Margins are visual only — without actual whitespace,
- * `<span>·</span>Compliance` is a single unbreakable run to the line breaker,
- * and on a narrow viewport it pushes past the container instead of wrapping.
- * That was a live mobile overflow bug here, not a hypothetical.
+ * ── The list breaks BETWEEN terms and nowhere else ──
+ *
+ * Each term is its own nowrap run and the `·` is glued to the term BEFORE it
+ * with a non-breaking space, so the only break opportunity in the whole line is
+ * the ordinary space that follows a separator. Two things fall out of that, and
+ * both were visible on the practice cards:
+ *
+ *   · a term made of more than one word cannot be split — "Web · Apps · AI
+ *     Agents · RAG · Digital / FTE · Automation" was breaking "Digital FTE" in
+ *     half across the line
+ *   · a line cannot START with a separator — "Finance & Tax · Corporate / · IP ·
+ *     International" was hanging the `·` out in the left margin, which reads as
+ *     a bullet that lost its list
+ *
+ * The separator still carries a REAL space after it, and that part is load
+ * bearing: it was once a bare `·` spaced with margins, which are visual only.
+ * Without actual whitespace `<span>·</span>Compliance` is a single unbreakable
+ * run to the line breaker, and on a narrow viewport it pushed past the
+ * container instead of wrapping. That was a live mobile overflow bug, not a
+ * hypothetical — the non-breaking space goes BEFORE the separator, never after.
  */
 export function DotList({ items, className }: { items: readonly string[]; className?: string }) {
   return (
     <p className={cx('text-caption text-ink-body', className)}>
       {items.map((item, i) => (
         <Fragment key={item}>
-          {i > 0 && (
-            <span className="text-ink-decorative" aria-hidden="true">
-              {' · '}
-            </span>
-          )}
-          {item}
+          {i > 0 && ' '}
+          <span className="whitespace-nowrap">
+            {item}
+            {i < items.length - 1 && (
+              <span className="text-ink-decorative" aria-hidden="true">
+                {' ·'}
+              </span>
+            )}
+          </span>
         </Fragment>
       ))}
     </p>

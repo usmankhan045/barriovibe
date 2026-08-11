@@ -43,6 +43,15 @@ const PATHS: Record<IconName, PathSet> = {
       <circle cx="16.5" cy="16.5" r="2.5" />
     </>
   ),
+  /** A document with the magnifying glass an audit actually is. */
+  audit: (
+    <>
+      <path d="M13.5 2.5H6.5a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h6" />
+      <path d="M13.5 2.5v6h6M7.5 12h5M7.5 16h3" />
+      <circle cx="16" cy="16.5" r="3" />
+      <path d="m18.3 18.8 2 2" />
+    </>
+  ),
 
   // ── Corporate & compliance ───────────────────────────────────────────────
   shield: (
@@ -55,6 +64,28 @@ const PATHS: Record<IconName, PathSet> = {
     <>
       <circle cx="12" cy="12" r="9.5" />
       <path d="M6.5 9h4M8.5 9v6M13 15V9l2 3 2-3v6" />
+    </>
+  ),
+  /** A "C" ringed like the trademark mark, so the two read as one IP family. */
+  copyright: (
+    <>
+      <circle cx="12" cy="12" r="9.5" />
+      <path d="M14.8 9.3a3.5 3.5 0 1 0 0 5.4" />
+    </>
+  ),
+  /** A lightbulb: the invention behind a patent, not the paperwork. */
+  patent: (
+    <>
+      <path d="M12 2.5a6 6 0 0 0-3.4 10.9c.7.5 1.1 1.3 1.2 2.2h4.4c.1-.9.5-1.7 1.2-2.2A6 6 0 0 0 12 2.5z" />
+      <path d="M9.5 6.8A3 3 0 0 1 12 5.5" />
+      <path d="M9.5 18.5h5M10.3 21h3.4" />
+    </>
+  ),
+  /** A compass: the instrument for entering a market you don't operate in yet. */
+  compass: (
+    <>
+      <circle cx="12" cy="12" r="9.5" />
+      <path d="m15.2 8.8-4.1 2.3-1.4 4.1 4.1-2.3z" />
     </>
   ),
   'globe-arrows': (
@@ -141,6 +172,18 @@ const PATHS: Record<IconName, PathSet> = {
     <>
       <rect x="2.5" y="4.5" width="19" height="15" rx="3" />
       <path d="m7 10 2.5 2L7 14M12.5 14.5h5" />
+    </>
+  ),
+  /* Stacked store plus a retrieval ray, for RAG. The three ellipses are the
+     indexed corpus and the arrow leaving them is the passage coming back with
+     the answer, which is the one thing that distinguishes this service from
+     the chatbot and agent icons either side of it. */
+  database: (
+    <>
+      <ellipse cx="9.5" cy="5.5" rx="7" ry="3" />
+      <path d="M2.5 5.5v6c0 1.66 3.13 3 7 3 .7 0 1.37-.04 2-.12" />
+      <path d="M2.5 11.5v6c0 1.66 3.13 3 7 3M16.5 5.5v4" />
+      <path d="M14.5 19.5h6m-2.5-2.5 2.5 2.5-2.5 2.5" />
     </>
   ),
 

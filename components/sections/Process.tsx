@@ -33,8 +33,8 @@ export function Process() {
         <Reveal>
           <SectionHeading
             eyebrow="How we work"
-            lines={['Four steps.']}
-            accent="No surprises"
+            lines={['Four steps, and you']}
+            accent="approve each one"
             centred
           />
         </Reveal>
