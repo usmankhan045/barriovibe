@@ -19,7 +19,7 @@ export const HOME_FAQS: Faq[] = [
   {
     question: 'Do you work with businesses outside Pakistan?',
     answer:
-      'Yes, in two different ways. Software, AI, marketing and e-commerce work is location-independent, so where you are registered makes no difference to it. The regulated work is jurisdictional, and we cover four: Pakistan through FBR, SECP and the provincial authorities, Saudi Arabia through MISA and the Saudi Business Center, the UAE through the Federal Tax Authority, and the United Kingdom through HMRC and Companies House. For anywhere else, tell us the structure and we will say plainly what we can and cannot take on.',
+      'Yes, in two different ways. Software, AI, marketing and e-commerce work is location-independent, so where you are registered makes no difference to it. The regulated work is jurisdictional, and we cover five: Pakistan through FBR, SECP and the provincial authorities, the United States through the state Secretaries of State, the IRS and the USPTO, Saudi Arabia through MISA and the Saudi Business Center, the UAE through the Federal Tax Authority, and the United Kingdom through HMRC and Companies House. For anywhere else, tell us the structure and we will say plainly what we can and cannot take on.',
   },
   {
     question: 'How are engagements structured?',

@@ -40,11 +40,13 @@ export const STATS_ENABLED = true;
  *
  * The fix was not to invent numbers. It was to count the things that are
  * genuinely countable today. Services and disciplines come straight from the
- * content layer, so they cannot drift. Jurisdictions is four because the
- * catalogue covers Pakistan, Saudi Arabia, the UAE and the United Kingdom, and
- * International Expansion has a page for each of the last three. One point of
- * contact is the firm's actual operating model, stated everywhere else on the
- * site.
+ * content layer, so they cannot drift. Jurisdictions is five because the
+ * catalogue covers Pakistan, the United States, Saudi Arabia, the UAE and the
+ * United Kingdom, and International Expansion has pages for each of the last
+ * four. It went from four to five when the US block was added, which is the
+ * hazard of a hand-typed count sitting next to two derived ones: recount it
+ * whenever a jurisdiction is added or dropped. One point of contact is the
+ * firm's actual operating model, stated everywhere else on the site.
  *
  * When real performance figures exist, replace the third and fourth of these
  * with them: client retention and filings on time were the intended slots and
@@ -54,7 +56,7 @@ export const STATS_ENABLED = true;
 export const STATS: Stat[] = [
   { value: String(SERVICE_COUNT), countTo: SERVICE_COUNT, label: 'Services under one roof' },
   { value: String(PILLAR_COUNT), countTo: PILLAR_COUNT, label: 'Specialist disciplines' },
-  { value: '4', countTo: 4, label: 'Jurisdictions covered' },
+  { value: '5', countTo: 5, label: 'Jurisdictions covered' },
   { value: '1', countTo: 1, label: 'Point of contact' },
 ];
 

@@ -68,7 +68,7 @@ export const IP_SERVICES: Service[] = [
       'Date of first use in Pakistan, if already trading',
       'Signed Form TM-48 power of attorney',
     ],
-    related: ['copyright-registration', 'patent-registration', 'shopify-store-development'],
+    related: ['copyright-registration', 'patent-registration', 'us-trademark-registration'],
     faqs: [
       {
         question: 'Why does registration take so long?',

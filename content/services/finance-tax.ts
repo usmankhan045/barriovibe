@@ -74,7 +74,7 @@ export const FINANCE_TAX_SERVICES: Service[] = [
       'Loan and lease agreements',
       'Prior year financial statements, if any',
     ],
-    related: ['bookkeeping', 'statutory-audit-support', 'corporate-secretarial-compliance'],
+    related: ['bookkeeping', 'audit-assurance', 'corporate-secretarial-compliance'],
     faqs: [
       {
         question: 'Which accounting software do you use?',
@@ -359,55 +359,240 @@ export const FINANCE_TAX_SERVICES: Service[] = [
   },
 
   {
-    slug: 'statutory-audit-support',
+    slug: 'withholding-tax-statements',
     pillar: 'finance-tax',
-    title: 'Statutory Audit Support',
-    navLabel: 'Audit Support',
+    title: 'Withholding Tax Statements',
+    navLabel: 'Withholding Statements',
     oneLiner:
-      "Your accounts made audit-ready, your independent auditor's queries answered, and the signed report delivered before your SECP filing deadline.",
+      'Quarterly and annual withholding statements filed under section 165, with the tax deducted at the right rate and deposited on time.',
     intro:
-      'Under the Companies Act 2017 most companies must have their annual financial statements audited, and the auditor has to be independent of whoever kept the books. We prepare the audit-ready file, build every schedule your auditor is going to ask for, and run the correspondence with them, so the audit happens on a calendar instead of turning into a scramble in the weeks before the AGM.',
+      'If you pay salaries, rent, commission, or a supplier or a contractor, you are almost certainly a withholding agent, and the obligation runs whether or not anyone has told you so. It has three parts: deduct at the correct rate, deposit the tax against the right payment section, and file the statement that reports it. The statement is where most businesses come unstuck, because it has to reconcile to every challan you paid and FBR reads the two against each other.',
+    icon: 'document',
+    included: [
+      'Withholding agent status assessed, and the payment sections you actually fall under identified',
+      'Correct rates applied by section and by the payee’s Active Taxpayer List status on the date of payment',
+      'Tax deposited through IRIS against the right section, with the CPR retained against the payment it covers',
+      'Quarterly statements under section 165 filed within 20 days of each quarter end',
+      'Annual statement filed within 30 days of the end of the tax year, reconciled to all four quarters',
+      'Section 149 salary withholding handled alongside, for employers running a payroll',
+      'Notices for non-filing or short deduction answered, and revised statements filed under section 165(2) where needed',
+    ],
+    audience: [
+      'Employers running a payroll',
+      'Companies paying suppliers and contractors',
+      'Businesses that have had a section 165 notice',
+    ],
+    steps: [
+      {
+        title: 'Agent status',
+        description:
+          'We establish which of your payments are subject to withholding and under which sections, then tell you what has been under-deducted so far and what that exposure is worth.',
+      },
+      {
+        title: 'Deduction and deposit',
+        description:
+          'Rates applied by section and by ATL status at the time of payment, and the tax deposited against the correct section, so that the challan and the statement agree by construction.',
+      },
+      {
+        title: 'Statement filing',
+        description:
+          'The quarterly statement prepared, reconciled to your challans and your ledger, and e-filed within 20 days of the quarter end.',
+      },
+      {
+        title: 'Annual reconciliation',
+        description:
+          'The annual statement filed after the tax year and reconciled to all four quarters, so the year closes without a mismatch left for FBR to raise two years later.',
+      },
+    ],
+    deliverables: [
+      'Filed quarterly statements with FBR acknowledgements',
+      'The annual withholding statement, reconciled to the four quarters',
+      'A challan register with every CPR matched to the payment it covers',
+      'Withholding certificates issued to the parties you deducted from',
+      'A rate schedule for your payment types, kept current with the Finance Act',
+    ],
+    documents: [
+      'Payment ledger for the quarter, by payee and by payment type',
+      'CNIC or NTN of every payee you deducted from',
+      'Payroll sheets for the period, where you deduct under section 149',
+      'Bank statements covering the payments',
+      'Tax deposit challans and CPRs already paid',
+      'Statements already filed for the year, if any',
+    ],
+    related: ['income-tax-filing', 'financial-accounting', 'corporate-secretarial-compliance'],
+    faqs: [
+      {
+        question: 'Am I a withholding agent?',
+        answer:
+          'Most companies and AOPs are, along with many individuals above a turnover threshold, and the status attaches to the kind of payment rather than to the size of the business. Salary, rent, commission, brokerage, professional fees, contracts and supplies all carry an obligation. We assess it against your actual payment ledger rather than inferring it from your legal form.',
+      },
+      {
+        question: 'When is the statement due?',
+        answer:
+          'Quarterly, within 20 days of the end of each quarter, so 20 October, 20 January, 20 April and 20 July, with an annual statement following within 30 days of the end of the tax year. Missing a quarter is a separate default from missing the deduction itself, and both carry a penalty.',
+      },
+      {
+        question: 'What happens if I deducted at the wrong rate?',
+        answer:
+          'The shortfall is recoverable from you rather than from the person you paid, and the expense can be disallowed in your own income tax assessment on top of that. Rates turn on the section and on whether the payee was on the Active Taxpayer List on the date of payment, which is why the ATL check belongs at the moment of payment and not at the end of the quarter.',
+      },
+      {
+        question: 'Can a statement that has already been filed be corrected?',
+        answer:
+          'Yes. A revised statement can be filed under section 165(2), and it is far better to revise than to leave a mismatch sitting for FBR to find. We prepare the revision with the reconciliation behind it, so the correction explains itself rather than inviting a second question.',
+      },
+    ],
+    seo: {
+      title: 'Withholding Tax Statement Filing under Section 165',
+      description:
+        'Quarterly and annual withholding statements filed with FBR under section 165, with correct rates by ATL status, challan reconciliation and notices answered.',
+    },
+  },
+
+  {
+    slug: 'tax-advisory',
+    pillar: 'finance-tax',
+    title: 'Tax Advisory',
+    navLabel: 'Tax Advisory',
+    oneLiner:
+      'Planning, written opinions and representation: the work that decides what a transaction costs before you do it, and defends it afterwards.',
+    intro:
+      'Filing tells FBR what you did. Advisory decides what you should do, and it is by far the cheaper half. The tax cost of a group structure, a property sale, a dividend, an employee share scheme or a payment to an overseas parent is largely fixed at the moment the transaction is designed, not at the moment it is reported. We give you a written position before you commit, and we stand behind it when a notice arrives.',
+    icon: 'compass',
+    included: [
+      'Corporate and personal tax planning on a specific transaction, with the position written down',
+      'Written opinions on treatment, exemptions, credits and the reduced rates you genuinely qualify for',
+      'Representation on FBR notices, audits and amended assessments under sections 122, 177 and 214C',
+      'Appeals to the Commissioner Appeals and the Appellate Tribunal Inland Revenue, and Alternative Dispute Resolution where it fits better',
+      'Double taxation treaty positions, and withholding on cross-border payments, royalties and technical fees',
+      'Transfer pricing documentation and related-party disclosures for groups',
+      'Salary structuring and employee tax planning built to survive an employer audit',
+    ],
+    audience: [
+      'Groups and multi-entity businesses',
+      'Companies under FBR audit or appeal',
+      'Anyone planning a large transaction',
+    ],
+    steps: [
+      {
+        title: 'The question',
+        description:
+          'We agree the question in one sentence, and what a usable answer looks like: a number, a treatment, or a decision to proceed or not. Vague briefs produce opinions nobody can act on.',
+      },
+      {
+        title: 'Analysis',
+        description:
+          'The Ordinance, the relevant SROs, circulars and case law read against your facts, and the alternatives costed rather than merely described.',
+      },
+      {
+        title: 'Written position',
+        description:
+          'An opinion you can act on and hand to a bank, an auditor or an investor, with the statutory authority cited for every conclusion in it.',
+      },
+      {
+        title: 'Defence',
+        description:
+          'If the position is challenged, we answer the notice, appear on your behalf, and take the matter through appeal where it is worth taking through appeal.',
+      },
+    ],
+    deliverables: [
+      'A written tax opinion with the statutory authority cited',
+      'A costed comparison of the alternatives considered',
+      'Drafted replies to FBR notices, on the record',
+      'Appeal grounds and memoranda where a matter proceeds',
+      'Transfer pricing documentation for related-party transactions',
+    ],
+    documents: [
+      'The transaction documents: drafts, term sheets or executed agreements',
+      'Prior filed returns and any assessment orders',
+      'Any FBR notice already received, with its full annexures',
+      'Group structure chart and current shareholding',
+      'Financial statements for the periods concerned',
+    ],
+    related: ['income-tax-filing', 'financial-advisory', 'contract-drafting'],
+    faqs: [
+      {
+        question: 'How is this different from filing my return?',
+        answer:
+          'A return reports a year that has already happened, and by then most of the tax is fixed. Advisory works on the decision before it becomes a transaction, while the treatment is still open. The two are sold separately because they are genuinely different work, not because one is a premium version of the other.',
+      },
+      {
+        question: 'I have received a notice under section 122. What now?',
+        answer:
+          'Do not answer it informally. An amended assessment notice has a response window, and anything you write becomes part of the record. Send it to us with its annexures and your filed return, and we will tell you what it actually alleges, what evidence answers it, and whether it is a matter to settle or to appeal.',
+      },
+      {
+        question: 'Can you appear before FBR and the tribunal for me?',
+        answer:
+          'Yes. We handle representation at the Commissioner and Commissioner Appeals stage and before the Appellate Tribunal Inland Revenue. We will also tell you at the outset where a matter is better resolved through Alternative Dispute Resolution than through an appeal that will run for years.',
+      },
+      {
+        question: 'Will a written opinion protect me if FBR disagrees?',
+        answer:
+          'It does not bind FBR, and nobody honest will tell you otherwise. What it does is establish that the position was taken on considered grounds with the law cited, which is what a penalty argument turns on, and it leaves your auditor and your board something defensible on file rather than a decision nobody can explain.',
+      },
+    ],
+    seo: {
+      title: 'Tax Advisory & FBR Representation in Pakistan',
+      description:
+        'Corporate and personal tax planning, written opinions, transfer pricing, and representation on FBR notices, audits and appeals to the Appellate Tribunal.',
+    },
+  },
+
+  {
+    slug: 'audit-assurance',
+    pillar: 'finance-tax',
+    title: 'Audit & Assurance',
+    navLabel: 'Audit & Assurance',
+    oneLiner:
+      'Statutory audit support, internal audit, and the certificates and agreed-upon procedures a bank, a donor or a regulator asks you to produce.',
+    intro:
+      'Assurance is what makes a number believable to somebody who did not produce it. Most of it is the statutory audit: under the Companies Act 2017 most companies must have their annual financial statements audited by an auditor independent of whoever kept the books. The rest is everything a third party asks for outside that annual cycle, from an internal audit of a process that keeps going wrong to a certificate a bank will not release a facility without. We prepare the file, run the process, and produce the report.',
     icon: 'audit',
     included: [
-      'Audit-readiness review of your existing books before your auditor sees them',
+      'Audit-readiness review of your existing books before your statutory auditor sees them',
       'Full schedule pack: fixed assets, receivables and payables ageing, provisions, related-party transactions',
-      'Coordination with your independent auditor from planning through fieldwork',
+      'Coordination with your independent statutory auditor from planning through fieldwork and sign-off',
       'Prepared-by-client (PBC) list management, so nothing is chased at the last minute',
-      'Response drafting for audit queries and management letter points',
+      'Internal audit of a cycle or a function, with findings ranked by exposure rather than merely listed',
+      'Agreed-upon procedures on a specific balance, process or period, reported factually with no opinion attached',
+      'Certificates and third-party reports for banks, donors and regulators, with the working papers behind them',
+      'Donor and grant audit preparation for not-for-profits, run against the funder’s own terms of reference',
       'Introduction to an independent audit firm if you do not already have one',
     ],
     audience: [
       'Companies with a statutory audit requirement',
       'Businesses raising debt or equity',
-      'Companies behind on a prior year audit',
+      'Not-for-profits reporting to a donor',
     ],
     steps: [
       {
+        title: 'Scoping',
+        description:
+          'We agree what the engagement has to produce: a statutory audit file, an internal audit report, or a specific certificate for a named recipient. The three are prepared very differently.',
+      },
+      {
         title: 'Readiness review',
         description:
-          'We go through your books against what an auditor will actually ask for, and flag what is missing while there is still time to fix it.',
+          'We go through your books against what the auditor or the recipient will actually ask for, and flag what is missing while there is still time to fix it.',
       },
       {
-        title: 'Schedule preparation',
+        title: 'Fieldwork',
         description:
-          'Every supporting schedule built: fixed asset register, ageing reports, reconciliations and disclosures.',
+          'Every supporting schedule built and the evidence gathered, and where a statutory audit is running we sit alongside your auditor answering queries same-day rather than letting them stack up.',
       },
       {
-        title: 'Fieldwork support',
+        title: 'Report',
         description:
-          "We sit alongside your auditor's fieldwork, answering queries same-day rather than letting them stack up.",
-      },
-      {
-        title: 'Sign-off',
-        description:
-          'Management letter points closed out and the signed audit report delivered in time for your Form A filing.',
+          'Management letter points closed out and the report or certificate delivered, in time for the filing or the decision it exists to support.',
       },
     ],
     deliverables: [
-      'Full audit schedule pack',
-      'A PBC list tracked to completion',
+      'Full audit schedule pack, with a PBC list tracked to completion',
       'Written responses to every audit query raised',
-      'The signed independent audit report',
+      'The signed independent audit report, where a statutory audit is the engagement',
+      'An internal audit report with findings ranked by exposure and an owner named against each',
+      'Certificates and agreed-upon procedures reports addressed to the third party that asked for them',
     ],
     documents: [
       'Trial balance and general ledger for the audit period',
@@ -421,7 +606,7 @@ export const FINANCE_TAX_SERVICES: Service[] = [
       {
         question: 'Do you carry out the audit yourselves?',
         answer:
-          'No, and that is the point of the arrangement. The audit opinion has to come from an auditor who is independent of whoever prepared the books, so that nobody is marking their own work. We build the audit-ready file and run the process; your independent auditor signs the opinion.',
+          'For a statutory audit, no, and that is the point of the arrangement. The audit opinion has to come from an auditor who is independent of whoever prepared the books, so that nobody is marking their own work. We build the audit-ready file and run the process; your independent auditor signs the opinion. Internal audit, agreed-upon procedures and certificate work carry no such independence bar, and those we perform ourselves.',
       },
       {
         question: 'Does every company need an audit?',
@@ -434,15 +619,20 @@ export const FINANCE_TAX_SERVICES: Service[] = [
           'Yes. We will introduce you to an independent firm qualified to sign for a company of your size, and get the file in order before you engage them, so the first thing they see is a prepared set of books rather than a shoebox of receipts.',
       },
       {
+        question: 'What is the difference between internal audit and a statutory audit?',
+        answer:
+          'A statutory audit is an annual legal requirement that ends in an opinion on your financial statements for the outside world to rely on. An internal audit is commissioned by you, looks at whichever cycle you are actually worried about, and ends in findings and fixes for the inside. One is compliance and the other is management information, and a company can genuinely need both in the same year.',
+      },
+      {
         question: "What if last year's audit found problems?",
         answer:
           "We read the prior management letter and prior year queries first, and build this year's schedules specifically to close them out, rather than repeating the same fire drill twelve months later.",
       },
     ],
     seo: {
-      title: 'Statutory Audit Support & Audit-Ready Accounts',
+      title: 'Audit & Assurance Services in Pakistan',
       description:
-        'Audit-ready financial statements and full schedule packs, plus coordination with your independent ICAP-licensed auditor ahead of your SECP Form A deadline.',
+        'Statutory audit support and audit-ready accounts, internal audit, agreed-upon procedures, and certificates for banks, donors and regulators.',
     },
   },
 
@@ -505,7 +695,7 @@ export const FINANCE_TAX_SERVICES: Service[] = [
       'Existing process documentation or SOPs, in whatever state they are in',
       'Fixed asset register and stock records, for a verification engagement',
     ],
-    related: ['financial-accounting', 'statutory-audit-support', 'company-registration'],
+    related: ['financial-accounting', 'audit-assurance', 'company-registration'],
     faqs: [
       {
         question: 'How is this different from your accounting service?',

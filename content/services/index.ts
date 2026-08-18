@@ -4,17 +4,23 @@ import { PRACTICES } from '../practices';
 import { FINANCE_TAX_SERVICES } from './finance-tax';
 import { CORPORATE_SERVICES } from './corporate-legal';
 import { IP_SERVICES } from './intellectual-property';
+import { USA_SERVICES } from './usa';
 import { INTERNATIONAL_SERVICES } from './international-expansion';
 import { GROWTH_SERVICES } from './growth-marketing';
 import { ECOMMERCE_SERVICES } from './ecommerce';
 import { SOFTWARE_SERVICES } from './software-ai';
 
 /**
- * All 32 services, in discipline order.
+ * Every service, in discipline order.
  *
  * This array is the single source of truth for the static service routes, the
  * mega-menu, the home page service index, the footer, sitemap.xml and the
  * contact form dropdown. Adding a service here updates all six.
+ *
+ * USA_SERVICES and INTERNATIONAL_SERVICES are both the International Expansion
+ * discipline, split across two files only because the US block is the larger of
+ * the two. The US spread comes first, which is what puts the United States at
+ * the top of that discipline everywhere it is listed.
  *
  * Keep these spreads in the same order as PILLARS in content/pillars.ts, which
  * is itself sorted to follow PRACTICES. Only the flat consumers read this
@@ -29,6 +35,7 @@ export const SERVICES: Service[] = [
   ...FINANCE_TAX_SERVICES,
   ...CORPORATE_SERVICES,
   ...IP_SERVICES,
+  ...USA_SERVICES,
   ...INTERNATIONAL_SERVICES,
 ];
 

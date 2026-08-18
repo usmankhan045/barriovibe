@@ -126,12 +126,12 @@ export const PILLARS: Pillar[] = [
     headline: { lines: ['Companies set up abroad,'], accent: 'and kept filing there' },
     servicesHeadline: { lines: ['Set up where'], accent: 'you want to trade' },
     blurb:
-      'Companies set up and kept filing outside Pakistan: Saudi Arabia, the United Arab Emirates and the United Kingdom.',
+      'Companies set up and kept filing outside Pakistan: the United States, Saudi Arabia, the United Arab Emirates and the United Kingdom.',
     intro:
-      'Opening in another country is two jobs, and most firms sell only the first. We register the entity, through MISA and the Saudi Business Center in Saudi Arabia, with the licensing authority and the Federal Tax Authority in the UAE, and with Companies House and HMRC in the UK. Then we run what follows: corporate tax, VAT, and books kept to the standard that jurisdiction expects to inspect.',
+      'Opening in another country is two jobs, and most firms sell only the first. We register the entity, with a Secretary of State and the IRS in the United States, through MISA and the Saudi Business Center in Saudi Arabia, with the licensing authority and the Federal Tax Authority in the UAE, and with Companies House and HMRC in the UK. Then we run what follows: the returns, the annual filings, and books kept to the standard that jurisdiction expects to inspect.',
     icon: 'globe-arrows',
     badge: 'chrome',
-    highlights: ['Saudi Arabia', 'UAE', 'United Kingdom'],
+    highlights: ['United States', 'Saudi Arabia', 'UAE', 'United Kingdom'],
   },
 ];
 

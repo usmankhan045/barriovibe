@@ -1,17 +1,24 @@
 import type { Service } from '../types';
 
 /**
- * Discipline 07: International Expansion.
+ * Discipline 07: International Expansion, less the United States.
  *
  * Everything registered outside Pakistan. Saudi Arabia moved here out of
  * Corporate & Compliance when the UK and UAE engagements were added, because
  * one overseas service inside a domestic discipline read as an exception
  * rather than as an offering.
  *
- * The pattern is the same in all three: register the entity, then run the
- * filings that follow. The second half is the part clients underestimate and
- * the part that carries the ongoing relationship, so every page here is
- * written to name it explicitly rather than stopping at the certificate.
+ * The US block outgrew this file and now lives in `./usa.ts`, which exports
+ * `USA_SERVICES` under the same `international-expansion` pillar. Nothing
+ * about the discipline is split, only the source file: five US services
+ * against three here is a file worth reading on its own. `index.ts` spreads
+ * the US array first, so the discipline leads with it everywhere.
+ *
+ * The pattern is the same in all three below, and in all five over there:
+ * register the entity, then run the filings that follow. The second half is
+ * the part clients underestimate and the part that carries the ongoing
+ * relationship, so every page here is written to name it explicitly rather
+ * than stopping at the certificate.
  */
 export const INTERNATIONAL_SERVICES: Service[] = [
   {

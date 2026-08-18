@@ -1,21 +1,26 @@
 # Agency website
 
-A Next.js 16 / React 19 marketing site for a five-discipline services agency:
-software and AI, finance and tax, corporate and compliance, growth and
-marketing, and e-commerce and marketplaces. Eighteen services, each with its own page,
-all generated from a typed content layer in `content/`. Every page is
-prerendered to static HTML at build
-time — 35 routes — and the only dynamic surface on the whole site is
-`/api/contact`, which writes contact-form submissions to Supabase. The design
-system is locked to two client-supplied brand colours enforced by a build-time
-guard, and `components/ui/` is a deliberately swappable zone so the client's own
+A Next.js 16 / React 19 marketing site for a services agency organised as a
+three-level tree: three practices, seven disciplines, thirty-nine services.
+The practices are Software & AI, Performance Marketing & E-commerce, and
+Corporate & Advisory. The disciplines under them are software and AI, growth
+and marketing, e-commerce and marketplaces, finance and tax, corporate and
+legal, intellectual property, and international expansion, the last covering
+the United States, Saudi Arabia, the UAE and the UK.
+
+Every service has its own page, all generated from a typed content layer in
+`content/`. Every page is prerendered to static HTML at build time, 58 routes,
+and the only dynamic surface on the whole site is `/api/contact`, which writes
+contact-form submissions to Supabase. The design system is locked to two
+client-supplied brand colours enforced by a build-time guard, and
+`components/ui/` is a deliberately swappable zone so the client's own
 components can be dropped in later without touching page composition.
 
 **This site is not finished.** It is structurally complete and technically
-sound, but it ships with named placeholders — the agency name, contact details,
-prices, stats, case studies and production domain — and Supabase is not yet
-provisioned. See [Before launch](#before-launch--placeholder-checklist), which
-is the part of this document that actually matters for handover.
+sound, but it ships with named placeholders: the agency name, contact details,
+case studies and production domain. Supabase is not yet provisioned. See
+[Before launch](#before-launch-placeholder-checklist), which is the part of
+this document that actually matters for handover.
 
 ---
 
@@ -58,7 +63,7 @@ Every entry in `package.json`:
 | Script | Command | What it does | When to run |
 |---|---|---|---|
 | `pnpm dev` | `next dev` | Dev server with hot reload. | Always, while working. |
-| `pnpm build` | `next build` | Production build. Prerenders all 35 routes to static HTML and prints First Load JS per route. | Before deploying; whenever you want to check the bundle budget. |
+| `pnpm build` | `next build` | Production build. Prerenders 62 static pages (58 HTML routes plus `robots.txt`, `sitemap.xml`, `icon.svg` and the Open Graph image) and prints First Load JS per route. | Before deploying; whenever you want to check the bundle budget. |
 | `pnpm start` | `next start` | Serves the production build locally. | To sanity-check the built output, including `/api/contact`. |
 | `pnpm lint` | `eslint .` | Flat-config ESLint with `next/core-web-vitals` + `next/typescript`. | Part of `verify`. |
 | `pnpm typecheck` | `tsc --noEmit` | Strict TypeScript, including `noUncheckedIndexedAccess`, `noUnusedLocals`, `noUnusedParameters`. | Part of `verify`. |
@@ -70,32 +75,36 @@ Every entry in `package.json`:
 
 ---
 
-## Before launch — placeholder checklist
+## Before launch: placeholder checklist
 
 Nothing below is a bug. Each is a deliberate placeholder that renders as a
-visible em-dash or an obviously blank value rather than a plausible-looking
-fake, so an unfinished field is conspicuous on the page instead of quietly
-shipping a lie. `pnpm check:content` reports how many services still carry a
-placeholder price but does **not** fail on it — none of these will block a
-build, so they have to be worked through by hand.
+plain hyphen or an obviously blank value rather than a plausible-looking fake,
+so an unfinished field is conspicuous on the page instead of quietly shipping a
+lie. None of them will block a build, so they have to be worked through by
+hand.
+
+Prices and turnaround times are no longer on this list. Both were removed from
+the `Service` type outright rather than blanked, on the client's instruction
+that the site quotes privately and publishes no figures. See the two notes in
+`content/types.ts` for why an empty required field was the wrong way to record
+that.
 
 | # | Placeholder | File to edit | If it is not done |
 |---|---|---|---|
-| 1 | **Agency name** — currently `Northbound` / `Northbound Advisory` | `content/site.ts` → `BRAND.name`, `BRAND.legalName` | The wrong name appears in the wordmark, every page title, all Open Graph tags, the footer, the legal pages and the JSON-LD. Nothing else in the codebase hardcodes the brand name — this is a two-line edit and the whole site renames. |
-| 2 | **Production domain** — currently `https://example.com` | `content/site.ts` → `BRAND.domain` | Canonical URLs, `sitemap.xml`, `robots.txt` and absolute OG image URLs all point at `example.com`. Search engines will index the wrong canonical. This is the single highest-impact placeholder. |
-| 3 | **Phone / WhatsApp** — `+92 000 0000000` / `920000000000` | `content/site.ts` → `CONTACT.phone`, `CONTACT.whatsapp` | Every call and WhatsApp CTA is dead. Note `whatsapp` is digits only, no `+` and no spaces — that is what `wa.me` expects. |
-| 4 | **Email** — `hello@example.com` | `content/site.ts` → `CONTACT.email` | The fallback contact route fails. This address is what the site tells visitors to use when the contact form is down, so it must be real before launch. |
-| 5 | **Office address** — `line1: '—'` | `content/site.ts` → `CONTACT.address` | The contact page shows an em-dash where the address should be. |
-| 6 | **Social links** — all `href: '#'`, all handles `@` | `content/site.ts` → `SOCIALS` | Footer social links go nowhere. Remove the entries you do not have accounts for rather than leaving `#`. |
-| 7 | **Stats** — three of four are `'—'` | `content/proof.ts` → `STATS` | The stat bar shows em-dashes. Either fill in real, defensible figures or set `STATS_ENABLED = false` to hide the section. Do not invent numbers. |
+| 1 | **Agency name**, currently `Northbound` / `Northbound Advisory` | `content/site.ts` → `BRAND.name`, `BRAND.legalName` | The wrong name appears in the wordmark, every page title, all Open Graph tags, the footer, the legal pages and the JSON-LD. Nothing else in the codebase hardcodes the brand name, so this is a two-line edit and the whole site renames. |
+| 2 | **Production domain**, currently `https://example.com` | `content/site.ts` → `BRAND.domain` | Canonical URLs, `sitemap.xml`, `robots.txt` and absolute OG image URLs all point at `example.com`. Search engines will index the wrong canonical. This is the single highest-impact placeholder. |
+| 3 | **Phone / WhatsApp**, `+92 000 0000000` / `920000000000` | `content/site.ts` → `CONTACT.phone`, `CONTACT.whatsapp` | Every call and WhatsApp CTA is dead. Note `whatsapp` is digits only, no `+` and no spaces, which is what `wa.me` expects. |
+| 4 | **Email**, `hello@example.com` | `content/site.ts` → `CONTACT.email` | The fallback contact route fails. This address is what the site tells visitors to use when the contact form is down, so it must be real before launch. |
+| 5 | **Office address**, `line1: '-'` | `content/site.ts` → `CONTACT.address` | The contact page shows a bare hyphen where the address should be. |
+| 6 | **Social links**, all `href: '#'`, all handles `@` | `content/site.ts` → `SOCIALS` | Footer social links go nowhere. Remove the entries you do not have accounts for rather than leaving `#`. |
+| 7 | **Stats**, all four are structural counts rather than performance figures | `content/proof.ts` → `STATS` | Nothing renders wrong today: every figure is true and checkable. But services and disciplines are derived while jurisdictions is typed by hand, so recount that one whenever a jurisdiction is added. Client retention and filings-on-time are the intended replacements for the last two slots. Do not invent numbers. |
 | 8 | **Client logos** — empty array, `LOGOS_ENABLED = false` | `content/proof.ts` → `CLIENT_LOGOS` | Nothing renders (correct today). Add real logo files under `public/logos/` and flip the flag when there are clients to name. |
-| 9 | **Per-service prices** — every service reads `From PKR —` | `priceFrom` in each of `content/services/*.ts` (18 services) | Each service page shows a blank price. `pnpm check:content` prints a count of how many are still placeholders, as an informational line. |
-| 10 | **Case studies** — empty array, `CASES_ENABLED = false` | `content/cases.ts` | `/work` renders an honest empty state that explains why there is nothing there yet. This is by design and is safe to launch with. When real engagements land, fill `CASE_STUDIES`, flip the flag, and make sure every metric is one you can evidence if challenged. |
-| 12 | **Privacy policy** — a template | `app/privacy/page.tsx` | Legally unreviewed. It accurately describes what the site does today (one contact form, no analytics, no cookies, no third-party fonts or scripts), but it needs a lawyer's sign-off. If analytics or a marketing pixel is ever added, this page must be updated in the same commit. |
-| 13 | **Terms of service** — a template | `app/terms/page.tsx` | Legally unreviewed. The ownership clause and the guarantees clause are the two that matter commercially; both are written to match what the service pages promise so the copy and the contract cannot contradict each other. Have both read by a lawyer. |
-| 14 | **"Last updated" dates on the legal pages** — `6 August 2026` | `app/privacy/page.tsx`, `app/terms/page.tsx` → `updated` prop | The dates will be stale by launch. Set them to the date of legal sign-off. |
-| 15 | **Supabase project** — not provisioned | See [Lead capture setup](#lead-capture-setup) | The contact form returns a 503 with a message telling the visitor to email instead. The migration is written but has not been applied to any project, and no environment variables are set. Nothing is being captured today. |
-| 16 | **State colours** — `--color-success` / `--color-danger` marked provisional | `app/tokens.css` | Form validation colours are hue-matched to the brand but are not client-confirmed brand colours. Confirm or replace. |
+| 9 | **Case studies** — empty array, `CASES_ENABLED = false` | `content/cases.ts` | `/work` renders an honest empty state that explains why there is nothing there yet. This is by design and is safe to launch with. When real engagements land, fill `CASE_STUDIES`, flip the flag, and make sure every metric is one you can evidence if challenged. |
+| 10 | **Privacy policy** — a template | `app/privacy/page.tsx` | Legally unreviewed. It accurately describes what the site does today (one contact form, no analytics, no cookies, no third-party fonts or scripts), but it needs a lawyer's sign-off. If analytics or a marketing pixel is ever added, this page must be updated in the same commit. |
+| 11 | **Terms of service** — a template | `app/terms/page.tsx` | Legally unreviewed. The ownership clause and the guarantees clause are the two that matter commercially; both are written to match what the service pages promise so the copy and the contract cannot contradict each other. Have both read by a lawyer. |
+| 12 | **"Last updated" dates on the legal pages** — `6 August 2026` | `app/privacy/page.tsx`, `app/terms/page.tsx` → `updated` prop | The dates will be stale by launch. Set them to the date of legal sign-off. |
+| 13 | **Supabase project** — not provisioned | See [Lead capture setup](#lead-capture-setup) | The contact form returns a 503 with a message telling the visitor to email instead. The migration is written but has not been applied to any project, and no environment variables are set. Nothing is being captured today. |
+| 14 | **State colours** — `--color-success` / `--color-danger` marked provisional | `app/tokens.css` | Form validation colours are hue-matched to the brand but are not client-confirmed brand colours. Confirm or replace. |
 
 ---
 
@@ -272,21 +281,26 @@ typed data, never inside JSX.
 | File | Contents |
 |---|---|
 | `content/site.ts` | Brand name, legal name, domain, contact details, socials, taglines. **The rename point.** |
-| `content/types.ts` | `Pillar`, `Service`, `Step`, `Faq`, `IconName`. `IconName` is a closed union, so a typo is a compile error rather than a missing icon at runtime. |
-| `content/pillars.ts` | The five disciplines, with headline, blurb, intro, icon and badge variant. |
-| `content/services/` | The 18 services, five files by pillar, re-exported from `index.ts`. |
-| `content/nav.ts` | Primary nav, mega-menu columns and footer link columns — all derived from `services/`. |
+| `content/types.ts` | `Practice`, `Pillar`, `Service`, `Step`, `Faq`, `IconName`. `IconName` is a closed union, so a typo is a compile error rather than a missing icon at runtime. |
+| `content/practices.ts` | The three practices, and the only record of which discipline sits under which. |
+| `content/pillars.ts` | The seven disciplines, with two headlines, blurb, intro, icon, badge variant and highlights. |
+| `content/services/` | The 39 services, eight files by discipline, re-exported from `index.ts`. International Expansion is split across `international-expansion.ts` and `usa.ts`, which is a file split and not a discipline split: both carry the same `pillar`. |
+| `content/nav.ts` | Primary nav, mega-menu columns and footer link columns, all derived from `services/`. |
 | `content/proof.ts` | Stats and client logos, each behind an enable flag. |
 | `content/cases.ts` | Case studies, behind `CASES_ENABLED`. |
 | `content/faqs.ts` | Home page FAQs, also emitted as `FAQPage` structured data. |
-| `content/differentiators.ts` | The six "why choose us" commitments. |
+| `content/differentiators.ts` | The six "why choose us" commitments, and the four `PROCESS` steps. |
+| `content/capabilities.ts` | The home page capability grid. One card per team, mechanism rather than adjective. |
+| `content/featuredServices.ts` | The six Corporate & Advisory services the home page names one by one. A shortlist, not an index. |
+| `content/revenueEngine.ts` | Practice 02 in full, all five services, as the home page states it. |
+| `content/softwareShowcase.ts` | The Software & AI home page section. |
 
 ### One array drives six things
 
 `content/services/index.ts` exports a single `SERVICES` array. That array is the
 source of truth for:
 
-1. The 18 static service routes (`/services/[pillar]/[service]`)
+1. The 39 static service routes (`/services/[pillar]/[service]`)
 2. The header mega-menu
 3. The home page service index
 4. The footer link columns
@@ -297,17 +311,17 @@ The client's hardest requirement was that a visitor can see every service
 offered, with nothing hidden. That guarantee is only as good as the data, which
 is why `pnpm check:content` exists and why it is wired into `pnpm verify`.
 
-### Adding a 19th service
+### Adding a 40th service
 
 1. Add one `Service` object to the appropriate file in `content/services/`. The
    required shape is in `content/types.ts`; copy an existing entry as a
    template.
 2. Fill in every field. `check:content` requires all of `slug`, `pillar`,
-   `title`, `navLabel`, `oneLiner`, `intro`, `icon`, `turnaround`, `priceFrom`,
-   `priceUnit`, plus at least 4 `included`, 3 `audience`, 4 `steps` (each with
-   title, description and duration), 3 `deliverables`, 3 `related` and 3 `faqs`.
-   `documents` may be empty — that hides the section, which is right for
-   non-compliance services.
+   `title`, `navLabel`, `oneLiner`, `intro` and `icon`, plus at least 4
+   `included`, 3 `audience`, 4 `steps` (each with a title and a description),
+   3 `deliverables`, 3 `related` and 3 `faqs`. `documents` may be empty, which
+   hides that section, and is right for non-compliance services. There are no
+   price or timing fields; see the notes in `content/types.ts`.
 3. Use a lowercase kebab-case slug that no other service uses.
 4. Point `related` at three slugs that exist, none of them its own, and make at
    least one cross into a different pillar. Same-pillar-only related links are a
@@ -316,15 +330,22 @@ is why `pnpm check:content` exists and why it is wired into `pnpm verify`.
    to `components/icons/index.tsx` and the name to the union in
    `content/types.ts`.
 6. Keep the SEO title under 60 characters and the description between 110 and
-   160 — both are warnings, not failures, but both cause truncation in results.
+   160. Both are warnings rather than failures, but both cause truncation in
+   results.
 7. Run `pnpm check:content`.
+
+8. The discipline you put it under must belong to a practice in
+   `content/practices.ts`, or `check:content` fails: a discipline in no
+   practice is missing from the mega-menu and the footer while still appearing
+   on the About grid, which is the "nothing hidden" guarantee failing by a side
+   door.
 
 You do not need to touch routing, navigation, the footer, the sitemap or the
 contact form. All six update from the array. `SERVICE_COUNT` and
-`SERVICE_COUNT_WORD` are derived too, so headline copy that says "Eighteen
-services" becomes "Nineteen services" automatically — but note that
-`content/site.ts` `TAGLINE` spells the number out by hand and would need
-updating.
+`SERVICE_COUNT_WORD` are derived too, so headline copy that says "Thirty-nine
+services" becomes "Forty services" automatically, including both taglines in
+`content/site.ts`, which interpolate `SERVICE_COUNT_WORD` rather than spelling
+the number out.
 
 ---
 
@@ -446,10 +467,10 @@ insert and lose a lead.
 
 ## Deployment
 
-The build produces 35 prerendered HTML routes plus one dynamic route handler at
+The build produces 58 prerendered HTML routes plus one dynamic route handler at
 `/api/contact` (`runtime = 'nodejs'`, `dynamic = 'force-dynamic'`). Node rather
 than the edge, because the Supabase service-role client and the crypto hashing
-are both simpler there and the endpoint is called a handful of times a day —
+are both simpler there and the endpoint is called a handful of times a day, so
 edge latency is irrelevant.
 
 Any host that runs a Next.js server works: Vercel, Netlify, a Node process
@@ -492,8 +513,8 @@ chess art is already pre-sized WebP so the practical impact is small.
 | `typecheck` | Type errors under `strict`, plus unused locals/parameters and unchecked index access. |
 | `lint` | `next/core-web-vitals` and `next/typescript` rules. |
 | `check:tokens` | A drifted brand colour, a raw hex outside the three allowed files, a stale token mirror. |
-| `check:layout` | A responsive grid with no base column count — the mobile overflow bug. |
-| `check:content` | An incomplete service, a duplicate or malformed slug, a pillar with no services, a broken `related` link, a service missing from the mega-menu. Warns (does not fail) on over-length SEO metadata, same-pillar-only related links, FAQs without a question mark, and placeholder prices. |
+| `check:layout` | A responsive grid with no base column count, which is the mobile overflow bug. |
+| `check:content` | An incomplete service, a duplicate or malformed slug, a discipline with no services, a discipline in no practice or in two, a practice whose menu link does not cover all of its disciplines, a broken `related` link, a service missing from the mega-menu. Warns (does not fail) on over-length SEO metadata, same-pillar-only related links, and FAQs without a question mark. |
 
 ### What it cannot check
 
@@ -517,5 +538,9 @@ a browser, so it cannot catch:
 - **Runtime behaviour of the contact form.** No test posts to `/api/contact`.
   The Supabase insert, the rate limit, the honeypot and the timing gate are all
   verified by hand.
-- **Copy accuracy.** Prices, stats, turnaround times and the claims on the
-  service pages are content, not code. Nothing validates that they are true.
+- **Copy accuracy.** Stats, statutory dates, thresholds, penalty figures and
+  every other factual claim on the service pages are content, not code.
+  Nothing validates that they are still true. The compliance pages cite real
+  and checkable figures on purpose, which also means they go out of date when a
+  Finance Act, an IRS threshold or a USPTO fee schedule changes. Treat them as
+  facts to re-verify, not as copy to polish.

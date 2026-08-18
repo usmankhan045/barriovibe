@@ -171,7 +171,7 @@ export const CORPORATE_SERVICES: Service[] = [
       'Audited or draft financial statements for the year being filed',
       'Existing registers and minute book, in whatever state they are in',
     ],
-    related: ['company-registration', 'statutory-audit-support', 'income-tax-filing'],
+    related: ['company-registration', 'audit-assurance', 'income-tax-filing'],
     faqs: [
       {
         question: 'What happens if I miss an SECP filing?',

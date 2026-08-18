@@ -4,7 +4,7 @@
  * ## Why this is the whole practice and not a shortlist
  *
  * content/featuredServices.ts is a shortlist because Corporate & Advisory runs
- * to nineteen services and six is a choice. This practice has five. Naming all
+ * to twenty-six services and six is a choice. This practice has five. Naming all
  * five costs one extra card and removes the question a shortlist always
  * invites, which is what got left out.
  *

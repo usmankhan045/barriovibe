@@ -96,7 +96,7 @@ export const PRACTICES: Practice[] = [
     blurb:
       'The regulated back office: accounts and tax, company registration and compliance, intellectual property, contracts, and setting up abroad.',
     intro:
-      'The part of a business that is judged by a regulator, a bank or a buyer rather than by a customer. Books kept clean and returns filed before the deadline, companies registered and kept compliant with SECP, trademarks and patents secured through IPO Pakistan, agreements drafted properly the first time, and entities set up and filing in Saudi Arabia, the UAE and the United Kingdom.',
+      'The part of a business that is judged by a regulator, a bank or a buyer rather than by a customer. Books kept clean and returns filed before the deadline, companies registered and kept compliant with SECP, trademarks and patents secured through IPO Pakistan, agreements drafted properly the first time, and entities set up and filing in the United States, Saudi Arabia, the UAE and the United Kingdom.',
     icon: 'shield',
     badge: 'chrome',
     /* The rook is the piece you castle behind. A regulated back office is the

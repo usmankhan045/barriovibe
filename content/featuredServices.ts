@@ -3,7 +3,7 @@
  *
  * ## What this is NOT
  *
- * It is not an index of the practice. Corporate & Advisory runs to nineteen
+ * It is not an index of the practice. Corporate & Advisory runs to twenty-six
  * services across four disciplines, and an earlier version of this section
  * tried to show them grouped by discipline. That read as a second copy of the
  * coverflow one section above, which already names all three practices and is
@@ -53,6 +53,11 @@ export interface FeaturedService {
  * Intellectual Property and International Expansion. All four disciplines in
  * the practice appear, and the two largest appear twice.
  *
+ * The International Expansion row is the US one. That discipline covers four
+ * jurisdictions and the United States is five of its eight services, so the US
+ * is what the single row it gets should stand for. Swapping the slug back to
+ * `uae-tax-bookkeeping` is a one-line change if the commercial priority moves.
+ *
  * Ordered so the discipline label alternates rather than clustering. Two
  * Finance & Tax rows next to each other read as a Finance & Tax section that
  * happens to have other things after it, which is the grouping this section is
@@ -74,8 +79,8 @@ export const FEATURED_SERVICES: FeaturedService[] = [
     note: 'Clearance search, filing in the right classes, objections handled.',
   },
   {
-    slug: 'uae-tax-bookkeeping',
-    note: 'FTA corporate tax and VAT registered and filed, on IFRS books.',
+    slug: 'us-company-formation',
+    note: 'A US LLC or C-Corp with the EIN, registered agent and business banking.',
   },
   {
     slug: 'financial-accounting',
