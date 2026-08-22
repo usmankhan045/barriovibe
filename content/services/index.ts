@@ -5,6 +5,7 @@ import { FINANCE_TAX_SERVICES } from './finance-tax';
 import { CORPORATE_SERVICES } from './corporate-legal';
 import { IP_SERVICES } from './intellectual-property';
 import { USA_SERVICES } from './usa';
+import { UK_SERVICES } from './uk';
 import { INTERNATIONAL_SERVICES } from './international-expansion';
 import { GROWTH_SERVICES } from './growth-marketing';
 import { ECOMMERCE_SERVICES } from './ecommerce';
@@ -17,10 +18,13 @@ import { SOFTWARE_SERVICES } from './software-ai';
  * mega-menu, the home page service index, the footer, sitemap.xml and the
  * contact form dropdown. Adding a service here updates all six.
  *
- * USA_SERVICES and INTERNATIONAL_SERVICES are both the International Expansion
- * discipline, split across two files only because the US block is the larger of
- * the two. The US spread comes first, which is what puts the United States at
- * the top of that discipline everywhere it is listed.
+ * USA_SERVICES, INTERNATIONAL_SERVICES and UK_SERVICES are all the
+ * International Expansion discipline, split across three files only because
+ * the US and UK blocks are each five services standing on their own, against
+ * two for Saudi Arabia and the UAE combined. The spread order below is the
+ * order the discipline is named in everywhere else, the United States, Saudi
+ * Arabia, the UAE, then the UK, which is what puts them in that order
+ * wherever the discipline is listed.
  *
  * Keep these spreads in the same order as PILLARS in content/pillars.ts, which
  * is itself sorted to follow PRACTICES. Only the flat consumers read this
@@ -37,6 +41,7 @@ export const SERVICES: Service[] = [
   ...IP_SERVICES,
   ...USA_SERVICES,
   ...INTERNATIONAL_SERVICES,
+  ...UK_SERVICES,
 ];
 
 export const SERVICE_COUNT = SERVICES.length;
@@ -52,7 +57,9 @@ const NUMBER_WORDS = [
   'Twenty-three', 'Twenty-four', 'Twenty-five', 'Twenty-six', 'Twenty-seven',
   'Twenty-eight', 'Twenty-nine', 'Thirty', 'Thirty-one', 'Thirty-two',
   'Thirty-three', 'Thirty-four', 'Thirty-five', 'Thirty-six', 'Thirty-seven',
-  'Thirty-eight', 'Thirty-nine', 'Forty',
+  'Thirty-eight', 'Thirty-nine', 'Forty', 'Forty-one', 'Forty-two',
+  'Forty-three', 'Forty-four', 'Forty-five', 'Forty-six', 'Forty-seven',
+  'Forty-eight', 'Forty-nine', 'Fifty',
 ] as const;
 
 export const SERVICE_COUNT_WORD: string =

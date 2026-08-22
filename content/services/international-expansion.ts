@@ -1,24 +1,27 @@
 import type { Service } from '../types';
 
 /**
- * Discipline 07: International Expansion, less the United States.
+ * Discipline 07: International Expansion, less the United States and the UK.
  *
- * Everything registered outside Pakistan. Saudi Arabia moved here out of
- * Corporate & Compliance when the UK and UAE engagements were added, because
- * one overseas service inside a domestic discipline read as an exception
- * rather than as an offering.
+ * Everything registered outside Pakistan that isn't the US or UK block below.
+ * Saudi Arabia moved here out of Corporate & Compliance when the UK and UAE
+ * engagements were added, because one overseas service inside a domestic
+ * discipline read as an exception rather than as an offering.
  *
- * The US block outgrew this file and now lives in `./usa.ts`, which exports
- * `USA_SERVICES` under the same `international-expansion` pillar. Nothing
- * about the discipline is split, only the source file: five US services
- * against three here is a file worth reading on its own. `index.ts` spreads
- * the US array first, so the discipline leads with it everywhere.
+ * The US block outgrew this file and now lives in `./usa.ts`, and the UK block
+ * outgrew it the same way and now lives in `./uk.ts`, both exporting their
+ * services under the same `international-expansion` pillar. Nothing about the
+ * discipline is split, only the source files: five US services and five UK
+ * services are each a chain worth reading on its own, against two here.
+ * `index.ts` spreads the US array first and the UK array last, so the
+ * discipline reads in the order it is named everywhere else: the United
+ * States, Saudi Arabia, the UAE, then the UK.
  *
- * The pattern is the same in all three below, and in all five over there:
- * register the entity, then run the filings that follow. The second half is
- * the part clients underestimate and the part that carries the ongoing
- * relationship, so every page here is written to name it explicitly rather
- * than stopping at the certificate.
+ * The pattern is the same in both below, and in all ten over there: register
+ * the entity, then run the filings that follow. The second half is the part
+ * clients underestimate and the part that carries the ongoing relationship,
+ * so every page here is written to name it explicitly rather than stopping at
+ * the certificate.
  */
 export const INTERNATIONAL_SERVICES: Service[] = [
   {
@@ -169,7 +172,7 @@ export const INTERNATIONAL_SERVICES: Service[] = [
       'Sales invoices, purchase invoices and any customs documentation',
       'Prior returns and financial statements, if any have been filed',
     ],
-    related: ['saudi-business-setup', 'uk-vat-bookkeeping', 'financial-accounting'],
+    related: ['saudi-business-setup', 'uk-vat-corporation-tax', 'financial-accounting'],
     faqs: [
       {
         question: 'Do I have to register for corporate tax if my profit is under AED 375,000?',
@@ -196,96 +199,6 @@ export const INTERNATIONAL_SERVICES: Service[] = [
       title: 'UAE Corporate Tax, VAT & Bookkeeping Services',
       description:
         'Federal Tax Authority corporate tax and VAT registration and filing, Small Business Relief elections, and IFRS bookkeeping for mainland and free zone companies.',
-    },
-  },
-
-  {
-    slug: 'uk-vat-bookkeeping',
-    pillar: 'international-expansion',
-    title: 'UK VAT & Bookkeeping',
-    navLabel: 'UK VAT & Bookkeeping',
-    oneLiner:
-      'UK VAT registration and Making Tax Digital returns filed to HMRC, on digital books kept to the standard MTD requires.',
-    intro:
-      'UK VAT is not a form you complete at year end. From your first return onwards you have to keep the records digitally and file through software compatible with Making Tax Digital, and that applies whether you registered because you crossed the threshold or because you chose to. We handle the registration, run the bookkeeping in software that satisfies MTD, and file each quarter to HMRC on time.',
-    icon: 'percent',
-    included: [
-      'VAT registration with HMRC, and a written view on whether you must register or would benefit from doing so voluntarily',
-      'Threshold monitoring against the rolling twelve-month test, so registration is never triggered unnoticed',
-      'Digital bookkeeping in MTD-compatible software, with the digital links HMRC requires kept intact',
-      'Quarterly VAT return preparation and submission through MTD for VAT',
-      'VAT scheme review across standard, flat rate, cash accounting and annual accounting',
-      'Input VAT recovery review, and the treatment of exports, reverse charge and zero-rated supplies',
-    ],
-    audience: [
-      'Pakistani businesses with a UK entity',
-      'E-commerce sellers shipping into the UK',
-      'Consultancies billing UK clients',
-    ],
-    steps: [
-      {
-        title: 'Registration review',
-        description:
-          'We test your turnover against the rolling twelve-month threshold and the next-thirty-days test, and confirm whether registration is mandatory, voluntary or not yet needed.',
-      },
-      {
-        title: 'Registration and setup',
-        description:
-          'VAT registration filed with HMRC, the VAT number issued, and MTD-compatible bookkeeping software configured and connected to your HMRC account.',
-      },
-      {
-        title: 'Books on a cycle',
-        description:
-          'Sales and purchases recorded digitally, bank feeds reconciled, and VAT coded correctly at the point of entry rather than corrected at quarter end.',
-      },
-      {
-        title: 'Quarterly filing',
-        description:
-          'Return reconciled, reviewed with you, and submitted through MTD before the deadline, which falls one month and seven days after the period ends.',
-      },
-    ],
-    deliverables: [
-      'UK VAT registration certificate and VAT number',
-      'MTD-compatible accounting file, in your ownership',
-      'Filed quarterly VAT returns with HMRC receipts',
-      'A VAT reconciliation showing output tax, input tax and the payment due',
-      'Management accounts alongside each return',
-    ],
-    documents: [
-      'Companies House incorporation details, or your sole trader details',
-      'HMRC Government Gateway credentials, or authorisation for us to act as agent',
-      'UK business bank statements',
-      'Sales invoices and purchase invoices for the period',
-      'Import documentation and postponed VAT accounting statements, where you import',
-      'Previous VAT returns, if you are already registered',
-    ],
-    related: ['uae-tax-bookkeeping', 'bookkeeping', 'ecommerce-management'],
-    faqs: [
-      {
-        question: 'When do I have to register for UK VAT?',
-        answer:
-          'When your taxable turnover exceeds the registration threshold, currently £90,000, over any rolling twelve-month period, or when you expect to exceed it within the next thirty days alone. The rolling test is the one that catches people, because it is not the tax year. Registration is due within thirty days of crossing it.',
-      },
-      {
-        question: 'My business is not established in the UK. Does the threshold apply to me?',
-        answer:
-          'The threshold applies to UK-established businesses. A non-established taxable person making taxable supplies in the UK generally has no threshold at all and must register from the first supply. If you are selling into the UK from Pakistan, assume registration is required and let us confirm the position rather than the other way round.',
-      },
-      {
-        question: 'What does Making Tax Digital actually require?',
-        answer:
-          'That your VAT records are kept digitally and that the return reaches HMRC through compatible software, with an unbroken digital link between the two. Typing figures from a spreadsheet into HMRC’s website is no longer a permitted way to file. It applies to every VAT-registered business from its first return, including voluntary registrations.',
-      },
-      {
-        question: 'Should I register voluntarily before I have to?',
-        answer:
-          'It depends on who you sell to. If your customers are VAT-registered businesses, registering early lets you recover input VAT and costs your customers nothing, since they reclaim what you charge. If you sell to consumers, registering adds 20% to your price or takes it out of your margin. We run that arithmetic on your actual numbers before recommending either way.',
-      },
-    ],
-    seo: {
-      title: 'UK VAT Registration & Bookkeeping Services',
-      description:
-        'UK VAT registration with HMRC, Making Tax Digital quarterly filing and digital bookkeeping for overseas businesses and e-commerce sellers trading into the UK.',
     },
   },
 ];

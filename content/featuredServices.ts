@@ -54,9 +54,10 @@ export interface FeaturedService {
  * the practice appear, and the two largest appear twice.
  *
  * The International Expansion row is the US one. That discipline covers four
- * jurisdictions and the United States is five of its eight services, so the US
- * is what the single row it gets should stand for. Swapping the slug back to
- * `uae-tax-bookkeeping` is a one-line change if the commercial priority moves.
+ * jurisdictions and the United States is five of its twelve services, tied
+ * with the UK, so the US is what the single row it gets should stand for.
+ * Swapping the slug back to `uae-tax-bookkeeping` is a one-line change if the
+ * commercial priority moves.
  *
  * Ordered so the discipline label alternates rather than clustering. Two
  * Finance & Tax rows next to each other read as a Finance & Tax section that

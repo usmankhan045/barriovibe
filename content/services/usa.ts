@@ -4,17 +4,20 @@ import type { Service } from '../types';
  * Discipline 07a: the United States.
  *
  * Split into its own file rather than added to `international-expansion.ts`
- * because the US block is five services against three for the whole of Saudi
- * Arabia, the UAE and the UK combined, and because those five are a single
- * chain rather than five unrelated offerings: form the entity, get the number,
- * keep the books, file the returns, register the brand. A reader working down
- * the file should be able to follow that chain. It is still the same
- * discipline: every service here carries `pillar: 'international-expansion'`,
+ * because the US block is five services against two for the whole of Saudi
+ * Arabia and the UAE combined, and because those five are a single chain
+ * rather than five unrelated offerings: form the entity, get the number, keep
+ * the books, file the returns, register the brand. A reader working down the
+ * file should be able to follow that chain. The UK block is the same shape and
+ * the same size, and lives in `./uk.ts` for the same reason. It is still the
+ * same discipline: every service here carries `pillar: 'international-expansion'`,
  * so the pillar page, the mega-menu and the footer group it with the other
  * overseas work without any further wiring.
  *
- * `USA_SERVICES` is spread ahead of `INTERNATIONAL_SERVICES` in
- * `content/services/index.ts`, which puts the US first inside the discipline.
+ * `USA_SERVICES` is spread ahead of `INTERNATIONAL_SERVICES` and `UK_SERVICES`
+ * in `content/services/index.ts`, which puts the US first inside the
+ * discipline, then Saudi Arabia and the UAE, then the UK last, the order the
+ * discipline is named in everywhere else.
  *
  * ── Facts in this file that are checkable, and were checked ──
  *
