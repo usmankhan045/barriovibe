@@ -4,22 +4,25 @@ import { SERVICE_COUNT_WORD } from './services';
  * Site-wide constants.
  *
  * ┌──────────────────────────────────────────────────────────────────────┐
- * │  RENAMING THE AGENCY IS A THREE-LINE EDIT — right here.               │
+ * │  RENAMING THE AGENCY IS A THREE-LINE EDIT: right here.                │
  * │  Nothing else in the codebase hardcodes the brand name.               │
  * └──────────────────────────────────────────────────────────────────────┘
  *
  * Every value marked TODO is a placeholder awaiting real data. They render as
- * visible em-dashes rather than plausible-looking fake values, so an
+ * visible hyphens rather than plausible-looking fake values, so an
  * unfinished field is obvious on the page instead of quietly shipping a lie.
  */
 
 export const BRAND = {
-  /** TODO: final agency name. */
-  name: 'Northbound',
-  /** TODO: registered legal entity, e.g. "Northbound (Private) Limited". */
-  legalName: 'Northbound Advisory',
-  /** TODO: production domain. Drives canonical URLs and absolute OG paths. */
-  domain: 'https://example.com',
+  name: 'BarrioVibe',
+  /**
+   * TODO: registered legal entity, e.g. "BarrioVibe (Private) Limited".
+   * Until one is registered this stays equal to the brand name rather than
+   * inventing a suffix the paperwork does not have.
+   */
+  legalName: 'BarrioVibe',
+  /** Production domain. Drives canonical URLs and absolute OG paths. */
+  domain: 'https://barriovibe.com',
   /** Used in the footer and the wordmark's secondary line. */
   descriptor: 'Business · Digital · Technology',
 } as const;
@@ -27,10 +30,10 @@ export const BRAND = {
 export const CONTACT = {
   /** TODO: real number, international format. */
   phone: '+92 000 0000000',
-  /** Digits only, no +, no spaces — this is what wa.me expects. */
+  /** Digits only, no +, no spaces: this is what wa.me expects. */
   whatsapp: '920000000000',
-  /** TODO: real inbox. */
-  email: 'hello@example.com',
+  /** TODO: confirm this inbox exists before launch. */
+  email: 'hello@barriovibe.com',
   address: {
     /** TODO: real office address. */
     line1: '-',

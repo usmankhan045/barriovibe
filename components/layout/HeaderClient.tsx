@@ -321,14 +321,13 @@ export function HeaderClient({ nav }: { nav: NavData }) {
          * share, that track wins the extra space and the pill slides the other
          * way.
          *
-         * That is a live risk rather than a theoretical one: BRAND.name is an
-         * explicit placeholder, and at 1024px each side track is only ~261px
-         * against a ~159px wordmark. A real agency name much longer than
-         * "Northbound" would have pushed the pill off centre with nothing in
-         * the build to catch it.
+         * That is a live risk rather than a theoretical one: at 1024px each
+         * side track is only ~261px against a ~159px wordmark. An agency name
+         * much longer than "BarrioVibe" would have pushed the pill off centre
+         * with nothing in the build to catch it.
          *
-         * Taking it out of flow and pinning it to the header — which is
-         * full-bleed and `sticky`, so it is the positioned ancestor — makes the
+         * Taking it out of flow and pinning it to the header, which is
+         * full-bleed and `sticky`, so it is the positioned ancestor, makes the
          * centring independent of both neighbours. It is now exact by
          * construction at every width, whatever the brand name turns out to be.
          */}
@@ -353,8 +352,8 @@ export function HeaderClient({ nav }: { nav: NavData }) {
          *     1440   wordmark 126px   CTA 147px    clear
          *
          * 1024 is the tightest and its 10px is real but thin, and the left gap
-         * is the one at risk: BRAND.name is a placeholder, the pill is centred
-         * on the VIEWPORT, and a longer agency name eats that gap directly.
+         * is the one at risk: the pill is centred on the VIEWPORT, so a longer
+         * agency name than "BarrioVibe" eats that gap directly.
          * Re-measure with getBoundingClientRect against the wordmark and the
          * CTA if the brand is renamed, a practice is renamed, or a fourth
          * practice is added. */}

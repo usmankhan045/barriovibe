@@ -5,9 +5,9 @@ import { cx } from '@/lib/cx';
 /**
  * The wordmark.
  *
- * Set as type rather than an image file, deliberately: the agency name is not
- * finalised, so a logo file would be thrown away. Changing `BRAND.name` in
- * content/site.ts renames the entire site.
+ * Set as type rather than an image file, deliberately: there is no drawn logo
+ * for BarrioVibe yet, and type scales, recolours and stays crisp without one.
+ * Changing `BRAND.name` in content/site.ts renames the entire site.
  *
  * Mark plus the name on one line. The mockups' lockup also carried a small
  * letterspaced descriptor under the name; it was dropped from the lockup on

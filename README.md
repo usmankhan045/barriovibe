@@ -17,8 +17,8 @@ client-supplied brand colours enforced by a build-time guard, and
 components can be dropped in later without touching page composition.
 
 **This site is not finished.** It is structurally complete and technically
-sound, but it ships with named placeholders: the agency name, contact details,
-case studies and production domain. Supabase is not yet provisioned. See
+sound, but it ships with named placeholders: contact details and case studies.
+Supabase is not yet provisioned. See
 [Before launch](#before-launch-placeholder-checklist), which is the part of
 this document that actually matters for handover.
 
@@ -91,10 +91,10 @@ that.
 
 | # | Placeholder | File to edit | If it is not done |
 |---|---|---|---|
-| 1 | **Agency name**, currently `Northbound` / `Northbound Advisory` | `content/site.ts` → `BRAND.name`, `BRAND.legalName` | The wrong name appears in the wordmark, every page title, all Open Graph tags, the footer, the legal pages and the JSON-LD. Nothing else in the codebase hardcodes the brand name, so this is a two-line edit and the whole site renames. |
-| 2 | **Production domain**, currently `https://example.com` | `content/site.ts` → `BRAND.domain` | Canonical URLs, `sitemap.xml`, `robots.txt` and absolute OG image URLs all point at `example.com`. Search engines will index the wrong canonical. This is the single highest-impact placeholder. |
+| 1 | ~~**Agency name**~~ **DONE**: `BarrioVibe` | `content/site.ts` → `BRAND.name`, `BRAND.legalName` | Set. The name reaches the wordmark, every page title, all Open Graph tags, the footer, the legal pages and the JSON-LD from these two constants alone. `legalName` still equals `BRAND.name`: give it the registered entity once one exists. |
+| 2 | ~~**Production domain**~~ **DONE**: `https://barriovibe.com` | `content/site.ts` → `BRAND.domain` | Set. Canonical URLs, `sitemap.xml`, `robots.txt` and absolute OG image URLs are all derived from it, so confirm the site is actually served from this host before launch. |
 | 3 | **Phone / WhatsApp**, `+92 000 0000000` / `920000000000` | `content/site.ts` → `CONTACT.phone`, `CONTACT.whatsapp` | Every call and WhatsApp CTA is dead. Note `whatsapp` is digits only, no `+` and no spaces, which is what `wa.me` expects. |
-| 4 | **Email**, `hello@example.com` | `content/site.ts` → `CONTACT.email` | The fallback contact route fails. This address is what the site tells visitors to use when the contact form is down, so it must be real before launch. |
+| 4 | **Email**, `hello@barriovibe.com` | `content/site.ts` → `CONTACT.email` | Named to match the domain but not yet verified as a live inbox. This address is what the site tells visitors to use when the contact form is down, so it must actually receive mail before launch. |
 | 5 | **Office address**, `line1: '-'` | `content/site.ts` → `CONTACT.address` | The contact page shows a bare hyphen where the address should be. |
 | 6 | **Social links**, all `href: '#'`, all handles `@` | `content/site.ts` → `SOCIALS` | Footer social links go nowhere. Remove the entries you do not have accounts for rather than leaving `#`. |
 | 7 | **Stats**, all four are structural counts rather than performance figures | `content/proof.ts` → `STATS` | Nothing renders wrong today: every figure is true and checkable. But services and disciplines are derived while jurisdictions is typed by hand, so recount that one whenever a jurisdiction is added. Client retention and filings-on-time are the intended replacements for the last two slots. Do not invent numbers. |
