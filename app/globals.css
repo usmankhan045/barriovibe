@@ -496,16 +496,15 @@
 
   /* ── Glass below lg only ────────────────────────────────────────────────
      For an element that needs the material on a phone and must not have it on
-     a desktop. One user: the header wordmark, whose full argument is at its
-     render site in HeaderClient.tsx. In short: the header carries no surface
-     of its own, so each of its elements carries its own material, and the
-     wordmark's desktop exemption is that it fades out on scroll. That fade is
-     `lg`-scoped, so below it the wordmark was ink sitting on whatever scrolled
-     under it. It takes the material instead.
+     a desktop. One user: the header's scroll-triggered wordmark plate — a
+     `-z-10` sibling span behind the lockup in HeaderClient.tsx, faded in by
+     `opacity` once `scrolled` is true, rather than the lockup's own class.
+     Splitting it out that way is what lets the plate fade in as a background
+     without the wordmark's own text fading with it.
 
-     Above lg the plate has to go completely, not merely go quiet: the wordmark
-     there is a lockup on bare canvas at the top of the page, and a pill of
-     glass drawn around it would be a box around nothing.
+     Above lg the plate has to go completely, not merely go quiet: on desktop
+     the wordmark fades out on scroll instead (see the render site), so a
+     plate would be sitting behind an element that is not there.
 
      This is the same switch-off the Reduce Transparency and Increase Contrast
      blocks at the foot of this file make, and it is written the same way for
@@ -4257,6 +4256,30 @@
   .u-flow-path {
     stroke-dasharray: 8 6;
     animation: u-flow-dash 1.6s linear infinite;
+  }
+
+  /* ── Mobile glow motif — the stat bar and the process steps, phone only ──
+     Both sections trade their desktop treatment for a dark, lit-thread read
+     below `lg`: a stat or a step as a bead of light rather than a cell in a
+     grid. The dark panel underneath both is `--grad-glass-card` inline at
+     the call site — the same material the coverflow cards already use — so
+     this is not a second dark surface being invented, just the existing one
+     reused on two more elements. These two rules are the part that IS new:
+     the glow itself, shared so a stat's dot and a step's badge read as one
+     recipe rather than two. */
+  .u-glow-dot {
+    display: block;
+    border-radius: var(--radius-pill);
+    background-color: var(--color-blue-200);
+    box-shadow:
+      0 0 0 5px color-mix(in srgb, var(--color-blue-200) 22%, transparent),
+      0 0 16px 3px color-mix(in srgb, var(--color-blue-400) 70%, transparent);
+  }
+
+  .u-glow-badge {
+    box-shadow:
+      0 0 0 6px color-mix(in srgb, var(--color-white) 10%, transparent),
+      0 0 22px 4px color-mix(in srgb, var(--color-blue-400) 55%, transparent);
   }
 
   /* Edges fade out instead of hard-clipping. */

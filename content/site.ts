@@ -28,12 +28,10 @@ export const BRAND = {
 } as const;
 
 export const CONTACT = {
-  /** TODO: real number, international format. */
-  phone: '+92 000 0000000',
+  phone: '+92 309 5034118',
   /** Digits only, no +, no spaces: this is what wa.me expects. */
-  whatsapp: '920000000000',
-  /** TODO: confirm this inbox exists before launch. */
-  email: 'hello@barriovibe.com',
+  whatsapp: '923095034118',
+  email: 'barriovibe@gmail.com',
   address: {
     /** TODO: real office address. */
     line1: '-',

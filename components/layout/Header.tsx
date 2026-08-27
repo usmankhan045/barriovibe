@@ -26,7 +26,7 @@ import { PRIMARY_NAV, MEGA_MENU_COLUMNS } from '@/content/nav';
  */
 export function Header() {
   const nav: NavData = {
-    primary: PRIMARY_NAV.map(({ label, href, practice }) => ({ label, href, practice })),
+    primary: PRIMARY_NAV.map(({ label, href, mega }) => ({ label, href, mega })),
     columns: MEGA_MENU_COLUMNS.map((column) => ({
       slug: column.practice.slug,
       title: column.practice.shortTitle,

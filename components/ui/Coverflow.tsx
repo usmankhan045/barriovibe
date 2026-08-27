@@ -354,6 +354,25 @@ const REACH_SLOW = 0.45;
  * move's own ω.
  */
 const LEAP = 0.6;
+
+/**
+ * The flat/narrow rake's own stiffness — a phone swipe, not the desktop
+ * showpiece.
+ *
+ * The rest of this file's spring tuning (OMEGA and the essay above it) is
+ * measured against a hover-driven 3D rake with nothing queued behind it,
+ * and 0.8–1.3s of travel is the right pace for that. A phone never sees
+ * that rake: below `NARROW` the scene is flat (no rotateY, see `place`) and
+ * the gesture is a thumb swipe with a destination already in mind, closer to
+ * iOS's own card-stack settle than to a hover-triggered display case. A
+ * one-card move at this ω settles in a little under 0.4s against the
+ * desktop rake's 0.8s — smooth and eased, not the flick-and-freeze a mobile
+ * swipe should never be, but not the desktop's deliberate 0.8s either.
+ *
+ * REACH_SLOW and LEAP are dimensionless multipliers of whichever ω is in
+ * play, so both are reused unchanged; only the base stiffness differs.
+ */
+const OMEGA_FLAT = 22;
 /* Sub-pixel: one card of travel is ~240px on a desktop, so 0.003 of a card is
    under three quarters of a pixel. Tighter than this and the integrator keeps
    going for another half second to move a distance nothing can display. */
@@ -971,8 +990,28 @@ export function Coverflow({
     hoverStillRef.current = null;
   };
 
-  /** Mirrors `flat` for the paint loop, which must not read React state. */
+  /**
+   * Mirrors `flat` for the paint loop, which must not read React state. True
+   * for Reduce Motion AND for a narrow (phone-width) viewport — both want the
+   * 3D rake turned off. This does NOT mean the move should be instant; see
+   * `instantRef` for that separate question.
+   */
   const flatRef = useRef(false);
+  /**
+   * True only for Reduce Motion. `settle` reads this — not `flatRef` — to
+   * decide whether to skip the spring and jump straight to the destination.
+   *
+   * The two used to be the same flag, which meant every phone got the
+   * Reduce-Motion treatment whether or not anyone asked the OS for less
+   * motion: a swipe teleported to its destination with no animation at all,
+   * which is what "the cards move too fast" was actually describing — there
+   * was no motion to be fast, only a cut. A narrow viewport is a layout
+   * constraint (no room for a 3D rake) and Reduce Motion is a stated
+   * preference (no elastic, flying motion at all); conflating them served
+   * neither: the first only asked for the rotation to go away, not for the
+   * transform to become a snap.
+   */
+  const instantRef = useRef(false);
 
   const [selected, setSelected] = useState(0);
 
@@ -1294,7 +1333,8 @@ export function Coverflow({
 
       const gapCards = target - posRef.current;
       targetRef.current = target;
-      omegaRef.current = OMEGA / (1 + REACH_SLOW * Math.min(Math.abs(gapCards), 3));
+      const baseOmega = flatRef.current ? OMEGA_FLAT : OMEGA;
+      omegaRef.current = baseOmega / (1 + REACH_SLOW * Math.min(Math.abs(gapCards), 3));
       setSelected(indexAt(target));
 
       if (velocity !== undefined) {
@@ -1338,8 +1378,10 @@ export function Coverflow({
       const width = widthRef.current;
 
       // Reduce Motion gets the destination, not the journey. So does a rake
-      // that has not been measured yet.
-      if (flatRef.current || !track || !width) {
+      // that has not been measured yet. A narrow viewport gets neither of
+      // those exemptions on its own — see `instantRef` — so a phone swipe
+      // still animates, just flat and at OMEGA_FLAT.
+      if (instantRef.current || !track || !width) {
         posRef.current = lap(target);
         targetRef.current = posRef.current;
         velocityRef.current = 0;
@@ -1377,10 +1419,15 @@ export function Coverflow({
       track.dataset.live = 'true';
       track.dataset.moving = 'true';
 
+      // `flatRef.current`, not a hard `false`: this branch used to run only
+      // for the 3D rake, where flat is always off, so the hard-coded value
+      // was never wrong until a flat scene started reaching it too. A narrow
+      // viewport's animated move still wants translateX + scale with no
+      // rotateY, matching the resting scene `paint` draws for it.
       const scene: Scene = {
         cells,
         width,
-        flat: false,
+        flat: flatRef.current,
         gap,
         falloff,
         shrink,
@@ -2021,24 +2068,32 @@ export function Coverflow({
 
   /**
    * Flatten the scene when the OS asks for less motion, or when the viewport is
-   * too narrow for a rake to be depth rather than clutter.
+   * too narrow for a rake to be depth rather than clutter. Only Reduce Motion
+   * additionally makes a move instant.
    *
-   * Both land on the same flag because they want the same thing. Reduce Motion
+   * The two used to be the same query answering the same flag. Reduce Motion
    * is Apple's own modifier for this material — it "decreases the intensity of
    * the effect and disables elastic properties", and a card flying toward the
-   * viewer is the elastic part. A phone has no room for the rake at all. The
-   * carousel keeps working either way: drag, tap, arrow keys and the dots are
-   * all untouched, and the centred card still expands.
+   * viewer under a 3D rake is the elastic part worth removing entirely. A
+   * narrow viewport just has no room for that rake; it says nothing about
+   * whether the visitor wants motion, and a swipe there still deserves a
+   * smooth, eased settle — see `instantRef`. The carousel keeps working
+   * either way: drag, tap, arrow keys and the dots are all untouched, and the
+   * centred card still expands.
    */
   useEffect(() => {
-    const queries = [window.matchMedia(REDUCED_MOTION), window.matchMedia(NARROW)];
+    const reducedMotion = window.matchMedia(REDUCED_MOTION);
+    const narrow = window.matchMedia(NARROW);
+    const queries = [reducedMotion, narrow];
 
     const sync = () => {
-      flatRef.current = queries.some((query) => query.matches);
-      // Flattening changes what every keyframe of a move in flight says, so the
-      // move is re-issued rather than allowed to finish against the old scene.
-      // In flat mode `settle` jumps straight to the destination, which is the
-      // right answer the moment Reduce Motion comes on.
+      flatRef.current = reducedMotion.matches || narrow.matches;
+      instantRef.current = reducedMotion.matches;
+      // Flattening (or its omega) changes what every keyframe of a move in
+      // flight says, so the move is re-issued rather than allowed to finish
+      // against the old scene. In instant mode `settle` jumps straight to the
+      // destination, which is the right answer the moment Reduce Motion comes
+      // on regardless of viewport width.
       if (!rebuild()) paint(true);
     };
 

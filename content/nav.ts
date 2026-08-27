@@ -9,11 +9,12 @@ export interface NavLink {
   label: string;
   href: string;
   /**
-   * Set on the three practice items only. It names the MEGA_MENU_COLUMNS entry
-   * this link opens, which is what gives each practice its own panel instead
-   * of one shared "Services" menu with the practices as tabs inside it.
+   * Set on the single "Services" item only. It is what opens the mega-menu
+   * panel; the panel itself carries an internal tab strip (built from
+   * `MEGA_MENU_COLUMNS`) for switching between the three practices, so this
+   * flag does not need to name which one.
    */
-  practice?: string;
+  mega?: boolean;
 }
 
 /**
@@ -43,43 +44,39 @@ export const MEGA_MENU_COLUMNS = PRACTICE_GROUPS.map(({ practice, groups }) => (
 }));
 
 /**
- * THE THREE PRACTICES ARE THE NAVIGATION, not one "Services" item that hides
- * them.
+ * ONE "Services" ITEM HOLDS ALL THREE PRACTICES.
  *
- * This used to be a single Services link opening one panel with the practices
- * as a tab strip inside it. That made the top-level offering invisible until
- * you hovered, and it put the site's most important distinction one
- * interaction deeper than it needed to be. Now the practices ARE the top-level
- * items and each opens its own panel, so a visitor reads "Software & AI /
- * Marketing & E-commerce / Corporate & Advisory" before touching anything.
- *
- * The complete catalogue has not gone anywhere: /services is still the hub and
- * every panel ends with a link to it.
- *
- * Derived, not typed out. A fourth practice appears in the navbar with no edit
- * here, which also means the pill's width is content-driven and worth
- * re-measuring if one is ever added. See the note on the nav pill in
+ * This used to put the three practices directly in the pill, each opening its
+ * own panel, on the theory that the site's core distinction should be visible
+ * before anyone touches the nav. The client's later instruction reversed that:
+ * one "Services" tab, with the three practices as an internal tab strip inside
+ * the single panel it opens. The panel's per-practice content (the discipline
+ * columns and their links) is unchanged; only the outer trigger and the way
+ * you pick a practice moved. See the mega-menu render in
  * components/layout/HeaderClient.tsx.
+ *
+ * The complete catalogue has not gone anywhere: /services is still the hub,
+ * the "Services" item links there directly, and the panel ends with a link to
+ * it too.
+ *
+ * Home and Blog bracket the pill on the client's instruction: Home leftmost,
+ * Blog rightmost, with the existing Contact/About order kept between them.
+ * Blog links to `/blog`, which currently renders an honest "nothing published
+ * yet" state — see app/blog/page.tsx — rather than being left unlinked or
+ * pointed at a page that does not exist.
  *
  * ── What is NOT in the pill ──
  *
  * Work. It is still a page and still linked from the footer through
- * COMPANY_LINKS; it is out of the top nav because six items with three long
- * practice names was more than the pill could hold at 1024px, and of the
- * non-practice items it is the one a visitor is least likely to be hunting for
- * by name.
- *
- * About is last, on the client's instruction that it sits in the right-hand
- * corner of the nav rather than in the middle of it.
+ * COMPANY_LINKS; it is out of the top nav because it is the one a visitor is
+ * least likely to be hunting for by name.
  */
 export const PRIMARY_NAV: NavLink[] = [
-  ...MEGA_MENU_COLUMNS.map((column) => ({
-    label: column.practice.shortTitle,
-    href: column.href,
-    practice: column.practice.slug,
-  })),
+  { label: 'Home', href: '/' },
+  { label: 'Services', href: '/services', mega: true },
   { label: 'Contact', href: '/contact' },
   { label: 'About', href: '/about' },
+  { label: 'Blog', href: '/blog' },
 ];
 
 export const COMPANY_LINKS: NavLink[] = [

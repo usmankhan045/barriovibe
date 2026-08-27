@@ -35,15 +35,20 @@ const SKIP_DIRS = new Set(['node_modules', '.next', '.git', 'out', 'public', 'as
 /**
  * The only files allowed to hold hex literals.
  *
- * tokens.css is the source of truth. The mirrors restate a few of its values
- * for contexts that cannot read CSS at all:
+ * tokens.css is the source of truth. The mirror restates a few of its values
+ * for a context that cannot read CSS at all:
  *   • lib/tokens.ts — meta theme-color, next/og image generation
- *   • app/icon.svg  — the favicon, which is a standalone file
  *
- * Check 3 below asserts every hex in a mirror also exists in tokens.css, so
- * a brand color change cannot leave a mirror silently stale.
+ * The favicon used to be a second mirror (app/icon.svg, a gradient built from
+ * these same hex values). It is now app/icon.png, a raster export of the
+ * client's actual logo with no hex codes in the file to drift — regenerate it
+ * from assets/logo.png if the brand colors ever change, rather than editing
+ * hex literals.
+ *
+ * Check 3 below asserts every hex in the mirror also exists in tokens.css, so
+ * a brand color change cannot leave it silently stale.
  */
-const TOKENS_MIRRORS = ['lib/tokens.ts', 'app/icon.svg'];
+const TOKENS_MIRRORS = ['lib/tokens.ts'];
 const HEX_ALLOWED = new Set(['app/tokens.css', ...TOKENS_MIRRORS]);
 
 /** #RGB, #RGBA, #RRGGBB, #RRGGBBAA — but not longer hashes or fragment ids. */

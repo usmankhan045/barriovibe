@@ -22,8 +22,8 @@ import { cx } from '@/lib/cx';
 const useIsoLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 export interface NavData {
-  /** `practice` is set on the three items that open a panel. */
-  primary: { label: string; href: string; practice?: string }[];
+  /** `mega` is set on the single "Services" item that opens the panel. */
+  primary: { label: string; href: string; mega?: boolean }[];
   /** One per practice. Three of them. */
   columns: {
     slug: string;
@@ -58,18 +58,18 @@ export interface NavData {
  * hidden" requirement at the navigation level.
  */
 export function HeaderClient({ nav }: { nav: NavData }) {
-  /* The slug of the practice whose panel is open, or null. This was a boolean
-     when there was one Services menu; there are three now, and "which one" and
-     "whether one" are the same question, so they are the same piece of state.
-     Two booleans would let two panels be open at once. */
+  /* The slug of the practice tab showing inside the Services panel, or null
+     when the panel is closed. "Which practice is selected" and "whether the
+     panel is open" are the same question now that there is one trigger, so
+     they are the same piece of state rather than a separate open boolean. */
   const [openPractice, setOpenPractice] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
   const reduceMotion = useReducedMotion();
   const megaRef = useRef<HTMLDivElement>(null);
-  // Keyed by practice slug: Escape has to return focus to the trigger that
-  // opened the panel, and there are three of them.
-  const megaTriggerRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
+  // Escape has to return focus to the trigger that opened the panel. There is
+  // one trigger — "Services" — regardless of which practice tab is showing.
+  const servicesTriggerRef = useRef<HTMLAnchorElement | null>(null);
   // The whole nav pill is the hover/focus region. It has to be, now that
   // moving between two practice triggers passes over a third element: scoping
   // it to a single <li> made every sideways move a close and a reopen.
@@ -110,7 +110,7 @@ export function HeaderClient({ nav }: { nav: NavData }) {
       // Returning focus to the trigger is required by the disclosure pattern.
       // Without it, dismissing the menu drops focus to <body> and a keyboard
       // user restarts from the top of the page having lost their place.
-      if (openPractice) megaTriggerRefs.current[openPractice]?.focus();
+      if (openPractice) servicesTriggerRef.current?.focus();
       setOpenPractice(null);
       setMobileOpen(false);
     };
@@ -143,6 +143,11 @@ export function HeaderClient({ nav }: { nav: NavData }) {
     clearTimeout(closeTimer.current);
     closeTimer.current = setTimeout(() => setOpenPractice(null), 120);
   };
+  /* Entering the Services trigger itself does not know which practice tab to
+     show. If one is already selected (the pending close was just cancelled
+     because the pointer came back before the 120ms fired) that selection
+     survives; otherwise it defaults to the first practice. */
+  const openServicesMega = () => openMega(openPractice ?? nav.columns[0]?.slug ?? '');
 
   /**
    * Close when focus leaves the nav pill AND the panel.
@@ -164,31 +169,20 @@ export function HeaderClient({ nav }: { nav: NavData }) {
   const isActive = (href: string) =>
     href === '/' ? pathname === '/' : pathname.startsWith(href);
 
-  /* A practice item is current for ANY page under ANY of its disciplines.
-   *
-   * `isActive` on the item's own href is not enough: Corporate & Advisory
-   * links to /services/finance-tax, so on /services/corporate-legal the lit
-   * seat would have moved to the wrong item, or to none at all. */
-  const isPracticeActive = (slug: string) => {
-    const column = nav.columns.find((c) => c.slug === slug);
-    return column?.groups.some((group) => pathname.startsWith(group.href)) ?? false;
-  };
-
   const practice = nav.columns.find((c) => c.slug === openPractice);
 
   /**
-   * The panel hangs from its own trigger, not from the centre of the page.
+   * The panel hangs from the Services trigger, not from the centre of the
+   * page. The trigger sits inside the nav pill, which is itself centred on
+   * the viewport rather than on any particular item, so a panel centred on
+   * the page would drift away from the word that opened it the moment the
+   * pill's own contents were not symmetric around Services.
    *
-   * A centred panel was the right answer when one Services item opened one
-   * menu: the item and the panel were both on the page's axis. With three
-   * triggers spread across a 755px pill and panels that range from ~518px to
-   * ~1022px wide, centring left the Software & AI panel sitting entirely to
-   * the RIGHT of the item that opened it, which reads as an unrelated box
-   * rather than as a menu belonging to that word.
-   *
-   * So the panel's left edge is aligned to its trigger's, then clamped to the
-   * page gutters so the four-column Corporate & Advisory panel does not run
-   * off the right of the viewport.
+   * So the panel's left edge is aligned to the trigger's, then clamped to the
+   * page gutters so the four-column Corporate & Advisory tab (the widest of
+   * the three) does not run off the right of the viewport. The trigger itself
+   * does not move when the internal tab strip switches practice, but the
+   * panel's width does, so the clamp is recomputed on every switch.
    *
    * The measuring frame is the `relative` div inside the panel's own
    * `u-container`, NOT the nav. That matters: the nav carries
@@ -207,7 +201,7 @@ export function HeaderClient({ nav }: { nav: NavData }) {
   const [panelLeft, setPanelLeft] = useState(0);
   useIsoLayoutEffect(() => {
     if (!openPractice) return;
-    const trigger = megaTriggerRefs.current[openPractice];
+    const trigger = servicesTriggerRef.current;
     const track = megaTrackRef.current;
     const panel = track?.querySelector('[data-mega-panel]') as HTMLElement | null;
     if (!trigger || !track || !panel) return;
@@ -263,36 +257,41 @@ export function HeaderClient({ nav }: { nav: NavData }) {
             just wordmark + hamburger, so hiding the wordmark there would leave
             a header with one lone button in it.
 
-            ── Why it carries glass below lg ──
+            ── Bare at the top, on the client's instruction; the plate only
+                arrives once there is something to protect against ──
 
-            The rule at the top of this file is that the header has no surface
-            and each of its elements carries its own material. On desktop all
-            three do: the nav pill is `.u-glass--pill`, the CTA is a solid blue
-            pill, and the wordmark is exempt because it FADES OUT past 24px of
-            scroll, so it is only ever ink on bare canvas at the top of the
-            page where the canvas is all there is behind it.
+            This carried a glass pill below `lg` PERMANENTLY, at every scroll
+            position: the wordmark does not fade out on scroll at that width
+            the way it does on desktop, so a phone was otherwise sitting bare
+            on top of whatever scrolled underneath it. The client's own
+            instruction was the plain lockup — no pill sitting under "BarrioVibe"
+            at the top of the page, which is where anyone actually looks at it.
 
-            Below lg that fade is off, for the reason given above: it would
-            leave a lone hamburger. The exemption went with it and the material
-            did not. Measured on an iPhone 14 Pro at 393px, the result was the
-            wordmark sitting directly on top of body copy, stat numerals and a
-            chrome button on every page of the site at every scroll position
-            past the hero: two things legible apart, neither legible together.
-
-            So the wordmark gets the material instead of the exemption, which
-            is what "fix the element that lost it" asks for. `.u-glass--pill`
-            specifically, and not a new surface: it is the one material on this
-            site tuned to fly over ANYTHING while carrying text, with a
-            measured contrast floor to prove it (see the legibility note on the
-            class). It also makes the mobile header read as the pair it always
-            should have been, a glass pill either side of the row, and takes the
-            lockup's tap target from 154×36 to the 44px minimum. */}
-        <Wordmark
+            So the plate now answers to `scrolled`, the same signal that
+            already drives the desktop fade-out below: gone at rest, so the
+            hero reads exactly as asked, and faded in the moment real content
+            — body copy, stat numerals, a chrome button — has something to
+            pass underneath it. It is a background fading in, not the wordmark
+            itself, which is why it is a sibling `-z-10` span rather than a
+            class on the lockup: fading the Wordmark's own opacity would fade
+            the text along with the plate, and the text has to stay solid
+            throughout. Same `-z-10`-span-behind-a-lit-element pattern as the
+            nav pill's active seat below. */}
+        <div
           className={cx(
-            'u-glass u-glass--pill u-plate-to-lg justify-self-start whitespace-nowrap rounded-pill py-1.5 pl-1.5 pr-3.5 transition-[opacity,visibility] duration-200 motion-reduce:transition-none',
+            'relative isolate justify-self-start transition-[opacity,visibility] duration-200 motion-reduce:transition-none',
             scrolled && 'lg:invisible lg:opacity-0',
           )}
-        />
+        >
+          <span
+            aria-hidden="true"
+            className={cx(
+              'u-glass u-glass--pill u-plate-to-lg absolute inset-0 -z-10 rounded-pill transition-opacity duration-300 motion-reduce:transition-none',
+              scrolled ? 'opacity-100' : 'opacity-0',
+            )}
+          />
+          <Wordmark className="whitespace-nowrap py-1.5 pl-1.5 pr-3.5" />
+        </div>
 
         {/* ── Desktop nav ─────────────────────────────────────────────── */}
         {/*
@@ -333,30 +332,26 @@ export function HeaderClient({ nav }: { nav: NavData }) {
          */}
         {/* THE PILL SHRINKS TO FIT AT lg. IT DOES NOT DISAPPEAR.
          *
-         * The pill holds three practice names now, two and three words each,
-         * and at the old 15px/px-4 sizing it measured 755px. Against the
-         * wordmark on its left and the CTA on its right that overlapped both
-         * at 1024 and only cleared at 1280.
+         * The pill now holds five short items (Home, Services, Contact, About,
+         * Blog) instead of the three long practice names it used to carry, so
+         * it is narrower than the 755px that originally forced the px-2.5/xl
+         * step-down below. The step-down is left in place regardless: it costs
+         * nothing when there is headroom, and it is the thing that keeps this
+         * safe if an item is ever renamed to something longer.
          *
          * Raising the breakpoint to xl was tried and REJECTED: it takes the
          * navigation away from every 1024-1279 laptop, and a hamburger on a
          * 13-inch screen is a downgrade, not a responsive adaptation. The
          * navbar is the point of this design. It stays visible.
          *
-         * So the pill is sized to the space instead. Work left the pill (see
-         * content/nav.ts) and below xl the seats step down to px-2.5, the gap
-         * to 0.5 and the type to 13px. Measured after:
+         * Measured with getBoundingClientRect against the wordmark and the CTA:
          *
-         *     1024   wordmark  10px   CTA  31px    clear
-         *     1152   wordmark  74px   CTA  95px    clear
-         *     1440   wordmark 126px   CTA 147px    clear
+         *     1024   wordmark 142px   CTA 167px    clear
+         *     1152   wordmark 206px   CTA 231px    clear
+         *     1440   wordmark 277px   CTA 302px    clear
          *
-         * 1024 is the tightest and its 10px is real but thin, and the left gap
-         * is the one at risk: the pill is centred on the VIEWPORT, so a longer
-         * agency name than "BarrioVibe" eats that gap directly.
-         * Re-measure with getBoundingClientRect against the wordmark and the
-         * CTA if the brand is renamed, a practice is renamed, or a fourth
-         * practice is added. */}
+         * All three comfortably clear now that the pill is shorter. Re-measure
+         * if the brand is renamed or an item is added or lengthened. */}
         <nav
           aria-label="Primary"
           className="hidden lg:absolute lg:left-1/2 lg:top-0 lg:flex lg:h-[var(--header-h)] lg:-translate-x-1/2 lg:items-center"
@@ -371,11 +366,13 @@ export function HeaderClient({ nav }: { nav: NavData }) {
               `rounded-pill` and `shadow-bar` are Tailwind utilities and land
               in the utilities layer, so they override `.u-glass`'s own radius
               and shadow rather than being overridden by them. */}
-          {/* The hover region is the whole pill, not the individual items.
-              With three adjacent triggers, a per-item region meant every
-              sideways move between practices left one region before entering
-              the next, firing a close and then an open, so the panel flickered
-              on a gesture the user reads as a single slide. */}
+          {/* The hover region is the whole pill, not the individual items, so
+              leaving the pill (rather than leaving whichever item happens to
+              be under the pointer) is what starts the close timer. That still
+              matters with one mega trigger: it is what lets the pointer travel
+              sideways from Services onto Home/Contact/About/Blog without the
+              panel's own close-on-leave racing the neighbouring item's
+              close-on-enter. */}
           <ul
             ref={megaRegionRef}
             onMouseLeave={closeMega}
@@ -383,35 +380,33 @@ export function HeaderClient({ nav }: { nav: NavData }) {
             className="u-glass u-glass--pill flex items-center gap-0.5 rounded-pill p-1 shadow-bar xl:gap-1"
           >
             {nav.primary.map((item) => {
-              const hasMega = Boolean(item.practice);
-              const active = hasMega ? isPracticeActive(item.practice!) : isActive(item.href);
-              const expanded = hasMega && openPractice === item.practice;
+              const hasMega = Boolean(item.mega);
+              const active = isActive(item.href);
+              const expanded = hasMega && openPractice !== null;
 
               return (
                 <li
                   key={item.href}
                   {...(hasMega
-                    ? { onMouseEnter: () => openMega(item.practice!) }
-                    : // Entering a non-practice item still has to dismiss an
-                      // open panel. Without this, sliding from Corporate &
-                      // Advisory onto About leaves the panel up, because the
-                      // pointer never left the pill's own region.
+                    ? { onMouseEnter: openServicesMega }
+                    : // Entering a non-mega item still has to dismiss an open
+                      // panel. Without this, sliding from Services onto About
+                      // leaves the panel up, because the pointer never left
+                      // the pill's own region.
                       { onMouseEnter: closeMega })}
                 >
                   <Link
                     {...(hasMega
                       ? {
-                          ref: (node: HTMLAnchorElement | null) => {
-                            megaTriggerRefs.current[item.practice!] = node;
-                          },
+                          ref: servicesTriggerRef,
                           'aria-expanded': expanded,
-                          onFocus: () => openMega(item.practice!),
+                          onFocus: openServicesMega,
                         }
                       : // Focus does what the pointer does. Tabbing from
-                        // Corporate & Advisory onto About used to leave its
-                        // panel hanging open under an unrelated item, because
-                        // focus was still inside the pill and nothing had told
-                        // it to close.
+                        // Services onto About used to leave its panel hanging
+                        // open under an unrelated item, because focus was
+                        // still inside the pill and nothing had told it to
+                        // close.
                         { onFocus: closeMega })}
                     href={item.href}
                     aria-current={active ? 'page' : undefined}
@@ -586,8 +581,45 @@ export function HeaderClient({ nav }: { nav: NavData }) {
              disciplines, which would otherwise widen past the page gutters.
              `top-2` reproduces the frame's `pt-2`, which an absolutely
              positioned child does not inherit. */
-          className="u-glass absolute top-2 w-max max-w-[72rem] overflow-hidden rounded-tile-lg shadow-bar"
+          className="u-glass absolute top-2 flex w-max max-w-[72rem] overflow-hidden rounded-tile-lg shadow-bar"
         >
+          {/* The practice tab strip. There is one trigger in the navbar now
+              ("Services"), so this rail is what picks which practice's
+              columns show to its right — the job the three separate nav
+              triggers used to do. Hovering or focusing a tab swaps the
+              content pane without closing the panel, the same swap the old
+              triggers did when the pointer moved sideways between them.
+
+              A real `<Link>`, not a button: clicking a tab still has to reach
+              the practice's own page, exactly as the old top-level items did. */}
+          {/* w-64: the rail's own padding plus each tab's internal padding
+              eats 48px before any text starts, and "Marketing & E-commerce"
+              (the longest label) needs ~192px past that to stay on one line.
+              Measured after the fact rather than guessed, because two
+              independent paddings stacking is easy to undercount. */}
+          <div className="flex w-64 flex-none flex-col gap-1 border-r border-line p-3">
+            {nav.columns.map((column) => {
+              const tabActive = practice.slug === column.slug;
+              return (
+                <Link
+                  key={column.slug}
+                  href={column.href}
+                  onMouseEnter={() => openMega(column.slug)}
+                  onFocus={() => openMega(column.slug)}
+                  className={cx(
+                    'flex items-center gap-2.5 rounded-chip px-3 py-2.5 text-[13.5px] font-semibold transition-colors',
+                    tabActive
+                      ? 'bg-blue-50 text-blue-600'
+                      : 'text-ink-strong hover:bg-blue-50/60 hover:text-blue-600',
+                  )}
+                >
+                  <Icon name={column.icon} size={16} className="flex-none" />
+                  {column.title}
+                </Link>
+              );
+            })}
+          </div>
+
           {/* One fixed-width column per discipline, the practice's single
               discipline split across two.
 
@@ -657,8 +689,11 @@ export function HeaderClient({ nav }: { nav: NavData }) {
             </div>
 
             {/* The one route out of a practice-scoped panel to the whole
-                catalogue. It matters more here than it did under a "Services"
-                item, because nothing in the navbar now says the word.
+                catalogue, distinct from the "Services" item that opened the
+                panel: that item and its href both point at /services already,
+                but a visitor scanning one practice's columns still benefits
+                from an explicit link to the full list rather than having to
+                notice the trigger word above does the same thing.
 
                 The rule is on the wrapper, not the link: `self-start` on a
                 bordered link shrinks it to the text, which renders the divider
@@ -766,11 +801,11 @@ export function HeaderClient({ nav }: { nav: NavData }) {
               </Link>
             </div>
 
-            {/* The practice items are the accordions above, so they are
-                filtered out here rather than listed twice. */}
+            {/* The Services item is the accordions above, so it is filtered
+                out here rather than listed a second time as a dead link. */}
             <nav aria-label="Primary mobile" className="flex flex-col gap-1">
               {nav.primary
-                .filter((i) => !i.practice)
+                .filter((i) => !i.mega)
                 .map((item) => (
                   <Link
                     key={item.href}

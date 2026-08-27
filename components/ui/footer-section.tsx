@@ -54,18 +54,13 @@ function BrandMark({ name, className }: { name: BrandName; className?: string })
 interface FooterLink {
   title: string;
   href: string;
-  /** Social columns only. Rendered before the label at 16px. */
+  /** `SOCIAL_LINKS` only. */
   brand?: BrandName;
 }
 
 interface FooterSection {
   label: string;
   links: FooterLink[];
-  /**
-   * Renders the column as a row of marks with no labels. Social only: the
-   * reasoning is on that section below.
-   */
-  marksOnly?: boolean;
 }
 
 /* ADAPTED 2 — link data.
@@ -107,27 +102,26 @@ const footerLinks: FooterSection[] = [
       },
     ],
   },
-  /* Marks only, and laid out across rather than down.
-   *
-   * These four are the only entries in the footer whose name is redundant: a
-   * LinkedIn mark beside the word LinkedIn is the same fact twice, and it is
-   * the one column where the glyph is more recognisable than the label. With
-   * the words gone the column would be four icons stacked in a 14px-wide strip,
-   * which is a column of dots, so it turns and runs as one row instead.
-   *
-   * The names stay in the accessibility tree as `sr-only` text. A row of four
-   * unlabelled links is four links called "link" to a screen reader.
-   */
-  {
-    label: 'Social',
-    marksOnly: true,
-    links: (Object.keys(BRAND_MARKS) as BrandName[]).map((name) => ({
-      title: name,
-      href: '#',
-      brand: name,
-    })),
-  },
 ];
+
+/**
+ * The social marks, placed with the brand block rather than filed as a fifth
+ * link column — the client's reference layout (xeven.com) puts them directly
+ * under the lockup's own copy, not alongside Services/Company/Get in touch,
+ * because they are not a navigation section, they are the brand's presence
+ * elsewhere. See the render site for where that lands them.
+ *
+ * A LinkedIn mark beside the word "LinkedIn" is the same fact twice, and it
+ * is the one place on the page where the glyph is more recognisable than the
+ * label, so the row carries marks only. The names stay in the accessibility
+ * tree as `sr-only` text — four unlabelled links are four links called
+ * "link" to a screen reader.
+ */
+const SOCIAL_LINKS: FooterLink[] = (Object.keys(BRAND_MARKS) as BrandName[]).map((name) => ({
+  title: name,
+  href: '#',
+  brand: name,
+}));
 
 /* ADAPTED 6 — the hover seat, lifted verbatim from the mega-menu submenu.
  *
@@ -245,54 +239,45 @@ export function Footer() {
                 </li>
               ))}
             </ul>
+
+            {/* The social row. See the note on `SOCIAL_LINKS` for why it sits
+                here, with the brand block, instead of filed as a link column.
+                `-ml-2` matches the seat's own padding so the marks line up
+                under the logo the way the legal links line up above them. */}
+            <ul className="-ml-2 mt-5 flex flex-wrap items-center gap-0.5 text-ink-body">
+              {SOCIAL_LINKS.map((link) => (
+                <li key={link.title}>
+                  <a href={link.href} className={FOOTER_MARK_LINK}>
+                    <BrandMark name={link.brand!} className="size-[17px] flex-none" />
+                    <span className="sr-only">{link.title}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
           </AnimatedContainer>
 
-          {/* `auto` rather than a 2fr share: an even split leaves the fourth
-				    column's text stranded ~200px short of the right edge, because
-				    each cell is far wider than its longest label. Sizing the field to
-				    its content and letting the 1fr logo column absorb the slack packs
+          {/* `auto` rather than a 2fr share: an even split leaves the third
+				    column's text stranded short of the right edge, because each cell
+				    is far wider than its longest label. Sizing the field to its
+				    content and letting the 1fr logo column absorb the slack packs
 				    the columns and lands them flush right, which is the proportion
-				    the reference actually has. */}
-          {/* `repeat(4,auto)` rather than `grid-cols-4`: equal fractions make every
-				    column as wide as the widest one — the email address — which leaves
-				    the short Social column trailing ~160px of dead space. Auto tracks
-				    size each column to its own content so the set packs. */}
-          <div className="grid grid-cols-2 gap-x-10 gap-y-10 sm:grid-cols-[repeat(4,auto)] lg:gap-x-14">
+				    the reference actually has.
+
+				    `repeat(3,auto)` rather than `grid-cols-3`, for the same reason:
+				    equal fractions make every column as wide as the widest one — the
+				    email address — which would leave "Company" trailing dead space. */}
+          <div className="grid grid-cols-2 gap-x-10 gap-y-10 sm:grid-cols-[repeat(3,auto)] lg:gap-x-14">
             {footerLinks.map((section, index) => (
-              /* The marks column spans both mobile columns.
-                 With the marks at the 44px touch floor (`u-tap--square`), four
-                 of them need 176px and a half-width column at 393px gives about
-                 152px, so the fourth wrapped onto a second row and the set read
-                 as 3 + 1. Given the whole row is four glyphs, the honest fix is
-                 to give it the width rather than to shrink the targets back
-                 below the floor they were just raised to. Two columns from sm
-                 up, where the grid is four auto tracks and this never applied. */
-              <AnimatedContainer
-                key={section.label}
-                delay={0.1 + index * 0.1}
-                className={section.marksOnly ? 'col-span-2 sm:col-span-1' : undefined}
-              >
+              <AnimatedContainer key={section.label} delay={0.1 + index * 0.1}>
                 <h3 className="font-display text-[11px] font-bold tracking-[0.14em] text-ink-strong uppercase">
                   {section.label}
                 </h3>
-                {/* Both of the marks row's offsets are matched to the text
-                    columns rather than eyeballed. The same `mt-4` puts the
-                    glyph centres within a pixel of the first link in every
-                    other column, and the negative margin equals the seat's own
-                    padding, so the marks line up under the heading exactly the
-                    way the labels do. */}
-                <ul
-                  className={
-                    section.marksOnly
-                      ? '-ml-2 mt-4 flex flex-wrap items-center gap-0.5 text-ink-body'
-                      : '-ml-2.5 mt-4 space-y-0.5 text-[13.5px] text-ink-body'
-                  }
-                >
+                <ul className="-ml-2.5 mt-4 space-y-0.5 text-[13.5px] text-ink-body">
                   {section.links.map((link) => (
                     <li key={link.title}>
                       {/* Only in-app routes go through next/link. mailto:, wa.me and
-										    the placeholder social anchors are not routes, and handing
-										    them to the router breaks the mail client / new tab. */}
+										    the contact placeholder are not routes, and handing them to
+										    the router breaks the mail client / new tab. */}
                       {link.href.startsWith('/') ? (
                         <Link href={link.href} className={FOOTER_LINK}>
                           <span className="inline-flex items-center">{link.title}</span>
@@ -303,21 +288,9 @@ export function Footer() {
                           {...(link.href.startsWith('http')
                             ? { target: '_blank', rel: 'noopener noreferrer' }
                             : {})}
-                          className={section.marksOnly ? FOOTER_MARK_LINK : FOOTER_LINK}
+                          className={FOOTER_LINK}
                         >
-                          {section.marksOnly && link.brand ? (
-                            <>
-                              <BrandMark name={link.brand} className="size-[17px] flex-none" />
-                              <span className="sr-only">{link.title}</span>
-                            </>
-                          ) : (
-                            <span className="inline-flex items-center">
-                              {link.brand && (
-                                <BrandMark name={link.brand} className="me-2 size-3.5 flex-none" />
-                              )}
-                              {link.title}
-                            </span>
-                          )}
+                          <span className="inline-flex items-center">{link.title}</span>
                         </a>
                       )}
                     </li>
