@@ -1,7 +1,20 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { ImageResponse } from 'next/og';
 import { BRAND, SHORT_TAGLINE } from '@/content/site';
 import { SERVICE_COUNT } from '@/content/services';
 import { TOKENS } from '@/lib/tokens';
+
+/**
+ * `satori` (the renderer behind `ImageResponse`) can't resolve a `/public`
+ * path at build time, so the mark is inlined as a data URI. The 90x96 copy
+ * in `public/brand/logo-og.png` keeps this well under the 500KB bundle limit
+ * documented for `ImageResponse`; the full-size mark lives at
+ * `public/brand/logo.png` and is used by the header/footer wordmark instead.
+ */
+const logoDataUri = `data:image/png;base64,${readFileSync(
+  join(process.cwd(), 'public/brand/logo-og.png'),
+).toString('base64')}`;
 
 /**
  * The site-wide social preview card, generated at build time.
@@ -48,10 +61,7 @@ export default function OpengraphImage() {
               justifyContent: 'center',
             }}
           >
-            {/* The chess pawn mark, matching the favicon. */}
-            <svg width="34" height="34" viewBox="0 0 64 64" fill={TOKENS.blue600}>
-              <path d="M32 12a7.4 7.4 0 0 0-4.3 13.4c-1.3 1.2-2.2 2.8-2.5 4.6h13.6c-.3-1.8-1.2-3.4-2.5-4.6A7.4 7.4 0 0 0 32 12Zm-8.3 21.6c1.4 4-.2 8.3-3.4 11.4-.6.6-.9 1.4-.9 2.2v1.2h25.2v-1.2c0-.8-.3-1.6-.9-2.2-3.2-3.1-4.8-7.4-3.4-11.4Zm-6.4 18.6h29.4a2 2 0 0 1 2 2V56H15.3v-1.8a2 2 0 0 1 2-2Z" />
-            </svg>
+            <img src={logoDataUri} width={34} height={36} alt="" />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <span style={{ fontSize: 32, fontWeight: 800, color: TOKENS.white, letterSpacing: -0.5 }}>
