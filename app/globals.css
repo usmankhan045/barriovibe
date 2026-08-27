@@ -3155,12 +3155,21 @@
      Below the header's z-50 on purpose. The nav pill is fixed too, and if these
      ever meet on a short viewport the navigation is the one that has to win.
      The bottom inset carries `env(safe-area-inset-bottom)` so it clears the
-     home indicator on an iPhone rather than sitting under it. */
+     home indicator on an iPhone rather than sitting under it.
+
+     `2.75rem` extra, not the bare corner offset: `.u-fab-label` hangs below
+     this box, and `position: fixed` is measured from the VIEWPORT, so on a
+     full-height phone screen the label's own height had nowhere left to go
+     and rendered mostly off the bottom edge. This lifts the whole button —
+     label included — enough to clear it: 1.5rem for the label's own box
+     (10px type, 0.5rem of padding, its shadow) plus the 0.5rem gap above it,
+     rounded up for breathing room. Re-measure if the label's type size or
+     padding changes. */
   .u-fab {
     position: fixed;
     z-index: 40;
     right: clamp(1rem, 3vw, 2rem);
-    bottom: calc(clamp(1rem, 3vw, 2rem) + env(safe-area-inset-bottom, 0px));
+    bottom: calc(clamp(1rem, 3vw, 2rem) + env(safe-area-inset-bottom, 0px) + 2.75rem);
 
     display: grid;
     place-items: center;
@@ -3203,6 +3212,39 @@
   .u-fab:active {
     transform: scale(0.97);
     transition-duration: 90ms;
+  }
+
+  /* The brand tag under the bubble. Absolutely positioned against `.u-fab`
+     itself (already a positioning context, being `position: fixed`) rather
+     than laid out as a second row inside it, so the 56px circle every note
+     above this argues for stays exactly that — a circle — with the tag
+     hanging below it instead of stretching it into a capsule.
+
+     It carries its own opaque surface rather than sitting as bare text on
+     the page, because the button rides over every kind of ground the site
+     has: light bands and the dark coverflow band alike. Text with no ground
+     of its own would read fine on white and vanish crossing onto the dark
+     section a few scrolls later.
+
+     No opacity/visibility rule of its own: `.u-fab`'s own hidden state
+     already takes every descendant with it, opacity being a compositing
+     property rather than one that cascades numerically, so this fades and
+     hides in lockstep with the bubble for free. */
+  .u-fab-label {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    border-radius: var(--radius-pill);
+    background-color: var(--color-white);
+    padding: 0.25rem 0.625rem;
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--color-blue-600);
+    box-shadow: var(--shadow-bar);
   }
 
 

@@ -19,11 +19,17 @@ import { ART, type ArtName } from '@/lib/art';
 export function Container({
   children,
   className,
+  id,
 }: {
   children: ReactNode;
   className?: string;
+  id?: string;
 }) {
-  return <div className={cx('u-container', className)}>{children}</div>;
+  return (
+    <div id={id} className={cx('u-container', className)}>
+      {children}
+    </div>
+  );
 }
 
 export function Section({

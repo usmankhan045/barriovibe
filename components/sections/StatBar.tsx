@@ -32,7 +32,11 @@ export function StatBar() {
   if (!STATS_ENABLED) return null;
 
   return (
-    <Container className="relative z-20 mt-10 lg:-mt-24">
+    // `id="proof"`: the WhatsApp FAB on the home page watches this element to
+    // know when the hero is behind the visitor. See the note at its call
+    // site in app/page.tsx for why StatBar, and not a later section, is what
+    // "after the hero" actually means.
+    <Container id="proof" className="relative z-20 mt-10 lg:-mt-24">
       <div className="u-tile hidden rounded-tile-lg shadow-bar lg:block">
         <dl className="grid grid-cols-2 divide-y divide-line sm:divide-y-0 lg:grid-cols-4 lg:divide-x">
           {STATS.map((stat) => (

@@ -175,7 +175,6 @@ export function ContactForm({ serviceOptions, contact }: ContactFormProps) {
           label="Your name"
           required
           autoComplete="name"
-          placeholder="Ayesha Khan"
           error={fieldErrors.name}
         />
         <Field
@@ -184,7 +183,6 @@ export function ContactForm({ serviceOptions, contact }: ContactFormProps) {
           type="email"
           required
           autoComplete="email"
-          placeholder="you@company.com"
           error={fieldErrors.email}
         />
         <Field
@@ -192,14 +190,12 @@ export function ContactForm({ serviceOptions, contact }: ContactFormProps) {
           label="Phone or WhatsApp"
           type="tel"
           autoComplete="tel"
-          placeholder="+92 300 0000000"
           error={fieldErrors.phone}
         />
         <Field
           name="company"
           label="Company"
           autoComplete="organization"
-          placeholder="Company name"
           error={fieldErrors.company}
         />
         {/* Full width on the last row. The budget select used to sit beside
@@ -227,7 +223,6 @@ export function ContactForm({ serviceOptions, contact }: ContactFormProps) {
           label="Tell us about it"
           required
           rows={6}
-          placeholder="What are you trying to solve, and by when? The more specific you are, the more useful our first reply will be."
           error={fieldErrors.message}
         />
       </div>

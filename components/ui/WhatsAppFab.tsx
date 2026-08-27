@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Icon } from '@/components/icons';
-import { CONTACT } from '@/content/site';
+import { BRAND, CONTACT } from '@/content/site';
 
 /**
  * The floating WhatsApp button, and it arrives at the end of the page.
@@ -133,6 +133,17 @@ export function WhatsAppFab({
       aria-label="Message us on WhatsApp"
     >
       <Icon name="whatsapp" size={26} />
+      {/* The brand tag under the bubble, on the client's instruction. Its own
+          small opaque pill rather than plain text on the page, because this
+          button rides over every kind of ground the site has, light bands and
+          the dark coverflow alike — bare text would lose contrast the moment
+          it crossed onto the dark one. `aria-hidden`: the anchor's own
+          `aria-label` above is already the accessible name for the whole
+          control, so this would only be announced a second time. See
+          `.u-fab-label` in globals.css. */}
+      <span className="u-fab-label" aria-hidden="true">
+        Ask {BRAND.name}
+      </span>
     </a>
   );
 }

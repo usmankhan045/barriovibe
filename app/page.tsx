@@ -82,14 +82,18 @@ export default function HomePage() {
           out here anyway, being a floating link to another app rather than part
           of the page's content.
 
-          It arrives at Disciplines, the third section, which is where this page
-          stops introducing itself and starts naming work. Above that line a
-          visitor has read a headline and four numbers and has nothing to ask
-          about yet; from it down there is always something on screen worth a
-          question. */}
+          It arrives at `#proof` — StatBar, which is pulled up into the hero
+          composition rather than being a section of its own (see the note at
+          its own definition) — so the button reads as available for the
+          entire page below the hero rather than waiting for the third
+          section. Disciplines, the actual third section, was tried first and
+          left the first fifth of the page's height without it: a headline and
+          four numbers is not nothing to ask about, and a visitor scrolling
+          straight through should not have to reach "One agency, three
+          practices" before a question becomes possible. */}
       </main>
 
-      <WhatsAppFab from="#disciplines" />
+      <WhatsAppFab from="#proof" />
     </>
   );
 }

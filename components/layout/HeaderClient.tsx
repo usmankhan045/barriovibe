@@ -609,23 +609,20 @@ export function HeaderClient({ nav }: { nav: NavData }) {
              disciplines, which would otherwise widen past the page gutters.
              `top-2` reproduces the frame's `pt-2`, which an absolutely
              positioned child does not inherit. */
-          className="u-glass absolute top-2 flex w-max max-w-[72rem] overflow-hidden rounded-tile-lg shadow-bar"
+          className="u-glass absolute top-2 flex w-max max-w-[72rem] flex-col overflow-hidden rounded-tile-lg shadow-bar"
         >
           {/* The practice tab strip. There is one trigger in the navbar now
-              ("Services"), so this rail is what picks which practice's
-              columns show to its right — the job the three separate nav
-              triggers used to do. Hovering or focusing a tab swaps the
-              content pane without closing the panel, the same swap the old
-              triggers did when the pointer moved sideways between them.
+              ("Services"), so this row is what picks which practice's
+              columns show below it — the job the three separate nav
+              triggers used to do. A horizontal row across the top of the
+              panel, on the client's instruction, rather than a rail down the
+              left: hovering or focusing a tab still swaps the content below
+              without closing the panel, the same swap the old triggers did
+              when the pointer moved sideways between them.
 
               A real `<Link>`, not a button: clicking a tab still has to reach
               the practice's own page, exactly as the old top-level items did. */}
-          {/* w-64: the rail's own padding plus each tab's internal padding
-              eats 48px before any text starts, and "Marketing & E-commerce"
-              (the longest label) needs ~192px past that to stay on one line.
-              Measured after the fact rather than guessed, because two
-              independent paddings stacking is easy to undercount. */}
-          <div className="flex w-64 flex-none flex-col gap-1 border-r border-line p-3">
+          <div className="flex flex-none items-center gap-1 border-b border-line p-3">
             {nav.columns.map((column) => {
               const tabActive = practice.slug === column.slug;
               return (
@@ -635,7 +632,7 @@ export function HeaderClient({ nav }: { nav: NavData }) {
                   onMouseEnter={() => openMega(column.slug)}
                   onFocus={() => openMega(column.slug)}
                   className={cx(
-                    'flex items-center gap-2.5 rounded-chip px-3 py-2.5 text-[13.5px] font-semibold transition-colors',
+                    'flex items-center gap-2.5 whitespace-nowrap rounded-chip px-3.5 py-2.5 text-[13.5px] font-semibold transition-colors',
                     tabActive
                       ? 'bg-blue-50 text-blue-600'
                       : 'text-ink-strong hover:bg-blue-50/60 hover:text-blue-600',
