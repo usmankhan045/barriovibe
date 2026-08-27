@@ -4,7 +4,7 @@ import type { ComponentProps, ReactNode } from 'react';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'motion/react';
 import { Wordmark } from '@/components/layout/Wordmark';
-import { BRAND, CONTACT } from '@/content/site';
+import { BRAND, CONTACT, SHORT_TAGLINE } from '@/content/site';
 import { COMPANY_LINKS, LEGAL_LINKS, MEGA_MENU_COLUMNS } from '@/content/nav';
 
 /**
@@ -85,11 +85,6 @@ const footerLinks: FooterSection[] = [
       href: link.href,
     })),
   },
-  /* The reference's four columns are all four items deep, and that even
-   * depth is most of why it reads as composed. A literal Legal column here
-   * holds two links and leaves a visible hole in the third slot, so the
-   * contact routes fill it and the two legal links move down beside the
-   * copyright — where a footer's fine print belongs anyway. */
   {
     label: 'Get in touch',
     links: [
@@ -101,6 +96,17 @@ const footerLinks: FooterSection[] = [
         href: '/contact',
       },
     ],
+  },
+  /* Its own column on the client's instruction, not filed beside the
+   * copyright the way it was before. Two links is shorter than the other
+   * three columns, which is a real trade against the "every column reads
+   * the same depth" reasoning this footer used to run on — but a named
+   * "Legal" heading is what was actually asked for, so it stands as its
+   * own category rather than being folded back in for the sake of even
+   * columns. */
+  {
+    label: 'Legal',
+    links: LEGAL_LINKS.map((link) => ({ title: link.label, href: link.href })),
   },
 ];
 
@@ -223,27 +229,19 @@ export function Footer() {
         <div className="grid w-full grid-cols-1 gap-10 xl:grid-cols-[1fr_auto] xl:gap-8">
           <AnimatedContainer>
             <Wordmark />
-            <p className="mt-6 text-[13px] leading-relaxed text-ink-body">
-              © {new Date().getFullYear()} {BRAND.legalName}.
-              <br className="hidden sm:inline" /> All rights reserved.
+            {/* The tagline, not the copyright line, now sits under the
+                lockup — the copyright moved to its own bar at the very
+                bottom of the footer (see the close of this component), and
+                a one-line description of the firm is what a logo usually
+                introduces anyway. */}
+            <p className="mt-4 max-w-[34ch] text-[13.5px] leading-relaxed text-ink-body">
+              {SHORT_TAGLINE}
             </p>
-            <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-[13px] text-ink-body">
-              {LEGAL_LINKS.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="u-tap transition-colors duration-200 hover:text-blue-600"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
 
             {/* The social row. See the note on `SOCIAL_LINKS` for why it sits
                 here, with the brand block, instead of filed as a link column.
                 `-ml-2` matches the seat's own padding so the marks line up
-                under the logo the way the legal links line up above them. */}
+                under the logo the way the tagline above does. */}
             <ul className="-ml-2 mt-5 flex flex-wrap items-center gap-0.5 text-ink-body">
               {SOCIAL_LINKS.map((link) => (
                 <li key={link.title}>
@@ -256,17 +254,17 @@ export function Footer() {
             </ul>
           </AnimatedContainer>
 
-          {/* `auto` rather than a 2fr share: an even split leaves the third
+          {/* `auto` rather than a 2fr share: an even split leaves the fourth
 				    column's text stranded short of the right edge, because each cell
 				    is far wider than its longest label. Sizing the field to its
 				    content and letting the 1fr logo column absorb the slack packs
 				    the columns and lands them flush right, which is the proportion
 				    the reference actually has.
 
-				    `repeat(3,auto)` rather than `grid-cols-3`, for the same reason:
+				    `repeat(4,auto)` rather than `grid-cols-4`, for the same reason:
 				    equal fractions make every column as wide as the widest one — the
-				    email address — which would leave "Company" trailing dead space. */}
-          <div className="grid grid-cols-2 gap-x-10 gap-y-10 sm:grid-cols-[repeat(3,auto)] lg:gap-x-14">
+				    email address — which would leave "Legal" trailing dead space. */}
+          <div className="grid grid-cols-2 gap-x-10 gap-y-10 sm:grid-cols-[repeat(4,auto)] lg:gap-x-14">
             {footerLinks.map((section, index) => (
               <AnimatedContainer key={section.label} delay={0.1 + index * 0.1}>
                 <h3 className="font-display text-[11px] font-bold tracking-[0.14em] text-ink-strong uppercase">
@@ -300,6 +298,19 @@ export function Footer() {
             ))}
           </div>
         </div>
+
+        {/* The copyright bar. Its own row at the absolute bottom of the
+            footer rather than sitting under the logo, on the client's
+            instruction — a border-top separates it from the columns above
+            so it reads as the page's closing line, not a fifth column. */}
+        <AnimatedContainer
+          delay={0.1 + footerLinks.length * 0.1}
+          className="mt-12 border-t border-line pt-6 text-center lg:mt-16"
+        >
+          <p className="text-[13px] text-ink-body">
+            © {new Date().getFullYear()} {BRAND.legalName}. All rights reserved.
+          </p>
+        </AnimatedContainer>
       </div>
     </footer>
   );

@@ -86,6 +86,27 @@ export function HeaderClient({ nav }: { nav: NavData }) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  /**
+   * The sticky wordmark goes fully inert the moment the footer's OWN
+   * lockup scrolls into view. On desktop that is moot — `scrolled` has
+   * already hidden it long before the page reaches its end — but below
+   * `lg` the wordmark carries a scroll-triggered plate instead of fading
+   * out (see the render site), so without this it kept floating over the
+   * footer, sitting directly on top of the second "BarrioVibe" the footer
+   * renders a few dozen pixels below it. One observer on the page's single
+   * `<footer>`, found by tag rather than threaded down as a prop: header
+   * and footer are unrelated siblings in the tree and neither otherwise
+   * needs a reference to the other.
+   */
+  const [footerVisible, setFooterVisible] = useState(false);
+  useEffect(() => {
+    const footer = document.querySelector('footer');
+    if (!footer) return;
+    const observer = new IntersectionObserver(([entry]) => setFooterVisible(!!entry?.isIntersecting));
+    observer.observe(footer);
+    return () => observer.disconnect();
+  }, []);
+
   // Any navigation closes everything, including a client-side route change
   // that does not remount this component.
   //
@@ -276,11 +297,18 @@ export function HeaderClient({ nav }: { nav: NavData }) {
             class on the lockup: fading the Wordmark's own opacity would fade
             the text along with the plate, and the text has to stay solid
             throughout. Same `-z-10`-span-behind-a-lit-element pattern as the
-            nav pill's active seat below. */}
+            nav pill's active seat below.
+
+            The whole lockup goes invisible again once the footer scrolls
+            into view — see `footerVisible` above — because the footer
+            carries its own "BarrioVibe" a short scroll below this one, and
+            a plated logo floating on top of a second, bare one read as a
+            mistake rather than as two sections. */}
         <div
           className={cx(
             'relative isolate justify-self-start transition-[opacity,visibility] duration-200 motion-reduce:transition-none',
             scrolled && 'lg:invisible lg:opacity-0',
+            footerVisible && 'invisible opacity-0',
           )}
         >
           <span

@@ -1,6 +1,6 @@
-import { Fragment } from 'react';
 import { Icon } from '@/components/icons';
 import { Reveal } from './Reveal';
+import { MobileStepRing } from './MobileStepRing';
 import { cx } from '@/lib/cx';
 import type { ProcessStep } from '@/content/differentiators';
 
@@ -39,9 +39,10 @@ import type { ProcessStep } from '@/content/differentiators';
  *
  * The scattered layout needs room for two ~280px columns plus the stagger
  * between them. Below `lg` that arithmetic gets tight against the
- * container's own padding, so the fallback below `lg` is a plain stacked
- * list — full width, no rotation, no path. That is also what a screen
- * reader gets: `role="list"` on the stack, the canvas hidden from it, so the
+ * container's own padding, so the client's own reference layout — a
+ * circular ring of steps with a detail panel underneath — takes over
+ * instead. See MobileStepRing.tsx. That is also what a screen reader gets:
+ * `role="list"` on both the canvas and the ring, one of them hidden, so the
  * four steps are announced once, not twice.
  */
 
@@ -92,47 +93,6 @@ function StepCard({ step }: { step: ProcessStep }) {
   );
 }
 
-/**
- * The phone-only step card. `StepCard` above is untouched and still what the
- * desktop canvas renders; this is a second, dark rendering of the same four
- * fields (number, title, description, tag) for the plain stacked list below
- * `lg`, not a responsive reskin of one shared component.
- *
- * The badge grows from a small corner pin into a lit roundel sitting ON the
- * connecting thread `PinnedSteps` draws between cards, which is what makes
- * the phone list read as one lit path rather than four unrelated notes —
- * the same argument the desktop canvas's own dashed `u-flow-path` makes with
- * room to curve; a phone gets the straight, one-axis version of it. Material
- * is `--grad-glass-card`, the coverflow's own dark blue, so this is the
- * same "beat of light" language `StatBar`'s phone markup uses, not a third
- * dark surface invented for one more section.
- */
-function MobileStepCard({ step }: { step: ProcessStep }) {
-  return (
-    <div
-      className="relative flex flex-col items-center overflow-hidden rounded-tile-lg px-6 pb-7 pt-9 text-center shadow-bar"
-      style={{ backgroundImage: 'var(--grad-glass-card)' }}
-      role="listitem"
-    >
-      <span
-        aria-hidden="true"
-        className="u-glow-badge grid size-12 flex-none place-items-center rounded-full bg-blue-600 text-white"
-      >
-        <Icon name="pin" size={18} />
-      </span>
-
-      <span className="mt-4 font-display text-[1.75rem] font-extrabold leading-none tabular text-blue-200">
-        {step.number}
-      </span>
-      <h3 className="mt-2 font-display text-h3 text-white">{step.title}</h3>
-      <p className="mt-2 text-[14.5px] leading-[1.55] text-white/70">{step.description}</p>
-      <span className="mt-4 inline-flex w-fit items-center rounded-pill border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.08em] text-white">
-        {step.tag}
-      </span>
-    </div>
-  );
-}
-
 export function PinnedSteps({
   steps,
   label,
@@ -172,23 +132,11 @@ export function PinnedSteps({
         })}
       </div>
 
-      {/* Below `lg`: a straight lit thread, dark cards strung on a single
-          line rather than the scattered canvas above. The thread is one
-          short segment per gap rather than one continuous line behind every
-          card, because the cards are `--grad-glass-card` solids: a line
-          drawn behind them would only ever show in the gap anyway, so it is
-          simplest drawn exactly there and nowhere else. */}
-      <div className="flex flex-col lg:hidden" role="list" aria-label={label}>
-        {steps.map((step, i) => (
-          <Fragment key={step.number}>
-            {i > 0 && (
-              <span aria-hidden="true" className="mx-auto h-7 w-px bg-blue-200/40" />
-            )}
-            <Reveal index={i}>
-              <MobileStepCard step={step} />
-            </Reveal>
-          </Fragment>
-        ))}
+      {/* Below `lg`: the ring. See MobileStepRing.tsx — a circular selector
+          with a dashed connecting path, on the client's reference, rather
+          than the scattered canvas's straight-line fallback. */}
+      <div className="lg:hidden">
+        <MobileStepRing steps={steps} label={label} />
       </div>
     </div>
   );

@@ -4258,28 +4258,18 @@
     animation: u-flow-dash 1.6s linear infinite;
   }
 
-  /* ── Mobile glow motif — the stat bar and the process steps, phone only ──
-     Both sections trade their desktop treatment for a dark, lit-thread read
-     below `lg`: a stat or a step as a bead of light rather than a cell in a
-     grid. The dark panel underneath both is `--grad-glass-card` inline at
-     the call site — the same material the coverflow cards already use — so
-     this is not a second dark surface being invented, just the existing one
-     reused on two more elements. These two rules are the part that IS new:
-     the glow itself, shared so a stat's dot and a step's badge read as one
-     recipe rather than two. */
-  .u-glow-dot {
-    display: block;
-    border-radius: var(--radius-pill);
-    background-color: var(--color-blue-200);
-    box-shadow:
-      0 0 0 5px color-mix(in srgb, var(--color-blue-200) 22%, transparent),
-      0 0 16px 3px color-mix(in srgb, var(--color-blue-400) 70%, transparent);
-  }
-
-  .u-glow-badge {
-    box-shadow:
-      0 0 0 6px color-mix(in srgb, var(--color-white) 10%, transparent),
-      0 0 22px 4px color-mix(in srgb, var(--color-blue-400) 55%, transparent);
+  /* The mobile step ring's detail panel, crossfading in on every tap. A
+     `key`-driven remount in MobileStepRing.tsx is what restarts it — no
+     animation library for one four-state fade. */
+  @keyframes u-step-fade {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   /* Edges fade out instead of hard-clipping. */
