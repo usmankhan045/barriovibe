@@ -25,6 +25,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/work', priority: 0.6, changeFrequency: 'monthly' },
     { path: '/blog', priority: 0.5, changeFrequency: 'monthly' },
     { path: '/contact', priority: 0.7, changeFrequency: 'yearly' },
+    /* The salary calculator. Ranked with the service pages rather than below
+       them: it is a page people search for by name, and its rates change with
+       each Finance Act, which is what the monthly frequency is saying. */
+    { path: '/tools/salary-tax', priority: 0.7, changeFrequency: 'monthly' },
     { path: '/privacy', priority: 0.2, changeFrequency: 'yearly' },
     { path: '/terms', priority: 0.2, changeFrequency: 'yearly' },
   ];

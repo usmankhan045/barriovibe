@@ -245,6 +245,11 @@ export const FINANCE_TAX_SERVICES: Service[] = [
     related: ['sales-tax-registration-filing', 'financial-accounting', 'corporate-secretarial-compliance'],
     faqs: [
       {
+        question: 'Can I work out what I will owe before contacting you?',
+        answer:
+          'For salary, yes. Our salary tax calculator at /tools/salary-tax runs the current FBR slabs and shows the working slab by slab, including the allowances and credits most salaried people never claim. It is an estimate on salary income alone, so it will not account for other income, tax already withheld by your employer, or anything that needs your filing history. For everything past that, the position review is where we tell you the number.',
+      },
+      {
         question: 'Why does being on the Active Taxpayer List matter?',
         answer:
           'Non-filers pay materially higher withholding rates on banking transactions, vehicle registration, property transfers and dividends. For most businesses the additional withholding over a year exceeds the cost of simply filing. Filing is usually the cheaper option even when no tax is payable.',

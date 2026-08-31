@@ -12,7 +12,8 @@
     "art": "node scripts/extract-art.mjs",
     "check:tokens": "node scripts/check-tokens.mjs",
     "check:content": "tsx scripts/check-content.ts",
-    "verify": "pnpm typecheck && pnpm lint && pnpm check:tokens && pnpm check:layout && pnpm check:content",
+    "check:tax": "tsx scripts/check-tax.ts",
+    "verify": "pnpm typecheck && pnpm lint && pnpm check:tokens && pnpm check:layout && pnpm check:content && pnpm check:tax",
     "check:layout": "node scripts/check-layout.mjs",
     "art:steps": "node scripts/fetch-step-art.mjs"
   },

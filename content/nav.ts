@@ -79,9 +79,22 @@ export const PRIMARY_NAV: NavLink[] = [
   { label: 'Blog', href: '/blog' },
 ];
 
+/**
+ * The footer's second column.
+ *
+ * "Salary Tax Calculator" sits with these rather than in the services columns
+ * because it is not a service: it is a free tool, it is the one page here a
+ * visitor might arrive at without wanting to hire anybody, and putting it
+ * among the forty-four purchasable things would misrepresent it in both
+ * directions. The footer is also the only site-wide link it has, the top nav
+ * being a fixed five items the client set (see PRIMARY_NAV above), so this
+ * entry is what keeps the page reachable from everywhere rather than only
+ * from the two Finance & Tax pages that link to it in their own copy.
+ */
 export const COMPANY_LINKS: NavLink[] = [
   { label: 'About', href: '/about' },
   { label: 'Work', href: '/work' },
+  { label: 'Salary Tax Calculator', href: '/tools/salary-tax' },
   { label: 'Contact', href: '/contact' },
 ];
 
