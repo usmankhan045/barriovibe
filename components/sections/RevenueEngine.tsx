@@ -11,7 +11,7 @@ import { REVENUE_ENGINE } from '@/content/revenueEngine';
 
 /**
  * "We build the demand, then take the order": Performance Marketing &
- * E-commerce, all five services named on the home page.
+ * E-commerce, all six services named on the home page.
  *
  * ## Where it sits and why the page needed it
  *
@@ -32,23 +32,30 @@ import { REVENUE_ENGINE } from '@/content/revenueEngine';
  *     SoftwareShowcase      this                    FeaturedServices
  *     ────────────────      ────────────────────    ─────────────────
  *     grey band             the canvas              the canvas
- *     six glass cards       five cards in a rail    six rows in an index
+ *     six glass cards       six cards in a rail     six rows in an index
  *     heading above         heading above           heading beside, and
  *                                                     it stays
  *     a picture per         a card per service      a line of type per
  *       service                                       service
  *
  * All three are on light ground, so the ARRANGEMENT is what tells them apart:
- * a card grid, a card rail, and an index with no card in it at all.
+ * a capped card grid, a full-width card rail, and an index with no card in it
+ * at all. All three now hold six things, which is a coincidence of the content
+ * rather than a rule, and it is why the arrangement has to carry the whole
+ * difference: the showcase caps at `max-w-6xl` and puts a picture on every
+ * card, this runs the full container and puts a line of type on every card,
+ * and FeaturedServices draws no card at all.
  *
  * Note what is no longer in that table: a row for what each one does under a
  * pointer. This section and SoftwareShowcase are now made of the same glass and
  * carry the same drop, and that is deliberate. See "The material" below.
  *
- * The array order still matters and is still the funnel: three services that
+ * The array order still matters and is still the funnel: four services that
  * build demand, then two that take the order it produces. It is read left to
- * right rather than drawn as a descent; the note on `.u-rev-card` in globals.css
- * is what happened to the staircase that used to say it a second time.
+ * right and then down; the note on `.u-rev-card` in globals.css is what
+ * happened to the staircase that used to say it a second time, and the sixth
+ * card is what settled it, since a staircase only reads across a single row
+ * and the row wraps at three.
  *
  * ## The material
  *
@@ -60,7 +67,7 @@ import { REVENUE_ENGINE } from '@/content/revenueEngine';
  * same moving boundary that drew the fill. The trick worked. It was the wrong
  * thing to spend it on, for a reason that is about the page rather than about
  * the card: a card that turns solid blue is a card announcing itself, and these
- * five are here to name services and hand you to them. Five announcements in a
+ * six are here to name services and hand you to them. Six announcements in a
  * row, one screen after a section that does something else entirely, made the
  * two read as two different sites.
  *
@@ -74,7 +81,7 @@ import { REVENUE_ENGINE } from '@/content/revenueEngine';
  * The lift, the press and the rim sweep are CSS on `:hover` / `:focus-visible`
  * from the material itself, and the arrival is the site's existing shared
  * reveal observer. The drop is components/ui/LiquidLens.tsx: one pointer
- * listener on the rail, so all five cards below stay Server Components. See the
+ * listener on the rail, so all six cards below stay Server Components. See the
  * REVENUE ENGINE block in globals.css.
  */
 
@@ -85,7 +92,7 @@ import { REVENUE_ENGINE } from '@/content/revenueEngine';
  *
  * This was a line of type, "Meta · Google · TikTok · LinkedIn", and at card
  * width four names wrapped onto a second line and left the row ragged across
- * five cards. Names are also the weakest form the claim can take: a visitor
+ * the cards. Names are also the weakest form the claim can take: a visitor
  * scanning for whether these people run Daraz recognises the mark a beat before
  * they read the word.
  *
@@ -146,9 +153,9 @@ function CardFace({
   return (
     <>
       {/* The numeral that used to sit opposite this tag is gone with the
-          descent it numbered. It ranked nothing: the five services are a
-          funnel, not a leaderboard, and five cards each wearing a number is
-          five invitations to read them as scored. */}
+          descent it numbered. It ranked nothing: the six services are a
+          funnel, not a leaderboard, and six cards each wearing a number is
+          six invitations to read them as scored. */}
       <span className="u-rev-card__tag">
         <Icon name={icon} size={13} className="flex-none" />
         {discipline}
@@ -224,14 +231,14 @@ export function RevenueEngine() {
 
         <Reveal index={1}>
           <p className="text-body-lg text-ink-body mt-7 max-w-[54ch]">
-            Paid campaigns, organic social, monetization, and the store the money
-            lands in. All of it measured against what a customer costs to acquire
-            and what that customer is worth.
+            Paid campaigns, your whole social presence, monetization, and the
+            store the money lands in. All of it measured against what a customer
+            costs to acquire and what that customer is worth.
           </p>
         </Reveal>
 
         {/* <LiquidLens> IS the rail rather than a wrapper around it: it renders
-            the `ul` itself, so the grid, its five list items and the listener
+            the `ul` itself, so the grid, its six list items and the listener
             are all one element deep. See the `as` prop for why it can. */}
         <LiquidLens as="ul" className="u-rev-rail">
           {REVENUE_ENGINE.map((entry, i) => (
@@ -243,16 +250,16 @@ export function RevenueEngine() {
 
         {/* The two discipline hubs, not a third "all services" button. There is
             already one of those in the section below, and a visitor who has
-            just read five cards from two disciplines wants the discipline, not
+            just read six cards from two disciplines wants the discipline, not
             the catalogue. */}
         {/* Buttons rather than the arrow links they were, and paired the way
             every other pair on this page is paired: blue then chrome. Two
-            arrow links after five cards read as a footnote to the cards, which
+            arrow links after six cards read as a footnote to the cards, which
             understated them. They are the only way out of this section, and the
             practice they name is the one the section is about.
 
             The order is the ranking. Growth & Marketing is the discipline the
-            first three cards belong to, so it is the blue one; E-commerce &
+            first four cards belong to, so it is the blue one; E-commerce &
             Marketplaces owns the last two and takes chrome. Neither is a lesser
             link, but a pair of blue buttons is two primary actions, which is
             one more than a section can have. */}

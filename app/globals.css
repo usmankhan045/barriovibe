@@ -954,7 +954,7 @@
      `.u-glass--card` rather than inside either of them:
 
        SoftwareShowcase   six cards, each carrying a white mockup pane
-       RevenueEngine      five cards, each carrying ink copy on white
+       RevenueEngine      six cards, each carrying ink copy on white
 
      Everything below is the material. What a section then does with a pointer
      on it belongs in that section's own block.
@@ -3506,7 +3506,7 @@
      and paint. `clip-path` is the exception and it is a deliberate one. It is
      the only property that can move a boundary ACROSS content, which is the
      whole effect: the copy inverts along the edge of the fill instead of
-     cross-fading behind it. Five cards, one at a time, on hover. */
+     cross-fading behind it. One card at a time, on hover. */
   .u-rev {
     position: relative;
     /* The dot field sits at z-index -1 and would fall behind the page
@@ -3553,19 +3553,36 @@
   }
 
   /* ── The rail ───────────────────────────────────────────────────────────
-     Five cards, three arrangements.
+     Six cards, three arrangements.
 
        base    one column. The step would be a vertical gap, which is a gap.
-       sm      two columns, and the fifth spans both. Four cards and a widow is
-               the arrangement a five-item grid falls into by default and it
-               reads as one card left over; spanning it makes it the row the
-               list lands on.
-       xl      five columns in one row, stepping downward.
+       sm      two columns, three rows.
+       xl      three columns, two rows.
 
-     There is no three-column state on purpose. Five into three is 3 + 2, which
-     is a shape, but it is SoftwareShowcase's shape one section earlier at a
-     slightly different width. Two columns holds until there is room for all
-     five. */
+     ── What changed when the sixth card arrived, and why it got simpler ──
+
+     This was five cards, and five is an awkward number in a grid. Two columns
+     left a widow, so the fifth card was spanned across both tracks with a
+     `:last-child` rule, and `xl` then needed a second `:last-child` rule to
+     undo the first because a media query adds no specificity. Five across also
+     ran the cards down to about 245px, narrow enough that four of the five
+     titles wrapped and one did not, which is what `--rev-card__title`'s
+     `min-height` was propping up.
+
+     Six divides by both, so all three of those rules are gone rather than
+     re-tuned. There is no widow to span at `sm`, nothing to undo at `xl`, and
+     at three across in a 1280px container the cards are wide enough that no
+     title wraps, so nothing needs a reserved second line.
+
+     ── Three columns, and the section it used to avoid ──
+
+     The old note here refused a three-column state because 3 + 2 was
+     SoftwareShowcase's shape one section earlier. Six makes it 3 + 3, which is
+     a filled block rather than that section's block-and-remainder, and the two
+     are at visibly different measures: the showcase caps at `max-w-6xl` and
+     this runs the full container. What still separates the sections is what
+     the component note says separates them, a picture per service against a
+     line of type per service, and that survives the column count matching. */
   .u-rev-rail {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -3577,36 +3594,12 @@
     .u-rev-rail {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-
-    .u-rev-rail > li:last-child {
-      grid-column: 1 / -1;
-    }
   }
 
   @media (width >= 80rem) {
     .u-rev-rail {
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 1.125rem;
-    }
-
-    /* `:last-child` and not `> li`. The two-column rule above spans the fifth
-       card across both tracks, and it is the more specific selector, so a
-       plain `> li { grid-column: auto }` here loses to it and leaves a row of
-       four with a full-width card underneath. */
-    .u-rev-rail > li:last-child {
-      grid-column: auto;
-    }
-
-    /* Two lines of height whether the title needs two or not. At five across,
-       four of the five titles wrap and one does not, so without this the notes
-       under them start on two different baselines and the row reads as being
-       slightly out of register with itself.
-
-       Only here. Below `xl` the cards are wide enough that every title is one
-       line, and reserving a second would open a visible gap under all five for
-       no reason. */
-    .u-rev-card__title {
-      min-height: 2.9rem;
     }
   }
 
@@ -3628,31 +3621,31 @@
      Two reasons, and the second is the one that decided it:
 
        IT SAID THE WRONG THING. A card that turns solid blue on hover is a card
-       announcing itself. These five name services and hand you to them; the
-       announcement was louder than the content and it happened five times in a
+       announcing itself. These six name services and hand you to them; the
+       announcement was louder than the content and it happened six times in a
        row across one screen.
        IT WAS A THIRD LANGUAGE. The section above lifts glass cards under a
        travelling drop. Doing something unrelated here made the two read as two
        sites. Sharing the material and the drop is what makes them read as one
        page with two arrangements on it, which is the argument at the top of the
-       component: the ARRANGEMENTS differ, five stepped cards against a 3×2
-       grid, and that is difference enough.
+       component: the ARRANGEMENTS differ, a full-width rail of six against a
+       capped 3×2 of pictures, and that is difference enough.
 
      ── The row is level, and the descent it used to have is worth recording ──
 
-     At `xl` each card sat 20px lower than the one before it, so the row
-     descended left to right: the funnel drawn, three services that build demand
-     and then two that take the order. The idea was good and it never once
-     shipped. The offset lived on `--rev-offset`, which the base `.u-rev-card`
-     rule set to 0 and the `xl` rule set to the step, both at one class of
-     specificity, and a media query adds none: the later rule won at every
-     width, so five cards that were meant to step sat in a straight line for the
-     life of the section.
+     Back when the row was five across at `xl`, each card was meant to sit 20px
+     lower than the one before it, so the row descended left to right: the
+     funnel drawn, the services that build demand and then the ones that take
+     the order. The idea was good and it never once shipped. The offset lived on
+     `--rev-offset`, which the base `.u-rev-card` rule set to 0 and the `xl`
+     rule set to the step, both at one class of specificity, and a media query
+     adds none: the later rule won at every width, so the cards that were meant
+     to step sat in a straight line for the life of the section.
 
-     It is deliberate now rather than accidental. A staircase of five is a
-     composition that has to be right at every width to be worth anything, and
-     what it bought was a diagonal fighting the one thing this section is for,
-     which is five cards you can compare at a glance. `--rev-step`,
+     It is deliberate now rather than accidental, and the sixth card settled it
+     for good: a staircase only reads across a single row, and the row wraps at
+     three. What the diagonal bought was a shape fighting the one thing this
+     section is for, which is cards you can compare at a glance. `--rev-step`,
      `--rev-offset`, the `--i` the component wrote and the bottom margin that
      compensated for the descent are all gone with it.
 
@@ -3664,9 +3657,12 @@
     display: block;
     height: 100%;
     min-height: 15rem;
-    /* One notch tighter than `.u-glass--card`'s --radius-tile-lg. Five cards
-       across is a smaller card than three, and a 24px radius on it starts to
-       eat into the corner of the copy. */
+    /* One notch tighter than `.u-glass--card`'s --radius-tile-lg. This card
+       carries less inside it than the showcase's does, and a 24px radius on a
+       body of two short lines starts to eat into the corner of the copy. It
+       was set when the row was five across and the card was genuinely narrow;
+       it is kept at three across because the reason above outlives the width
+       that first prompted it. */
     border-radius: var(--radius-tile);
   }
 
@@ -3710,11 +3706,11 @@
   }
 
   /* Pinned to the bottom of the card by `margin-top: auto`, which is what puts
-     all five footers on one line across a row of cards whose titles wrap to
-     different numbers of lines. The hairline over it is the same mark the
-     showcase card draws over "Explore", and it is what turns five separate
-     footers into one band running across the section. Blue rather than
-     --color-line: on a white glass body every other line already is. */
+     every footer in a row on one line across cards whose notes run to different
+     numbers of lines. The hairline over it is the same mark the showcase card
+     draws over "Explore", and it is what turns six separate footers into one
+     band running across the section. Blue rather than --color-line: on a white
+     glass body every other line already is. */
   .u-rev-card__foot {
     display: flex;
     align-items: center;
@@ -3739,7 +3735,7 @@
      the logos a reward for hovering when they are one of the two things on the
      card a visitor is actually scanning for. The other is the title, and that
      is ink at rest too. A row of marks is a claim about what the work runs on,
-     so it is stated once, at full weight, on all five cards at once.
+     so it is stated once, at full weight, on all six cards at once.
 
      Nothing here changes on hover any more, which is why there is no transition
      to go with the colour: the card's own lift, its rim sweep and the drop are

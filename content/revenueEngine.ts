@@ -4,16 +4,28 @@
  * ## Why this is the whole practice and not a shortlist
  *
  * content/featuredServices.ts is a shortlist because Corporate & Advisory runs
- * to twenty-six services and six is a choice. This practice has five. Naming all
- * five costs one extra card and removes the question a shortlist always
+ * to twenty-six services and six is a choice. This practice has six. Naming all
+ * six costs no choice at all and removes the question a shortlist always
  * invites, which is what got left out.
+ *
+ * Keep it that way. The moment a service in this practice is left off this
+ * array the section becomes a shortlist without saying so, and the heading
+ * above it ("We build the demand, then take the order") promises the whole
+ * funnel rather than a selection from it.
  *
  * ## The order is the funnel
  *
- * Demand first, then the storefront the demand arrives at: three Growth &
+ * Demand first, then the storefront the demand arrives at: four Growth &
  * Marketing services, then two E-commerce ones. The section renders them left
  * to right in this order, so reading order is the funnel. Reordering this array
  * reorders the funnel, which is the one thing here that is not free to change.
+ *
+ * The two social rows sit next to each other on purpose, presence before
+ * management, because they are the pair a visitor has to tell apart and side
+ * by side is where the two `note` lines do that work. Their scopes are written
+ * to differ for the same reason: Reddit and Quora appear on the presence card
+ * and nowhere else in this array, which is the fastest statement of what the
+ * broader service adds.
  *
  * The row used to descend as well, one card lower than the last, saying the
  * same thing a second way. It is level now; the note on `.u-rev-card` in
@@ -61,6 +73,11 @@ export const REVENUE_ENGINE: RevenueService[] = [
     slug: 'performance-marketing',
     note: 'Full-funnel campaigns, with the conversion tracking proven before the budget moves.',
     scope: ['Meta', 'Google', 'TikTok', 'LinkedIn'],
+  },
+  {
+    slug: 'social-presence-management',
+    note: 'Every account you have anywhere, found, consolidated and run as one presence.',
+    scope: ['Instagram', 'TikTok', 'Reddit', 'Quora'],
   },
   {
     slug: 'social-media-management',

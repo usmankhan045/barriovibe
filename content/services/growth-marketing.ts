@@ -9,6 +9,27 @@ import type { Service } from '../types';
  * or impressions, which is the discipline's whole argument and should survive
  * any future edit. Monetization is written to set expectations honestly:
  * approval is the platform's decision and nobody can guarantee it.
+ *
+ * ## Two social services, and the line between them
+ *
+ * `social-media-management` and `social-presence-management` are deliberately
+ * both here, and a visitor who cannot tell them apart will buy neither. The
+ * distinction is scope of custody, not effort:
+ *
+ *   MANAGEMENT   the platforms you have already decided to be on, run well.
+ *                You name the three or four that matter, we produce and
+ *                publish to them and answer the comments.
+ *   PRESENCE     the entire surface your business occupies online, owned.
+ *                That adds the accounts nobody remembers making, the ones
+ *                somebody else made in your name, the community platforms
+ *                (Reddit, Quora, Discord) where your reputation is being
+ *                decided by people who have not reached your site yet, and the
+ *                profiles that answer a search before your homepage does.
+ *
+ * Each one's FAQ states that line in the visitor's own words, and they say the
+ * same thing. If either scope is ever edited, edit both FAQs with it, because
+ * two service pages disagreeing about where the boundary sits is worse than no
+ * boundary at all.
  */
 export const GROWTH_SERVICES: Service[] = [
   {
@@ -59,8 +80,13 @@ export const GROWTH_SERVICES: Service[] = [
       'Monthly performance report with commentary and next actions',
     ],
     documents: [],
-    related: ['performance-marketing', 'platform-monetization', 'chatbot-development'],
+    related: ['social-presence-management', 'performance-marketing', 'chatbot-development'],
     faqs: [
+      {
+        question: 'How is this different from Presence Management?',
+        answer:
+          'This runs the platforms you have already decided to be on. You name the three or four that matter, we produce the content, publish it and answer the comments. Presence Management takes custody of everything else too: the accounts nobody remembers making, the ones somebody else made in your name, the Reddit and Quora threads shaping your reputation with people who have not reached your site yet, and the Google Business Profile that answers a search before your homepage does. If you can already list every account that exists in your name, this is the service you want.',
+      },
       {
         question: 'How many posts per month?',
         answer:
@@ -81,6 +107,103 @@ export const GROWTH_SERVICES: Service[] = [
       title: 'Social Media Management Services',
       description:
         'Full social media management across Instagram, Facebook, LinkedIn, TikTok, YouTube and X: strategy, content, publishing and community.',
+    },
+  },
+
+  {
+    slug: 'social-presence-management',
+    pillar: 'growth-marketing',
+    title: 'Social Media Presence Management',
+    navLabel: 'Presence Management',
+    oneLiner:
+      'Every account you have anywhere, run as one presence: the networks, the forums, the video platforms, the review sites and the search profiles.',
+    intro:
+      'Most businesses do not have a social media problem, they have a sprawl problem. There is an Instagram someone posts to, a LinkedIn nobody touches, a TikTok that was tried once, a Reddit thread going unanswered, a Quora question ranking above your own site, and a Google Business Profile with a competitor’s photo on it. We take custody of the whole surface: every platform your audience uses, run to one strategy, one voice and one set of numbers, with the accounts still registered to you.',
+    icon: 'users',
+    included: [
+      'A presence audit: every account that exists, every one that should, every one impersonating you, and every profile you have lost access to',
+      'Account recovery, consolidation and verification, with dead and duplicate profiles closed down',
+      'One brand book for social: voice, visual direction, bios, handles and link structure, applied identically everywhere',
+      'Short-form video for Instagram Reels, TikTok and YouTube Shorts, cut separately for each platform rather than reposted with the watermark on',
+      'Feed, story and carousel content for Instagram, Facebook, LinkedIn, X, Pinterest and Threads',
+      'Community platforms handled properly: Reddit answers that respect the subreddit rules, Quora answers written to rank, and Discord or Facebook Group moderation where you run one',
+      'Google Business Profile and review platforms kept current, with every review answered',
+      'Daily inbox and comment management across every platform, with an escalation path for complaints',
+      'Listening and reputation monitoring on brand mentions, competitor activity and the questions your market keeps asking',
+      'One monthly report covering every platform together, with what to keep, cut and test next',
+    ],
+    audience: [
+      'Businesses with accounts scattered across platforms',
+      'Founders replacing an in-house social hire',
+      'Brands with a reputation problem online',
+    ],
+    steps: [
+      {
+        title: 'Find everything',
+        description:
+          'We inventory every profile carrying your name, including the ones nobody remembers making and the ones somebody else made. You get the full list with access status against each, which is usually the first time it has existed on one page.',
+      },
+      {
+        title: 'Consolidate and set the standard',
+        description:
+          'Access recovered, duplicates closed, handles and bios aligned, and the voice and visual rules written down. Nothing goes out until the same brand is showing up on all of them.',
+      },
+      {
+        title: 'Run it daily',
+        description:
+          'Content produced and published to the agreed cadence per platform, comments and messages answered every working day, mentions monitored, and reviews and community threads handled as they appear.',
+      },
+      {
+        title: 'Report and reset',
+        description:
+          'One monthly review across the whole presence rather than a report per platform, and the next cycle shaped by what earned attention instead of by what was planned.',
+      },
+    ],
+    deliverables: [
+      'A written presence audit listing every account, its status and its access',
+      'A social brand book covering voice, visuals, bios and handles',
+      'A monthly content calendar approved before anything publishes',
+      'All designed graphics and edited video, source files included',
+      'A monthly cross-platform report with commentary and next actions',
+    ],
+    documents: [],
+    related: ['social-media-management', 'performance-marketing', 'web-development'],
+    faqs: [
+      {
+        question: 'How is this different from Social Media Management?',
+        answer:
+          'Scope, and who holds the problem. Social Media Management runs the platforms you have chosen to be on and posts to them well. This owns the entire surface your business occupies online, which includes the profiles you forgot, the review sites you have never logged into, the Reddit and Quora threads deciding your reputation with people who have not reached your site yet, and the Google Business Profile that answers a search before your homepage does. If you know which three platforms matter and want them run, take the management service. If nobody in your business can currently list every account that exists in your name, this is the one.',
+      },
+      {
+        question: 'Which platforms are actually covered?',
+        answer:
+          'The networks: Instagram, Facebook, LinkedIn, TikTok, X, YouTube, Pinterest, Threads and Snapchat. The community and knowledge platforms: Reddit, Quora and Discord, plus Facebook and LinkedIn Groups. The profiles that answer a search: Google Business Profile, Trustpilot and the review sites specific to your sector. Which of them you should be on is the audit’s job, and the honest answer for most businesses is fewer than they expect. Being absent from a platform is a decision; being half-present on it is a liability.',
+      },
+      {
+        question: 'Reddit bans marketing. How do you post there?',
+        answer:
+          'By not marketing. Reddit is run by moderators who remove promotional accounts on sight, and a brand that arrives with a campaign gets the account banned and sometimes the domain blocked site-wide. What works is answering questions in the subreddits your customers are already in, from an account with a history, disclosing who you are, and linking only where a link genuinely answers the question. It is slower than anything else in this scope and it is the channel most likely to be read by someone comparing you to a competitor. We will also tell you when a subreddit is not worth entering at all.',
+      },
+      {
+        question: 'What happens to the accounts we cannot get into?',
+        answer:
+          'We work through the platform recovery routes with you, which need documents from your side: the business registration, a domain email on the brand, and in some cases a signed letter. Where recovery fails, the options are a new profile with the old one reported for impersonation, or leaving it dormant and outranking it. We tell you which is realistic per platform rather than promising every account back.',
+      },
+      {
+        question: 'Do you post using AI?',
+        answer:
+          'We use AI in the workflow, for research, first drafts, editing and scheduling, and a person approves everything that publishes and writes every reply that matters. Unreviewed AI in a comment section is how brands end up screenshotted, and on Reddit and Quora it is also how accounts get removed. Your calendar states what is produced how, so there is nothing to discover later.',
+      },
+      {
+        question: 'Who owns the accounts?',
+        answer:
+          'You do, without exception. Every profile stays registered to your business on your own email and we work through delegated access, so ending the engagement is a permissions change and not a handover negotiation. Source files for all graphics and video are yours and handed over on request.',
+      },
+    ],
+    seo: {
+      title: 'Social Media Presence Management',
+      description:
+        'Your whole online presence run as one: Instagram, TikTok, LinkedIn, YouTube, Reddit, Quora and Google Business Profile, with community and reviews handled.',
     },
   },
 
