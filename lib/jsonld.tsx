@@ -37,6 +37,7 @@ export function organizationSchema() {
       '@type': 'PostalAddress',
       streetAddress: CONTACT.address.line1,
       addressLocality: CONTACT.address.city,
+      addressRegion: 'Khyber Pakhtunkhwa',
       addressCountry: 'PK',
     },
     areaServed: { '@type': 'Country', name: 'Pakistan' },

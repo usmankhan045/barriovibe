@@ -37,7 +37,9 @@ const SKIP_DIRS = new Set(['node_modules', '.next', '.git', 'out', 'public', 'as
  *
  * tokens.css is the source of truth. The mirror restates a few of its values
  * for a context that cannot read CSS at all:
- *   • lib/tokens.ts — meta theme-color, next/og image generation
+ *   • lib/tokens.ts — meta theme-color, next/og image generation, and the
+ *     colours lib/email/templates.ts inlines (email clients support neither
+ *     custom properties nor stylesheets)
  *
  * The favicon used to be a second mirror (app/icon.svg, a gradient built from
  * these same hex values). It is now app/icon.png, a raster export of the

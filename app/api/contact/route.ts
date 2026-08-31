@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { leadSchema } from '@/lib/leads.server';
 import { LEAD_RULES, type LeadResult } from '@/lib/leads';
+import { SERVICES } from '@/content/services';
+import { autoReplyEmail, notificationEmail } from '@/lib/email/templates';
+import { sendMail, isMailConfigured, MAIL_TARGETS } from '@/lib/email/mailer';
 
 /**
  * The only server surface on the site. Every page is static HTML; this one
@@ -156,5 +159,85 @@ export async function POST(request: Request) {
     );
   }
 
+  // ── Notify, and acknowledge ──────────────────────────────────────────────
+  //
+  // Deliberately AFTER the insert and deliberately not allowed to fail the
+  // request. The database row is the durable record of the enquiry; email is
+  // how we find out about it quickly. If SMTP is down, the lead is still
+  // captured and still visible in Supabase, and telling the visitor their
+  // enquiry failed would be a lie that costs us the lead.
+  //
+  // The two sends run concurrently because neither depends on the other, and
+  // a visitor waiting on a spinner should not pay for two sequential SMTP
+  // round trips.
+  await sendLeadEmails(lead);
+
   return NextResponse.json<LeadResult>({ ok: true });
+}
+
+/** Resolve the stored slug to the title a human recognises. */
+function serviceTitle(slug: string | undefined): string | undefined {
+  if (!slug) return undefined;
+  if (slug === 'not-sure') return 'Not sure yet';
+  return SERVICES.find((s) => s.slug === slug)?.title;
+}
+
+async function sendLeadEmails(lead: {
+  name: string;
+  email: string;
+  phone?: string;
+  company?: string;
+  service?: string;
+  message: string;
+  sourcePath?: string;
+}): Promise<void> {
+  if (!isMailConfigured()) {
+    // Loud, because in production this means enquiries are arriving and
+    // nobody is being told. The lead is safe in the database either way.
+    console.warn('[contact] SMTP not configured: lead saved, no email sent.');
+    return;
+  }
+
+  const fields = {
+    name: lead.name,
+    email: lead.email,
+    phone: lead.phone || undefined,
+    company: lead.company || undefined,
+    service: serviceTitle(lead.service),
+    message: lead.message,
+    sourcePath: lead.sourcePath || undefined,
+  };
+
+  const notify = notificationEmail(fields, { submittedAt: new Date() });
+  const reply = autoReplyEmail(fields);
+
+  const [notified, replied] = await Promise.all([
+    sendMail({
+      to: MAIL_TARGETS.notifyTo,
+      subject: notify.subject,
+      html: notify.html,
+      text: notify.text,
+      // So that hitting reply in Gmail writes to the enquirer, not to
+      // ourselves. This is the single most useful line in this function.
+      replyTo: `${lead.name} <${lead.email}>`,
+    }),
+    sendMail({
+      to: `${lead.name} <${lead.email}>`,
+      subject: reply.subject,
+      html: reply.html,
+      text: reply.text,
+      headers: {
+        // Marks this as machine-generated so that an out-of-office or another
+        // autoresponder on their side does not reply to it and start a loop.
+        // Auto-Submitted is the RFC 3834 header; the X- ones are what
+        // Microsoft and older systems actually honour.
+        'Auto-Submitted': 'auto-replied',
+        'X-Auto-Response-Suppress': 'All',
+        Precedence: 'auto_reply',
+      },
+    }),
+  ]);
+
+  if (!notified) console.error('[contact] notification email failed for', lead.email);
+  if (!replied) console.error('[contact] auto-reply failed for', lead.email);
 }

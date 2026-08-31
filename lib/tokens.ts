@@ -7,6 +7,11 @@
  *   • `viewport.themeColor` in app/layout.tsx — a meta tag value
  *   • Open Graph images generated with next/og at build time
  *   • Any inline SVG needing a literal fill in a generated image
+ *   • lib/email/templates.ts. Email clients support neither custom properties
+ *     nor stylesheets, so every colour in a message is an inline literal. That
+ *     is the whole reason the EMAIL group below exists: without it those hex
+ *     values would be typed out in the template, where nothing would keep them
+ *     in step with the site.
  *
  * ┌──────────────────────────────────────────────────────────────────────┐
  * │  This is the ONLY other file allowed to hold hex values, and         │
@@ -27,6 +32,21 @@ export const TOKENS = {
   canvas: '#fefefe',
   surface: '#ffffff',
   white: '#ffffff',
+
+  /* ── Email only ──────────────────────────────────────────────────────────
+     The subset of the palette the mail templates need as literals. Same
+     values as the matching custom properties in app/tokens.css, and
+     `pnpm check:tokens` fails the build if any of them stops matching. */
+  /** --color-silver-700: body copy, 5.01:1. */
+  body: '#67707e',
+  /** --color-line: hairline borders. */
+  line: '#e9eaed',
+  /** --color-band: the alternating section fill the email uses as its ground. */
+  band: '#f7f8f9',
+  /** --color-blue-50: the response-time panel fill. */
+  blue50: '#ecf1fe',
+  /** --color-blue-100: masthead sub-line on the gradient. */
+  blue100: '#d4dffc',
 } as const;
 
 /** The CTA band gradient, for OG image backgrounds. */

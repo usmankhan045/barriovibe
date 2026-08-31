@@ -34,9 +34,8 @@ export const CONTACT = {
   whatsapp: '923095034118',
   email: 'barriovibe@gmail.com',
   address: {
-    /** TODO: real office address. */
-    line1: '-',
-    city: 'Karachi',
+    line1: 'Ayan Plaza, Mardan Road',
+    city: 'Charsadda',
     country: 'Pakistan',
   },
   /** Displayed on the contact page so nobody wonders when they'll hear back. */

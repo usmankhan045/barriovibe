@@ -111,14 +111,8 @@ export default function ContactPage() {
               <div className="u-tile mt-3 p-5">
                 <Eyebrow>Office</Eyebrow>
                 <p className="mt-2 text-[15px] leading-[1.6] text-ink-body">
-                  {/* See the note in Footer.tsx: a placeholder street line
-                      renders as a bare hyphen and looks broken. */}
-                  {CONTACT.address.line1 !== '-' && (
-                    <>
-                      {CONTACT.address.line1}
-                      <br />
-                    </>
-                  )}
+                  {CONTACT.address.line1}
+                  <br />
                   {CONTACT.address.city}, {CONTACT.address.country}
                 </p>
                 <p className="mt-3 flex items-center gap-2 text-[13.5px] text-ink-body">

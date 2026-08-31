@@ -130,16 +130,9 @@ export function Footer() {
               </li>
               <li className="flex items-start gap-2.5 text-caption text-ink-body">
                 <Icon name="building" size={16} className="mt-0.5 flex-none text-ink-body" />
-                {/* A placeholder street line rendered as a lone hyphen above
-                    the city, which read as a broken empty row. Omit it until
-                    there is a real address. */}
                 <span>
-                  {CONTACT.address.line1 !== '-' && (
-                    <>
-                      {CONTACT.address.line1}
-                      <br />
-                    </>
-                  )}
+                  {CONTACT.address.line1}
+                  <br />
                   {CONTACT.address.city}, {CONTACT.address.country}
                 </span>
               </li>
