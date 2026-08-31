@@ -27,15 +27,10 @@ import type { ReactNode } from 'react';
  *                         worse misrepresentation than the name in type.
  *   Payments, Shipping    not platforms and not brands.
  *
- * The social marks (instagram, pinterest, x, quora) are the second caller:
- * `content/site.ts` names one per entry in SOCIALS and the footer renders the
- * row. They earn their place under the same rule, since each one names an
- * account the firm actually posts from.
- *
- * `reddit` is kept here with no caller. The account exists but has posted
- * nothing, so it is out of SOCIALS for now (see the note there); leaving the
- * mark in place makes restoring it a one-line edit in that file rather than a
- * hunt for the path data again.
+ * The social marks (instagram, pinterest, x, quora, facebook, reddit) are the
+ * second caller: `content/site.ts` names one per entry in SOCIALS and the
+ * footer renders the row. Each one names an account the firm holds. See the
+ * note in that file on the two whose profiles a script cannot verify.
  *
  * ## Every mark is set to the same optical weight
  *

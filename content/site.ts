@@ -53,29 +53,30 @@ export const CONTACT = {
  * without adding its mark there renders nothing, which is why the type below
  * pins it to that file's keys rather than to `string`.
  *
- * Every href here was opened and confirmed to land on the real account.
+ * Every href here is a profile the owner has confirmed.
  *
- * Two accounts are deliberately absent.
+ * Two entries cannot be checked from a script, and are here on the owner's
+ * word rather than on a passing request.
  *
- * Facebook: the account exists under the same name, but a logged-out request
- * cannot tell a real Facebook vanity URL from a dead one (both answer with the
- * same error page), so it stays out until the exact URL is copied from the
- * address bar of the live page. An unverified profile link in `sameAs` is a
- * claim to a search engine that we cannot back up.
+ * Facebook: a logged-out request cannot tell a real vanity URL from a dead
+ * one. Every path answers 400, including known-good ones, so the response
+ * carries no information. This URL was copied from the address bar of the
+ * live page, which is the only check that settles it.
  *
- * Reddit (u/Barriovibe): the account is real, but it has posted nothing. Its
- * feed at /user/Barriovibe/.rss returns zero entries, and Reddit does not hold
- * a visitor on an empty profile: it bounces them to the logged-in home feed,
- * which is what a click on this link actually did. A link that lands somewhere
- * other than where it says is worse than no link, and an empty profile in
- * `sameAs` is a weak signal to a search engine besides. Restore the entry once
- * the account has public posts, and check the .rss feed reports them.
+ * Reddit (u/Barriovibe): the account is real but has not posted publicly yet,
+ * and Reddit blocks automated checks from CI (403 on every profile, active
+ * ones included), so the .rss feed cannot confirm otherwise. Listed on the
+ * owner's instruction. Two caveats stand until it has public posts: a
+ * logged-out click may bounce to Reddit's home feed instead of holding on the
+ * profile, and an empty profile is a weak `sameAs` signal.
  */
 export const SOCIALS = [
   { label: 'Instagram', href: 'https://www.instagram.com/barriovibe/', mark: 'instagram' },
   { label: 'Pinterest', href: 'https://www.pinterest.com/barriovibe/', mark: 'pinterest' },
   { label: 'X', href: 'https://x.com/BarrioVibe', mark: 'x' },
   { label: 'Quora', href: 'https://www.quora.com/profile/Barrio-Vibe', mark: 'quora' },
+  { label: 'Facebook', href: 'https://www.facebook.com/barriovibe/', mark: 'facebook' },
+  { label: 'Reddit', href: 'https://www.reddit.com/user/Barriovibe/', mark: 'reddit' },
 ] as const satisfies readonly { label: string; href: string; mark: BrandMarkName }[];
 
 /**
