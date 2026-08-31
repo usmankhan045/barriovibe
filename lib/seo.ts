@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { BRAND, TAGLINE } from '@/content/site';
+import { BRAND, TAGLINE, X_HANDLE } from '@/content/site';
 
 /**
  * Metadata helpers. Every page builds its metadata through `pageMetadata` so
@@ -46,6 +46,12 @@ export function pageMetadata({
       card: 'summary_large_image',
       title: `${title} | ${BRAND.name}`,
       description,
+      // Both keys, because they answer different questions: `site` is the
+      // account the page belongs to and `creator` the byline. With one
+      // account they are the same handle, and X attributes the card to it
+      // either way.
+      site: X_HANDLE,
+      creator: X_HANDLE,
     },
     ...(noIndex ? { robots: { index: false, follow: false } } : {}),
   };

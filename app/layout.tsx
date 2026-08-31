@@ -4,7 +4,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/ui/footer-section';
 import { SkipLink } from '@/components/layout/SkipLink';
 import { RevealObserver } from '@/components/ui/RevealObserver';
-import { BRAND, TAGLINE, SHORT_TAGLINE } from '@/content/site';
+import { BRAND, TAGLINE, SHORT_TAGLINE, X_HANDLE } from '@/content/site';
 import { SITE_URL } from '@/lib/seo';
 import { TOKENS } from '@/lib/tokens';
 import './globals.css';
@@ -26,6 +26,10 @@ export const metadata: Metadata = {
     locale: 'en_PK',
     siteName: BRAND.name,
   },
+  // The site-wide default. `pageMetadata` sets the same handle per route, but
+  // it does not cover the home page or anything that builds metadata by hand,
+  // and a card without it is attributed to nobody.
+  twitter: { card: 'summary_large_image', site: X_HANDLE, creator: X_HANDLE },
   robots: {
     index: true,
     follow: true,

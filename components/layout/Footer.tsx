@@ -154,6 +154,8 @@ export function Footer() {
                 <li key={social.label}>
                   <a
                     href={social.href}
+                    target="_blank"
+                    rel="me noopener noreferrer"
                     className="inline-flex rounded-chip border border-silver-300 bg-surface px-3 py-1.5 text-[13px] font-medium text-ink-body transition-colors hover:border-blue-200 hover:text-blue-600"
                   >
                     {social.label}

@@ -40,7 +40,11 @@ export function organizationSchema() {
       addressCountry: 'PK',
     },
     areaServed: { '@type': 'Country', name: 'Pakistan' },
-    sameAs: SOCIALS.map((s) => s.href).filter((h) => h !== '#'),
+    // `sameAs` is the claim that these profiles are this organisation. Every
+    // entry in SOCIALS is a verified, absolute profile URL, so the list goes
+    // through whole; the old '#' filter guarded placeholders that no longer
+    // exist. See the note in content/site.ts on why Facebook is not here.
+    sameAs: SOCIALS.map((s) => s.href),
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
       name: 'Services',

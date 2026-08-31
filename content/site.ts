@@ -1,3 +1,4 @@
+import type { BrandMarkName } from '@/components/icons/brands';
 import { SERVICE_COUNT_WORD } from './services';
 
 /**
@@ -43,12 +44,38 @@ export const CONTACT = {
   responseTime: 'We reply to every enquiry within one working day.',
 } as const;
 
+/**
+ * The brand's presence elsewhere. One list, consumed by two places that must
+ * never disagree: the footer's mark row and the `sameAs` array in the
+ * Organization schema. `sameAs` is how a search engine ties this domain to
+ * those profiles, so a link that 404s is worse than an absent one.
+ *
+ * `mark` names a glyph in `components/icons/brands.tsx`. Adding an entry
+ * without adding its mark there renders nothing, which is why the type below
+ * pins it to that file's keys rather than to `string`.
+ *
+ * Every href here was opened and confirmed to land on the real account.
+ *
+ * Facebook is deliberately absent. The account exists under the same name, but
+ * a logged-out request cannot tell a real Facebook vanity URL from a dead one
+ * (both answer with the same error page), so it stays out until the exact URL
+ * is copied from the address bar of the live page. An unverified profile link
+ * in `sameAs` is a claim to a search engine that we cannot back up.
+ */
 export const SOCIALS = [
-  { label: 'LinkedIn', href: '#', handle: '@' },
-  { label: 'Instagram', href: '#', handle: '@' },
-  { label: 'Facebook', href: '#', handle: '@' },
-  { label: 'X', href: '#', handle: '@' },
-] as const;
+  { label: 'Instagram', href: 'https://www.instagram.com/barriovibe/', mark: 'instagram' },
+  { label: 'Pinterest', href: 'https://www.pinterest.com/barriovibe/', mark: 'pinterest' },
+  { label: 'X', href: 'https://x.com/BarrioVibe', mark: 'x' },
+  { label: 'Reddit', href: 'https://www.reddit.com/user/Barriovibe/', mark: 'reddit' },
+  { label: 'Quora', href: 'https://www.quora.com/profile/Barrio-Vibe', mark: 'quora' },
+] as const satisfies readonly { label: string; href: string; mark: BrandMarkName }[];
+
+/**
+ * The X handle, with the @, as Twitter Card metadata wants it. Kept beside
+ * SOCIALS because it is the same account: if the profile URL above ever
+ * changes, this changes with it.
+ */
+export const X_HANDLE = '@BarrioVibe';
 
 /**
  * The positioning line. Used as the metadata description default and in the
