@@ -30,6 +30,10 @@ export function organizationSchema() {
     name: BRAND.name,
     legalName: BRAND.legalName,
     url: SITE_URL,
+    // The icon Next serves from app/icon.png. Google uses this for the
+    // knowledge panel and for rich results that carry a brand mark.
+    logo: absoluteUrl('/icon.png'),
+    image: absoluteUrl('/opengraph-image'),
     description: TAGLINE,
     email: CONTACT.email,
     telephone: CONTACT.phone,
@@ -41,6 +45,21 @@ export function organizationSchema() {
       addressCountry: 'PK',
     },
     areaServed: { '@type': 'Country', name: 'Pakistan' },
+    // Mirrors CONTACT.hours. Stated here as data so a search engine can show
+    // the opening hours without parsing the sentence the footer renders.
+    openingHoursSpecification: {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: [
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+      ],
+      opens: '10:00',
+      closes: '19:00',
+    },
     // `sameAs` is the claim that these profiles are this organisation. Every
     // entry in SOCIALS is a verified, absolute profile URL, so the list goes
     // through whole; the old '#' filter guarded placeholders that no longer
@@ -119,5 +138,43 @@ export function itemListSchema(name: string, urls: string[]) {
       position: i + 1,
       url: absoluteUrl(url),
     })),
+  };
+}
+
+/**
+ * A free browser-side tool, described as an application rather than as a page.
+ *
+ * `WebApplication` is what earns a tool the rich result that names it and its
+ * price. The price is genuinely zero and stated as such: omitting `offers`
+ * entirely reads as "unknown", which is not the same claim.
+ */
+export function webApplicationSchema({
+  name,
+  description,
+  path,
+  category = 'FinanceApplication',
+}: {
+  name: string;
+  description: string;
+  path: string;
+  category?: string;
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name,
+    description,
+    url: absoluteUrl(path),
+    applicationCategory: category,
+    // It runs in the page, so the browser is the whole requirement.
+    operatingSystem: 'Any',
+    browserRequirements: 'Requires JavaScript',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'PKR',
+    },
+    provider: { '@id': `${SITE_URL}/#organization` },
+    isAccessibleForFree: true,
   };
 }

@@ -23,7 +23,7 @@ export const BRAND = {
    */
   legalName: 'BarrioVibe',
   /** Production domain. Drives canonical URLs and absolute OG paths. */
-  domain: 'https://barriovibe.com',
+  domain: 'https://www.barriovibe.com',
   /** Used in the footer and the wordmark's secondary line. */
   descriptor: 'Business · Digital · Technology',
 } as const;

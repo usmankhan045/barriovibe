@@ -13,7 +13,12 @@ import { Reveal } from '@/components/ui/Reveal';
 import { Button } from '@/components/ui/Button';
 import { FaqAccordion } from '@/components/sections/FaqList';
 import { SalaryCalculator } from '@/components/sections/SalaryCalculator';
-import { JsonLd, breadcrumbSchema, faqSchema } from '@/lib/jsonld';
+import {
+  JsonLd,
+  breadcrumbSchema,
+  faqSchema,
+  webApplicationSchema,
+} from '@/lib/jsonld';
 import { getService, serviceHref } from '@/content/services';
 import { SALARY_TAX_FAQS, SALARY_TAX_TOOL } from '@/content/tools';
 import { SLABS, TAX_YEAR, EXEMPT_THRESHOLD } from '@/lib/tax/pakistan';
@@ -121,6 +126,13 @@ export default function SalaryTaxPage() {
   return (
     <main id="main" tabIndex={-1}>
       <JsonLd data={breadcrumbSchema(CRUMBS)} />
+      <JsonLd
+        data={webApplicationSchema({
+          name: SALARY_TAX_TOOL.title,
+          description: SALARY_TAX_TOOL.seo.description,
+          path: '/tools/salary-tax',
+        })}
+      />
       <JsonLd data={faqSchema(SALARY_TAX_FAQS)} />
 
       {/* ── 1. Hero and the calculator itself ─────────────────────────────
