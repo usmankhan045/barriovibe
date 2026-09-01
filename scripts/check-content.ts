@@ -16,7 +16,10 @@ import { PILLARS } from '../content/pillars';
 import { PRACTICES } from '../content/practices';
 import { SERVICES, SERVICE_COUNT, SERVICE_COUNT_WORD, serviceHref } from '../content/services';
 import { MEGA_MENU_COLUMNS } from '../content/nav';
+import { INDEXNOW_KEY } from '../content/site';
 import type { Service } from '../content/types';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 
 const failures: string[] = [];
 const warnings: string[] = [];
@@ -269,6 +272,20 @@ for (const service of SERVICES) {
 if (menuHrefs.size !== SERVICE_COUNT) {
   fail(
     `Mega-menu lists ${menuHrefs.size} services but ${SERVICE_COUNT} exist. Counts must match exactly.`,
+  );
+}
+
+// The IndexNow key file proves domain ownership by being served at a path
+// named after the key. Next cannot build a route path from a constant, so the
+// directory name is a literal that has to be kept in step with INDEXNOW_KEY by
+// hand. A mismatch is invisible in the UI and only shows up as search engines
+// quietly rejecting every submission, which is exactly the kind of silent
+// failure this script exists to catch.
+const indexNowRoute = join(process.cwd(), 'app', `${INDEXNOW_KEY}.txt`, 'route.ts');
+if (!existsSync(indexNowRoute)) {
+  fail(
+    `IndexNow key file missing: INDEXNOW_KEY is "${INDEXNOW_KEY}" but there is no ` +
+      `app/${INDEXNOW_KEY}.txt/route.ts. Rename the route directory to match the key.`,
   );
 }
 

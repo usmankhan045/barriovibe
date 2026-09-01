@@ -28,6 +28,20 @@ export const BRAND = {
   descriptor: 'Business · Digital · Technology',
 } as const;
 
+/**
+ * IndexNow host key.
+ *
+ * Proves to Bing, Yandex, Naver and Seznam that whoever submits a URL for
+ * recrawling controls this domain. Google does not participate in IndexNow.
+ *
+ * This is a public verification token rather than a secret: it is served, by
+ * design, at `/{key}.txt` for anyone to fetch. `app/{key}.txt/route.ts` serves
+ * it, and its directory name must equal this string. `pnpm check:content`
+ * asserts that, because a rename here with no matching rename there fails
+ * silently: submissions are simply rejected.
+ */
+export const INDEXNOW_KEY = 'bdd57b0a8a61a3cc7efb6ce8c10abc5e';
+
 export const CONTACT = {
   phone: '+92 309 5034118',
   /** Digits only, no +, no spaces: this is what wa.me expects. */
