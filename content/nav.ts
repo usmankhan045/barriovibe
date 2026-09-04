@@ -62,8 +62,21 @@ export const MEGA_MENU_COLUMNS = PRACTICE_GROUPS.map(({ practice, groups }) => (
  * Home and Blog bracket the pill on the client's instruction: Home leftmost,
  * Blog rightmost, with the existing Contact/About order kept between them.
  * Blog links to `/blog`, which currently renders an honest "nothing published
- * yet" state — see app/blog/page.tsx — rather than being left unlinked or
+ * yet" state, see app/blog/page.tsx, rather than being left unlinked or
  * pointed at a page that does not exist.
+ *
+ * ── Tools ──
+ *
+ * Added next to Services because it is the same kind of item: a hub over a
+ * growing set of pages, listed in content/tools.ts. It carries no `mega` flag.
+ * The mega-menu exists because forty-four services cannot be chosen from a
+ * dropdown; a handful of calculators can be chosen from a page, and giving
+ * Tools a panel of its own would put a near-empty version of the Services
+ * panel next to the full one.
+ *
+ * It sits before Contact rather than after Blog: it is a reason to visit the
+ * site, not an afterword, and the two hub items reading together keeps the
+ * pill's ordering honest about what the site is.
  *
  * ── What is NOT in the pill ──
  *
@@ -74,6 +87,7 @@ export const MEGA_MENU_COLUMNS = PRACTICE_GROUPS.map(({ practice, groups }) => (
 export const PRIMARY_NAV: NavLink[] = [
   { label: 'Home', href: '/' },
   { label: 'Services', href: '/services', mega: true },
+  { label: 'Tools', href: '/tools' },
   { label: 'Contact', href: '/contact' },
   { label: 'About', href: '/about' },
   { label: 'Blog', href: '/blog' },
@@ -82,19 +96,22 @@ export const PRIMARY_NAV: NavLink[] = [
 /**
  * The footer's second column.
  *
- * "Salary Tax Calculator" sits with these rather than in the services columns
- * because it is not a service: it is a free tool, it is the one page here a
- * visitor might arrive at without wanting to hire anybody, and putting it
- * among the forty-four purchasable things would misrepresent it in both
- * directions. The footer is also the only site-wide link it has, the top nav
- * being a fixed five items the client set (see PRIMARY_NAV above), so this
- * entry is what keeps the page reachable from everywhere rather than only
- * from the two Finance & Tax pages that link to it in their own copy.
+ * "Tools" sits with these rather than in the services columns because the
+ * calculators are not services: they are free, they are the pages here a
+ * visitor might arrive at without wanting to hire anybody, and listing them
+ * among the forty-four purchasable things would misrepresent them in both
+ * directions.
+ *
+ * This used to link `/tools/salary-tax` directly, because the calculator was
+ * the only tool and the footer was the only site-wide link it had. It now
+ * points at the hub, which is in the top nav too: a footer that named one
+ * calculator would go stale the moment a second one shipped, and the hub is
+ * one click from every tool.
  */
 export const COMPANY_LINKS: NavLink[] = [
   { label: 'About', href: '/about' },
   { label: 'Work', href: '/work' },
-  { label: 'Salary Tax Calculator', href: '/tools/salary-tax' },
+  { label: 'Tools', href: '/tools' },
   { label: 'Contact', href: '/contact' },
 ];
 

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { SERVICES, serviceHref, PRACTICE_PAGES } from '@/content/services';
 import { PILLARS } from '@/content/pillars';
+import { TOOLS, toolHref } from '@/content/tools';
 import { absoluteUrl } from '@/lib/seo';
 
 /**
@@ -25,10 +26,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/work', priority: 0.6, changeFrequency: 'monthly' },
     { path: '/blog', priority: 0.5, changeFrequency: 'monthly' },
     { path: '/contact', priority: 0.7, changeFrequency: 'yearly' },
-    /* The salary calculator. Ranked with the service pages rather than below
-       them: it is a page people search for by name, and its rates change with
-       each Finance Act, which is what the monthly frequency is saying. */
-    { path: '/tools/salary-tax', priority: 0.7, changeFrequency: 'monthly' },
+    { path: '/tools', priority: 0.7, changeFrequency: 'monthly' },
     { path: '/privacy', priority: 0.2, changeFrequency: 'yearly' },
     { path: '/terms', priority: 0.2, changeFrequency: 'yearly' },
   ];
@@ -56,6 +54,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
     ...SERVICES.map((service) => ({
       url: absoluteUrl(serviceHref(service)),
+      lastModified,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    })),
+    /* The calculators, ranked with the service pages rather than below them:
+       they are pages people search for by name, and their rates change with
+       each Finance Act, which is what the monthly frequency is saying.
+       Derived from TOOLS for the same reason the services are derived from
+       SERVICES: a tool that ships and is never submitted is the usual failure
+       mode of a hand-kept list. */
+    ...TOOLS.map((tool) => ({
+      url: absoluteUrl(toolHref(tool)),
       lastModified,
       changeFrequency: 'monthly' as const,
       priority: 0.7,

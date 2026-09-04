@@ -20,7 +20,7 @@ import {
   webApplicationSchema,
 } from '@/lib/jsonld';
 import { getService, serviceHref } from '@/content/services';
-import { SALARY_TAX_FAQS, SALARY_TAX_TOOL } from '@/content/tools';
+import { SALARY_TAX_FAQS, SALARY_TAX_TOOL, toolHref } from '@/content/tools';
 import { SLABS, TAX_YEAR, EXEMPT_THRESHOLD } from '@/lib/tax/pakistan';
 import { pageMetadata } from '@/lib/seo';
 
@@ -55,16 +55,19 @@ import { pageMetadata } from '@/lib/seo';
  * far has shown they want more than a number.
  */
 
+// "Tools" pointed at this page's own URL while it was the only tool and there
+// was no index above it. It points at the hub now, so the crumb is a route out
+// rather than a link back to the page you are on.
 const CRUMBS = [
   { label: 'Home', href: '/' },
-  { label: 'Tools', href: '/tools/salary-tax' },
-  { label: SALARY_TAX_TOOL.title, href: '/tools/salary-tax' },
+  { label: 'Tools', href: '/tools' },
+  { label: SALARY_TAX_TOOL.navLabel, href: toolHref(SALARY_TAX_TOOL) },
 ];
 
 export const metadata: Metadata = pageMetadata({
   title: SALARY_TAX_TOOL.seo.title,
   description: SALARY_TAX_TOOL.seo.description,
-  path: '/tools/salary-tax',
+  path: toolHref(SALARY_TAX_TOOL),
 });
 
 /**
@@ -130,7 +133,7 @@ export default function SalaryTaxPage() {
         data={webApplicationSchema({
           name: SALARY_TAX_TOOL.title,
           description: SALARY_TAX_TOOL.seo.description,
-          path: '/tools/salary-tax',
+          path: toolHref(SALARY_TAX_TOOL),
         })}
       />
       <JsonLd data={faqSchema(SALARY_TAX_FAQS)} />

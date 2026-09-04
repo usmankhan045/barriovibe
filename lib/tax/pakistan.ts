@@ -35,6 +35,15 @@
  * history. A person with those facts needs a return prepared, not a widget.
  */
 
+import {
+  taxOnSlabs,
+  marginalRateOn,
+  assertSlabsConsistent,
+  money,
+  type Slab,
+  type SlabRow,
+} from './slabs';
+
 /**
  * The tax year these figures are for.
  *
@@ -62,14 +71,7 @@ export const TAX_YEAR = {
  * it, the two disagree and the build fails rather than the page quietly
  * reporting the wrong tax.
  */
-export interface Slab {
-  /** Upper bound of the slab, or null for the open-ended top slab. */
-  upTo: number | null;
-  /** Marginal rate on the part of income inside this slab. */
-  rate: number;
-  /** Cumulative tax at the bottom of this slab, per the Ordinance. */
-  fixed: number;
-}
+export type { Slab, SlabRow };
 
 export const SLABS: Slab[] = [
   { upTo: 600_000, rate: 0, fixed: 0 },
@@ -189,17 +191,6 @@ export const EMPTY_INPUT: CalculatorInput = {
   pensionContribution: 0,
 };
 
-/** One slab's contribution, for the working shown under the result. */
-export interface SlabRow {
-  from: number;
-  to: number | null;
-  rate: number;
-  /** Income falling inside this slab. */
-  taxable: number;
-  /** Tax arising from this slab alone. */
-  tax: number;
-}
-
 export interface Result {
   grossAnnual: number;
   grossMonthly: number;
@@ -251,41 +242,12 @@ function annualise(amount: number, period: CalculatorInput['period']): number {
  * statutory formula rather than an approximation of it.
  */
 export function taxOn(taxableIncome: number): { tax: number; rows: SlabRow[] } {
-  const rows: SlabRow[] = [];
-  let tax = 0;
-  let floor = 0;
-
-  for (const slab of SLABS) {
-    const ceiling = slab.upTo ?? Infinity;
-    if (taxableIncome <= floor) break;
-
-    const taxable = Math.min(taxableIncome, ceiling) - floor;
-    const slabTax = taxable * slab.rate;
-    tax += slabTax;
-
-    rows.push({
-      from: floor,
-      to: slab.upTo,
-      rate: slab.rate,
-      taxable,
-      tax: slabTax,
-    });
-
-    floor = ceiling;
-  }
-
-  return { tax, rows };
+  return taxOnSlabs(taxableIncome, SLABS);
 }
 
 /** The marginal rate at a given taxable income. */
 export function marginalRateAt(taxableIncome: number): number {
-  let floor = 0;
-  for (const slab of SLABS) {
-    const ceiling = slab.upTo ?? Infinity;
-    if (taxableIncome <= ceiling) return taxableIncome <= floor ? slab.rate : slab.rate;
-    floor = ceiling;
-  }
-  return SLABS[SLABS.length - 1]!.rate;
+  return marginalRateOn(taxableIncome, SLABS);
 }
 
 /**
@@ -333,19 +295,19 @@ function creditAtAverageRate(
 }
 
 export function calculate(input: CalculatorInput): Result {
-  const grossAnnual = Math.max(0, annualise(input.amount, input.period));
+  const grossAnnual = money(annualise(input.amount, input.period));
 
   // ── Allowances, section 9: these come off before the slabs ──────────────
-  const zakatAllowance = Math.min(Math.max(0, input.zakat), grossAnnual);
+  const zakatAllowance = Math.min(money(input.zakat), grossAnnual);
   const afterZakat = grossAnnual - zakatAllowance;
 
   const education = educationAllowance(
     afterZakat,
-    Math.max(0, input.tuitionFee),
-    Math.max(0, Math.floor(input.children)),
+    money(input.tuitionFee),
+    money(Math.floor(input.children)),
   );
 
-  const taxableIncome = Math.max(0, afterZakat - education);
+  const taxableIncome = money(afterZakat - education);
 
   // ── The slabs ───────────────────────────────────────────────────────────
   const { tax: taxBeforeCredits, rows: slabRows } = taxOn(taxableIncome);
@@ -355,25 +317,25 @@ export function calculate(input: CalculatorInput): Result {
   const donationCredit = creditAtAverageRate(
     taxBeforeCredits,
     taxableIncome,
-    Math.max(0, input.donations),
+    money(input.donations),
     taxableIncome * RELIEF.donationIncomeRate,
   );
 
   const pensionCredit = creditAtAverageRate(
     taxBeforeCredits,
     taxableIncome,
-    Math.max(0, input.pensionContribution),
+    money(input.pensionContribution),
     taxableIncome * RELIEF.pensionIncomeRate,
   );
 
   // Credits cannot take the liability below zero: they reduce tax payable,
   // they are not refundable.
-  const incomeTax = Math.max(0, taxBeforeCredits - donationCredit - pensionCredit);
+  const incomeTax = money(taxBeforeCredits - donationCredit - pensionCredit);
 
   // ── Deductions that are not tax ─────────────────────────────────────────
   const eobiAnnual = input.eobi ? EOBI_ANNUAL : 0;
   const providentFundAnnual =
-    grossAnnual * Math.min(Math.max(0, input.providentFundRate), 100) / 100;
+    grossAnnual * Math.min(money(input.providentFundRate), 100) / 100;
 
   const totalStatutory = incomeTax + eobiAnnual;
   const totalDeductions = totalStatutory + providentFundAnnual;
@@ -417,24 +379,10 @@ export function calculate(input: CalculatorInput): Result {
  * at module load, so a bad edit fails `pnpm typecheck`, `pnpm build` and the
  * page's first render rather than shipping a wrong number quietly.
  *
- * It is cheap enough to leave in: eight slabs, one pass, once per process.
+ * The check itself lives in lib/tax/slabs.ts, because the business, rent and
+ * agricultural tables all need exactly the same guarantee.
  */
-function assertSlabsConsistent(): void {
-  let cumulative = 0;
-  let floor = 0;
-
-  for (const slab of SLABS) {
-    if (Math.abs(slab.fixed - cumulative) > 0.5) {
-      throw new Error(
-        `Pakistan tax slabs are inconsistent: the slab starting at ${floor} declares a ` +
-          `fixed amount of ${slab.fixed}, but the slabs beneath it sum to ${cumulative}. ` +
-          'Re-check the table in the First Schedule, Part I, Division I.',
-      );
-    }
-    if (slab.upTo === null) break;
-    cumulative += (slab.upTo - floor) * slab.rate;
-    floor = slab.upTo;
-  }
-}
-
-assertSlabsConsistent();
+assertSlabsConsistent(
+  SLABS,
+  'Pakistan salary tax slabs (First Schedule, Part I, Division I, sub-clause (2))',
+);

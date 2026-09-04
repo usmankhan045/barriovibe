@@ -1,9 +1,10 @@
 'use client';
 
-import { useMemo, useState, useId } from 'react';
+import { useMemo, useState } from 'react';
 import { Icon } from '@/components/icons';
 import { Button } from '@/components/ui/Button';
 import { cx } from '@/lib/cx';
+import { money, percent, Rs, NumberField, Row } from './calculator-parts';
 import {
   calculate,
   EMPTY_INPUT,
@@ -47,139 +48,6 @@ import {
  * own fund is not a deduction in the sense that tax is, so it sits in its own
  * row with a line saying it is still your money.
  */
-
-/* ── Formatting ─────────────────────────────────────────────────────────────
-   `en-PK` gives the digit grouping Pakistani readers expect. Rupee amounts are
-   rendered to whole rupees: the arithmetic is exact in the engine and the
-   paisa on a salary figure is noise. */
-const money = new Intl.NumberFormat('en-PK', { maximumFractionDigits: 0 });
-const percent = new Intl.NumberFormat('en-PK', {
-  style: 'percent',
-  minimumFractionDigits: 1,
-  maximumFractionDigits: 2,
-});
-
-function Rs(value: number): string {
-  return `Rs ${money.format(Math.round(value))}`;
-}
-
-/**
- * A number the visitor types.
- *
- * `inputMode="numeric"` rather than `type="number"`: a number input on a phone
- * still offers a spinner nobody uses here, and it silently discards a value
- * the browser considers malformed, which loses what someone typed while they
- * are mid-way through typing it. Text plus a numeric keypad keeps every
- * keystroke and lets this component decide what a number is.
- */
-function NumberField({
-  label,
-  value,
-  onChange,
-  hint,
-  prefix = 'Rs',
-  placeholder = '0',
-}: {
-  label: string;
-  value: number;
-  onChange: (next: number) => void;
-  hint?: string;
-  prefix?: string | null;
-  placeholder?: string;
-}) {
-  const id = useId();
-  const hintId = `${id}-hint`;
-
-  return (
-    <div className="flex flex-col gap-2">
-      <label htmlFor={id} className="font-display text-[14px] font-bold text-ink">
-        {label}
-      </label>
-      <div className="relative">
-        {prefix && (
-          <span
-            className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[15px] text-ink-body"
-            aria-hidden="true"
-          >
-            {prefix}
-          </span>
-        )}
-        <input
-          id={id}
-          type="text"
-          inputMode="numeric"
-          autoComplete="off"
-          value={value === 0 ? '' : money.format(value)}
-          placeholder={placeholder}
-          aria-describedby={hint ? hintId : undefined}
-          onChange={(event) => {
-            // Strip grouping separators and anything else non-numeric, so a
-            // pasted "1,50,000" or "Rs 150000" both work.
-            const digits = event.target.value.replace(/[^\d]/g, '');
-            onChange(digits === '' ? 0 : Number(digits));
-          }}
-          className={cx(
-            'w-full rounded-chip border border-line bg-surface py-3 text-[15px] text-ink',
-            'placeholder:text-ink-body focus:border-blue-600',
-            'transition-colors duration-200',
-            prefix ? 'pl-11 pr-4' : 'px-4',
-          )}
-        />
-      </div>
-      {hint && (
-        <p id={hintId} className="text-[12.5px] leading-[1.5] text-ink-body">
-          {hint}
-        </p>
-      )}
-    </div>
-  );
-}
-
-/** One line in the deductions list. `tone` marks the take-home row. */
-function Row({
-  label,
-  value,
-  note,
-  tone = 'normal',
-}: {
-  label: string;
-  value: string;
-  note?: string;
-  tone?: 'normal' | 'muted' | 'total';
-}) {
-  return (
-    <div
-      className={cx(
-        'flex items-baseline justify-between gap-4 py-2.5',
-        tone === 'total' && 'border-t border-line pt-4',
-      )}
-    >
-      <span className="min-w-0">
-        <span
-          className={cx(
-            'block text-[14.5px]',
-            tone === 'total' ? 'font-display font-bold text-ink' : 'text-ink-body',
-          )}
-        >
-          {label}
-        </span>
-        {note && <span className="mt-0.5 block text-[12.5px] text-ink-body">{note}</span>}
-      </span>
-      <span
-        className={cx(
-          'flex-none tabular-nums',
-          tone === 'total'
-            ? 'font-display text-[19px] font-bold text-ink'
-            : tone === 'muted'
-              ? 'text-[14.5px] text-ink-body'
-              : 'text-[14.5px] font-medium text-ink-strong',
-        )}
-      >
-        {value}
-      </span>
-    </div>
-  );
-}
 
 export function SalaryCalculator() {
   const [input, setInput] = useState<CalculatorInput>({
@@ -225,6 +93,9 @@ export function SalaryCalculator() {
                 className={cx(
                   'u-tap flex-1 cursor-pointer rounded-chip border px-4 py-2.5 text-center',
                   'text-[14px] font-medium capitalize transition-colors',
+                  // The radio is `sr-only`, so the focus ring goes on the label
+                  // instead. Same reasoning as ChoiceField in ./calculator-parts.
+                  'focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-blue-600',
                   input.period === period
                     ? 'border-blue-600 bg-blue-50 text-blue-600'
                     : 'border-line bg-surface text-ink-body hover:border-blue-600',

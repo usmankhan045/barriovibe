@@ -1,5 +1,6 @@
 import { BRAND, TAGLINE, CONTACT } from '@/content/site';
 import { PRACTICE_GROUPS, SERVICES, serviceHref, practiceHref } from '@/content/services';
+import { TOOL_GROUPS, toolHref } from '@/content/tools';
 import { absoluteUrl } from '@/lib/seo';
 
 /**
@@ -50,11 +51,17 @@ export function GET() {
     lines.push('');
   }
 
+  // Derived from TOOLS, the same way the services above are derived from
+  // SERVICES. The calculator used to be written out here by hand, which was
+  // fine while it was the only one and would have quietly omitted the second.
   lines.push('## Tools');
   lines.push('');
-  lines.push(
-    `- [Pakistan Salary Tax Calculator](${absoluteUrl('/tools/salary-tax')}): work out monthly take-home pay on the current FBR salary slabs. Runs entirely in the browser and sends nothing anywhere.`,
-  );
+  lines.push(`- [Tools](${absoluteUrl('/tools')}): free calculators, computed in the browser.`);
+  for (const group of TOOL_GROUPS) {
+    for (const tool of group.tools) {
+      lines.push(`- [${tool.title}](${absoluteUrl(toolHref(tool))}): ${tool.card}`);
+    }
+  }
   lines.push('');
 
   lines.push('## About');
