@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ToolPage } from '@/components/sections/ToolPage';
 import { RentalIncomeCalculator } from '@/components/sections/PropertyCalculators';
 import { RENTAL_INCOME_TOOL, RENTAL_INCOME_FAQS, toolHref } from '@/content/tools';
-import { pageMetadata } from '@/lib/seo';
+import { toolMetadata } from '@/lib/seo';
 
 /**
  * /tools/rental-income-tax
@@ -12,7 +12,7 @@ import { pageMetadata } from '@/lib/seo';
  * (lib/tax/) and its questions.
  */
 
-export const metadata: Metadata = pageMetadata({
+export const metadata: Metadata = toolMetadata({
   title: RENTAL_INCOME_TOOL.seo.title,
   description: RENTAL_INCOME_TOOL.seo.description,
   path: toolHref(RENTAL_INCOME_TOOL),

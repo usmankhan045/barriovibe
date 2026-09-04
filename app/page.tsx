@@ -11,14 +11,14 @@ import { Results, LogoWall } from '@/components/sections/Results';
 import { FaqSection } from '@/components/sections/FaqList';
 import { WhatsAppFab } from '@/components/ui/WhatsAppFab';
 import { HOME_FAQS } from '@/content/faqs';
-import { BRAND, SHORT_TAGLINE, TAGLINE } from '@/content/site';
+import { BRAND, SEO_TITLE, TAGLINE } from '@/content/site';
 import { absoluteUrl } from '@/lib/seo';
-import { JsonLd, organizationSchema, faqSchema } from '@/lib/jsonld';
+import { JsonLd, organizationSchema, faqSchema, webSiteSchema } from '@/lib/jsonld';
 
 export const metadata: Metadata = {
   // The root layout's template appends the brand to every other page; the home
   // page sets its own absolute title so it doesn't read "Brand — Brand".
-  title: { absolute: `${BRAND.name} | ${SHORT_TAGLINE}` },
+  title: { absolute: `${SEO_TITLE} | ${BRAND.name}` },
   description: TAGLINE,
   alternates: { canonical: absoluteUrl('/') },
 };
@@ -37,6 +37,7 @@ export default function HomePage() {
         the markup and the structured data cannot describe different questions.
       */}
       <JsonLd data={organizationSchema()} />
+      <JsonLd data={webSiteSchema()} />
       <JsonLd data={faqSchema(HOME_FAQS)} />
 
       <Hero />

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ToolPage } from '@/components/sections/ToolPage';
 import { SecuritiesGainsCalculator } from '@/components/sections/InvestmentCalculators';
 import { SECURITIES_GAINS_TOOL, SECURITIES_GAINS_FAQS, toolHref } from '@/content/tools';
-import { pageMetadata } from '@/lib/seo';
+import { toolMetadata } from '@/lib/seo';
 
 /**
  * /tools/capital-gains-tax
@@ -12,7 +12,7 @@ import { pageMetadata } from '@/lib/seo';
  * (lib/tax/) and its questions.
  */
 
-export const metadata: Metadata = pageMetadata({
+export const metadata: Metadata = toolMetadata({
   title: SECURITIES_GAINS_TOOL.seo.title,
   description: SECURITIES_GAINS_TOOL.seo.description,
   path: toolHref(SECURITIES_GAINS_TOOL),

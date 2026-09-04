@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ToolPage } from '@/components/sections/ToolPage';
 import { SalaryIncrementCalculator } from '@/components/sections/SalaryToolCalculators';
 import { SALARY_INCREMENT_TOOL, SALARY_INCREMENT_FAQS, toolHref } from '@/content/tools';
-import { pageMetadata } from '@/lib/seo';
+import { toolMetadata } from '@/lib/seo';
 
 /**
  * /tools/salary-increment
@@ -14,7 +14,7 @@ import { pageMetadata } from '@/lib/seo';
  * content/tools.ts), its arithmetic (in lib/tax/) and its questions.
  */
 
-export const metadata: Metadata = pageMetadata({
+export const metadata: Metadata = toolMetadata({
   title: SALARY_INCREMENT_TOOL.seo.title,
   description: SALARY_INCREMENT_TOOL.seo.description,
   path: toolHref(SALARY_INCREMENT_TOOL),

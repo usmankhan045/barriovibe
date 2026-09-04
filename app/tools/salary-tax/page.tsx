@@ -13,16 +13,24 @@ import { Reveal } from '@/components/ui/Reveal';
 import { Button } from '@/components/ui/Button';
 import { FaqAccordion } from '@/components/sections/FaqList';
 import { SalaryCalculator } from '@/components/sections/SalaryCalculator';
+import { RateProvenance } from '@/components/sections/RateProvenance';
 import {
   JsonLd,
   breadcrumbSchema,
   faqSchema,
+  organizationRef,
   webApplicationSchema,
 } from '@/lib/jsonld';
 import { getService, serviceHref } from '@/content/services';
-import { SALARY_TAX_FAQS, SALARY_TAX_TOOL, toolHref } from '@/content/tools';
+import {
+  SALARY_TAX_FAQS,
+  SALARY_TAX_TOOL,
+  TOOLS,
+  toolHref,
+  type Tool,
+} from '@/content/tools';
 import { SLABS, TAX_YEAR, EXEMPT_THRESHOLD } from '@/lib/tax/pakistan';
-import { pageMetadata } from '@/lib/seo';
+import { toolMetadata } from '@/lib/seo';
 
 /**
  * /tools/salary-tax: the Pakistan salary tax calculator.
@@ -64,7 +72,20 @@ const CRUMBS = [
   { label: SALARY_TAX_TOOL.navLabel, href: toolHref(SALARY_TAX_TOOL) },
 ];
 
-export const metadata: Metadata = pageMetadata({
+/**
+ * The three calculators a reader on this page is most likely to want next.
+ *
+ * Chosen rather than listed: someone who has just worked out this month's tax
+ * is usually asking one of three follow-up questions. What would a raise leave
+ * me with (increment), what gross do I need to hit a take-home figure
+ * (reverse), and how do two offers actually compare (job offer). Resolved from
+ * TOOLS by slug so a rename cannot leave a dead link behind.
+ */
+const RELATED_TOOLS = ['salary-increment', 'reverse-salary', 'job-offer-comparison']
+  .map((slug) => TOOLS.find((t) => t.slug === slug))
+  .filter((t): t is Tool => Boolean(t));
+
+export const metadata: Metadata = toolMetadata({
   title: SALARY_TAX_TOOL.seo.title,
   description: SALARY_TAX_TOOL.seo.description,
   path: toolHref(SALARY_TAX_TOOL),
@@ -129,6 +150,8 @@ export default function SalaryTaxPage() {
   return (
     <main id="main" tabIndex={-1}>
       <JsonLd data={breadcrumbSchema(CRUMBS)} />
+      {/* The node this page's WebApplication provider points at. */}
+      <JsonLd data={organizationRef()} />
       <JsonLd
         data={webApplicationSchema({
           name: SALARY_TAX_TOOL.title,
@@ -160,6 +183,10 @@ export default function SalaryTaxPage() {
           <div className="mt-8 md:mt-12">
             <SalaryCalculator />
           </div>
+
+          {/* Same block, same position as every tool built on ToolPage. This
+              page predates that template and has to opt in by hand. */}
+          <RateProvenance />
         </Container>
       </section>
 
@@ -258,7 +285,46 @@ export default function SalaryTaxPage() {
         </Container>
       </Section>
 
-      {/* ── 5. The ask, once, at the end ──────────────────────────────── */}
+      {/* ── 5. Where to go next ───────────────────────────────────────────
+          Every other calculator carries this block from ToolPage; this page,
+          written before that template existed, was the only one of the
+          twenty-two without it. That made the site's most-visited entry point
+          its only dead end: a reader arriving here on the wrong calculator was
+          offered the hub or nothing, and the link equity that should have
+          spread across the salary cluster stopped at this page. */}
+      <Section band tight>
+        <Container>
+          <Reveal>
+            <SectionHeading eyebrow="Also here" lines={['Other calculators']} accent="for this" />
+          </Reveal>
+          <ul className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {RELATED_TOOLS.map((sibling, i) => (
+              <Reveal key={sibling.slug} as="li" index={i} className="h-full">
+                <Link
+                  href={toolHref(sibling)}
+                  className="u-tile u-tile-interactive group flex h-full flex-col p-7"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <h3 className="font-display text-h3 text-ink transition-colors group-hover:text-blue-600">
+                      {sibling.navLabel}
+                    </h3>
+                    <Icon
+                      name="arrow-up-right"
+                      size={18}
+                      className="mt-1 flex-none text-ink-body transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-blue-600"
+                    />
+                  </div>
+                  <p className="mt-3 flex-1 text-[15px] leading-[1.6] text-ink-body">
+                    {sibling.card}
+                  </p>
+                </Link>
+              </Reveal>
+            ))}
+          </ul>
+        </Container>
+      </Section>
+
+      {/* ── 6. The ask, once, at the end ──────────────────────────────── */}
       <Section tight>
         <Container>
           <Reveal>

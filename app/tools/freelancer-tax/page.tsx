@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ToolPage } from '@/components/sections/ToolPage';
 import { FreelancerTaxCalculator } from '@/components/sections/WithholdingCalculators';
 import { FREELANCER_TAX_TOOL, FREELANCER_TAX_FAQS, toolHref } from '@/content/tools';
-import { pageMetadata } from '@/lib/seo';
+import { toolMetadata } from '@/lib/seo';
 
 /**
  * /tools/freelancer-tax
@@ -14,7 +14,7 @@ import { pageMetadata } from '@/lib/seo';
  * content/tools.ts), its arithmetic (in lib/tax/) and its questions.
  */
 
-export const metadata: Metadata = pageMetadata({
+export const metadata: Metadata = toolMetadata({
   title: FREELANCER_TAX_TOOL.seo.title,
   description: FREELANCER_TAX_TOOL.seo.description,
   path: toolHref(FREELANCER_TAX_TOOL),

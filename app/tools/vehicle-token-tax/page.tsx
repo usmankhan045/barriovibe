@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ToolPage } from '@/components/sections/ToolPage';
 import { TokenTaxCalculator } from '@/components/sections/ProvincialCalculators';
 import { TOKEN_TAX_TOOL, TOKEN_TAX_FAQS, toolHref } from '@/content/tools';
-import { pageMetadata } from '@/lib/seo';
+import { toolMetadata } from '@/lib/seo';
 
 /**
  * /tools/vehicle-token-tax
@@ -12,7 +12,7 @@ import { pageMetadata } from '@/lib/seo';
  * (lib/tax/) and its questions.
  */
 
-export const metadata: Metadata = pageMetadata({
+export const metadata: Metadata = toolMetadata({
   title: TOKEN_TAX_TOOL.seo.title,
   description: TOKEN_TAX_TOOL.seo.description,
   path: toolHref(TOKEN_TAX_TOOL),

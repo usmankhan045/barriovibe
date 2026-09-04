@@ -18,6 +18,7 @@ import { SERVICES, SERVICE_COUNT, SERVICE_COUNT_WORD, serviceHref } from '../con
 import { MEGA_MENU_COLUMNS } from '../content/nav';
 import { INDEXNOW_KEY } from '../content/site';
 import type { Service } from '../content/types';
+import { hasGitHistory } from '../lib/lastmod';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -286,6 +287,28 @@ if (!existsSync(indexNowRoute)) {
   fail(
     `IndexNow key file missing: INDEXNOW_KEY is "${INDEXNOW_KEY}" but there is no ` +
       `app/${INDEXNOW_KEY}.txt/route.ts. Rename the route directory to match the key.`,
+  );
+}
+
+/*
+ * The sitemap's lastmod dates come from git commit history (lib/lastmod.ts).
+ * When history is unreadable, which is what a shallow CI clone produces, the
+ * helper falls back to file mtimes. On a fresh checkout every mtime is the
+ * moment CI cloned the repo, so the fallback silently reproduces the uniform
+ * build timestamp that the git lookup exists to replace, and the sitemap goes
+ * back to claiming all eighty-four pages change on every deploy.
+ *
+ * Nothing about that is visible in the output: the dates look plausible. So it
+ * is asserted here instead. If this fails in CI the fix is to fetch full
+ * history (`fetch-depth: 0` on actions/checkout, or drop `--depth` from the
+ * clone) rather than to relax the check.
+ */
+if (!hasGitHistory()) {
+  fail(
+    'Sitemap lastmod cannot read git history, so every URL would fall back to a file ' +
+      'mtime. On a shallow clone those are all the checkout time, which republishes ' +
+      'the uniform build timestamp this was built to remove. Fetch full git history ' +
+      '(fetch-depth: 0 on actions/checkout, or drop --depth from the clone).',
   );
 }
 

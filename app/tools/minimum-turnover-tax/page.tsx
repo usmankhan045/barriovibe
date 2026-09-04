@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ToolPage } from '@/components/sections/ToolPage';
 import { MinimumTurnoverTaxCalculator } from '@/components/sections/BusinessCalculators';
 import { MINIMUM_TURNOVER_TAX_TOOL, MINIMUM_TURNOVER_TAX_FAQS, toolHref } from '@/content/tools';
-import { pageMetadata } from '@/lib/seo';
+import { toolMetadata } from '@/lib/seo';
 
 /**
  * /tools/minimum-turnover-tax
@@ -14,7 +14,7 @@ import { pageMetadata } from '@/lib/seo';
  * content/tools.ts), its arithmetic (in lib/tax/) and its questions.
  */
 
-export const metadata: Metadata = pageMetadata({
+export const metadata: Metadata = toolMetadata({
   title: MINIMUM_TURNOVER_TAX_TOOL.seo.title,
   description: MINIMUM_TURNOVER_TAX_TOOL.seo.description,
   path: toolHref(MINIMUM_TURNOVER_TAX_TOOL),

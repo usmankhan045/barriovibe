@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ToolPage } from '@/components/sections/ToolPage';
 import { VehicleTaxCalculator } from '@/components/sections/ConsumerCalculators';
 import { VEHICLE_TAX_TOOL, VEHICLE_TAX_FAQS, toolHref } from '@/content/tools';
-import { pageMetadata } from '@/lib/seo';
+import { toolMetadata } from '@/lib/seo';
 
 /**
  * /tools/vehicle-tax
@@ -12,7 +12,7 @@ import { pageMetadata } from '@/lib/seo';
  * (lib/tax/) and its questions.
  */
 
-export const metadata: Metadata = pageMetadata({
+export const metadata: Metadata = toolMetadata({
   title: VEHICLE_TAX_TOOL.seo.title,
   description: VEHICLE_TAX_TOOL.seo.description,
   path: toolHref(VEHICLE_TAX_TOOL),

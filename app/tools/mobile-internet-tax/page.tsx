@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ToolPage } from '@/components/sections/ToolPage';
 import { TelecomTaxCalculator } from '@/components/sections/ConsumerCalculators';
 import { TELECOM_TOOL, TELECOM_FAQS, toolHref } from '@/content/tools';
-import { pageMetadata } from '@/lib/seo';
+import { toolMetadata } from '@/lib/seo';
 
 /**
  * /tools/mobile-internet-tax
@@ -12,7 +12,7 @@ import { pageMetadata } from '@/lib/seo';
  * (lib/tax/) and its questions.
  */
 
-export const metadata: Metadata = pageMetadata({
+export const metadata: Metadata = toolMetadata({
   title: TELECOM_TOOL.seo.title,
   description: TELECOM_TOOL.seo.description,
   path: toolHref(TELECOM_TOOL),

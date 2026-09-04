@@ -57,6 +57,26 @@ const nextConfig: NextConfig = {
         source: '/:path*',
         headers: [
           { key: 'Content-Security-Policy', value: CSP },
+          /*
+           * HSTS. `upgrade-insecure-requests` in the CSP above rewrites
+           * resource loads within a page that has already loaded over HTTPS.
+           * It does nothing for the navigation that got the visitor there, so
+           * the first request of a session could still go out over plain HTTP
+           * and be intercepted before any policy applies. This header closes
+           * that: after one HTTPS visit the browser refuses to speak HTTP to
+           * the domain for two years, and `preload` asks that it never does so
+           * even on the first visit.
+           *
+           * `preload` is a one-way door in practice. Submitting the domain at
+           * hstspreload.org bakes it into browser binaries and removal takes
+           * months, so every present and future subdomain must be able to serve
+           * HTTPS before that submission is made. The header is safe to send
+           * now; the submission is the step to take deliberately.
+           */
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload',
+          },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'X-Frame-Options', value: 'SAMEORIGIN' },

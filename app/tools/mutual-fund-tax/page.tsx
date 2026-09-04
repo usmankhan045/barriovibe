@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ToolPage } from '@/components/sections/ToolPage';
 import { MutualFundCalculator } from '@/components/sections/InvestmentCalculators';
 import { MUTUAL_FUND_TOOL, MUTUAL_FUND_FAQS, toolHref } from '@/content/tools';
-import { pageMetadata } from '@/lib/seo';
+import { toolMetadata } from '@/lib/seo';
 
 /**
  * /tools/mutual-fund-tax
@@ -12,7 +12,7 @@ import { pageMetadata } from '@/lib/seo';
  * (lib/tax/) and its questions.
  */
 
-export const metadata: Metadata = pageMetadata({
+export const metadata: Metadata = toolMetadata({
   title: MUTUAL_FUND_TOOL.seo.title,
   description: MUTUAL_FUND_TOOL.seo.description,
   path: toolHref(MUTUAL_FUND_TOOL),

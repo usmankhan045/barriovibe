@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ToolPage } from '@/components/sections/ToolPage';
 import { AgricultureTaxCalculator } from '@/components/sections/ProvincialCalculators';
 import { AGRICULTURE_TAX_TOOL, AGRICULTURE_FAQS, toolHref } from '@/content/tools';
-import { pageMetadata } from '@/lib/seo';
+import { toolMetadata } from '@/lib/seo';
 
 /**
  * /tools/agriculture-tax
@@ -12,7 +12,7 @@ import { pageMetadata } from '@/lib/seo';
  * (lib/tax/) and its questions.
  */
 
-export const metadata: Metadata = pageMetadata({
+export const metadata: Metadata = toolMetadata({
   title: AGRICULTURE_TAX_TOOL.seo.title,
   description: AGRICULTURE_TAX_TOOL.seo.description,
   path: toolHref(AGRICULTURE_TAX_TOOL),

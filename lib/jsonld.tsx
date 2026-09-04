@@ -3,6 +3,7 @@ import { SERVICES, serviceHref } from '@/content/services';
 import type { Faq, Service } from '@/content/types';
 import { absoluteUrl, SITE_URL } from './seo';
 import type { Crumb } from '@/components/primitives/Breadcrumb';
+import { RATES_BASIS, RATES_REVIEWED } from '@/content/provenance';
 
 /**
  * Structured data.
@@ -20,6 +21,39 @@ export function JsonLd({ data }: { data: object }) {
       dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
     />
   );
+}
+
+/**
+ * The organisation as a *reference* node, for pages that name it as a provider.
+ *
+ * `serviceSchema` and `webApplicationSchema` both point `provider` at
+ * `/#organization`. That reference only resolves if the node it names is in the
+ * same page's markup: Google reads each URL's JSON-LD on its own and does not
+ * merge a graph across pages. Defining the node only on the home page therefore
+ * left the `provider` on all sixty-six service and tool pages pointing at
+ * nothing, which is not an error a validator reports, it just silently drops.
+ *
+ * This is the identifying subset rather than the full node. It carries the same
+ * `@id`, so a consumer that has seen the full node elsewhere merges the two; a
+ * consumer that has not still gets a named, located provider instead of a
+ * dangling pointer. The full node stays on home, about and contact, where the
+ * address, hours and catalogue actually belong.
+ */
+export function organizationRef() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ProfessionalService',
+    '@id': `${SITE_URL}/#organization`,
+    name: BRAND.name,
+    url: SITE_URL,
+    logo: absoluteUrl('/icon.png'),
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: CONTACT.address.city,
+      addressRegion: 'Khyber Pakhtunkhwa',
+      addressCountry: 'PK',
+    },
+  };
 }
 
 export function organizationSchema() {
@@ -44,7 +78,30 @@ export function organizationSchema() {
       addressRegion: 'Khyber Pakhtunkhwa',
       addressCountry: 'PK',
     },
-    areaServed: { '@type': 'Country', name: 'Pakistan' },
+    /*
+     * Two claims, not one. The firm works nationally, and most of what it does
+     * (a return filed through IRIS, a company registered with SECP) needs no
+     * physical proximity at all. But it is also a real office in Charsadda, and
+     * a country-only `areaServed` states the first and hides the second, which
+     * is the half that wins "tax consultant near me" in Khyber Pakhtunkhwa
+     * where the competition is thin.
+     *
+     * TODO: add `geo` with the exact GeoCoordinates for Ayan Plaza. Real
+     * coordinates have to be read off the map, not guessed from the city
+     * centre: a pin in the wrong place is worse for a local search than no pin,
+     * because Google matches it against the address and finds a contradiction.
+     */
+    areaServed: [
+      { '@type': 'Country', name: 'Pakistan' },
+      { '@type': 'AdministrativeArea', name: 'Khyber Pakhtunkhwa' },
+    ],
+    /*
+     * A band, not a price. Schema.org wants the symbol form here, and it is the
+     * one figure the site is willing to state: the engagements start small and
+     * scope up, which "$$" says without publishing a rate card the services
+     * pages deliberately do not carry.
+     */
+    priceRange: '$$',
     // Mirrors CONTACT.hours. Stated here as data so a search engine can show
     // the opening hours without parsing the sentence the footer renders.
     openingHoursSpecification: {
@@ -176,5 +233,44 @@ export function webApplicationSchema({
     },
     provider: { '@id': `${SITE_URL}/#organization` },
     isAccessibleForFree: true,
+    /*
+     * The YMYL trio: who is answerable, and as of when.
+     *
+     * These calculators compute a figure a visitor may act on, which is the
+     * content class Google holds to the highest evidence bar. An anonymous,
+     * undated number is the profile that rates worst there, regardless of how
+     * accurate it actually is. The same three facts render visibly on the page
+     * (components/sections/RateProvenance.tsx) and are read from the same
+     * module, so the markup and the schema cannot come apart.
+     */
+    dateModified: RATES_REVIEWED,
+    author: { '@id': `${SITE_URL}/#organization` },
+    reviewedBy: { '@id': `${SITE_URL}/#organization` },
+    citation: RATES_BASIS,
+  };
+}
+
+/**
+ * The site itself, as an entity distinct from the firm that runs it.
+ *
+ * `WebSite` is what lets a search engine say "these 87 URLs are one publication
+ * with one name" rather than treating the domain as a bag of pages, and it is
+ * the node `publisher` hangs the organisation off. One per site, on the home
+ * page only: repeating it per page would assert 87 websites.
+ *
+ * No `potentialAction`/`SearchAction`. That property claims the site has a
+ * search endpoint a crawler can query, and this one does not. Declaring a
+ * search box that does not exist is a worse signal than declaring nothing.
+ */
+export function webSiteSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${SITE_URL}/#website`,
+    url: SITE_URL,
+    name: BRAND.name,
+    description: TAGLINE,
+    inLanguage: 'en-PK',
+    publisher: { '@id': `${SITE_URL}/#organization` },
   };
 }

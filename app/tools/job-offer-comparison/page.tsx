@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ToolPage } from '@/components/sections/ToolPage';
 import { JobOfferCalculator } from '@/components/sections/SalaryToolCalculators';
 import { JOB_OFFER_TOOL, JOB_OFFER_FAQS, toolHref } from '@/content/tools';
-import { pageMetadata } from '@/lib/seo';
+import { toolMetadata } from '@/lib/seo';
 
 /**
  * /tools/job-offer-comparison
@@ -14,7 +14,7 @@ import { pageMetadata } from '@/lib/seo';
  * content/tools.ts), its arithmetic (in lib/tax/) and its questions.
  */
 
-export const metadata: Metadata = pageMetadata({
+export const metadata: Metadata = toolMetadata({
   title: JOB_OFFER_TOOL.seo.title,
   description: JOB_OFFER_TOOL.seo.description,
   path: toolHref(JOB_OFFER_TOOL),

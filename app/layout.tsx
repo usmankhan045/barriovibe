@@ -4,7 +4,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/ui/footer-section';
 import { SkipLink } from '@/components/layout/SkipLink';
 import { RevealObserver } from '@/components/ui/RevealObserver';
-import { BRAND, TAGLINE, SHORT_TAGLINE, X_HANDLE } from '@/content/site';
+import { BRAND, TAGLINE, SEO_TITLE, X_HANDLE } from '@/content/site';
 import { SITE_URL } from '@/lib/seo';
 import { TOKENS } from '@/lib/tokens';
 import './globals.css';
@@ -12,7 +12,7 @@ import './globals.css';
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${BRAND.name} | ${SHORT_TAGLINE}`,
+    default: `${SEO_TITLE} | ${BRAND.name}`,
     // Every inner page supplies a bare title; the brand is appended here so
     // no page has to remember to do it.
     template: `%s | ${BRAND.name}`,

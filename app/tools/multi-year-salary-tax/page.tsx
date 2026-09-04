@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ToolPage } from '@/components/sections/ToolPage';
 import { MultiYearSalaryCalculator } from '@/components/sections/SalaryToolCalculators';
 import { MULTI_YEAR_SALARY_TOOL, MULTI_YEAR_SALARY_FAQS, toolHref } from '@/content/tools';
-import { pageMetadata } from '@/lib/seo';
+import { toolMetadata } from '@/lib/seo';
 
 /**
  * /tools/multi-year-salary-tax
@@ -14,7 +14,7 @@ import { pageMetadata } from '@/lib/seo';
  * content/tools.ts), its arithmetic (in lib/tax/) and its questions.
  */
 
-export const metadata: Metadata = pageMetadata({
+export const metadata: Metadata = toolMetadata({
   title: MULTI_YEAR_SALARY_TOOL.seo.title,
   description: MULTI_YEAR_SALARY_TOOL.seo.description,
   path: toolHref(MULTI_YEAR_SALARY_TOOL),

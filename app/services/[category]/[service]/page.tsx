@@ -16,7 +16,13 @@ import { Icon } from '@/components/icons';
 import { Reveal } from '@/components/ui/Reveal';
 import { Button } from '@/components/ui/Button';
 import { FaqAccordion } from '@/components/sections/FaqList';
-import { JsonLd, breadcrumbSchema, faqSchema, serviceSchema } from '@/lib/jsonld';
+import {
+  JsonLd,
+  breadcrumbSchema,
+  faqSchema,
+  organizationRef,
+  serviceSchema,
+} from '@/lib/jsonld';
 import { PILLAR_BY_SLUG } from '@/content/pillars';
 import { PRACTICE_OF_PILLAR } from '@/content/practices';
 import {
@@ -110,6 +116,8 @@ export default async function ServicePage({ params }: { params: Params }) {
 
   return (
     <main id="main" tabIndex={-1}>
+      {/* The node this page's Service provider points at. */}
+      <JsonLd data={organizationRef()} />
       <JsonLd data={serviceSchema(service)} />
       <JsonLd data={breadcrumbSchema(crumbs)} />
       <JsonLd data={faqSchema(service.faqs)} />

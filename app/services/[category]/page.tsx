@@ -261,8 +261,17 @@ function PracticeView({
               <Reveal>
                 <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
                   <div>
+                    {/* H2, not H3. Each discipline block is a top-level
+                        section of this page, under the H1 and under nothing
+                        else, so H3 skipped a level: an outline reader saw a
+                        subsection of a heading that was not there. It went
+                        unnoticed on the seven practice pages that happen to
+                        carry an H2 further down, and showed plainly on
+                        corporate-advisory and marketing-ecommerce, which do
+                        not. `size` still renders it at h2 scale, so this
+                        changes the document outline and not the design. */}
                     <SectionHeading
-                      level={3}
+                      level={2}
                       size="h2"
                       eyebrow={pillar.title}
                       lines={pillar.servicesHeadline.lines}

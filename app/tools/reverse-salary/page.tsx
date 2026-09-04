@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ToolPage } from '@/components/sections/ToolPage';
 import { ReverseSalaryCalculator } from '@/components/sections/SalaryToolCalculators';
 import { REVERSE_SALARY_TOOL, REVERSE_SALARY_FAQS, toolHref } from '@/content/tools';
-import { pageMetadata } from '@/lib/seo';
+import { toolMetadata } from '@/lib/seo';
 
 /**
  * /tools/reverse-salary
@@ -14,7 +14,7 @@ import { pageMetadata } from '@/lib/seo';
  * content/tools.ts), its arithmetic (in lib/tax/) and its questions.
  */
 
-export const metadata: Metadata = pageMetadata({
+export const metadata: Metadata = toolMetadata({
   title: REVERSE_SALARY_TOOL.seo.title,
   description: REVERSE_SALARY_TOOL.seo.description,
   path: toolHref(REVERSE_SALARY_TOOL),

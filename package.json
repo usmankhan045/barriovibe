@@ -15,7 +15,8 @@
     "check:tax": "tsx scripts/check-tax.ts",
     "verify": "pnpm typecheck && pnpm lint && pnpm check:tokens && pnpm check:layout && pnpm check:content && pnpm check:tax",
     "check:layout": "node scripts/check-layout.mjs",
-    "art:steps": "node scripts/fetch-step-art.mjs"
+    "art:steps": "node scripts/fetch-step-art.mjs",
+    "indexnow": "tsx scripts/indexnow.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.1",

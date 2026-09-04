@@ -115,6 +115,24 @@ export const SHORT_TAGLINE =
   'One agency for software and AI, performance marketing and e-commerce, and corporate and advisory.';
 
 /**
+ * The home page's `<title>`, and the fallback title for anything that does not
+ * set one.
+ *
+ * Separate from SHORT_TAGLINE, which it used to be. That line is a positioning
+ * sentence written to be read under a headline, and at 98 characters it made a
+ * 125-character title: Google shows roughly 60, so two thirds of it was never
+ * seen, and the third that was said "One agency for software and AI, perfor..."
+ * rather than what the firm does or where.
+ *
+ * This is written for the one job a title has, which is to be read in a result
+ * list beside nine competitors. Disciplines first because that is what was
+ * searched for, Pakistan because it qualifies every one of them, and the brand
+ * last because a name means nothing to someone who has not heard it yet.
+ */
+export const SEO_TITLE =
+  'Web, Marketing, Tax and Legal Services in Pakistan';
+
+/**
  * The hero subhead. Separate from TAGLINE, which it used to reuse.
  *
  * TAGLINE is written for a search result: a dense, comma-separated list of

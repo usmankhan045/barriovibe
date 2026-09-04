@@ -55,6 +55,20 @@ import {
 export const TAX_YEAR = {
   label: 'Tax year 2027',
   period: '1 July 2026 to 30 June 2027',
+  /**
+   * The same year written the way it is searched for.
+   *
+   * Nobody types "tax year 2027" into Google. They type "2026-27", because that
+   * is how the year is named everywhere outside the Ordinance: on a payslip, in
+   * a budget headline, in the question a colleague asks. A title carrying the
+   * statutory label and not this one misses the query that would have found it,
+   * and "income tax calculator pakistan 2026-27" is a search with both volume
+   * and unambiguous intent.
+   *
+   * Kept beside `label` rather than derived from it so the two cannot disagree
+   * when the year rolls.
+   */
+  searchLabel: '2026-27',
   /** The Act that set the slabs below. Shown as the page's provenance line. */
   authority: 'Finance Act 2026',
 } as const;

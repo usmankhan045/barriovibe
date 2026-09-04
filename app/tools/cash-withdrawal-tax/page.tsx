@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ToolPage } from '@/components/sections/ToolPage';
 import { CashWithdrawalCalculator } from '@/components/sections/WithholdingCalculators';
 import { CASH_WITHDRAWAL_TOOL, CASH_WITHDRAWAL_FAQS, toolHref } from '@/content/tools';
-import { pageMetadata } from '@/lib/seo';
+import { toolMetadata } from '@/lib/seo';
 
 /**
  * /tools/cash-withdrawal-tax
@@ -14,7 +14,7 @@ import { pageMetadata } from '@/lib/seo';
  * content/tools.ts), its arithmetic (in lib/tax/) and its questions.
  */
 
-export const metadata: Metadata = pageMetadata({
+export const metadata: Metadata = toolMetadata({
   title: CASH_WITHDRAWAL_TOOL.seo.title,
   description: CASH_WITHDRAWAL_TOOL.seo.description,
   path: toolHref(CASH_WITHDRAWAL_TOOL),

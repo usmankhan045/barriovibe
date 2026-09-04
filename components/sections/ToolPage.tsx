@@ -11,7 +11,14 @@ import { Icon } from '@/components/icons';
 import { Reveal } from '@/components/ui/Reveal';
 import { Button } from '@/components/ui/Button';
 import { FaqAccordion } from '@/components/sections/FaqList';
-import { JsonLd, breadcrumbSchema, faqSchema, webApplicationSchema } from '@/lib/jsonld';
+import { RateProvenance } from '@/components/sections/RateProvenance';
+import {
+  JsonLd,
+  breadcrumbSchema,
+  faqSchema,
+  organizationRef,
+  webApplicationSchema,
+} from '@/lib/jsonld';
 import { TOOLS, toolHref, type Tool } from '@/content/tools';
 import { TAX_YEAR } from '@/lib/tax/pakistan';
 import type { Faq } from '@/content/types';
@@ -84,6 +91,8 @@ export function ToolPage({
   return (
     <main id="main" tabIndex={-1}>
       <JsonLd data={breadcrumbSchema(crumbs)} />
+      {/* The node this page's WebApplication provider points at. */}
+      <JsonLd data={organizationRef()} />
       <JsonLd
         data={webApplicationSchema({
           name: tool.title,
@@ -109,6 +118,11 @@ export function ToolPage({
           </div>
 
           <div className="mt-8 md:mt-12">{children}</div>
+
+          {/* Directly under the calculator, not in a footer. A reader who has
+              just been handed a number is the one who should see what it
+              rests on. */}
+          <RateProvenance />
         </Container>
       </section>
 

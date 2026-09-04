@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ToolPage } from '@/components/sections/ToolPage';
 import { SuperTaxCalculator } from '@/components/sections/BusinessCalculators';
 import { SUPER_TAX_TOOL, SUPER_TAX_FAQS, toolHref } from '@/content/tools';
-import { pageMetadata } from '@/lib/seo';
+import { toolMetadata } from '@/lib/seo';
 
 /**
  * /tools/super-tax
@@ -14,7 +14,7 @@ import { pageMetadata } from '@/lib/seo';
  * content/tools.ts), its arithmetic (in lib/tax/) and its questions.
  */
 
-export const metadata: Metadata = pageMetadata({
+export const metadata: Metadata = toolMetadata({
   title: SUPER_TAX_TOOL.seo.title,
   description: SUPER_TAX_TOOL.seo.description,
   path: toolHref(SUPER_TAX_TOOL),

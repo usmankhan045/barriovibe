@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ToolPage } from '@/components/sections/ToolPage';
 import { ElectricityBillCalculator } from '@/components/sections/ConsumerCalculators';
 import { ELECTRICITY_TOOL, ELECTRICITY_FAQS, toolHref } from '@/content/tools';
-import { pageMetadata } from '@/lib/seo';
+import { toolMetadata } from '@/lib/seo';
 
 /**
  * /tools/electricity-bill-tax
@@ -12,7 +12,7 @@ import { pageMetadata } from '@/lib/seo';
  * (lib/tax/) and its questions.
  */
 
-export const metadata: Metadata = pageMetadata({
+export const metadata: Metadata = toolMetadata({
   title: ELECTRICITY_TOOL.seo.title,
   description: ELECTRICITY_TOOL.seo.description,
   path: toolHref(ELECTRICITY_TOOL),

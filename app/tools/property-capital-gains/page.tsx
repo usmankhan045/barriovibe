@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ToolPage } from '@/components/sections/ToolPage';
 import { PropertyGainsCalculator } from '@/components/sections/PropertyCalculators';
 import { PROPERTY_GAINS_TOOL, PROPERTY_GAINS_FAQS, toolHref } from '@/content/tools';
-import { pageMetadata } from '@/lib/seo';
+import { toolMetadata } from '@/lib/seo';
 
 /**
  * /tools/property-capital-gains
@@ -12,7 +12,7 @@ import { pageMetadata } from '@/lib/seo';
  * (lib/tax/) and its questions.
  */
 
-export const metadata: Metadata = pageMetadata({
+export const metadata: Metadata = toolMetadata({
   title: PROPERTY_GAINS_TOOL.seo.title,
   description: PROPERTY_GAINS_TOOL.seo.description,
   path: toolHref(PROPERTY_GAINS_TOOL),

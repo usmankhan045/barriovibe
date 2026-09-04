@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ToolPage } from '@/components/sections/ToolPage';
 import { PropertyPurchaseCalculator } from '@/components/sections/PropertyCalculators';
 import { PROPERTY_PURCHASE_TOOL, PROPERTY_PURCHASE_FAQS, toolHref } from '@/content/tools';
-import { pageMetadata } from '@/lib/seo';
+import { toolMetadata } from '@/lib/seo';
 
 /**
  * /tools/property-purchase-tax
@@ -12,7 +12,7 @@ import { pageMetadata } from '@/lib/seo';
  * (lib/tax/) and its questions.
  */
 
-export const metadata: Metadata = pageMetadata({
+export const metadata: Metadata = toolMetadata({
   title: PROPERTY_PURCHASE_TOOL.seo.title,
   description: PROPERTY_PURCHASE_TOOL.seo.description,
   path: toolHref(PROPERTY_PURCHASE_TOOL),
