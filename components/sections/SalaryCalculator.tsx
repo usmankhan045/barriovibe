@@ -10,7 +10,6 @@ import {
   EOBI,
   EOBI_MONTHLY,
   RELIEF,
-  TAX_YEAR,
   type CalculatorInput,
 } from '@/lib/tax/pakistan';
 import {
@@ -80,6 +79,10 @@ export function SalaryCalculator() {
      not read four rows of "Rs 0". */
   const hasAllowances = result.zakatAllowance > 0 || result.educationAllowance > 0;
   const hasCredits = result.donationCredit > 0 || result.pensionCredit > 0;
+  /* Section 4AB reached salary only in tax years 2025 and 2026, and only above
+     Rs 10m of taxable income. Nil everywhere else, so the row is conditional
+     rather than a permanent "Rs 0". */
+  const hasSurcharge = result.surcharge > 0;
 
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_1fr] lg:gap-8">
@@ -287,10 +290,23 @@ export function SalaryCalculator() {
         <div className="u-tile p-7 md:p-8">
           <div className="flex items-baseline justify-between gap-4">
             <h2 className="font-display text-h3 text-ink">Your take-home</h2>
+            {/* The year the figures are on. It tracks the selector rather than
+                naming the current year, because a panel headed "Tax year 2027"
+                while showing 2019 rates would be the worst failure this
+                component could have. */}
             <span className="text-[12px] font-bold uppercase tracking-[0.1em] text-ink-body">
-              {TAX_YEAR.label}
+              {year.label}
             </span>
           </div>
+
+          {/* A closed year is stated plainly rather than left to be inferred
+              from a dropdown the reader may have set and forgotten. */}
+          {!isCurrentYear && (
+            <p className="mt-3 rounded-chip border border-line bg-surface px-4 py-2.5 text-[12.5px] leading-[1.5] text-ink-body">
+              These are the rates for {year.period}, a year that has closed, not the
+              current ones.{year.note ? ` ${year.note}` : ''}
+            </p>
+          )}
 
           {!hasSalary ? (
             /* The empty state says what to do, rather than showing a column of
@@ -344,10 +360,14 @@ export function SalaryCalculator() {
                   </>
                 )}
 
+                {/* The slab tax. It is the final income tax figure only when
+                    nothing sits between it and the total: no credit reduced it
+                    and no surcharge was added on top. Where either did, this
+                    row is the start of a working and the total comes below. */}
                 <Row
-                  label={hasCredits ? 'Tax on the slabs' : 'Income tax'}
+                  label={hasCredits || hasSurcharge ? 'Tax on the slabs' : 'Income tax'}
                   note={
-                    hasCredits
+                    hasCredits || hasSurcharge
                       ? undefined
                       : `Effective rate ${percent.format(result.effectiveRate)}, marginal rate ${percent.format(result.marginalRate)}`
                   }
@@ -372,12 +392,30 @@ export function SalaryCalculator() {
                         tone="muted"
                       />
                     )}
-                    <Row
-                      label="Income tax payable"
-                      note={`Effective rate ${percent.format(result.effectiveRate)}, marginal rate ${percent.format(result.marginalRate)}`}
-                      value={`- ${Rs(result.incomeTax)}`}
-                    />
                   </>
+                )}
+
+                {/* Section 4AB, in the two years it reached salary. Shown as
+                    its own row rather than folded into the tax, because a
+                    reader checking an old assessment needs to see it named:
+                    it is a surcharge ON the tax, and at these incomes it is
+                    a large number that would otherwise look like a slab
+                    error. Nil for the current year, so the row is absent. */}
+                {hasSurcharge && (
+                  <Row
+                    label="Surcharge"
+                    note={`Section 4AB, ${percent.format(result.surchargeRate)} of the tax, on taxable income above ${Rs(year.surcharge.threshold)}`}
+                    value={`- ${Rs(result.surcharge)}`}
+                    tone="muted"
+                  />
+                )}
+
+                {(hasCredits || hasSurcharge) && (
+                  <Row
+                    label="Income tax payable"
+                    note={`Effective rate ${percent.format(result.effectiveRate)}, marginal rate ${percent.format(result.marginalRate)}`}
+                    value={`- ${Rs(result.incomeTax)}`}
+                  />
                 )}
 
                 {result.eobiAnnual > 0 && (
@@ -424,8 +462,13 @@ export function SalaryCalculator() {
                                 ? `Above ${money.format(row.from)}`
                                 : `${money.format(row.from)} to ${money.format(row.to)}`}
                             </td>
+                            {/* A flat band has no rate to print. Tax year 2019
+                                charged a fixed rupee amount across its lower
+                                bands, and showing "0%" beside a Rs 1,000
+                                charge would read as a bug rather than as the
+                                law. See `Slab.flat` in lib/tax/slabs.ts. */}
                             <td className="py-2 pr-3 text-right text-ink-body">
-                              {percent.format(row.rate)}
+                              {row.flat ? 'Flat' : percent.format(row.rate)}
                             </td>
                             <td className="py-2 pr-3 text-right text-ink-body">
                               {money.format(Math.round(row.taxable))}
@@ -439,10 +482,19 @@ export function SalaryCalculator() {
                     </table>
                   </div>
 
+                  {/* Both halves follow the selected year. Stating "the
+                      surcharge no longer applies" while showing tax year 2025,
+                      where it did apply and is in the table above, would be the
+                      page contradicting itself. */}
                   <p className="mt-4 text-[12.5px] leading-[1.55] text-ink-body">
                     Rates from the First Schedule, Part I, Division I of the Income Tax
-                    Ordinance, 2001, as amended by the {TAX_YEAR.authority}. The salaried
-                    surcharge under section 4AB no longer applies.
+                    Ordinance, 2001, as amended by the {year.authority}, for{' '}
+                    {year.label.toLowerCase()}.{' '}
+                    {year.surcharge.rate > 0
+                      ? `A surcharge of ${percent.format(year.surcharge.rate)} under section 4AB applied to salary above ${Rs(year.surcharge.threshold)} of taxable income this year.`
+                      : 'The salaried surcharge under section 4AB does not apply this year.'}{' '}
+                    This table applies where salary is more than{' '}
+                    {percent.format(year.salaryShareTest)} of taxable income.
                   </p>
                 </details>
               )}

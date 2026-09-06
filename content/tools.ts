@@ -53,7 +53,7 @@ export const SALARY_TAX_TOOL: Tool = {
   slug: 'salary-tax',
   title: 'Pakistan Salary Tax Calculator',
   navLabel: 'Salary Tax Calculator',
-  card: 'Your monthly take-home on the current FBR salary slabs, with EOBI, provident fund, Zakat and pension relief, and the slab-by-slab working shown.',
+  card: 'Your monthly take-home on the FBR salary slabs for any tax year from 2012-13 to 2026-27, with EOBI, provident fund, Zakat and pension relief, and the slab-by-slab working shown.',
   icon: 'calculator',
   /**
    * Deliberately two sentences.
@@ -69,7 +69,7 @@ export const SALARY_TAX_TOOL: Tool = {
    * top of the tool.
    */
   intro:
-    'Enter your gross salary and see what actually reaches your account, on the current FBR slabs for salaried individuals. Nothing you type leaves your browser.',
+    'Enter your gross salary and see what actually reaches your account, on the FBR slabs for salaried individuals. Pick any tax year back to 2012-13 to check a closed year or a return you are revising. Nothing you type leaves your browser.',
   limits: [
     'Income from anywhere but salary: rent, a business, capital gains, dividends or profit on debt, each taxed under its own rules',
     'More than one employer in the same tax year, where each one withholds as though it were your only income',
@@ -81,7 +81,7 @@ export const SALARY_TAX_TOOL: Tool = {
   seo: {
     title: 'Pakistan Salary Tax Calculator',
     description:
-      'Work out your monthly take-home pay in Pakistan on the current FBR salary slabs, with EOBI, provident fund, Zakat, donation and pension relief, and the working shown.',
+      'Work out your monthly take-home pay in Pakistan on the FBR salary slabs for any tax year from 2012-13 to 2026-27, with EOBI, provident fund, Zakat, donation and pension relief, and the working shown.',
   },
 };
 
@@ -652,6 +652,62 @@ export const TELECOM_TOOL: Tool = {
  * claim as a tool that is finished and ready to be linked from the navbar, and
  * this list is the second claim.
  */
+/**
+ * The reference pages, which are not calculators.
+ *
+ * Everything else under /tools takes a figure and returns one. These take
+ * nothing and state the law: the withholding rate card, and the salary slabs
+ * for each of the tax years the calculator offers. They live here anyway
+ * because a visitor does not sort by "interactive": someone who wants the
+ * 236K rate and someone who wants to compute it are the same person on
+ * different days, and both start at /tools.
+ *
+ * Kept in their own group at the end of the menu rather than mixed into the
+ * five above, so the grouping still reads as "what are you doing" and the one
+ * group that answers "what is the rate" is findable as such.
+ */
+export const RATE_CARD_TOOL: Tool = {
+  slug: 'rates/withholding',
+  title: 'Withholding Tax Rate Card',
+  navLabel: 'Withholding rate card',
+  card: 'Every withholding rate on one page, with the filer and non-filer columns side by side and the section of the Ordinance against each.',
+  icon: 'receipt',
+  intro:
+    'The rates tax is deducted at before money reaches you, on one page. Filer and non-filer side by side, because on most of these the gap between the two columns is larger than the rate itself.',
+  limits: [
+    'Rates for a company or an association of persons, where several of these differ from the figures for an individual',
+    'Reduced rates under a double taxation treaty, which depend on the other country and on a residence certificate',
+    'Exemption certificates under section 159, which stop a deduction that would otherwise apply',
+    'Provincial sales tax on services, which is charged by your province and is a different tax from anything here',
+  ],
+  seo: {
+    title: 'Withholding Tax Rate Card Pakistan',
+    description:
+      'Pakistan withholding tax rates on one page, filer and non-filer side by side, with the section of the Income Tax Ordinance against each rate. Free to read and download.',
+  },
+};
+
+export const SLAB_TABLES_TOOL: Tool = {
+  slug: 'rates/salary-slabs',
+  title: 'Salary Tax Slabs by Year',
+  navLabel: 'Salary slabs by year',
+  card: 'The salaried income tax slabs for every tax year back to 2012-13, each with the Finance Act that set it and a table you can download.',
+  icon: 'chart',
+  intro:
+    'The salaried slab table for each tax year, back to 2012-13, with the Act that set it named against every one. For checking a closed year, a return you are revising, or how the rates on your salary have moved.',
+  limits: [
+    'The business and AOP table, which is a different and much steeper set of slabs under the same Division',
+    'Tax years before 2012-13, which charged a percentage of your whole income rather than a rate on each band and are a different kind of tax',
+    'Marginal relief, which applied in the earliest years shown and could reduce the tax where income only just crossed a band',
+    'Anything deducted from the tax itself, such as the allowances and credits the salary calculator applies',
+  ],
+  seo: {
+    title: 'Pakistan Salary Tax Slabs by Year',
+    description:
+      'Pakistan salaried income tax slab rates for every tax year from 2012-13 to 2026-27, each with the Finance Act that set it. Free to read and download.',
+  },
+};
+
 export const TOOLS: Tool[] = [
   SALARY_TAX_TOOL,
   MULTI_YEAR_SALARY_TOOL,
@@ -675,6 +731,10 @@ export const TOOLS: Tool[] = [
   CASH_WITHDRAWAL_TOOL,
   ELECTRICITY_TOOL,
   TELECOM_TOOL,
+  // The reference pages, which state rates rather than computing them. Listed
+  // last because a visitor scanning the hub is usually after a calculator.
+  RATE_CARD_TOOL,
+  SLAB_TABLES_TOOL,
 ];
 
 /**
@@ -691,12 +751,46 @@ export interface ToolGroup {
   title: string;
   accent: string;
   blurb: string;
+  /**
+   * The group's own icon, for the Tools mega-menu tab strip. The hub page
+   * shows an icon per tool and none per group, because a group there already
+   * has a heading, an eyebrow and a paragraph; a menu tab has room for a word
+   * and a glyph, so the group needs one of its own.
+   */
+  icon: IconName;
+  /**
+   * The group's heading in the Tools mega-menu.
+   *
+   * A separate string from `title` + `accent`, which the hub splits across two
+   * lines under a display heading with the accent in colour. The menu wants
+   * one line and one weight, so it wants the phrase whole and in one piece.
+   *
+   * Sentence case, not title case: these sit at 11px uppercase with letter
+   * spacing in the panel, matching the discipline headings in the Services
+   * menu, and the CSS does the casing.
+   *
+   * One line at 224px is the constraint. "Vehicles and investments" is the
+   * longest and it fits; check before lengthening one past it.
+   */
+  navLabel: string;
+  /**
+   * What to call the things in this group, singular and plural.
+   *
+   * Every group held calculators until the reference group arrived, and a
+   * page that states the rates is not a calculator: labelling it one on the
+   * hub is a small lie about what the visitor is about to get. Optional, and
+   * absent means "calculator", so the five original groups did not have to
+   * change.
+   */
+  noun?: { one: string; many: string };
   tools: Tool[];
 }
 
 export const TOOL_GROUPS: ToolGroup[] = [
   {
     slug: 'salary',
+    icon: 'users',
+    navLabel: 'Salary and take-home',
     title: 'Salary and',
     accent: 'take-home',
     blurb:
@@ -711,6 +805,8 @@ export const TOOL_GROUPS: ToolGroup[] = [
   },
   {
     slug: 'business',
+    icon: 'building',
+    navLabel: 'Business and company',
     title: 'Business and',
     accent: 'company',
     blurb:
@@ -724,6 +820,8 @@ export const TOOL_GROUPS: ToolGroup[] = [
   },
   {
     slug: 'property',
+    icon: 'pin',
+    navLabel: 'Property and rent',
     title: 'Property and',
     accent: 'rent',
     blurb:
@@ -737,6 +835,8 @@ export const TOOL_GROUPS: ToolGroup[] = [
   },
   {
     slug: 'vehicle',
+    icon: 'chart',
+    navLabel: 'Vehicles and investments',
     title: 'Vehicles and',
     accent: 'investments',
     blurb:
@@ -745,6 +845,8 @@ export const TOOL_GROUPS: ToolGroup[] = [
   },
   {
     slug: 'withholding',
+    icon: 'receipt',
+    navLabel: 'Deducted at source',
     title: 'Tax deducted',
     accent: 'by someone else',
     blurb:
@@ -753,15 +855,29 @@ export const TOOL_GROUPS: ToolGroup[] = [
   },
   {
     slug: 'provincial',
+    icon: 'compass',
+    navLabel: 'Set by your province',
     title: 'Set by your',
     accent: 'province',
     blurb:
       'Agriculture is a provincial subject, not a federal one, so these are charged by your province and the rates differ across the four. Where a province publishes nothing we can verify, the calculator says so rather than guessing.',
     tools: [AGRICULTURE_TAX_TOOL],
   },
+  {
+    slug: 'rates',
+    icon: 'receipt',
+    navLabel: 'Rate cards and reference',
+    title: 'Rate cards and',
+    accent: 'reference',
+    noun: { one: 'reference page', many: 'reference pages' },
+    blurb:
+      'The rates themselves, stated rather than computed. These are the pages to reach for when you know what you are looking at and want the figure, or the year you need is one that has closed.',
+    tools: [RATE_CARD_TOOL, SLAB_TABLES_TOOL],
+  },
 ];
 
 export const toolHref = (tool: Tool) => `/tools/${tool.slug}`;
+
 
 /**
  * Copy for the hub itself.
@@ -1441,5 +1557,61 @@ export const TELECOM_FAQS: Faq[] = [
     question: 'Can I claim it back?',
     answer:
       'It is adjustable against your income tax for the year, so it is claimed on your return like any other withholding. Most people never do, which is how a tax of a few rupees at a time adds up quietly over a year.',
+  },
+];
+
+export const RATE_CARD_FAQS: Faq[] = [
+  {
+    question: 'What does "filer" mean on this card?',
+    answer:
+      'A person whose name is on FBR\'s Active Taxpayer List, which is published weekly and is a different thing from having filed once. You are on it if you filed the last return that fell due and your name has been included; you can check your own status on FBR\'s site by CNIC. On several rows here the non-filer column is more than double the filer column, and on two of them a filer pays nothing at all.',
+  },
+  {
+    question: 'Is this the tax I owe, or something else?',
+    answer:
+      'Mostly something else. Withholding is tax collected in advance by whoever pays you or serves you, and on most of these rows it is adjustable: it counts towards your liability for the year and is claimed back on your return. The rows marked final are different. There the deduction settles the tax on that income and there is nothing further to pay or reclaim on it.',
+  },
+  {
+    question: 'Why are some rates shown as a range rather than one figure?',
+    answer:
+      'Because the Ordinance states them that way. The advance tax on buying property is banded by the value of the property for a person off the Active Taxpayer List, and the charge on registering a vehicle depends on its engine capacity or its value. A single percentage there would be a simplification rather than the rate, so the card gives the range and the calculator beside it works out the figure for your own facts.',
+  },
+  {
+    question: 'Do these rates apply to a company as well?',
+    answer:
+      'Not all of them. This card is written for an individual, which is who most of these deductions are taken from. Several sections charge a company differently, and a few charge an association of persons differently again. A business should read the rate against its own status rather than assume the individual column applies.',
+  },
+  {
+    question: 'How current is this?',
+    answer:
+      'Every rate here is read from the same module the calculators on this site compute with, and that module is reconciled against the First Schedule on every build. There is no second copy of any figure to go stale. The tax year and the Act that set the rates are stated at the top of the page.',
+  },
+];
+
+export const SLAB_TABLES_FAQS: Faq[] = [
+  {
+    question: 'Which year do I need?',
+    answer:
+      'The one the income was earned in, not the one you are filing in. Pakistan\'s tax year is named for the year it ends in and runs from 1 July to 30 June, so salary earned in, say, March 2025 falls in tax year 2025, which ran 1 July 2024 to 30 June 2025. Each table on this page states both the name and the dates for that reason.',
+  },
+  {
+    question: 'Why does the Act named against a year not match the year?',
+    answer:
+      'Because a Finance Act passed in one summer sets the rates for the year beginning that July. It is also common for an Act to leave the salaried table alone, in which case an earlier Act still governs. Three consecutive years on this page run on one table for exactly that reason, and each says so rather than crediting the Act passed the summer before it.',
+  },
+  {
+    question: 'Why do the older years look so different?',
+    answer:
+      'Because the law changed shape, not just rate. One year charged a flat amount for a whole band rather than a percentage. Another stated its cumulative figures deliberately higher than the bands beneath it add up to, so that higher earners did not get the benefit of the lower rates. Where a year does something unusual the table says what it was.',
+  },
+  {
+    question: 'Do these tables apply to business income?',
+    answer:
+      'No. These are the slabs for a salaried individual, which apply where salary is more than a stated share of taxable income. Business and association-of-persons income is charged on a separate and much steeper table under the same Division of the First Schedule. The business calculator on this site uses that one.',
+  },
+  {
+    question: 'How far back do these go, and why stop there?',
+    answer:
+      'To tax year 2013, which is the first year of the modern table. Before that the law charged a percentage of a person\'s whole income rather than a rate on each band, with marginal relief to soften the steps between them. That is a different kind of calculation, and stating it in the same shape as these tables would misrepresent it.',
   },
 ];

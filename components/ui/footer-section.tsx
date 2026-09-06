@@ -206,7 +206,7 @@ export function Footer() {
      * `pt-20` rather than `pt-16` so the wordmark clears the overlap: nothing
      * legible may sit in the 48px strip where the blue shows through.
      */
-    <footer className="u-glass u-glass--sheet relative -mt-12 w-full overflow-hidden rounded-t-[28px] pt-20 pb-12 md:rounded-t-[40px] lg:pt-24">
+    <footer className="u-glass u-glass--sheet relative -mt-12 w-full overflow-hidden rounded-t-[28px] pt-20 md:rounded-t-[40px] lg:pt-24">
 
       {/* Full-bleed footer, container-width contents — the same split every
 			    other section on the site uses, so the wordmark lines up with the
@@ -297,11 +297,19 @@ export function Footer() {
 
         {/* The copyright bar. Its own row at the absolute bottom of the
             footer rather than sitting under the logo, on the client's
-            instruction — a border-top separates it from the columns above
-            so it reads as the page's closing line, not a fifth column. */}
+            instruction: a border-top separates it from the columns above
+            so it reads as the page's closing line, not a fifth column.
+
+            It carries the footer's bottom padding itself (`py-6`, matching
+            the `pt-6` it already had above the text) rather than leaving it
+            on the <footer>. The element had `pb-12` there, which put 48px of
+            empty glass below this line with nothing in it: the line read as
+            floating rather than as closing the page. Balanced padding on the
+            bar is what makes it a row. Anything added below this must bring
+            its own bottom padding, or put it back on the <footer>. */}
         <AnimatedContainer
           delay={0.1 + footerLinks.length * 0.1}
-          className="mt-12 border-t border-line pt-6 text-center lg:mt-16"
+          className="mt-12 border-t border-line py-6 text-center lg:mt-16"
         >
           <p className="text-[13px] text-ink-body">
             © {new Date().getFullYear()} {BRAND.legalName}. All rights reserved.

@@ -1,4 +1,5 @@
 import { PRACTICE_GROUPS, practiceHref } from './services';
+import { TOOL_GROUPS, toolHref } from './tools';
 
 /**
  * Navigation trees, derived from `services.ts` so a new service appears in the
@@ -9,13 +10,24 @@ export interface NavLink {
   label: string;
   href: string;
   /**
-   * Set on the single "Services" item only. It is what opens the mega-menu
-   * panel; the panel itself carries an internal tab strip (built from
-   * `MEGA_MENU_COLUMNS`) for switching between the three practices, so this
-   * flag does not need to name which one.
+   * Names which mega-menu panel this item opens, or is absent on the items
+   * that are plain links.
+   *
+   * Two items carry one: "Services" opens the practice panel built from
+   * `MEGA_MENU_COLUMNS`, and "Tools" opens the calculator panel built from
+   * `TOOLS_MENU_COLUMNS`. Each panel carries its own internal tab strip, so
+   * the flag names the panel rather than the tab: which tab is showing is
+   * runtime state in the header, not part of the nav tree.
+   *
+   * It used to be a boolean, when Services was the only item with a panel. A
+   * boolean cannot say WHICH panel once there are two, and the header keys
+   * its open state on this string.
    */
-  mega?: boolean;
+  mega?: MegaMenuId;
 }
+
+/** The panels the header can open. See `mega` above. */
+export type MegaMenuId = 'services' | 'tools';
 
 /**
  * The mega-menu and the footer, both shaped as practice → discipline →
@@ -44,6 +56,39 @@ export const MEGA_MENU_COLUMNS = PRACTICE_GROUPS.map(({ practice, groups }) => (
 }));
 
 /**
+ * The Tools panel, shaped as group → calculators.
+ *
+ * Deliberately one level shallower than `MEGA_MENU_COLUMNS`. A practice holds
+ * disciplines which hold services; a tool group holds calculators directly.
+ * That extra level is why Services needs a tab strip and Tools does not: three
+ * practices holding forty-four services cannot be shown at once, six groups
+ * holding twenty-two calculators can. The panel shows all six side by side,
+ * each under its own heading. See the tab strip's note in HeaderClient.
+ *
+ * Header.tsx is what turns this list into the panel's single column, so the
+ * shape the client renders stays identical for both menus.
+ *
+ * Derived from `TOOL_GROUPS` for the same reason the services tree is derived
+ * from `PRACTICE_GROUPS`: a new calculator appears in the menu by being added
+ * to its group, and nobody has to remember a second list.
+ */
+export const TOOLS_MENU_COLUMNS = TOOL_GROUPS.map((group) => ({
+  slug: group.slug,
+  /* The group's own heading in the panel, not the hub's split title. See the
+     note on `navLabel` in content/tools.ts. */
+  title: group.navLabel,
+  icon: group.icon,
+  /* The group's own section on the hub, not a page of its own: the groups are
+     headings on /tools, and each one carries `scroll-mt-28` and an id there so
+     the fragment lands under the sticky header. */
+  href: `/tools#${group.slug}`,
+  tools: group.tools.map((tool) => ({
+    label: tool.navLabel,
+    href: toolHref(tool),
+  })),
+}));
+
+/**
  * ONE "Services" ITEM HOLDS ALL THREE PRACTICES.
  *
  * This used to put the three practices directly in the pill, each opening its
@@ -68,11 +113,16 @@ export const MEGA_MENU_COLUMNS = PRACTICE_GROUPS.map(({ practice, groups }) => (
  * ── Tools ──
  *
  * Added next to Services because it is the same kind of item: a hub over a
- * growing set of pages, listed in content/tools.ts. It carries no `mega` flag.
- * The mega-menu exists because forty-four services cannot be chosen from a
- * dropdown; a handful of calculators can be chosen from a page, and giving
- * Tools a panel of its own would put a near-empty version of the Services
- * panel next to the full one.
+ * growing set of pages, listed in content/tools.ts.
+ *
+ * It carried no panel at first, on the reasoning that a handful of
+ * calculators could be chosen from a page and a panel for them would be a
+ * near-empty copy of the Services one sitting next to the full one. That
+ * reasoning expired with the count: `TOOL_GROUPS` now holds twenty-two
+ * calculators in six groups, which is a hub, not a handful, and the argument
+ * that forty-four services cannot be chosen from a dropdown applies to them
+ * for the same reason. So Tools opens its own panel, with the six groups as
+ * its tab strip, exactly as the practices are the Services tab strip.
  *
  * It sits before Contact rather than after Blog: it is a reason to visit the
  * site, not an afterword, and the two hub items reading together keeps the
@@ -86,8 +136,8 @@ export const MEGA_MENU_COLUMNS = PRACTICE_GROUPS.map(({ practice, groups }) => (
  */
 export const PRIMARY_NAV: NavLink[] = [
   { label: 'Home', href: '/' },
-  { label: 'Services', href: '/services', mega: true },
-  { label: 'Tools', href: '/tools' },
+  { label: 'Services', href: '/services', mega: 'services' },
+  { label: 'Tools', href: '/tools', mega: 'tools' },
   { label: 'Contact', href: '/contact' },
   { label: 'About', href: '/about' },
   { label: 'Blog', href: '/blog' },

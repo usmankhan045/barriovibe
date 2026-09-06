@@ -100,6 +100,13 @@ import {
   compareOffers,
   reverseSalary,
 } from '../lib/tax/salary-tools';
+import { calculateForYear, TAX_YEARS, taxYearById } from '../lib/tax/salary-years';
+import {
+  WITHHOLDING_SECTIONS,
+  nonFilerRate,
+  TENTH_SCHEDULE_UPLIFT,
+} from '../lib/tax/withholding-rates';
+import { RATE_GROUPS } from '../lib/tax/rate-card';
 
 let failures = 0;
 
@@ -1199,6 +1206,210 @@ for (let x = 0; x <= 50_000_000; x += 250_000) {
   }
 }
 
+// ── Every historic tax year ─────────────────────────────────────────────────
+//
+// The year selector on /tools/salary-tax offers ten years, so there are ten
+// tables that can be wrong rather than one. Each is asserted the same two ways
+// the current year is: against itself, and against cases worked by hand from
+// the Ordinance.
+//
+// The tables were read out of FBR's own consolidated Ordinance texts (amended
+// to 30.06.2018, 30.06.2022 and 31.07.2025), which print each superseded table
+// under a footnote naming the Act that replaced it. Two of the years below are
+// additionally confirmed against an independent public calculator, marked at
+// the case concerned.
+{
+  const taxIn = (id: string, income: number) =>
+    taxOnSlabs(income, taxYearById(id).slabs).tax;
+
+  // Each table reconciles with itself, exactly as the current year's does.
+  for (const year of TAX_YEARS) {
+    for (const [i, slab] of year.slabs.entries()) {
+      if (slab.upTo === null) continue;
+      const next = year.slabs[i + 1];
+      if (!next) continue;
+      /* A flat band is outside the cumulative scheme by construction: it
+         charges one figure across the whole band and the band above restarts
+         from zero. See `Slab.flat`. Its own worked cases are below. */
+      if (slab.flat !== undefined || next.flat !== undefined) continue;
+      eq(
+        `${year.label}: tax at Rs ${slab.upTo.toLocaleString()} equals the next slab's fixed amount`,
+        taxIn(year.id, slab.upTo),
+        next.fixed,
+      );
+    }
+  }
+
+  // The exempt threshold of every year is genuinely untaxed.
+  for (const year of TAX_YEARS) {
+    eq(
+      `${year.label}: exempt threshold is untaxed`,
+      taxIn(year.id, year.exemptThreshold),
+      0,
+    );
+  }
+
+  // Worked cases, one per year, computed from the Ordinance's own
+  // "fixed + rate on the excess" statement rather than from the slab walk.
+  eq('TY2018 at Rs 3,600,000', taxIn('2017-2018', 3_600_000), 472_000 + 0.25 * 100_000);
+  eq('TY2020 at Rs 3,600,000', taxIn('2019-2020', 3_600_000), 370_000 + 0.2 * 100_000);
+  eq('TY2021 at Rs 3,600,000', taxIn('2020-2021', 3_600_000), 370_000 + 0.2 * 100_000);
+  eq('TY2022 at Rs 3,600,000', taxIn('2021-2022', 3_600_000), 370_000 + 0.2 * 100_000);
+  // Confirmed against an independent public calculator, which returns 405,000.
+  eq('TY2023 at Rs 3,600,000', taxIn('2022-2023', 3_600_000), 165_000 + 0.2 * 1_200_000);
+  eq('TY2024 at Rs 3,600,000', taxIn('2023-2024', 3_600_000), 165_000 + 0.225 * 1_200_000);
+  eq('TY2025 at Rs 3,600,000', taxIn('2024-2025', 3_600_000), 430_000 + 0.3 * 400_000);
+  eq('TY2026 at Rs 3,600,000', taxIn('2025-2026', 3_600_000), 346_000 + 0.3 * 400_000);
+  // Confirmed against an independent public calculator, which returns 416,000.
+  eq('TY2027 at Rs 3,600,000', taxIn('2026-2027', 3_600_000), 316_000 + 0.25 * 400_000);
+
+  // ── The four older tables, and the pairs that share one ─────────────────
+  //
+  // Six years, four tables: the Finance Acts of 2014 and 2016 both left the
+  // salaried slabs alone. The figures below are chosen to tell apart the two
+  // tables that are otherwise easy to conflate, which is the specific mistake
+  // a reader of a single consolidated Ordinance makes.
+  eq('TY2014 at Rs 7,000,000', taxIn('2013-2014', 7_000_000), 1_425_000);
+  eq('TY2015 at Rs 7,000,000', taxIn('2014-2015', 7_000_000), 1_425_000);
+  eq('TY2016 at Rs 7,000,000', taxIn('2015-2016', 7_000_000), 1_422_000);
+  eq('TY2017 at Rs 7,000,000', taxIn('2016-2017', 7_000_000), 1_422_000);
+  // Tax year 2018 shares that table too: the Finance Acts of 2016 and 2017
+  // both left the salaried slabs alone, so one table covers 2016 to 2018.
+  eq('TY2018 at Rs 7,000,000', taxIn('2017-2018', 7_000_000), 1_422_000);
+  // The 2% band the Finance Act 2015 inserted: present from TY2016, absent
+  // before it. Rs 450,000 is inside that band and nowhere else.
+  eq('TY2016 has the 2% band at Rs 450,000', taxIn('2015-2016', 450_000), 0.02 * 50_000);
+  eq('TY2015 has no 2% band at Rs 450,000', taxIn('2014-2015', 450_000), 0.05 * 50_000);
+
+  // ── Tax year 2013, whose stated amounts break their own arithmetic ───────
+  //
+  // FBR's Circular 2 of 2012 states these three figures in terms, against the
+  // smaller ones the cumulative arithmetic would give. Asserting the floors is
+  // the whole point: a walk that accumulated instead of reading `fixed` would
+  // return 92,500, 167,500 and 262,500 here and be wrong by up to Rs 165,000.
+  eq('TY2013 floor of the 15% band is the stated 95,000', taxIn('2012-2013', 1_500_000), 95_000);
+  eq('TY2013 floor of the 17.5% band is the stated 175,000', taxIn('2012-2013', 2_000_000), 175_000);
+  eq('TY2013 floor of the 20% band is the stated 420,000', taxIn('2012-2013', 2_500_000), 420_000);
+  // And the bands still run marginally above those floors.
+  eq('TY2013 above the top floor', taxIn('2012-2013', 3_000_000), 420_000 + 0.2 * 500_000);
+  eq('TY2013 first three bands are ordinary', taxIn('2012-2013', 1_000_000), 17_500 + 0.1 * 250_000);
+
+  // Tax year 2019, the flat-charge table. Every one of these is a figure the
+  // Act states directly rather than a rate applied to a slice, and the pair
+  // either side of Rs 1,200,000 is the discontinuity: Rs 2,000 at the
+  // threshold and effectively nothing one rupee above it.
+  eq('TY2019 at Rs 400,000 is nil', taxIn('2018-2019', 400_000), 0);
+  eq('TY2019 at Rs 400,001 is the flat Rs 1,000', taxIn('2018-2019', 400_001), 1_000);
+  eq('TY2019 at Rs 800,000 is still the flat Rs 1,000', taxIn('2018-2019', 800_000), 1_000);
+  eq('TY2019 at Rs 800,001 is the flat Rs 2,000', taxIn('2018-2019', 800_001), 2_000);
+  eq('TY2019 at Rs 1,200,000 is still the flat Rs 2,000', taxIn('2018-2019', 1_200_000), 2_000);
+  eq('TY2019 restarts from nil above Rs 1,200,000', taxIn('2018-2019', 1_200_001), 0.05, 0.01);
+  eq('TY2019 at Rs 2,500,000', taxIn('2018-2019', 2_500_000), 65_000);
+  eq('TY2019 at Rs 4,000,000', taxIn('2018-2019', 4_000_000), 290_000);
+  eq('TY2019 at Rs 8,000,000', taxIn('2018-2019', 8_000_000), 1_090_000);
+
+  // ── Section 4AB, in the two years it reached salary ──────────────────────
+  //
+  // Inserted by the Finance Act 2024 at 10% for everyone, reduced to 9% for
+  // salary by the Finance Act 2025, and nil for salary from tax year 2027. It
+  // is charged on the TAX, above Rs 10m of taxable income, so a salary at or
+  // below the threshold must attract none of it in any year.
+  const annual = (id: string, amount: number) =>
+    calculateForYear({ ...EMPTY_INPUT, amount, period: 'annual' }, id);
+
+  eq('TY2025 surcharge rate is 10%', annual('2024-2025', 15_000_000).surchargeRate, 0.1, 1e-9);
+  eq('TY2026 surcharge rate is 9%', annual('2025-2026', 15_000_000).surchargeRate, 0.09, 1e-9);
+  eq('TY2027 has no salary surcharge', annual('2026-2027', 15_000_000).surchargeRate, 0, 1e-9);
+  eq('TY2024 predates section 4AB', annual('2023-2024', 15_000_000).surchargeRate, 0, 1e-9);
+
+  eq(
+    'TY2025 surcharge is nil at the Rs 10m threshold itself',
+    annual('2024-2025', 10_000_000).surcharge,
+    0,
+  );
+  {
+    // 10% of the tax, and the tax is the slab figure since no credit applies.
+    const r = annual('2024-2025', 15_000_000);
+    eq('TY2025 surcharge is 10% of the slab tax', r.surcharge, r.taxBeforeCredits * 0.1);
+    eq('TY2025 income tax includes the surcharge', r.incomeTax, r.taxBeforeCredits * 1.1);
+  }
+}
+
+// ── The rate card's stated sections ─────────────────────────────────────────
+//
+// These are rates the card publishes and nothing on the site computes, so
+// there is no calculator whose answer would go wrong if one were mistyped. The
+// page itself is the product, which makes these assertions the only thing
+// standing between a typo and a published figure.
+//
+// Read from the Income Tax Ordinance, 2001 as amended to 30 June 2026, and
+// cross-checked against KPMG Taseer Hadi's withholding card for tax year 2027,
+// which agrees on every rate below.
+{
+  const rateOf = (section: string, index: number) =>
+    WITHHOLDING_SECTIONS.find((s) => s.section === section)!.rates[index]!.filer;
+
+  // Section 150, dividends. The eight cases in Division I, Part III.
+  eq('s.150 IPP pass-through dividend', rateOf('150', 0), 0.075, 1e-9);
+  eq('s.150 REIT and residual cases', rateOf('150', 1), 0.15, 1e-9);
+  eq('s.150 mutual fund, equity portion', rateOf('150', 2), 0.15, 1e-9);
+  eq('s.150 mutual fund, debt portion, non-company', rateOf('150', 3), 0.25, 1e-9);
+  eq('s.150 mutual fund, debt portion, company', rateOf('150', 4), 0.29, 1e-9);
+  eq('s.150 company paying no tax', rateOf('150', 5), 0.25, 1e-9);
+  eq('s.150 SPV to a REIT scheme is nil', rateOf('150', 6), 0, 1e-9);
+  eq('s.150 SPV to anyone else', rateOf('150', 7), 0.35, 1e-9);
+
+  // Section 151, profit on debt. Rewritten by the Finance Act 2025 from a flat
+  // 15%, which is the figure a reader is most likely to misremember.
+  eq('s.151 bank deposit', rateOf('151', 0), 0.2, 1e-9);
+  eq('s.151 government securities, not an individual', rateOf('151', 1), 0.2, 1e-9);
+  eq('s.151 every other case', rateOf('151', 2), 0.15, 1e-9);
+
+  // Section 156, prizes.
+  eq('s.156 prize bond or cross-word', rateOf('156', 0), 0.15, 1e-9);
+  eq('s.156 raffle, lottery, quiz or sales promotion', rateOf('156', 1), 0.2, 1e-9);
+
+  // Section 233, brokerage and commission.
+  eq('s.233 advertising agents', rateOf('233', 0), 0.1, 1e-9);
+  eq('s.233 life insurance agents under Rs 500,000', rateOf('233', 1), 0.08, 1e-9);
+  eq('s.233 everyone else', rateOf('233', 2), 0.12, 1e-9);
+
+  // Section 236A, auctions.
+  eq('s.236A general auction', rateOf('236A', 0), 0.1, 1e-9);
+  eq('s.236A immovable property and railway services', rateOf('236A', 1), 0.05, 1e-9);
+
+  // ── Rule 1 of the Tenth Schedule ────────────────────────────────────────
+  //
+  // Every non-filer figure on the card for these sections is the filer rate
+  // doubled. None of them states its own non-filer rate, so a hand-typed
+  // doubled figure anywhere here would be a second source that could drift.
+  eq('the Tenth Schedule uplift is a doubling', TENTH_SCHEDULE_UPLIFT, 2, 1e-9);
+  for (const section of WITHHOLDING_SECTIONS) {
+    for (const rate of section.rates) {
+      eq(
+        `s.${section.section} non-filer rate for "${rate.label.slice(0, 40)}" is the filer rate doubled`,
+        nonFilerRate(rate.filer),
+        rate.filer * 2,
+        1e-9,
+      );
+    }
+  }
+
+  // The card renders what those modules hold, so a row must exist for every
+  // rate declared. Catches a section added to the data and forgotten on the
+  // card, which would be invisible on the page.
+  const cardRows = RATE_GROUPS.flatMap((group) => group.rows);
+  for (const section of WITHHOLDING_SECTIONS) {
+    const onCard = cardRows.filter((row) => row.section === section.section).length;
+    eq(
+      `s.${section.section} has a card row for each of its rates`,
+      onCard,
+      section.rates.length,
+      0.001,
+    );
+  }
+}
+
 // ── Report ──────────────────────────────────────────────────────────────────
 if (failures > 0) {
   console.error(`\n  ✗ Tax check failed: ${failures} problem(s). Do not ship this.\n`);
@@ -1209,5 +1420,15 @@ console.log(
   `\n  ✓ Tax check passed: ${SLABS.length} salary, ${BUSINESS_SLABS.length} business and ` +
     `${RENT_SLABS.length} rent slabs reconcile with the First Schedule; company, 4C, 113, 154A, ` +
     `231AB, 236C, 236K, 231B, 235, 236, 37 and 37A rates verified for ${TAX_YEAR.label}`,
+);
+console.log(
+  `    plus all ${TAX_YEARS.length} salary tax years (${TAX_YEARS[TAX_YEARS.length - 1]!.searchLabel} ` +
+    `to ${TAX_YEARS[0]!.searchLabel}) reconciled and worked against the Ordinance, ` +
+    `including the section 4AB surcharge`,
+);
+console.log(
+  `    plus the rate card's ${RATE_GROUPS.flatMap((g) => g.rows).length} rows across ` +
+    `${new Set(RATE_GROUPS.flatMap((g) => g.rows.map((r) => r.section))).size} sections, ` +
+    `with every non-filer rate derived through Rule 1 of the Tenth Schedule`,
 );
 console.log('');

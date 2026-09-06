@@ -1,5 +1,5 @@
 import { HeaderClient, type NavData } from './HeaderClient';
-import { PRIMARY_NAV, MEGA_MENU_COLUMNS } from '@/content/nav';
+import { PRIMARY_NAV, MEGA_MENU_COLUMNS, TOOLS_MENU_COLUMNS } from '@/content/nav';
 
 /**
  * SLOT — the client is supplying their own navbar. See components/ui/README.md.
@@ -23,6 +23,11 @@ import { PRIMARY_NAV, MEGA_MENU_COLUMNS } from '@/content/nav';
  * `pnpm check:content` fails the build if any service is missing from it —
  * that is what enforces the "nothing hidden" requirement at the navigation
  * level.
+ *
+ * The same reduction is done for the Tools panel, which is a second menu of
+ * the same shape over content/tools.ts. That file is the larger of the two by
+ * some way, since every calculator carries its own FAQ set, so keeping it out
+ * of the client bundle matters more here, not less.
  */
 export function Header() {
   const nav: NavData = {
@@ -44,6 +49,38 @@ export function Header() {
         links: group.links.map(({ label, href }) => ({ label, href })),
       })),
     })),
+    /* The Tools panel, in the same shape as the practices above so the header
+       renders both through one component.
+
+       ONE column, holding all six groups, where Services has one column per
+       practice. That difference is the whole reason the Tools panel has no tab
+       strip: a tab strip is a control for picking between columns, and there
+       is nothing here to pick between. Twenty-two calculators fit on screen
+       together; forty-four services do not. The header derives that from the
+       column count rather than from the menu's name, so this shape is what
+       decides it. See the tab strip's note in HeaderClient.
+
+       The groups keep their own titles, which become the column headings that
+       tell the six apart. */
+    tools: [
+      {
+        slug: 'tools',
+        /* Neither is rendered: an untabbed panel draws no tab, and the tab is
+           the only thing that uses a column's own title and icon. They are
+           here because the shape is shared with the practices above, where
+           both are drawn. Kept honest rather than left blank so that a Tools
+           panel that ever does grow a second column has them already. */
+        title: 'Tools',
+        href: '/tools',
+        icon: 'calculator' as const,
+        groups: TOOLS_MENU_COLUMNS.map((group) => ({
+          slug: group.slug,
+          title: group.title,
+          href: group.href,
+          links: group.tools,
+        })),
+      },
+    ],
   };
 
   return <HeaderClient nav={nav} />;

@@ -21,9 +21,33 @@ import { cx } from '@/lib/cx';
 /** `useLayoutEffect` warns when it runs on the server. This one measures. */
 const useIsoLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
+/** Which panel a nav item opens. Mirrors `MegaMenuId` in content/nav.ts. */
+export type MegaMenuId = 'services' | 'tools';
+
+/**
+ * A tab inside a mega-menu panel, and the columns of links under it.
+ *
+ * One shape for both panels, and the panel's whole layout follows from how
+ * many of these arrive: several means a tab strip to pick between them
+ * (Services, one per practice), exactly one means no strip and every group
+ * shown at once (Tools). See the tab strip's note at the render site.
+ */
+export interface MegaColumn {
+  slug: string;
+  title: string;
+  href: string;
+  icon: IconName;
+  groups: {
+    slug: string;
+    title: string;
+    href: string;
+    links: { label: string; href: string }[];
+  }[];
+}
+
 export interface NavData {
-  /** `mega` is set on the single "Services" item that opens the panel. */
-  primary: { label: string; href: string; mega?: boolean }[];
+  /** `mega` names which panel the item opens: "Services" or "Tools". */
+  primary: { label: string; href: string; mega?: MegaMenuId }[];
   /** One per practice. Three of them. */
   columns: {
     slug: string;
@@ -43,6 +67,9 @@ export interface NavData {
       links: { label: string; href: string }[];
     }[];
   }[];
+  /* The Tools panel. Exactly one column, holding the six tool groups, which
+     is what makes it the untabbed one. See MegaColumn. */
+  tools: MegaColumn[];
 }
 
 /**
@@ -58,21 +85,29 @@ export interface NavData {
  * hidden" requirement at the navigation level.
  */
 export function HeaderClient({ nav }: { nav: NavData }) {
-  /* The slug of the practice tab showing inside the Services panel, or null
-     when the panel is closed. "Which practice is selected" and "whether the
-     panel is open" are the same question now that there is one trigger, so
-     they are the same piece of state rather than a separate open boolean. */
-  const [openPractice, setOpenPractice] = useState<string | null>(null);
+  /* WHICH panel is open, and which tab inside it, or null when nothing is.
+     One piece of state rather than three, because "open" and "which tab" are
+     the same question: a panel with no tab selected has nothing to show, and
+     a selected tab with no panel has nowhere to show it.
+
+     It used to be a bare tab slug, back when Services was the only trigger.
+     A slug alone cannot say which panel it belongs to once Tools has one too,
+     and the two panels' slugs are drawn from different namespaces. */
+  const [openMega, setOpenMega] = useState<{ menu: MegaMenuId; tab: string } | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
   const reduceMotion = useReducedMotion();
   const megaRef = useRef<HTMLDivElement>(null);
-  // Escape has to return focus to the trigger that opened the panel. There is
-  // one trigger — "Services" — regardless of which practice tab is showing.
-  const servicesTriggerRef = useRef<HTMLAnchorElement | null>(null);
+  /* Escape has to return focus to the trigger that opened the panel, and the
+     panel has to be positioned under it, so each trigger keeps a reference
+     keyed by the panel it opens. A single ref would have the last-rendered
+     trigger overwrite the first, which is how "Escape from Tools focuses
+     Services" and "the Tools panel hangs off the Services item" would both
+     have happened. */
+  const megaTriggerRefs = useRef<Partial<Record<MegaMenuId, HTMLAnchorElement | null>>>({});
   // The whole nav pill is the hover/focus region. It has to be, now that
-  // moving between two practice triggers passes over a third element: scoping
-  // it to a single <li> made every sideways move a close and a reopen.
+  // moving between two mega triggers passes over other elements: scoping it
+  // to a single <li> made every sideways move a close and a reopen.
   const megaRegionRef = useRef<HTMLUListElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
@@ -118,26 +153,28 @@ export function HeaderClient({ nav }: { nav: NavData }) {
   const [renderedPath, setRenderedPath] = useState(pathname);
   if (renderedPath !== pathname) {
     setRenderedPath(pathname);
-    setOpenPractice(null);
+    setOpenMega(null);
     setMobileOpen(false);
   }
 
   // Escape closes whichever layer is open. Required for the mega-menu to be
   // keyboard-operable rather than a hover-only trap.
   useEffect(() => {
-    if (!openPractice && !mobileOpen) return;
+    if (!openMega && !mobileOpen) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return;
       // Returning focus to the trigger is required by the disclosure pattern.
       // Without it, dismissing the menu drops focus to <body> and a keyboard
-      // user restarts from the top of the page having lost their place.
-      if (openPractice) servicesTriggerRef.current?.focus();
-      setOpenPractice(null);
+      // user restarts from the top of the page having lost their place. It
+      // must be the trigger that OPENED this panel, not whichever one the
+      // header rendered last.
+      if (openMega) megaTriggerRefs.current[openMega.menu]?.focus();
+      setOpenMega(null);
       setMobileOpen(false);
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [openPractice, mobileOpen]);
+  }, [openMega, mobileOpen]);
 
   // The mobile sheet covers the page, so the page behind it must not scroll.
   useEffect(() => {
@@ -156,19 +193,28 @@ export function HeaderClient({ nav }: { nav: NavData }) {
    * that there are three panels: sliding from one practice to the next cancels
    * the pending close and swaps the panel in place, so the menu reads as one
    * surface changing contents rather than three that blink out and back. */
-  const openMega = (slug: string) => {
+  const showMega = (menu: MegaMenuId, tab: string) => {
     clearTimeout(closeTimer.current);
-    setOpenPractice(slug);
+    setOpenMega({ menu, tab });
   };
   const closeMega = () => {
     clearTimeout(closeTimer.current);
-    closeTimer.current = setTimeout(() => setOpenPractice(null), 120);
+    closeTimer.current = setTimeout(() => setOpenMega(null), 120);
   };
-  /* Entering the Services trigger itself does not know which practice tab to
-     show. If one is already selected (the pending close was just cancelled
-     because the pointer came back before the 120ms fired) that selection
-     survives; otherwise it defaults to the first practice. */
-  const openServicesMega = () => openMega(openPractice ?? nav.columns[0]?.slug ?? '');
+  /* The columns behind each panel, so "which panel" is answered in one place
+     rather than at each of the four sites that need it. */
+  const megaColumns = (menu: MegaMenuId) => (menu === 'tools' ? nav.tools : nav.columns);
+  /* Entering a trigger does not itself say which tab to show. If that panel
+     is already open (the pending close was just cancelled because the pointer
+     came back before the 120ms fired) its selected tab survives; otherwise it
+     opens on the panel's first tab. Sliding from Services to Tools therefore
+     switches panels rather than keeping a stale tab, because the menu no
+     longer matches. */
+  const openMenu = (menu: MegaMenuId) =>
+    showMega(
+      menu,
+      openMega?.menu === menu ? openMega.tab : (megaColumns(menu)[0]?.slug ?? ''),
+    );
 
   /**
    * Close when focus leaves the nav pill AND the panel.
@@ -184,26 +230,44 @@ export function HeaderClient({ nav }: { nav: NavData }) {
     if (next && (megaRegionRef.current?.contains(next) || megaRef.current?.contains(next))) {
       return;
     }
-    setOpenPractice(null);
+    setOpenMega(null);
   };
 
   const isActive = (href: string) =>
     href === '/' ? pathname === '/' : pathname.startsWith(href);
 
-  const practice = nav.columns.find((c) => c.slug === openPractice);
+  /* The panel to render, and the tab lit inside it. Both null when closed.
+
+     The untabbed Tools panel is a single column, so its "tab" is that column:
+     `openMenu` opens on the first one and there is never a second to switch
+     to. Same lookup, no branch. */
+  const panelColumns = openMega ? megaColumns(openMega.menu) : null;
+  const panelTab = panelColumns?.find((c) => c.slug === openMega?.tab) ?? null;
+  /* Whether the open panel carries a tab strip. See the strip's own note: it
+     is a question about how much content there is, not about which menu. */
+  const tabbed = (panelColumns?.length ?? 0) > 1;
 
   /**
-   * The panel hangs from the Services trigger, not from the centre of the
-   * page. The trigger sits inside the nav pill, which is itself centred on
+   * The panel hangs from the trigger that opened it, not from the centre of
+   * the page. The trigger sits inside the nav pill, which is itself centred on
    * the viewport rather than on any particular item, so a panel centred on
    * the page would drift away from the word that opened it the moment the
    * pill's own contents were not symmetric around Services.
    *
-   * So the panel's left edge is aligned to the trigger's, then clamped to the
-   * page gutters so the four-column Corporate & Advisory tab (the widest of
-   * the three) does not run off the right of the viewport. The trigger itself
-   * does not move when the internal tab strip switches practice, but the
-   * panel's width does, so the clamp is recomputed on every switch.
+   * So the panel is CENTRED ON ITS TRIGGER, then clamped to the page gutters
+   * so the four-column Corporate & Advisory tab (the widest of the three) does
+   * not run off the right of the viewport. The trigger itself does not move
+   * when the internal tab strip switches practice, but the panel's width does,
+   * so the centring and the clamp are recomputed on every switch.
+   *
+   * It used to align the panel's LEFT EDGE to the trigger's. That is the right
+   * instinct (the panel should belong to the word that opened it) applied at
+   * the wrong point: a 750px panel hanging off the left edge of a 50px word
+   * throws its whole mass to the right of it, which is what made the menu look
+   * shoved off to one side rather than dropped from the item. Centring on the
+   * trigger keeps the connection and reads as centred, because the pill is
+   * itself near the middle of the page. The clamp still wins at the edges,
+   * which is the case where a panel genuinely cannot be centred on its word.
    *
    * The measuring frame is the `relative` div inside the panel's own
    * `u-container`, NOT the nav. That matters: the nav carries
@@ -221,27 +285,36 @@ export function HeaderClient({ nav }: { nav: NavData }) {
   const megaTrackRef = useRef<HTMLDivElement>(null);
   const [panelLeft, setPanelLeft] = useState(0);
   useIsoLayoutEffect(() => {
-    if (!openPractice) return;
-    const trigger = servicesTriggerRef.current;
+    if (!openMega) return;
+    const trigger = megaTriggerRefs.current[openMega.menu];
     const track = megaTrackRef.current;
     const panel = track?.querySelector('[data-mega-panel]') as HTMLElement | null;
     if (!trigger || !track || !panel) return;
 
     const trackBox = track.getBoundingClientRect();
-    const offset = trigger.getBoundingClientRect().left - trackBox.left;
-    setPanelLeft(Math.max(0, Math.min(offset, trackBox.width - panel.offsetWidth)));
-  }, [openPractice]);
+    const triggerBox = trigger.getBoundingClientRect();
+    // The trigger's centre, in the track's coordinates, less half the panel.
+    const centred =
+      triggerBox.left + triggerBox.width / 2 - trackBox.left - panel.offsetWidth / 2;
+    setPanelLeft(Math.max(0, Math.min(centred, trackBox.width - panel.offsetWidth)));
+    /* Both parts matter. The tab changes the panel's width, and the menu
+       changes which trigger it hangs from, so a dependency on either alone
+       leaves the panel at the other one's offset. */
+  }, [openMega]);
 
   /* Counted here rather than imported. `SERVICE_COUNT` lives in the content
      layer, and importing anything from there into this client component drags
      every service's full text into the browser bundle — the failure the note
      at the top of this file exists to prevent. The nav tree is already here
      and already complete, so the number is free. */
-  const serviceCount = nav.columns.reduce(
-    (total, column) =>
-      total + column.groups.reduce((groupTotal, group) => groupTotal + group.links.length, 0),
-    0,
-  );
+  const countLinks = (columns: MegaColumn[]) =>
+    columns.reduce(
+      (total, column) =>
+        total + column.groups.reduce((groupTotal, group) => groupTotal + group.links.length, 0),
+      0,
+    );
+  const serviceCount = countLinks(nav.columns);
+  const toolCount = countLinks(nav.tools);
 
   return (
     /* No background, at any scroll position.
@@ -408,15 +481,19 @@ export function HeaderClient({ nav }: { nav: NavData }) {
             className="u-glass u-glass--pill flex items-center gap-0.5 rounded-pill p-1 shadow-bar xl:gap-1"
           >
             {nav.primary.map((item) => {
-              const hasMega = Boolean(item.mega);
+              const menu = item.mega;
               const active = isActive(item.href);
-              const expanded = hasMega && openPractice !== null;
+              /* Only the item whose OWN panel is showing is expanded. A shared
+                 "something is open" flag would have put Services and Tools
+                 both in the open state, chevrons and all, whichever one the
+                 pointer was on. */
+              const expanded = menu !== undefined && openMega?.menu === menu;
 
               return (
                 <li
                   key={item.href}
-                  {...(hasMega
-                    ? { onMouseEnter: openServicesMega }
+                  {...(menu
+                    ? { onMouseEnter: () => openMenu(menu) }
                     : // Entering a non-mega item still has to dismiss an open
                       // panel. Without this, sliding from Services onto About
                       // leaves the panel up, because the pointer never left
@@ -424,11 +501,13 @@ export function HeaderClient({ nav }: { nav: NavData }) {
                       { onMouseEnter: closeMega })}
                 >
                   <Link
-                    {...(hasMega
+                    {...(menu
                       ? {
-                          ref: servicesTriggerRef,
+                          ref: (node: HTMLAnchorElement | null) => {
+                            megaTriggerRefs.current[menu] = node;
+                          },
                           'aria-expanded': expanded,
-                          onFocus: openServicesMega,
+                          onFocus: () => openMenu(menu),
                         }
                       : // Focus does what the pointer does. Tabbing from
                         // Services onto About used to leave its panel hanging
@@ -460,7 +539,7 @@ export function HeaderClient({ nav }: { nav: NavData }) {
                     )}
                   >
                     {item.label}
-                    {hasMega && (
+                    {menu && (
                       <Icon
                         name="chevron-down"
                         size={14}
@@ -564,15 +643,14 @@ export function HeaderClient({ nav }: { nav: NavData }) {
           flat white with its columns crushed to the pill's width. Positioned
           here it resolves against <header>, which is `sticky` and untransformed,
           so the glass has the page behind it to bend. */}
-      {practice && (
+      {openMega && panelColumns && panelTab && (
       <div
         ref={megaRef}
-        /* Re-asserting the open practice on the panel's own mouseenter is what
-           lets the pointer travel from the trigger into the panel without the
-           pending close firing halfway across the gap. It re-states what is
-           already open rather than choosing, so nothing changes under the
-           cursor. */
-        onMouseEnter={() => openMega(practice.slug)}
+        /* Re-asserting the open panel on its own mouseenter is what lets the
+           pointer travel from the trigger into the panel without the pending
+           close firing halfway across the gap. It re-states what is already
+           open rather than choosing, so nothing changes under the cursor. */
+        onMouseEnter={() => showMega(openMega.menu, openMega.tab)}
         onMouseLeave={closeMega}
         onBlur={handleMegaBlur}
         className="absolute inset-x-0 top-full hidden lg:block"
@@ -621,16 +699,34 @@ export function HeaderClient({ nav }: { nav: NavData }) {
               when the pointer moved sideways between them.
 
               A real `<Link>`, not a button: clicking a tab still has to reach
-              the practice's own page, exactly as the old top-level items did. */}
+              the practice's own page, exactly as the old top-level items did.
+
+              ── Services only. Tools shows every group at once ──
+
+              Tabs earn their place when the content behind them cannot be
+              shown together: forty-four services across three practices
+              cannot. Twenty-two calculators can. Tabbing them was tried and
+              produced a panel whose width came from six tabs (~870px) holding
+              a five-link column (~516px), so a third of the glass sat empty
+              beside the links — visible in the first build of this.
+
+              Showing all six groups fills that width with the thing the
+              visitor came for instead of with a control for revealing it, and
+              it removes a hover step from every calculator that is not in the
+              group that happens to open first. So `tabbed` is what tells the
+              panel which of the two it is, rather than the menu id: it is a
+              statement about the content's size, and a practice added to the
+              services tree does not change that. */}
+          {tabbed && (
           <div className="flex flex-none items-center gap-1 border-b border-line p-3">
-            {nav.columns.map((column) => {
-              const tabActive = practice.slug === column.slug;
+            {panelColumns.map((column) => {
+              const tabActive = panelTab.slug === column.slug;
               return (
                 <Link
                   key={column.slug}
                   href={column.href}
-                  onMouseEnter={() => openMega(column.slug)}
-                  onFocus={() => openMega(column.slug)}
+                  onMouseEnter={() => showMega(openMega.menu, column.slug)}
+                  onFocus={() => showMega(openMega.menu, column.slug)}
                   className={cx(
                     'flex items-center gap-2.5 whitespace-nowrap rounded-chip px-3.5 py-2.5 text-[13.5px] font-semibold transition-colors',
                     tabActive
@@ -644,6 +740,7 @@ export function HeaderClient({ nav }: { nav: NavData }) {
               );
             })}
           </div>
+          )}
 
           {/* One fixed-width column per discipline, the practice's single
               discipline split across two.
@@ -657,18 +754,41 @@ export function HeaderClient({ nav }: { nav: NavData }) {
               eight links in one column makes a tall thin panel hanging off a
               wide navbar. Two columns of four is the better shape and, at
               2×224px, still a narrower panel than either of the others, which is
-              honest about it holding one discipline. */}
-          <div className="flex flex-col p-5">
-            <div className="flex gap-x-7">
-              {practice.groups.map((group) => (
-                <div key={group.slug}>
-                  {/* The discipline heading is a link, not a label: it is the
-                      only route to the discipline page from inside the menu.
+              honest about it holding one discipline.
 
-                      Suppressed when the practice holds a single discipline,
-                      where it would restate the navbar item the panel is already
-                      hanging from. */}
-                  {practice.groups.length > 1 && (
+              ── The untabbed panel wraps instead of running one row ──
+
+              Tools shows all six groups (see the tab strip's note above), and
+              six 224px columns in a row is 1400px, past the container. So the
+              untabbed panel lays its groups out three across and lets them
+              wrap onto a second line: 5+4+4 on the first row, 4+4+1 on the
+              second, which is 3×224px plus gaps and padding, about 750px. That
+              is close to the width the six tabs would have forced, but filled
+              with links rather than with empty glass.
+
+              `items-start` so a short group (Provincial holds one calculator)
+              sits at the top of its cell rather than stretching to match the
+              tallest one in its row. */}
+          <div className="flex flex-col p-5">
+            <div
+              className={
+                tabbed ? 'flex gap-x-7' : 'grid grid-cols-3 items-start gap-x-7 gap-y-6'
+              }
+            >
+              {panelTab.groups.map((group) => (
+                <div key={group.slug}>
+                  {/* The heading is a link, not a label: it is the only route
+                      from inside the menu to the discipline's page, or in the
+                      untabbed panel to the group's section on the hub.
+
+                      Suppressed only where it would restate what is already on
+                      screen directly above it: a practice holding a single
+                      discipline, whose name is the navbar item the panel hangs
+                      from. In the untabbed panel it is the opposite of
+                      redundant, it is what tells six columns of calculators
+                      apart, so `group.title` is set there and the heading
+                      always shows. */}
+                  {panelTab.groups.length > 1 && group.title && (
                     <Link
                       href={group.href}
                       className="mb-2 block border-b border-line pb-2 font-display text-[11px] font-bold uppercase tracking-[0.08em] text-ink-body transition-colors hover:text-blue-600"
@@ -680,7 +800,18 @@ export function HeaderClient({ nav }: { nav: NavData }) {
                   <ul
                     className={cx(
                       'grid gap-x-7 gap-y-0.5',
-                      practice.groups.length === 1 ? 'grid-cols-2' : 'grid-cols-1',
+                      /* Two columns where a tab holds a single group, so eight
+                         links do not make a tall thin panel hanging off a wide
+                         navbar. That is Software & AI, the one practice with a
+                         single discipline.
+
+                         The untabbed panel never splits: its groups are
+                         already the columns, and splitting one would make a
+                         group twice the width of its neighbours in the same
+                         grid row. */
+                      tabbed && panelTab.groups.length === 1
+                        ? 'grid-cols-2'
+                        : 'grid-cols-1',
                     )}
                   >
                     {group.links.map((link) => (
@@ -724,9 +855,15 @@ export function HeaderClient({ nav }: { nav: NavData }) {
                 bordered link shrinks it to the text, which renders the divider
                 as a stray 90px dash rather than as the edge of the last row. */}
             <div className="mt-5 border-t border-line pt-4">
-              <Link href="/services" className="u-arrow-link text-[13px]">
-                All {serviceCount} services
-              </Link>
+              {openMega.menu === 'tools' ? (
+                <Link href="/tools" className="u-arrow-link text-[13px]">
+                  All {toolCount} calculators
+                </Link>
+              ) : (
+                <Link href="/services" className="u-arrow-link text-[13px]">
+                  All {serviceCount} services
+                </Link>
+              )}
             </div>
           </div>
         </motion.div>
@@ -742,17 +879,32 @@ export function HeaderClient({ nav }: { nav: NavData }) {
           className="fixed inset-x-0 bottom-0 top-[var(--header-h)] z-50 overflow-y-auto overscroll-contain border-t border-line bg-canvas lg:hidden"
         >
           <div className="u-container flex flex-col gap-8 py-8">
-            {/* Services get accordions so every one stays reachable without an
-                endless scroll. Native <details>, no JS, no state.
+            {/* Services and Tools get accordions so every one stays reachable
+                without an endless scroll. Native <details>, no JS, no state.
 
-                One accordion per PRACTICE, with the disciplines as headings
-                inside it. Nesting a second <details> layer was the obvious
-                alternative and is worse on a phone: two taps to reach a
-                service, and a closed inner row gives no clue how much is
-                behind it. Thirty-two links across three sections scrolls
-                perfectly well once opened. */}
-            <div className="flex flex-col gap-2">
-              {nav.columns.map((column) => (
+                One accordion per PRACTICE (or per tool group), with the
+                disciplines as headings inside it. Nesting a second <details>
+                layer was the obvious alternative and is worse on a phone: two
+                taps to reach a service, and a closed inner row gives no clue
+                how much is behind it. Thirty-two links across three sections
+                scrolls perfectly well once opened, and a tool group is one
+                layer shallower again. */}
+            {/* Two accordion stacks, Services then Tools, built from the same
+                columns the desktop panels use. They are rendered by the same
+                helper below rather than duplicated: the two menus differ only
+                in their heading, their columns and where "all of them" points. */}
+            {[
+              { heading: 'Services', columns: nav.columns, href: '/services', all: 'All services' },
+              { heading: 'Tools', columns: nav.tools, href: '/tools', all: 'All calculators' },
+            ].map((menu) => (
+            <div key={menu.href} className="flex flex-col gap-2">
+              {/* The stack needs a name now that there are two of them. One
+                  stack could be left unlabelled, because the sheet held
+                  nothing else it could be confused with; two cannot. */}
+              <h2 className="px-2 font-display text-[11px] font-bold uppercase tracking-[0.08em] text-ink-body">
+                {menu.heading}
+              </h2>
+              {menu.columns.map((column) => (
                 /* `py-1.5` on the tile, down from `py-3`, because the height
                    moved onto the <summary> below. The padding belonged to the
                    <details>, and tapping a <details>'s padding does not toggle
@@ -789,7 +941,7 @@ export function HeaderClient({ nav }: { nav: NavData }) {
                             discipline: a heading that repeats the accordion
                             label immediately above it is noise, not
                             structure. */}
-                        {column.groups.length > 1 && (
+                        {column.groups.length > 1 && group.title && (
                           /* `u-tap` rather than `block`: these measured 18px
                              tall and they are the only route to a discipline
                              page from the sheet. `u-tap` makes the box
@@ -821,13 +973,16 @@ export function HeaderClient({ nav }: { nav: NavData }) {
                 </details>
               ))}
 
-              <Link href="/services" className="u-arrow-link mt-1 self-start px-2 text-[14px]">
-                All services
+              <Link href={menu.href} className="u-arrow-link mt-1 self-start px-2 text-[14px]">
+                {menu.all}
               </Link>
             </div>
+            ))}
 
-            {/* The Services item is the accordions above, so it is filtered
-                out here rather than listed a second time as a dead link. */}
+            {/* Services and Tools are the accordions above, so both are
+                filtered out here rather than listed a second time as dead
+                links. `mega` names which panel an item opens, so its presence
+                is exactly "this item is an accordion stack". */}
             <nav aria-label="Primary mobile" className="flex flex-col gap-1">
               {nav.primary
                 .filter((i) => !i.mega)

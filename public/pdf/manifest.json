@@ -1,0 +1,70 @@
+{
+  "withholding-tax-rate-card-2026-27": {
+    "bytes": 32983,
+    "pages": 2
+  },
+  "salary-tax-slabs-all-years": {
+    "bytes": 41317,
+    "pages": 5
+  },
+  "salary-tax-slabs-2026-27": {
+    "bytes": 21362,
+    "pages": 1
+  },
+  "salary-tax-slabs-2025-26": {
+    "bytes": 21804,
+    "pages": 1
+  },
+  "salary-tax-slabs-2024-25": {
+    "bytes": 21701,
+    "pages": 1
+  },
+  "salary-tax-slabs-2023-24": {
+    "bytes": 21185,
+    "pages": 1
+  },
+  "salary-tax-slabs-2022-23": {
+    "bytes": 21009,
+    "pages": 1
+  },
+  "salary-tax-slabs-2021-22": {
+    "bytes": 21906,
+    "pages": 1
+  },
+  "salary-tax-slabs-2020-21": {
+    "bytes": 21815,
+    "pages": 1
+  },
+  "salary-tax-slabs-2019-20": {
+    "bytes": 22143,
+    "pages": 1
+  },
+  "salary-tax-slabs-2018-19": {
+    "bytes": 22752,
+    "pages": 1
+  },
+  "salary-tax-slabs-2017-18": {
+    "bytes": 22453,
+    "pages": 1
+  },
+  "salary-tax-slabs-2016-17": {
+    "bytes": 22253,
+    "pages": 1
+  },
+  "salary-tax-slabs-2015-16": {
+    "bytes": 22353,
+    "pages": 1
+  },
+  "salary-tax-slabs-2014-15": {
+    "bytes": 22117,
+    "pages": 1
+  },
+  "salary-tax-slabs-2013-14": {
+    "bytes": 22133,
+    "pages": 1
+  },
+  "salary-tax-slabs-2012-13": {
+    "bytes": 21755,
+    "pages": 1
+  }
+}

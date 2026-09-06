@@ -52,6 +52,14 @@ export const metadata = pageMetadata({
   path: '/tools',
 });
 
+/* How many of the tools actually compute, and how many just state the rates.
+   Derived from TOOL_GROUPS so both follow the data. */
+const CALCULATOR_COUNT = TOOL_GROUPS.filter((g) => !g.noun).reduce(
+  (sum, g) => sum + g.tools.length,
+  0,
+);
+const REFERENCE_COUNT = TOOLS.length - CALCULATOR_COUNT;
+
 export default function ToolsPage() {
   return (
     <main id="main" tabIndex={-1}>
@@ -67,7 +75,11 @@ export default function ToolsPage() {
             <div className="relative z-10">
               <SectionHeading
                 level={1}
-                eyebrow={`${TOOLS.length} calculators, free to use`}
+                /* Counted from the groups rather than from TOOLS, because
+                   two of the entries are reference pages rather than
+                   calculators and calling all 24 "calculators" would be
+                   wrong the moment the reference group was added. */
+                eyebrow={`${CALCULATOR_COUNT} calculators and ${REFERENCE_COUNT} rate cards, free to use`}
                 lines={['Calculators that']}
                 accent="show their working"
               />
@@ -97,7 +109,11 @@ export default function ToolsPage() {
             <Reveal>
               <SectionHeading
                 level={2}
-                eyebrow={`${group.tools.length} ${group.tools.length === 1 ? 'calculator' : 'calculators'}`}
+                eyebrow={`${group.tools.length} ${
+                  group.tools.length === 1
+                    ? (group.noun?.one ?? 'calculator')
+                    : (group.noun?.many ?? 'calculators')
+                }`}
                 lines={[group.title]}
                 accent={group.accent}
               />

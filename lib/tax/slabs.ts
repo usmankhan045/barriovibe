@@ -52,6 +52,25 @@ export interface Slab {
    *   Rs 1,000. That is what the law said, so it is what this computes.
    */
   flat?: number;
+  /**
+   * True where the Ordinance's stated `fixed` is deliberately NOT the sum of
+   * the bands beneath it, so the usual reconciliation must not be applied.
+   *
+   * There is exactly one table here like this, and it is not a drafting slip.
+   * For tax year 2013 the Finance Act 2012 withheld the benefit of the lower
+   * bands from higher earners, and FBR's Circular 2 of 2012 says so in terms:
+   * the top band "is 20% plus Rs. 420,000 (instead of Rs. 255,000 which would
+   * have been the case if benefit of lower rate of previous slabs was provided
+   * to taxpayers in this slab)", with the same point made for Rs 175,000
+   * against 167,500 and Rs 95,000 against 92,500.
+   *
+   * So for these bands the stated figure is the law and the derived figure is
+   * wrong. `assertSlabsConsistent` skips them rather than being relaxed for
+   * every table, and `check-tax.ts` asserts the stated amounts directly
+   * instead. The walk in `taxOnSlabs` reads `fixed` for a marked band rather
+   * than accumulating into it.
+   */
+  nonCumulative?: boolean;
 }
 
 /** One slab's contribution, for the working shown under a result. */
@@ -93,7 +112,16 @@ export function taxOnSlabs(
 
   for (const slab of slabs) {
     const ceiling = slab.upTo ?? Infinity;
-    if (taxableIncome <= floor) break;
+
+    /* Normally a band contributes nothing once income has run out, and the
+       walk stops. A non-cumulative band is the exception: the Ordinance states
+       the tax AT ITS FLOOR as a figure higher than the bands beneath it sum
+       to, so a person sitting exactly on that floor owes the stated amount and
+       not the total of the bands below. Entering the band with a zero-width
+       slice is what applies it. See `Slab.nonCumulative` and tax year 2013,
+       where Rs 2,500,000 exactly is Rs 420,000 and not Rs 262,500. */
+    if (taxableIncome < floor) break;
+    if (taxableIncome === floor && !slab.nonCumulative) break;
 
     const taxable = Math.min(taxableIncome, ceiling) - floor;
 
@@ -118,6 +146,13 @@ export function taxOnSlabs(
        says, and dropping the accumulated total here is what reproduces it. */
     if (previousWasFlat) tax = slab.fixed;
     previousWasFlat = false;
+
+    /* A band whose stated `fixed` is deliberately not the sum beneath it takes
+       that stated figure as its base. Tax year 2013 is the only such table:
+       the Finance Act 2012 withheld the lower bands' benefit from higher
+       earners, so Rs 420,000 rather than the Rs 255,000 the arithmetic would
+       give. Deriving it would quietly undercharge by Rs 165,000. */
+    if (slab.nonCumulative) tax = slab.fixed;
 
     const slabTax = taxable * slab.rate;
     tax += slabTax;
@@ -168,7 +203,11 @@ export function assertSlabsConsistent(slabs: readonly Slab[], label: string): vo
        tax year 2019 table pass a check the other nine still face in full. */
     const belowWasFlat = cumulative !== 0 && slabs.some((s) => s.flat !== undefined && s.upTo === floor);
 
-    if (!belowWasFlat && Math.abs(slab.fixed - cumulative) > 0.5) {
+    /* A band the Ordinance states above its own arithmetic is exempt from the
+       reconciliation by design, not by concession: see `Slab.nonCumulative`
+       and FBR's Circular 2 of 2012. Its stated figure is asserted directly in
+       check-tax.ts instead, which is the stronger check of the two. */
+    if (!belowWasFlat && !slab.nonCumulative && Math.abs(slab.fixed - cumulative) > 0.5) {
       throw new Error(
         `${label}: the slab starting at ${floor} states a fixed amount of ` +
           `${slab.fixed}, but the slabs beneath it sum to ${cumulative}. ` +
