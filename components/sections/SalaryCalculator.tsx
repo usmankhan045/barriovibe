@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/Button';
 import { cx } from '@/lib/cx';
 import { money, percent, Rs, NumberField, Row } from './calculator-parts';
 import {
-  calculate,
   EMPTY_INPUT,
   EOBI,
   EOBI_MONTHLY,
@@ -14,6 +13,12 @@ import {
   TAX_YEAR,
   type CalculatorInput,
 } from '@/lib/tax/pakistan';
+import {
+  calculateForYear,
+  DEFAULT_TAX_YEAR_ID,
+  TAX_YEARS,
+  taxYearById,
+} from '@/lib/tax/salary-years';
 
 /**
  * The salary tax calculator.
@@ -56,12 +61,19 @@ export function SalaryCalculator() {
     period: 'monthly',
   });
   const [showReliefs, setShowReliefs] = useState(false);
+  /* The year the slabs come from. Its own state rather than part of `input`,
+     because it selects a rate table rather than describing the salary, and
+     because `CalculatorInput` is shared with the four tools in
+     lib/tax/salary-tools.ts that only ever want the current year. */
+  const [yearId, setYearId] = useState(DEFAULT_TAX_YEAR_ID);
 
   const set = <K extends keyof CalculatorInput>(key: K, value: CalculatorInput[K]) =>
     setInput((previous) => ({ ...previous, [key]: value }));
 
-  const result = useMemo(() => calculate(input), [input]);
+  const year = useMemo(() => taxYearById(yearId), [yearId]);
+  const result = useMemo(() => calculateForYear(input, yearId), [input, yearId]);
   const hasSalary = result.grossAnnual > 0;
+  const isCurrentYear = yearId === DEFAULT_TAX_YEAR_ID;
 
   /* Whether any relief is actually in play. Drives whether the panel shows the
      allowance and credit rows at all: a visitor who filled none of them should
@@ -78,6 +90,44 @@ export function SalaryCalculator() {
           Enter gross salary, before any deduction. Nothing you type here leaves your
           browser.
         </p>
+
+        {/* ── Tax year ────────────────────────────────────────────────────
+            A select rather than the radios below it: ten options, and unlike
+            monthly-versus-annual there is nothing to be gained from seeing all
+            ten at once. It sits above the salary because it changes what every
+            figure on the page means, and a control that reframes the answer
+            should not be found after it.
+
+            Most visitors want the current year and it is the default, so this
+            costs them one line of reading and no clicks. */}
+        <div className="mt-7">
+          <label
+            htmlFor="tax-year"
+            className="block font-display text-[14px] font-bold text-ink"
+          >
+            Tax year
+          </label>
+          <select
+            id="tax-year"
+            value={yearId}
+            onChange={(event) => setYearId(event.target.value)}
+            className={cx(
+              'u-tap mt-2.5 w-full cursor-pointer rounded-chip border border-line bg-surface',
+              'px-4 py-2.5 text-[14px] text-ink transition-colors hover:border-blue-600',
+              'focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-blue-600',
+            )}
+          >
+            {TAX_YEARS.map((option) => (
+              <option key={option.id} value={option.id}>
+                {option.searchLabel} ({option.label})
+                {option.id === DEFAULT_TAX_YEAR_ID ? ' - current' : ''}
+              </option>
+            ))}
+          </select>
+          <p className="mt-2 text-[12.5px] leading-[1.5] text-ink-body">
+            {year.period}. Rates set by the {year.authority}.
+          </p>
+        </div>
 
         {/* Monthly or annual. Radio rather than a select: two options, and the
             choice changes what the number beside it means, so both readings

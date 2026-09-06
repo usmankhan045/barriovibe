@@ -163,6 +163,29 @@ export interface CalculatorInput {
   amount: number;
   period: 'monthly' | 'annual';
   /**
+   * The year's slab table and surcharge, where it is not the current year.
+   *
+   * Optional, and absent means the current year, which is what keeps every
+   * existing caller working: the four tools in ./salary-tools.ts and anything
+   * else that only ever wanted this year's answer never had to learn about
+   * years at all.
+   *
+   * It is passed in rather than looked up by an id here, because the ten
+   * tables live in ./salary-years.ts and that module already imports this one
+   * for the current year. Taking the table as an argument keeps the dependency
+   * pointing one way. `lib/tax/salary-years.ts` exports `calculateForYear`,
+   * which is the function a page should actually call.
+   *
+   * The slab table and the section 4AB surcharge both come from this. The
+   * allowances and credits in `RELIEF` do not: sections 60, 60D, 61 and 63 did
+   * not move across the ten years offered, so they are not year-indexed and
+   * pretending otherwise would be inventing precision.
+   */
+  year?: {
+    slabs: readonly Slab[];
+    surcharge: { rate: number; threshold: number };
+  };
+  /**
    * Whether the employer deducts EOBI. Off by default and asked as a question,
    * because assuming it would put a Rs 4,884 deduction on the slip of every
    * visitor whose employer is not registered.
@@ -217,6 +240,17 @@ export interface Result {
   /** Tax on `taxableIncome` straight off the slabs, before any credit. */
   taxBeforeCredits: number;
   slabRows: SlabRow[];
+
+  /**
+   * Section 4AB, charged on the tax rather than on income.
+   *
+   * Nil for the current year and for every year before 2025, so the results
+   * panel shows the row only when it is non-zero. It is inside `incomeTax`
+   * rather than beside it, because it is withheld from salary under section
+   * 149 along with the tax and a payslip does not separate them.
+   */
+  surcharge: number;
+  surchargeRate: number;
 
   /** Credits under sections 61 and 63, at the average rate. */
   donationCredit: number;
@@ -324,7 +358,10 @@ export function calculate(input: CalculatorInput): Result {
   const taxableIncome = money(afterZakat - education);
 
   // ── The slabs ───────────────────────────────────────────────────────────
-  const { tax: taxBeforeCredits, rows: slabRows } = taxOn(taxableIncome);
+  /* The current year unless the caller named another. See `CalculatorInput.year`
+     for why the table arrives as an argument rather than as a year id. */
+  const slabs = input.year?.slabs ?? SLABS;
+  const { tax: taxBeforeCredits, rows: slabRows } = taxOnSlabs(taxableIncome, slabs);
   const averageRate = taxableIncome > 0 ? taxBeforeCredits / taxableIncome : 0;
 
   // ── Credits, Part X: these come off the tax, at the average rate ────────
@@ -344,7 +381,23 @@ export function calculate(input: CalculatorInput): Result {
 
   // Credits cannot take the liability below zero: they reduce tax payable,
   // they are not refundable.
-  const incomeTax = money(taxBeforeCredits - donationCredit - pensionCredit);
+  const taxAfterCredits = money(taxBeforeCredits - donationCredit - pensionCredit);
+
+  /* ── Section 4AB ──────────────────────────────────────────────────────────
+     A surcharge on the TAX, not on income, above a taxable income threshold.
+     Nil for the current year and for everything before tax year 2025, so this
+     is a no-op unless the caller asked for one of those two years.
+
+     It is charged on the tax after credits rather than before: the section
+     charges a percentage of "the income tax imposed under Division I", and the
+     credits under sections 61 and 63 reduce the tax imposed. */
+  const surchargeRate =
+    input.year && taxableIncome > input.year.surcharge.threshold
+      ? input.year.surcharge.rate
+      : 0;
+  const surcharge = taxAfterCredits * surchargeRate;
+
+  const incomeTax = taxAfterCredits + surcharge;
 
   // ── Deductions that are not tax ─────────────────────────────────────────
   const eobiAnnual = input.eobi ? EOBI_ANNUAL : 0;
@@ -366,6 +419,9 @@ export function calculate(input: CalculatorInput): Result {
     taxBeforeCredits,
     slabRows,
 
+    surcharge,
+    surchargeRate,
+
     donationCredit,
     pensionCredit,
     averageRate,
@@ -381,7 +437,7 @@ export function calculate(input: CalculatorInput): Result {
     takeHomeMonthly: takeHomeAnnual / 12,
 
     effectiveRate: grossAnnual > 0 ? incomeTax / grossAnnual : 0,
-    marginalRate: marginalRateAt(taxableIncome),
+    marginalRate: marginalRateOn(taxableIncome, slabs),
   };
 }
 
