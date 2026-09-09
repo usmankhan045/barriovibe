@@ -237,4 +237,172 @@ const HOW_TO_GET_NTN: Guide = {
   },
 };
 
-export const NTN_GUIDES: Guide[] = [HOW_TO_GET_NTN];
+/**
+ * The documents guide.
+ *
+ * Separate from the how-to because the searcher is different: one wants the
+ * procedure, the other has started and been stopped by a requirement. The
+ * substance nobody else covers is that FBR's own two surfaces disagree about
+ * the bank certificate, and that FBR simply does not define what counts as
+ * evidence of business premises, which leaves anyone working from home without
+ * an answer.
+ */
+const NTN_DOCUMENTS: Guide = {
+  slug: 'ntn-registration-documents',
+  cluster: 'ntn',
+  title: 'What Documents You Need for NTN Registration',
+  navLabel: 'NTN documents',
+  card: 'By taxpayer type, from FBR\'s own pages, including the two requirements FBR states inconsistently and the one it never defines.',
+
+  answer:
+    'A salaried individual uploads nothing in IRIS. A business individual uploads three things: a business letterhead, a paid utility bill for the premises no older than three months, and evidence of tenancy or ownership. Associations and companies need more, and their principal officer must attend a Regional Tax Office in person. Everyone needs a CNIC, a SIM registered in their own name, an email address and a bank account certificate.',
+
+  sections: [
+    {
+      kind: 'table',
+      heading: 'What each taxpayer type needs',
+      intro: 'From FBR\'s published requirements. The last column is the one that surprises people.',
+      columns: ['Taxpayer', 'Documents', 'Register online?'],
+      rows: [
+        [
+          'Salaried individual',
+          'CNIC, SIM on own CNIC, personal email, bank account certificate. No IRIS uploads.',
+          'Yes, fully',
+        ],
+        [
+          'Business individual',
+          'The above, plus business letterhead, paid utility bill under 3 months old, and tenancy or ownership evidence',
+          'Yes, fully',
+        ],
+        [
+          'Association of persons',
+          'Partnership deed and registration certificate, CNICs of all partners, authorisation letter signed by all of them, SIM on the authorised person\'s CNIC and not already used with FBR, AOP email, bank certificate in the AOP name',
+          'No, RTO visit',
+        ],
+        [
+          'Company',
+          'Incorporation certificate, CNICs of all directors, letter on company letterhead signed by all directors naming the principal officer, SIM on his CNIC and not already used with FBR, company email, bank certificate in the company name',
+          'No, RTO visit',
+        ],
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'FBR states the bank certificate requirement two ways',
+      body: 'FBR\'s IRIS registration guide lists three attachments and marks all of them "business individuals only", which means a salaried person uploads nothing. FBR\'s separate requirements page lists an original certificate of maintenance of a personal bank account among the things an individual needs. Both are FBR. The practical reading is that IRIS enforces one set at the upload step and a facilitation counter may ask for the other, so have the certificate available even if the form never demands it.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'The bank account certificate',
+      body: [
+        'FBR calls it an original certificate of maintenance of a personal bank account in your own name. It is a letter from your branch confirming that an account exists in your name and is operative. Any branch will issue one; what varies is how long they take and whether they charge.',
+        'The failure mode worth planning around is not the document, it is the name on it. It has to match your CNIC exactly. An account opened years ago under a slightly different spelling, or without a middle name that your CNIC carries, is the kind of mismatch that sends you back to the bank rather than forward to FBR.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'What FBR never defines',
+      body: 'For a business individual, FBR asks for "evidence of tenancy or ownership of business premises" and stops there. It does not say what qualifies. A registered rent agreement or a title document plainly does; a utility bill in your own name is commonly accepted. What FBR has never addressed is the person working from home with no separate premises and no tenancy to evidence, which is a large share of freelancers and consultants. If a page tells you confidently what to submit in that situation, ask where it read that.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'The SIM rule has no workaround',
+      body: [
+        'FBR requires the mobile number to be registered against your own CNIC, and verifies it against NADRA. A SIM in a parent\'s or spouse\'s name will not pass, and there is no alternative route: you get your own SIM or you do not register.',
+        'For an association or a company there is a second condition that catches people who have done this before. The authorised person\'s SIM must not already be registered with FBR against another taxpayer. An accountant who used his own number for a client\'s registration has spent it.',
+      ],
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Overseas Pakistanis and foreign nationals',
+      body: [
+        'FBR\'s IRIS documentation answers this more clearly than most guides do. The user ID is the thirteen-digit CNIC or NICOP for a Pakistani individual, which means a NICOP holder registers on the same basis as a resident. For a non-Pakistani individual it is a seven-digit NTN, allotted separately rather than derived from an identity card.',
+        'What FBR does not address, and we will not guess at, is whether the requirement for a SIM registered against your own CNIC is enforced for someone living abroad with no Pakistani number. That is the practical blocker for overseas registration and it deserves a direct answer from a Regional Tax Office rather than an inference from us.',
+      ],
+    },
+
+    {
+      kind: 'prose',
+      heading: 'If you are registering an association, there is a step before this one',
+      body: [
+        'A partnership must be registered with the Registrar of Firms under section 58 of the Partnership Act 1932 before its registration certificate can be produced to FBR. That is a separate process with a separate authority, and it is provincial: the requirements and fees differ by province.',
+        'For Islamabad Capital Territory it runs to a partnership deed on Rs 1,000 stamp paper, an affidavit on Rs 5 stamp paper, a Rs 1,000 fee paid to National Bank under head C-03545, CNICs of all partners and witnesses, everything notarised, with partners appearing in person and the certificate collected about ten days later. Note that Form No. 1 itself is preprinted with a Rs 100 filing fee, which is long out of date.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'One error message, explained',
+      body: 'FBR\'s own IRIS documentation records the error "Residence / Head Office / Business Address in Address Tab must be entered before submission" and gives two causes: an address that has not been marked as a residence, and a business address that has not been linked to the business. If you are stuck on it, one of those two is why.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Registering creates an obligation',
+      body: 'Section 114(1)(b)(vii) requires a return from any person who has obtained a National Tax Number. Getting one is not a neutral act that only helps you at the bank: it puts you inside the filing regime, and the consequences of not filing then attach.',
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'What documents do I need for NTN registration in Pakistan?',
+      answer:
+        'A salaried individual uploads nothing in IRIS but needs a CNIC, a SIM registered in their own name, a personal email and a bank account certificate. A business individual additionally uploads a business letterhead, a paid utility bill for the premises no older than three months, and evidence of tenancy or ownership.',
+    },
+    {
+      question: 'What is a certificate of maintenance of a bank account?',
+      answer:
+        'A letter from your branch confirming that an account exists in your name and is operative. Any branch will issue one. The name on it must match your CNIC exactly, which is the most common reason it gets rejected.',
+    },
+    {
+      question: 'What counts as evidence of business premises?',
+      answer:
+        'FBR asks for evidence of tenancy or ownership without defining it. A registered rent agreement or a title document plainly qualifies. FBR has never addressed the case of someone working from home with no separate premises, so there is no authoritative answer for it.',
+    },
+    {
+      question: 'Can I register for an NTN if my SIM is in my father\'s name?',
+      answer:
+        'No. FBR requires the number to be registered against your own CNIC and verifies it against NADRA. There is no workaround. For an association or company there is a further condition: the authorised person\'s SIM must not already be registered with FBR against another taxpayer.',
+    },
+    {
+      question: 'Can an overseas Pakistani get an NTN?',
+      answer:
+        'Yes. FBR\'s IRIS documentation accepts a NICOP as the user ID on the same basis as a CNIC. Whether the requirement for a SIM registered against your own CNIC is enforced for someone with no Pakistani number is not addressed by FBR, so confirm with a Regional Tax Office.',
+    },
+    {
+      question: 'Can a foreign national get an NTN in Pakistan?',
+      answer:
+        'Yes. FBR allots a separate seven-digit NTN to a non-Pakistani individual rather than deriving the identifier from an identity card. The specific document set is not published, so confirm it with a Regional Tax Office.',
+    },
+    {
+      question: 'Do I need to register my partnership before applying for an AOP NTN?',
+      answer:
+        'Yes. The partnership registration certificate from the Registrar of Firms under section 58 of the Partnership Act 1932 is among the documents FBR asks for, so that process comes first. It is provincial, so requirements and fees differ.',
+    },
+    {
+      question: 'Does getting an NTN mean I have to file a tax return?',
+      answer:
+        'Yes. Section 114(1)(b)(vii) requires a return from any person who has obtained a National Tax Number, independently of income level.',
+    },
+  ],
+
+  publishedAt: '2026-09-19',
+  related: ['how-to-get-an-ntn', 'filer-vs-non-filer'],
+
+  seo: {
+    title: 'NTN Registration Documents: What FBR Actually Requires',
+    description:
+      'Required documents by taxpayer type from FBR\'s own pages, the bank certificate FBR states two ways, the premises evidence it never defines, and the SIM rule with no workaround.',
+  },
+};
+
+export const NTN_GUIDES: Guide[] = [HOW_TO_GET_NTN, NTN_DOCUMENTS];

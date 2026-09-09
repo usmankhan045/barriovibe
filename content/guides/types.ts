@@ -31,7 +31,7 @@ import type { Faq, IconName } from '../types';
  * in scripts/check-content.ts.
  */
 
-/** The nine clusters. A guide belongs to exactly one. */
+/** The clusters. A guide belongs to exactly one. */
 export type ClusterSlug =
   | 'filer'
   | 'pseb'
@@ -39,6 +39,7 @@ export type ClusterSlug =
   | 'company'
   | 'trademark'
   | 'property'
+  | 'salestax'
   | 'cross-border';
 
 export interface Cluster {

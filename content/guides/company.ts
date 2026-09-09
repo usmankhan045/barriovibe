@@ -253,4 +253,173 @@ const SECP_REGISTRATION: Guide = {
   },
 };
 
-export const COMPANY_GUIDES: Guide[] = [SECP_REGISTRATION];
+/**
+ * The choice-of-vehicle guide.
+ *
+ * Its flagship correction is the audit threshold. Competitors cite s.247's
+ * Rs 3 million figure as an audit exemption; s.247 governs WHO may audit, not
+ * whether an audit is needed. The exemption is s.223(5) at Rs 1 million, and a
+ * third threshold at s.233(3) decides the filing route. Three numbers doing
+ * three jobs, routinely collapsed into one.
+ */
+const CHOOSING_A_STRUCTURE: Guide = {
+  slug: 'smc-vs-private-limited-vs-sole-proprietor',
+  cluster: 'company',
+  title: 'SMC, Private Limited or Sole Proprietor: Which to Register',
+  navLabel: 'Choosing a structure',
+  card: 'What actually differs between the three, the audit thresholds everyone gets wrong, and the statutory points at which the answer changes.',
+
+  answer:
+    'A sole proprietorship has no registration and no separate legal existence, so the business debts are your debts. A single member company and a private limited company are both bodies corporate with limited liability, and they are taxed identically: the differences between them are compliance differences, not tax ones. Audit becomes compulsory once paid-up capital exceeds Rs 1 million.',
+
+  sections: [
+    {
+      kind: 'table',
+      heading: 'The three forms side by side',
+      columns: ['', 'Sole proprietor', 'Single member company', 'Private limited'],
+      rows: [
+        ['Registered with', 'Nobody, only FBR for an NTN', 'SECP', 'SECP'],
+        ['Members', 'One, and it is you', '1', '2 to 50'],
+        ['Directors', 'Not applicable', 'At least 1', 'Not less than 2'],
+        ['Separate legal person', 'No', 'Yes, s.18', 'Yes, s.18'],
+        ['Liability', 'Unlimited and personal', 'Limited', 'Limited'],
+        ['Taxed as', 'Individual, slab rates', 'Company', 'Company'],
+      ],
+    },
+
+    {
+      kind: 'prose',
+      heading: 'There is no such thing as registering a sole proprietorship',
+      body: [
+        'The Companies Act 2017 contains no provision for one, and SECP registers only companies and limited liability partnerships. What people mean when they say they registered a sole proprietorship is that they obtained an NTN from FBR, and possibly a provincial or local licence.',
+        'This also settles a question competitors answer badly. There is no statutory conversion from a sole proprietorship into a company, because there is nothing to convert. You incorporate a new company and transfer the assets to it, and the proprietorship simply stops. Pages describing a conversion procedure are describing something that does not exist.',
+      ],
+    },
+
+    {
+      kind: 'prose',
+      heading: 'What limited liability actually rests on',
+      body: [
+        'Section 18 is the whole of it: on registration, the subscribers become a body corporate with perpetual succession and a common seal. The company is a person, distinct from the people who own it, and its debts are its own.',
+        'A sole proprietor has no such statute, so there is no separation to rely on. Section 9(2) makes the point from the other direction: where an association of more than twenty persons carries on business for gain without incorporating, the members are personally liable for all the liabilities of that business.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Limited liability can be lost',
+      body: 'Under section 15, if a single member company falls below one member or a private company below two, and business continues for more than 180 days, every member who knows about it becomes severally liable for the whole of the debts contracted during that time. The protection is not unconditional.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'An SMC is taxed exactly like a private limited company',
+      body: [
+        'The Income Tax Ordinance operates on the word "company" and draws no distinction for a single member company, which is a private company under the Companies Act in any event. Both reach the small company rate on the same section 2(59AB) thresholds: paid-up capital plus undistributed reserves not over Rs 50 million, not more than 250 employees, annual turnover not over Rs 250 million, and not formed by splitting up an existing company.',
+        'Note the section number. Small company is defined at section 2(59AB). Section 2(59A) is a different thing entirely, the definition of a small and medium enterprise, and the two get confused constantly.',
+      ],
+    },
+
+    {
+      kind: 'table',
+      heading: 'The three audit thresholds, and what each one does',
+      intro:
+        'Competitors cite the Rs 3 million figure as an audit exemption. It is not. Three separate provisions use three separate numbers for three separate purposes.',
+      columns: ['Paid-up capital', 'Audit required?', 'Who may audit', 'Filing route'],
+      rows: [
+        ['Up to Rs 1m', 'No, s.223(5) proviso', 'Not applicable', 's.234, whether audited or not'],
+        ['Over Rs 1m, under Rs 3m', 'Yes', 'Chartered accountant or CMA', 's.234 while under Rs 10m'],
+        ['Rs 3m and above', 'Yes', 'Chartered accountant only, s.247(1)', 's.234 while under Rs 10m'],
+        ['Rs 10m and above', 'Yes', 'Chartered accountant only', 's.233'],
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'What section 247 is actually for',
+      body: 'It governs who is qualified to act as auditor, not whether you need one. Below Rs 3 million paid-up capital a cost and management accountant may audit a private company; at or above it, only a chartered accountant with a valid ICAP practising certificate. Citing it as an audit exemption threshold gets the reader\'s obligation wrong in both directions.',
+    },
+
+    {
+      kind: 'list',
+      heading: 'What a company files that a sole proprietor does not',
+      intro:
+        'The compliance gap is the real cost of incorporating, and it is larger than the registration fee suggests.',
+      items: [
+        'An income tax return regardless of income or activity, under s.114(1)(a). A dormant company still files.',
+        'Books of account kept at the registered office and retained for ten financial years, under s.220',
+        'Financial statements laid before the annual general meeting within 120 days of the year end, under s.223(2)',
+        'An audit, unless paid-up capital is Rs 1 million or less',
+        'An auditor appointed by the board within 90 days of incorporation, with the registrar notified within 14 days',
+        'The annual return on Form A or B, and Form 29 within 15 days of any change of officers',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'A single member company still needs a second person',
+      body: 'The Single Member Companies Rules require an SMC to appoint a company secretary within fifteen days, and the sole director may not be the company secretary. So a one-person company is not quite a one-person operation on paper. We read this in the original 2003 Rules, which still reference the repealed Companies Ordinance 1984, and SECP has reported changes to the nominee director requirements since, so confirm the current position before relying on it.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'When the answer changes',
+      body: [
+        'Rather than a revenue figure invented for the purpose, there are statutory points at which the calculation genuinely shifts. Turnover approaching Rs 100 million brings individuals and associations within minimum tax under section 113, which removes one of the better arguments for staying unincorporated. Paid-up capital above Rs 1 million starts the audit obligation. More than twenty participants makes incorporation compulsory under section 9(1).',
+        'Everything else is a judgement about liability exposure. A business with real contractual or third-party risk wants the section 18 separation whatever its turnover, and a business with none may reasonably stay unincorporated well past the point where it could afford not to.',
+      ],
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'Is an SMC taxed differently from a private limited company?',
+      answer:
+        'No. The Income Tax Ordinance operates on the word "company" and makes no distinction for a single member company, which is a private company under the Companies Act. Both reach the small company rate on identical section 2(59AB) thresholds. The differences between the two forms are Companies Act compliance differences.',
+    },
+    {
+      question: 'Do I need to register a sole proprietorship in Pakistan?',
+      answer:
+        'There is no registration for one. The Companies Act contains no sole proprietor provision and SECP registers only companies and LLPs. What you need is an NTN from FBR, sales tax registration if applicable, and any provincial or local licence your activity requires.',
+    },
+    {
+      question: 'When does a company have to be audited in Pakistan?',
+      answer:
+        'Whenever paid-up capital exceeds Rs 1 million. Section 223(5) exempts a private company with paid-up capital not exceeding Rs 1 million, and section 223(9) applies that carve-out to single member companies. The Rs 3 million figure often quoted is from section 247 and governs who may act as auditor, not whether an audit is required.',
+    },
+    {
+      question: 'Can I convert my sole proprietorship into a private limited company?',
+      answer:
+        'Not by conversion, because there is nothing registered to convert. You incorporate a new company and transfer the business assets to it, after which the proprietorship ceases. Guides describing a conversion procedure are describing something that does not exist in the Act.',
+    },
+    {
+      question: 'Does a single member company need a company secretary?',
+      answer:
+        'The Single Member Companies Rules require one to be appointed within fifteen days, and provide that the sole director shall not be the company secretary. Confirm the current text before relying on it: the version we read is the original 2003 Rules and SECP has reported amendments since.',
+    },
+    {
+      question: 'Does a dormant company have to file a tax return?',
+      answer:
+        'Yes. Section 114(1)(a) requires a return from every company, regardless of income or activity. Whether it must also file an annual return with SECP depends on whether particulars have changed since the last one.',
+    },
+    {
+      question: 'How many people can be in a partnership in Pakistan?',
+      answer:
+        'Twenty. Section 9(1) of the Companies Act provides that no association or partnership of more than twenty persons may be formed for gain unless registered as a company, and section 9(2) makes those in breach personally liable for all the liabilities of the business.',
+    },
+  ],
+
+  publishedAt: '2026-09-18',
+  related: ['secp-company-registration', 'how-to-get-an-ntn'],
+
+  seo: {
+    title: 'SMC vs Private Limited vs Sole Proprietor in Pakistan',
+    description:
+      'What differs between the three structures, why an SMC is taxed identically to a private limited, and the three audit thresholds that competitors collapse into one wrong number.',
+  },
+};
+
+export const COMPANY_GUIDES: Guide[] = [SECP_REGISTRATION, CHOOSING_A_STRUCTURE];

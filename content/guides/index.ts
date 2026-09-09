@@ -3,6 +3,9 @@ import { FILER_GUIDES } from './filer';
 import { NTN_GUIDES } from './ntn';
 import { COMPANY_GUIDES } from './company';
 import { TRADEMARK_GUIDES } from './trademark';
+import { PROPERTY_GUIDES } from './property';
+import { PSEB_GUIDES } from './pseb';
+import { SALESTAX_GUIDES } from './salestax';
 
 export type { Cluster, ClusterSlug, Guide, GuideSection } from './types';
 
@@ -60,6 +63,30 @@ export const CLUSTERS: Cluster[] = [
       'The fees below are read from the gazette notification that set them, not from the tables circulating online, two of which conflate different forms. Costs scale by class in Pakistan, and the renewal is the largest single fee.',
     icon: 'trademark',
   },
+  {
+    slug: 'property',
+    title: 'Property tax',
+    card: 'What a buyer and a seller each pay, how advance tax credits against your final bill, and which rates changed in 2026.',
+    intro:
+      'Property carries the largest single sums most people will ever be taxed on, and the rules moved twice in 2026. These guides state the rate, the section it comes from, and what it is charged on, because the three are not the same question.',
+    icon: 'building',
+  },
+  {
+    slug: 'pseb',
+    title: 'PSEB and IT export',
+    card: 'The 0.25% rate on software and IT service exports: what qualifies, what registration costs, and which conditions are no longer law.',
+    intro:
+      'This is where the tax half of the firm and the software half meet. The rate is set by statute, the registration is a statutory condition rather than paperwork, and one widely repeated requirement was repealed in 2022.',
+    icon: 'code',
+  },
+  {
+    slug: 'salestax',
+    title: 'Sales tax',
+    card: 'Who has to register, why the turnover threshold you have read about does not exist, and whether you belong to FBR or your province.',
+    intro:
+      'Sales tax registration is decided by what you do rather than what you earn, and by whether you supply goods or services. Both of those are widely misreported, and getting either wrong means registering with the wrong authority.',
+    icon: 'receipt',
+  },
 ];
 
 /** Every guide, due or not. Use `PUBLISHED_GUIDES` for anything reader-facing. */
@@ -68,6 +95,9 @@ export const ALL_GUIDES: Guide[] = [
   ...NTN_GUIDES,
   ...COMPANY_GUIDES,
   ...TRADEMARK_GUIDES,
+  ...PROPERTY_GUIDES,
+  ...PSEB_GUIDES,
+  ...SALESTAX_GUIDES,
 ];
 
 /**
