@@ -59,9 +59,13 @@ use `pdftotext -layout` instead. See `DEAD-ENDS.md`.
 
 ## What the research could not do
 
-**No keyword volume data.** No agent had Ahrefs, Semrush, DataForSEO or Search
-Console. Every volume label in `DEMAND.md` is inferred from SERP composition,
-not measured. This is the highest-value missing input.
+**No keyword volume data, and this is structural.** Per-keyword volume is the
+paywalled core of Ahrefs and Semrush, and nobody publishes it free for a
+Pakistan-geo tax keyword set. Google Trends returns 429 here. What exists
+instead is 7,496 real queries harvested from Google and Bing autocomplete, in
+`keywords/`, which evidences phrasing and relative prominence but is NOT volume.
+Google Keyword Planner with geo=PK, free with an Ads account, remains the
+correct fix. See `keywords/README.md`.
 
 **Reddit was blocked for all six agents.** Each said so rather than inventing
 practitioner discourse. The n8n community forum substituted for the AI cluster;
