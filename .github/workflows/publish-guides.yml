@@ -1,0 +1,111 @@
+name: Publish scheduled guides
+
+# ── What this does, and why it is a deploy hook rather than a commit ──
+#
+# Guides carry a `publishedAt` date and content/guides/index.ts filters on the
+# build date, so a guide appears when the site is next built on or after its
+# date. Nothing in the repository needs to change for a guide to go live: the
+# scheduling is entirely a property of when the build runs.
+#
+# Vercel builds on push. With no push, it does not rebuild, so a guide dated
+# tomorrow would sit unpublished until the next unrelated commit. This workflow
+# is the thing that makes the date mean something: once a day it asks Vercel to
+# rebuild, and the date filter does the rest.
+#
+# The alternative, committing an empty change to force a push, was rejected. It
+# writes a commit a day into the history for no reason, it races with real work
+# on main, and it makes `git log` useless for finding out what actually changed.
+#
+# ── Why 03:00 UTC ──
+#
+# 08:00 in Pakistan (UTC+5). A guide dated today is live before the working day
+# starts, and the run is well clear of midnight in every timezone the build
+# might see, so there is no ambiguity about which date the runner thinks it is.
+
+on:
+  schedule:
+    # 03:00 UTC daily. GitHub's scheduler is best-effort and can lag under load;
+    # that is acceptable here because the only cost of a late run is that a
+    # guide appears later in the morning.
+    - cron: '0 3 * * *'
+  # Manual trigger, for publishing something ahead of schedule or re-running a
+  # failed day without waiting twenty-four hours.
+  workflow_dispatch:
+
+# Two runs deploying at once would be pointless rather than harmful, but
+# serialising them keeps the logs readable.
+concurrency:
+  group: publish-guides
+  cancel-in-progress: false
+
+jobs:
+  check-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      # ── Is anything actually due today? ──
+      #
+      # Asking first means a deploy hook only fires on days a guide is due,
+      # rather than 365 rebuilds a year to publish 54 guides. It also gives the
+      # run log a plain statement of what went live, which is the record you
+      # want when someone asks why a page appeared.
+      - name: Check for guides due today
+        id: due
+        run: pnpm tsx scripts/guides-due.ts >> "$GITHUB_OUTPUT"
+
+      # ── Verify before deploying ──
+      #
+      # The full suite, including the tax reconciliation and the no-em-dash
+      # check on rendered output. A guide that has sat in the repo for a week
+      # is still unverified against today's build until today's build runs, and
+      # publishing a broken page automatically is worse than publishing late.
+      - name: Verify
+        if: steps.due.outputs.due == 'true'
+        run: pnpm verify
+
+      - name: Build
+        if: steps.due.outputs.due == 'true'
+        run: pnpm build
+
+      # ── Ask Vercel to rebuild ──
+      #
+      # A deploy hook is a URL that triggers a build of a chosen branch. Create
+      # one at Vercel > Project > Settings > Git > Deploy Hooks, then store it
+      # as the VERCEL_DEPLOY_HOOK repository secret. It is a bearer credential:
+      # anyone holding the URL can trigger a build, which is why it is a secret
+      # and not an input.
+      - name: Trigger Vercel deploy
+        if: steps.due.outputs.due == 'true'
+        env:
+          HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "::error::VERCEL_DEPLOY_HOOK is not set. Guides due today will not publish."
+            echo "Create a deploy hook in Vercel (Settings > Git > Deploy Hooks)"
+            echo "and add it as a repository secret named VERCEL_DEPLOY_HOOK."
+            exit 1
+          fi
+          code=$(curl -sS -o /tmp/hook-response -w '%{http_code}' -X POST "$HOOK")
+          echo "Vercel responded $code"
+          cat /tmp/hook-response
+          # Vercel returns 201 on a queued job. Anything else is a real failure
+          # and should fail the run rather than be logged and forgotten.
+          case "$code" in
+            20*) echo "Deploy queued." ;;
+            *) echo "::error::Deploy hook returned $code"; exit 1 ;;
+          esac
+
+      - name: Nothing due
+        if: steps.due.outputs.due != 'true'
+        run: echo "No guides scheduled for today. Vercel was not asked to rebuild."
