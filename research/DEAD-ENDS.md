@@ -17,3 +17,10 @@ header from the linking page.
 
 **scrapling's get_all_text() returns empty for PDF responses.** It renders HTML.
 For a PDF, download the bytes and use `pdftotext -layout`.
+
+**sbp.org.pk/fe_manual/pdf/2021/Chapter-20.pdf returns an HTML shell, not a PDF.**
+Tried plain curl, curl with browser UA + Referer, and StealthyFetcher with a
+prior session on the manual index. All return the SBP page template. The 2021
+chapter path appears retired. Use the EPD circulars under /epd/<year>/ instead:
+FE Circular No. 01 of 11 July 2024 (FEC1-AnnexA.pdf) fetched cleanly and carries
+the current Equity Investment Abroad framework, which supersedes the 2021 text.
