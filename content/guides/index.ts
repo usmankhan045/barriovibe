@@ -1,5 +1,8 @@
 import type { Cluster, ClusterSlug, Guide } from './types';
 import { FILER_GUIDES } from './filer';
+import { NTN_GUIDES } from './ntn';
+import { COMPANY_GUIDES } from './company';
+import { TRADEMARK_GUIDES } from './trademark';
 
 export type { Cluster, ClusterSlug, Guide, GuideSection } from './types';
 
@@ -31,12 +34,41 @@ export const CLUSTERS: Cluster[] = [
     card: 'What being on the Active Taxpayer List is worth, in rupees, and how to get on it.',
     intro:
       'Every one of these answers the same underlying question from a different angle: what does filer status actually change. The figures come from the same modules the calculators use, so where a guide states a rate you can check it against the tool on the page.',
-    icon: 'document',
+    icon: 'ledger',
+  },
+  {
+    slug: 'ntn',
+    title: 'NTN registration',
+    card: 'Getting a National Tax Number, what it costs (nothing), and what registration does and does not oblige you to do.',
+    intro:
+      'FBR\'s own portal ranks first on most of these questions and answers almost none of them. These guides are assembled from FBR\'s own documents: the requirements, the IRIS steps, and the point where most registrations quietly stop short of finishing.',
+    icon: 'receipt',
+  },
+  {
+    slug: 'company',
+    title: 'Company formation',
+    card: 'Registering with SECP, the fees most published pages get wrong, and the filings due before you have found an office.',
+    intro:
+      'Every figure here comes from the Seventh Schedule to the Companies Act or from the Act itself. Where SECP has not published a position, this says so rather than guessing, because a confident wrong number about a fee is worse than an honest gap.',
+    icon: 'building',
+  },
+  {
+    slug: 'trademark',
+    title: 'Trademark and IP',
+    card: 'What registration really costs across the whole lifecycle, from the search to the renewal ten years later.',
+    intro:
+      'The fees below are read from the gazette notification that set them, not from the tables circulating online, two of which conflate different forms. Costs scale by class in Pakistan, and the renewal is the largest single fee.',
+    icon: 'trademark',
   },
 ];
 
 /** Every guide, due or not. Use `PUBLISHED_GUIDES` for anything reader-facing. */
-export const ALL_GUIDES: Guide[] = [...FILER_GUIDES];
+export const ALL_GUIDES: Guide[] = [
+  ...FILER_GUIDES,
+  ...NTN_GUIDES,
+  ...COMPANY_GUIDES,
+  ...TRADEMARK_GUIDES,
+];
 
 /**
  * "Now", as the build sees it.
@@ -47,7 +79,13 @@ export const ALL_GUIDES: Guide[] = [...FILER_GUIDES];
  * dated today until the next run.
  */
 function buildDate(): string {
-  return new Date().toISOString().slice(0, 10);
+  /*
+   * GUIDE_BUILD_DATE exists for QA: it lets a build render the whole scheduled
+   * slate at once so every guide can be checked before its date arrives. It is
+   * never set in CI, so a normal build uses the real date and the schedule
+   * holds.
+   */
+  return process.env.GUIDE_BUILD_DATE ?? new Date().toISOString().slice(0, 10);
 }
 
 /**

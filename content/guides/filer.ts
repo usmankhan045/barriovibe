@@ -229,4 +229,153 @@ const FILER_VS_NON_FILER: Guide = {
   },
 };
 
-export const FILER_GUIDES: Guide[] = [FILER_VS_NON_FILER];
+/**
+ * The procedural half of the filer cluster.
+ *
+ * "How to become a filer" is the deepest seed in the entire harvest: 412
+ * autocomplete completions, more than any other Pakistani tax query tested,
+ * and its SERP carries YouTube and LinkedIn on page one. It is a separate
+ * guide from filer-vs-non-filer rather than a section of it because the
+ * searcher is different: one has decided and wants the procedure, the other is
+ * still deciding and wants the arithmetic.
+ */
+const HOW_TO_BECOME_A_FILER: Guide = {
+  slug: 'how-to-become-a-filer',
+  cluster: 'filer',
+  title: 'How to Become a Filer in Pakistan',
+  navLabel: 'How to become a filer',
+  card: 'Register, file one return, and check your status. What it costs if you are late, and why the answer to "how long does it take" changed in 2024.',
+
+  answer:
+    'Becoming a filer means appearing on FBR\'s Active Taxpayer List, and the list is built from who has filed a return. Three steps: register for a National Tax Number if you have not, file the return for the last completed tax year, and pay the surcharge if you missed the deadline. If you file on time, inclusion is immediate rather than weekly.',
+
+  sections: [
+    {
+      kind: 'prose',
+      body: [
+        'There is no application to become a filer. The Active Taxpayer List is not something you join, it is a list FBR generates from returns filed, so the whole procedure is really one act with some paperwork either side of it.',
+        'What changes is the timing and the cost, and both changed recently enough that most published advice is out of date on one or the other.',
+      ],
+    },
+
+    {
+      kind: 'steps',
+      heading: 'The three steps',
+      steps: [
+        {
+          title: 'Register, if you have not already',
+          body: 'Registration under section 181 gives you a National Tax Number and is free. If you hold a CNIC that number is already your NTN under section 181(4), but you still have to submit Form 181 in IRIS to be registered.',
+        },
+        {
+          title: 'File the return for the last completed tax year',
+          body: 'This is the step that actually does it. Registration alone will never put you on the list, however long ago you registered. The tax year runs July to June and the return for a salaried individual is due by 30 September.',
+        },
+        {
+          title: 'Pay the surcharge if you filed late',
+          body: 'Under section 182A, late filing means paying a surcharge before you are included in the list. There is now an alternative for individuals, covered below.',
+        },
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'How long it takes, and why most answers are wrong',
+      body: 'FBR moved the Active Taxpayer List to daily updates in October 2024, and stated that a taxpayer filing by the due date is included immediately. Before that the list shifted annually each March and was refreshed weekly. FBR\'s own list page still says "every Monday", which contradicts FBR\'s own press release. If you file on time, you do not wait.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'What it costs to file late',
+      body: [
+        'The surcharge under section 182A rose sharply in 2026. For an individual it went from Rs 1,000 to Rs 25,000, for an association of persons from Rs 10,000 to Rs 50,000, and for a company from Rs 20,000 to Rs 100,000. Pages still quoting the old figures are describing tax year 2026.',
+        'The Finance Act 2026 added an alternative that was not in the Bill and is therefore missing from most commentary: an individual can avoid the surcharge entirely by giving the concerned Commissioner an undertaking not to purchase, acquire or otherwise obtain ownership or beneficial interest in any property for six months from the date of the undertaking.',
+        'That is a real choice rather than a technicality. If you were not going to buy property in the next six months anyway, the undertaking costs you nothing and saves Rs 25,000.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Filing late costs more than the surcharge',
+      body: 'Section 182A also provides that a person who does not file by the due date may not carry forward any loss for that tax year, may not be issued a refund while off the list, and loses the additional payment for a delayed refund under section 171. For a business with a bad year, the loss carry-forward is permanent and can dwarf every other consequence.',
+    },
+
+    {
+      kind: 'calculator',
+      toolSlug: 'salary-tax',
+      heading: 'Work out what you owe first',
+      body: 'The return is easier to face when you know the number. This computes salary tax on the current slabs and shows the working slab by slab.',
+    },
+
+    {
+      kind: 'list',
+      heading: 'Checking whether it worked',
+      intro: 'All official routes, and the syntax differs by taxpayer type.',
+      items: [
+        'Send ATL and your 13-digit CNIC to 9966, for an individual',
+        'Send ATL and the 7-digit NTN to 9966, for an association or a company',
+        'Use AJKATL rather than ATL if you are in Azad Jammu and Kashmir',
+        'Check FBR\'s online Active Taxpayer List status page in a browser',
+      ],
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Two cases where you do not need to file',
+      body: [
+        'A non-resident holding a Pakistan Origin Card or NICOP can get the filer rate on property transactions without being on the list at all. The authority handling the transaction raises a PSID through the Overseas Pakistanis link on FBR\'s portal, uploads the card and proof of residency, and a Commissioner approves payment at the filer rate. FBR documents this in its own overseas FAQ.',
+        'Separately, Rule 2 of the Tenth Schedule lets a withholding agent who believes a person was not required to file notify the Commissioner with the reasons. The Commissioner has thirty days to respond and silence is deemed acceptance. Neither route is a substitute for filing if you are required to file.',
+      ],
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'How do I become a filer in Pakistan?',
+      answer:
+        'File an income tax return. The Active Taxpayer List is generated from returns filed, so there is no separate application. If you are not registered, register first under section 181 to get a National Tax Number, which is free, then file the return for the last completed tax year.',
+    },
+    {
+      question: 'How long does it take to become a filer after filing?',
+      answer:
+        'Immediately, if you filed by the due date. FBR moved the Active Taxpayer List to daily updates in October 2024 and stated that taxpayers filing by the due date are included immediately. FBR\'s own list page still says the update happens every Monday, which is out of date.',
+    },
+    {
+      question: 'How much does it cost to become a filer?',
+      answer:
+        'Registration is free and filing a return costs nothing. If you file after the due date, section 182A requires a surcharge before you are included in the list: Rs 25,000 for an individual, Rs 50,000 for an association of persons and Rs 100,000 for a company.',
+    },
+    {
+      question: 'Can I avoid the late filing surcharge?',
+      answer:
+        'An individual can. The Finance Act 2026 provided that the surcharge does not apply to an individual who furnishes an undertaking with the concerned Commissioner not to purchase, acquire or otherwise obtain ownership or beneficial interest in any property for six months from the date of the undertaking.',
+    },
+    {
+      question: 'Do I need to file a return if my employer already deducts tax?',
+      answer:
+        'Deduction at source and filing are different obligations. Your employer withholding tax on salary does not put you on the Active Taxpayer List, so without a filed return you will still pay non-filer rates on property, vehicles and banking transactions.',
+    },
+    {
+      question: 'What is the last date to file a tax return in Pakistan?',
+      answer:
+        'For a salaried individual the return for a tax year ending 30 June is due by 30 September. FBR has extended that date in past years, including twice in tax year 2025, but an extension is an administrative decision rather than something to plan around.',
+    },
+    {
+      question: 'I am registered with FBR but not on the Active Taxpayer List. Why?',
+      answer:
+        'Because registration and filing are separate. Registration gives you a National Tax Number; the list is built from who has filed a return. If you registered but never filed, you hold an NTN and are not a filer.',
+    },
+  ],
+
+  publishedAt: '2026-09-12',
+  related: ['filer-vs-non-filer', 'how-to-get-an-ntn'],
+
+  seo: {
+    title: 'How to Become a Filer in Pakistan: Three Steps',
+    description:
+      'Register, file one return, check your status. What the late surcharge costs after the Finance Act 2026, the undertaking that avoids it, and why inclusion is now immediate.',
+  },
+};
+
+export const FILER_GUIDES: Guide[] = [FILER_VS_NON_FILER, HOW_TO_BECOME_A_FILER];
