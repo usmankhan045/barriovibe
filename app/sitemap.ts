@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next';
 import { SERVICES, serviceHref, PRACTICE_PAGES } from '@/content/services';
 import { PILLARS } from '@/content/pillars';
 import { TOOLS, toolHref } from '@/content/tools';
+import { PUBLISHED_GUIDES, activeClusters, clusterHref, guideHref } from '@/content/guides';
 import { absoluteUrl } from '@/lib/seo';
 import { newestLastModified } from '@/lib/lastmod';
 
@@ -59,6 +60,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/blog', priority: 0.5, changeFrequency: 'yearly', sources: ['app/blog/page.tsx'] },
     { path: '/contact', priority: 0.7, changeFrequency: 'yearly', sources: ['app/contact/page.tsx'] },
     { path: '/tools', priority: 0.7, changeFrequency: 'monthly', sources: ['app/tools/page.tsx', 'content/tools.ts'] },
+    { path: '/guides', priority: 0.8, changeFrequency: 'monthly', sources: ['app/guides/page.tsx', 'content/guides/index.ts'] },
     { path: '/privacy', priority: 0.2, changeFrequency: 'yearly', sources: ['app/privacy/page.tsx'] },
     { path: '/terms', priority: 0.2, changeFrequency: 'yearly', sources: ['app/terms/page.tsx'] },
   ];
@@ -91,6 +93,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: modified(
         ...pillarSources(service.pillar),
         'app/services/[category]/[service]/page.tsx',
+      ),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    })),
+    /* Guide clusters, then the guides themselves. Only published guides are in
+       PUBLISHED_GUIDES, so a future-dated guide is absent from the sitemap
+       rather than announced before the page exists. */
+    ...activeClusters().map((c) => ({
+      url: absoluteUrl(clusterHref(c.slug)),
+      lastModified: modified('content/guides/index.ts', 'app/guides/[cluster]/page.tsx'),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    })),
+    ...PUBLISHED_GUIDES.map((g) => ({
+      url: absoluteUrl(guideHref(g)),
+      lastModified: modified(
+        `content/guides/${g.cluster}.ts`,
+        'content/provenance.ts',
+        'components/sections/GuidePage.tsx',
       ),
       changeFrequency: 'monthly' as const,
       priority: 0.7,

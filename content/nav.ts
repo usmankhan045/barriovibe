@@ -138,6 +138,17 @@ export const PRIMARY_NAV: NavLink[] = [
   { label: 'Home', href: '/' },
   { label: 'Services', href: '/services', mega: 'services' },
   { label: 'Tools', href: '/tools', mega: 'tools' },
+  /* Guides sits beside Tools because the two work as a pair: a calculator
+     answers "what is the number" and a guide answers "why is it that number",
+     and each links to the other. Placed before Contact so the reference
+     material reads as one group.
+
+     NOTE: this takes the header to seven items. Blog still points at a page
+     that says nothing is published yet, which is an honest empty state but a
+     weak signal on every page of the site. Moving Blog to the footer until it
+     has posts is worth considering; left in place because that is the owner's
+     call, not a technical one. */
+  { label: 'Guides', href: '/guides' },
   { label: 'Contact', href: '/contact' },
   { label: 'About', href: '/about' },
   { label: 'Blog', href: '/blog' },

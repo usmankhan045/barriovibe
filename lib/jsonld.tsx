@@ -274,3 +274,46 @@ export function webSiteSchema() {
     publisher: { '@id': `${SITE_URL}/#organization` },
   };
 }
+
+/**
+ * A guide, described as an article with a review date and a named reviewer.
+ *
+ * Guides are YMYL content: they answer tax questions a reader will act on. The
+ * three properties that matter most to a quality rater are the three an
+ * anonymous, undated page lacks, so they are all read from content/provenance.ts
+ * rather than written per guide. The same module drives the visible block on the
+ * page, so the markup and the schema cannot come apart.
+ *
+ * `dateModified` carries the statutory review date rather than a build
+ * timestamp, for the reason set out in content/provenance.ts: a date that moves
+ * on its own is a claim about work nobody did.
+ */
+export function guideSchema({
+  title,
+  description,
+  path,
+  cluster,
+}: {
+  title: string;
+  description: string;
+  path: string;
+  cluster: string;
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    url: absoluteUrl(path),
+    mainEntityOfPage: { '@type': 'WebPage', '@id': absoluteUrl(path) },
+    articleSection: cluster,
+    inLanguage: 'en-PK',
+    dateModified: RATES_REVIEWED,
+    datePublished: RATES_REVIEWED,
+    author: { '@id': `${SITE_URL}/#organization` },
+    publisher: { '@id': `${SITE_URL}/#organization` },
+    reviewedBy: { '@id': `${SITE_URL}/#organization` },
+    citation: RATES_BASIS,
+    isAccessibleForFree: true,
+  };
+}

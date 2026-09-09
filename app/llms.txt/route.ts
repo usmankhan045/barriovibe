@@ -1,6 +1,7 @@
 import { BRAND, TAGLINE, CONTACT } from '@/content/site';
 import { PRACTICE_GROUPS, SERVICES, serviceHref, practiceHref } from '@/content/services';
 import { TOOL_GROUPS, toolHref } from '@/content/tools';
+import { PUBLISHED_GUIDES, activeClusters, clusterHref, guideHref } from '@/content/guides';
 import { absoluteUrl } from '@/lib/seo';
 
 /**
@@ -63,6 +64,25 @@ export function GET() {
     }
   }
   lines.push('');
+
+  /* Guides, derived from PUBLISHED_GUIDES for the same reason the tools are
+     derived from TOOL_GROUPS. An AI crawler reading this file is exactly the
+     audience a reference guide is written for, so listing them individually
+     rather than only the hub is deliberate. */
+  if (PUBLISHED_GUIDES.length > 0) {
+    lines.push('## Guides');
+    lines.push('');
+    lines.push(
+      `- [Guides](${absoluteUrl('/guides')}): reference answers on Pakistani tax and company compliance, each citing the section it comes from.`,
+    );
+    for (const cluster of activeClusters()) {
+      lines.push(`- [${cluster.title}](${absoluteUrl(clusterHref(cluster.slug))}): ${cluster.card}`);
+    }
+    for (const guide of PUBLISHED_GUIDES) {
+      lines.push(`- [${guide.title}](${absoluteUrl(guideHref(guide))}): ${guide.card}`);
+    }
+    lines.push('');
+  }
 
   lines.push('## About');
   lines.push('');
