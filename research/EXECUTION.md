@@ -1,7 +1,12 @@
 # How a post gets built
 
-`POSTS.md` says what to write. This says how, and in what order, so the first
-post and the seventieth come out the same shape.
+`POSTS.md` says what to write: **108 pieces, 54 guides, 47 blog posts, 7
+downloadable assets**. This says how, and in what order, so the first piece and
+the hundredth come out the same shape.
+
+Guides and blog posts are separate tracks with separate models. Most of this
+document is about guides, because they ship first and because their constraints
+are the tighter ones. The blog post model is noted where it differs.
 
 ---
 

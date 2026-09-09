@@ -116,15 +116,66 @@ three geo pages, not a content pillar.
 
 ---
 
+## Two tracks, not one funnel
+
+The plan is 108 pieces: **54 guides, 47 blog posts, 7 downloadable assets**
+(`POSTS.md`). They divide into two tracks that share almost nothing, and
+treating them as one pipeline is the mistake this section exists to prevent.
+
+|  | Guides track | Blog track |
+| --- | --- | --- |
+| Route | `/guides/` | `/blog/` |
+| Pieces | 54, in 7 clusters | 47, in 6 clusters |
+| Audience | Pakistani businesses and filers | Global buyers of software and automation |
+| Ages | No. Updated in place, "last reviewed" | Yes. Dated, and stays dated |
+| Proof | Verified statute, 22 calculators | Our own client data and build experience |
+| Pays back | Slowly, then permanently | Faster, on higher-margin services |
+| Model | Typed data in `content/guides/` | Post model, still to build |
+
+They share the layout primitives and nothing else: no template, no reviewer, no
+data source, no update cadence. So they **run in parallel** rather than in
+sequence. Guides start first because they compound, but the blog should not wait
+for 54 guides to finish, because it converts on the services with the best
+margins.
+
+An earlier version of this document treated the blog as "occasional" and put AI
+content in a Phase 4. That was wrong by a factor of four: the AI and development
+harvest holds 4,888 real queries after noise removal, against roughly 2,200 on
+the Pakistani side. The blog is not the smaller half of this strategy.
+
 ## The phases
 
-### Phase 1, months 1-3: own the convergence
+Phases are ordered by what compounds and what unblocks what, not by month
+counts. Real pace depends on how many pieces a week actually get written, and
+that is a decision about capacity rather than a prediction.
 
-The five convergence guides plus the international buyer pack. Low volume, high
-intent, zero competition, and every fact already verified against primary
-sources. This phase is defensible because it needs both competencies.
+### Phase 1: prove both formats
 
-### Phase 2, months 3-6: extend the tooling moat
+Six guides (one from each strong cluster) and the `/guides` infrastructure, then
+review before scaling. Then the blog post model and the first blog cluster.
+
+The point of stopping to review is that the first piece of each kind settles the
+shape every later one inherits, and changing that shape across a finished
+cluster is far more expensive than changing it once.
+
+### Phase 2: complete the strongest clusters
+
+Guide clusters 1 (filer status) and 2 (PSEB and IT export), 16 pieces, plus blog
+cluster 8 (AI agents, cost and failure), 10 pieces.
+
+A complete cluster outranks the same number of scattered posts, because the
+internal links tell a crawler which page is the authority on the topic. Finish
+clusters; do not sprinkle.
+
+### Phase 3: the buyer assets
+
+Cluster 14, seven downloads. These are the odd ones out: they do not chase
+search volume at all. They work on traffic that already exists, and they exist
+because `g2-security-review-delay` and `g2-cfo-veto` show what actually stalls a
+deal once a buyer is already interested. A pre-filled security questionnaire
+addresses the single biggest documented delay in B2B software buying.
+
+### Phase 4: extend the tooling moat
 
 Tools earn links; articles mostly do not. Each of these is grounded in verified
 regulation, which is what lets them meet the same standard as the tax
@@ -138,38 +189,52 @@ calculators (a cited section plus a check assertion):
 - **SECP deadline calculator.** Financial year end in; AGM, Form A and Form 29
   dates out.
 - **Trademark renewal tracker.** Ten-year term plus the six-month grace period.
+- **The four verification tools** (`verification-tools-deferred`): 208 harvested
+  queries want to look something up rather than compute something, and the site
+  has nothing pointed at that intent.
 
 Every tool should produce a **shareable permalink and a PDF export**. Tools that
 only display a number earn far fewer links than tools that produce an artefact,
 and `scripts/` already generates PDF rate cards.
 
-### Phase 3, months 6-12: the link engine
+### Phase 5: the link engine
 
-Two assets with a higher ceiling than any article:
+Two assets with a higher ceiling than any single article:
 
 1. **An n8n template library.** 30 to 50 genuinely working workflows on GitHub
    under a permissive licence, plus a browsable index. n8n's own template
    library spawned entire linking domains (n8nresources.dev with 5,600+
    templates, n8n-library.com with 2,348+, GitHub repos with hundreds). This is
    on-brand rather than promotional: BarrioVibe sells workflow automation, so
-   publishing working workflows is proof rather than marketing.
+   publishing working workflows is proof rather than marketing. It also pairs
+   directly with blog cluster 10, which is 879 queries of automation-platform
+   demand.
 2. **Original research.** Nobody in Pakistan publishes an annual agency-pricing
    or freelancer-tax survey. Whoever does owns the citation, and press appetite
    for Pakistani IT export data is demonstrable.
 
-### Phase 4, ongoing: AI content, played correctly
+### Phase 6: breadth
 
-Not "what is RAG" and not "AI agent vs chatbot": those SERPs belong to companies
-with domain authority that will not be matched soon. Instead:
+Guide clusters 3 to 7 and blog clusters 9 to 13, in whatever order the open
+verification items and the calendar allow.
+
+## How the blog is played, and how it is not
+
+Worth stating plainly because it is the easiest thing to get wrong. Do **not**
+write "what is RAG" or "AI agent vs chatbot": `DEMAND.md` records that those
+SERPs belong to Zendesk, Salesforce, Atlassian and DataCamp, and that bar will
+not be cleared soon. The blog wins on three angles instead:
 
 - **Cost with real arithmetic.** Build cost is only 25-35% of three-year TCO.
-  What ranks today are useless ranges ($10K to $450K) with no methodology.
+  What ranks today are useless ranges ($10K to $450K) with no methodology, and
+  "ai agent cost per month" sits at maximum autocomplete prominence on both
+  engines.
 - **Failure modes.** Near-uncontested, because admitting failure is off-brand
   for vendors. Real practitioner pain is documented on the n8n community forum:
   agents reporting actions never performed, a third tool triggering iteration
   loops, agents hallucinating instead of querying the database, no confidence
   thresholds so low-confidence decisions auto-execute.
-- **The contrarian piece**, which Gartner backs: over 40% of agentic AI projects
+- **The contrarian read**, which Gartner backs: over 40% of agentic AI projects
   will be cancelled by end-2027, and of thousands of vendors claiming agentic
   AI only about 130 are real. Every ranking "do I need an agent" article is
   written by someone selling agents.
@@ -178,11 +243,12 @@ with domain authority that will not be matched soon. Instead:
 
 ## Where content lives
 
-    /guides/    reference and convergence. Evergreen, carries "last reviewed",
-                updated in place rather than re-dated. A guide is not a post: it
-                has no publish date in the chronological sense.
-    /blog/      AI explainers, contrarian pieces, Finance Act commentary.
-                Genuinely dated, genuinely occasional.
+    /guides/    54 pieces. Reference and convergence, evergreen, carries "last
+                reviewed", updated in place rather than re-dated. A guide is not
+                a post: it has no publish date in the chronological sense.
+    /blog/      47 pieces. AI cost and failure, automation platforms, what
+                software costs, e-commerce, and how to buy development work.
+                Dated, opinionated, and it stays dated.
     /tools/     22 calculators, already shipped.
     /services/  44 pages, already shipped.
 
@@ -191,6 +257,11 @@ Slabs 2026-27" as a post and next year publish "2027-28", you split authority
 across two URLs and the old one rots while still ranking. Five years of that
 leaves five half-strong pages instead of one strong one. Updating a single guide
 URL keeps every backlink, share and citation it has earned.
+
+The reverse is equally true and easier to forget. "You Probably Do Not Need an
+Agent" is an argument, not a reference. Putting it under `/guides/` would claim
+a permanence it should not have, and it should carry a date so a reader can
+judge it against a fast-moving field.
 
 `/blog` is currently a flag (`POSTS_ENABLED = false`) and an honest empty state.
 Both `/guides` and a real post model still need building.
