@@ -117,6 +117,13 @@ const HOW_TO_GET_NTN: Guide = {
     },
 
     {
+      kind: 'note',
+      tone: 'info',
+      heading: 'FBR\'s two pages do not quite agree',
+      body: 'The IRIS guide asks a salaried individual to upload nothing. FBR\'s separate "requirements before registration" page lists an original certificate of maintenance of a personal bank account among the things an individual needs. Both are FBR. The practical reading is that IRIS enforces one set at the upload step and a facilitation counter may ask for the other, so have the bank certificate available even though the form will not demand it. Whichever you are asked for, the name on it has to match your CNIC exactly.',
+    },
+
+    {
       kind: 'table',
       heading: 'Requirements by taxpayer type',
       intro: 'From FBR\'s published requirements. The last column is the one that surprises people.',

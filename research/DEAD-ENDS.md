@@ -24,3 +24,19 @@ prior session on the manual index. All return the SBP page template. The 2021
 chapter path appears retired. Use the EPD circulars under /epd/<year>/ instead:
 FE Circular No. 01 of 11 July 2024 (FEC1-AnnexA.pdf) fetched cleanly and carries
 the current Equity Investment Abroad framework, which supersedes the 2021 text.
+
+**secp.gov.pk PDFs are behind a JavaScript download manager.**
+The document pages (e.g. the Seventh Schedule fee notification, Circular 13 of
+2024) render a "Download" button whose href is the same page URL with `?ind=`
+and `filename=` query parameters. Fetching that URL, even with StealthyFetcher,
+returns the page template rather than the PDF: the actual file is served by a
+JS-driven POST the fetcher does not perform.
+
+Tried and failed: plain curl with browser UA and Referer; StealthyFetcher on
+the document page and on the `?ind=` URL; guessing `/wp-content/uploads/<year>/
+<month>/<FILE>.pdf` paths.
+
+What worked instead: the fee figures came from a third party hosting the same
+Seventh Schedule PDF, cross-checked against Business Recorder's reporting of
+the 21 April 2025 structure. For anything where only SECP has the document,
+download it manually in a browser.
