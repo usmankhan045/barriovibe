@@ -61,12 +61,12 @@ siblings link across where a reader's next question is genuinely next door.
 
 **Why this cluster leads.** `pk-serp-weakest-queries`: SlideShare and a LinkedIn
 post rank on page one for "difference between filer and non filer". 134
-harvested queries. And 11 shipped calculators compute the filer/non-filer gap,
-so every claim links to a tool that proves it in rupees.
+harvested queries. And 13 shipped calculators expose a filer/non-filer toggle,
+so every claim links to a tool that proves the gap in rupees.
 
 | # | Post | Owns | Proof |
 | --- | --- | --- | --- |
-| 1.1 | **Filer vs Non-Filer: What the Difference Costs You** (hub) | the head term | 11 calculators |
+| 1.1 | **Filer vs Non-Filer: What the Difference Costs You** (hub) | the head term | 13 calculators |
 | 1.2 | How to Become a Filer: The Registration Path, Start to Finish | "how to become a filer" (412 completions, the deepest seed in the harvest) | IRIS process |
 | 1.3 | What Non-Filers Pay on Property: 236C and 236K Compared | property-specific gap | `s236c-single-rate`, `s236k-single-rate` |
 | 1.4 | What Non-Filers Pay on Vehicles | vehicle-specific gap | vehicle calculators |

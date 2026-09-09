@@ -57,7 +57,7 @@ Evergreen. Updated in place, never re-dated.
 | # | Title | Status | Rests on |
 | --- | --- | --- | --- |
 | 7 | Income Tax Slabs 2026-27, With the Working Shown | READY | `lib/tax/pakistan.ts` (already verified by `check:tax`) |
-| 8 | Filer vs Non-Filer: The Real Rupee Difference | READY | 11 existing calculators compute both sides |
+| 8 | Filer vs Non-Filer: The Real Rupee Difference | READY | 13 existing calculators expose a filer toggle |
 | 9 | Trademark Registration Costs: The Fees Everyone Gets Wrong | READY | `tm-fees-schedule`, `tm-fee-currency` |
 | 10 | Registering a Company on SECP eZfile | READY | `secp-ezfile` |
 | 11 | SECP Annual Filing: Form A, Form 29, and When You Don't Have to File | READY | `secp-annual-filing-chain` |

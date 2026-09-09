@@ -70,6 +70,29 @@ that rates worst, however accurate it happens to be.
 
 `HowTo` on procedural guides only, where the steps are genuinely sequential.
 
+## Integration points
+
+A new route section is not just a template. These six all derive from content
+registries and will silently omit guides otherwise. Verified against the
+codebase on 9 September 2026:
+
+    app/sitemap.ts          add the guide routes and their lastmod sources.
+                            Uses per-route git dates, so name the content files
+                            each guide is generated from.
+    app/llms.txt/route.ts   enumerates sections from SERVICES and TOOL_GROUPS.
+                            Guides need the same treatment or AI crawlers get a
+                            site description that omits them.
+    content/nav.ts          the header currently carries six items. Adding
+                            Guides makes seven. Consider moving Blog to the
+                            footer until it has posts: a nav link to an
+                            acknowledged empty page is a weak signal.
+    components/layout/      footer link groups.
+    scripts/check-content.ts  extend to validate the guide registry the way it
+                            validates services: required fields, resolvable
+                            cross-links, slug format.
+    app/robots.ts           no change needed. The wildcard allows everything
+                            except PRIVATE_PATHS, and /guides is not private.
+
 ## Definition of done
 
 A guide ships when all of these hold:
@@ -87,8 +110,8 @@ A guide ships when all of these hold:
 
 The SERP data shows SlideShare and a LinkedIn post ranking page one for
 "difference between filer and non filer": a commercial query being won by a
-slide deck. Eleven shipped calculators already compute the filer/non-filer gap,
-so every claim in it links to a tool that proves the number on the reader's own
+slide deck. Thirteen shipped calculators expose a filer/non-filer toggle, so
+every claim in it links to a tool that proves the number on the reader's own
 figures. It is the clearest demonstration of what this site can do that
 competitors cannot, and it is the head of the cluster with the most spokes ready
 to follow.
