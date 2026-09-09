@@ -8,7 +8,8 @@ session that produced it.
 | File | What it holds |
 | --- | --- |
 | `STRATEGY.md` | The conclusions. Why the intersection of tech and compliance is the wedge, what international buyers actually do, the four phases, and what not to build. |
-| `ARTICLES.md` | 41 titles across five categories, each tagged READY, BLOCKED or OURS, with the finding ids it rests on. |
+| `POSTS.md` | **The post plan.** 71 posts in nine hub-and-spoke clusters, built from the query harvest and SERP data. Start here. |
+| `ARTICLES.md` | Superseded by POSTS.md. Kept for its per-title status tags and finding ids. |
 | `DEMAND.md` | The raw observations: search demand by cluster, seasonality, who ranks today and why they are beatable. |
 | `OPEN-ITEMS.md` | Six verification items that block specific articles, each with what to fetch. |
 | `DEAD-ENDS.md` | Fetch routes that do not work, so they are not walked twice. |

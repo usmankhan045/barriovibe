@@ -1,5 +1,15 @@
 # Article slate
 
+> **Superseded by `POSTS.md`.**
+>
+> This was 41 titles chosen by category, before the autocomplete harvest and the
+> SERP analysis existed. `POSTS.md` rebuilds the slate from that evidence: 71
+> posts in nine hub-and-spoke clusters, each owning one answerable question
+> rather than a slice of a topic.
+>
+> Kept because the per-title status tags (READY, BLOCKED, OURS) and the finding
+> ids behind them are still accurate, and `POSTS.md` references them.
+
 41 titles across five categories, each tagged with what it rests on and whether
 it can be written today. Derived from `STRATEGY.md`; facts trace to
 `findings.jsonl`.
