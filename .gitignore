@@ -15,3 +15,6 @@ tsconfig.tsbuildinfo
 # Source mockups — inputs to `pnpm art`, never shipped to the browser.
 # Keep them in version control so the art pipeline is reproducible.
 !assets/source
+
+# Research raw fetches: large PDFs and page dumps, reproducible via research/fetch.py
+research/raw/
