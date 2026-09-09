@@ -247,7 +247,7 @@ downloads that remove friction from a buying process.
 
 ---
 
-## Tools to build alongside
+## Tools: deferred, not dropped
 
 `pk-tool-intent-dominant`: 453 of 2,233 Pakistani queries carry tool intent, the
 largest actionable category, and the four highest-prominence ones are all
@@ -261,9 +261,20 @@ tool**.
     PSEB break-even calculator   feeds 2.7
     SECP deadline calculator     feeds 4.7
 
-Each should produce a shareable permalink and a PDF export: `DEMAND.md` records
-that tools producing an artefact earn far more links than tools that display a
-number.
+**Deferred on 9 September 2026: guides first, tools later.** Recorded here and in
+`findings.jsonl` as `verification-tools-deferred` so the gap is not forgotten.
+
+Worth knowing when it is picked up: these differ in kind from the 22 existing
+calculators. Those are pure in-browser arithmetic, which is what lets the site
+promise that nothing a visitor types leaves the page. A verification tool has to
+query an external source, so the honest first version is a page that explains
+how to check, what the result means, and what to do about it, linking to the
+official tool. That captures the informational half of the intent at the cost of
+a page rather than an integration.
+
+Each should eventually produce a shareable permalink and a PDF export:
+`DEMAND.md` records that tools producing an artefact earn far more links than
+tools that display a number.
 
 ---
 
