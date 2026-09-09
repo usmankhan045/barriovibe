@@ -123,9 +123,15 @@ plan, but it benefits from a ranked cluster linking into it.
 
     1. /guides infrastructure: content/guides/, the template, the hub, schema
     2. Post 1.1, the filer hub, end to end
-    3. Review it together before writing 70 more
+    3. Review it together before writing the rest
     4. Wave 1: 1.2, 2.1, 3.1, 5.2, 7.1
-    5. Wave 2: complete clusters 1 and 2
+    5. Wave 2: complete guide clusters 1 and 2
+    6. /blog post model, then Wave 3: cluster 8
+
+The blog needs its own model and template. A guide is typed data updated in
+place with a "last reviewed" date; a post is dated, opinionated and stays where
+it is. Do not try to serve both from one component: the shared parts are the
+layout primitives, which they already share.
 
 Step 3 is the point. One finished guide is worth more than six drafts, because
 the shape it settles is the shape the rest inherit.
@@ -137,6 +143,6 @@ the shape it settles is the shape the rest inherit.
     2.5   PSEB renewal terms
     7.5   Stripe and EIN timing
     7.6   Form 5472 penalty detail
-    9.2   Pakistan's domestic data-protection position
+    14.2  Pakistan's domestic data-protection position
 
 Close them with `research/fetch.py` before those posts, not before starting.

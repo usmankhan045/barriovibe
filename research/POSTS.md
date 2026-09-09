@@ -7,6 +7,13 @@ Supersedes the flat list in `ARTICLES.md`, which was 41 titles chosen by
 category. This is built the other way round: from the query mass that actually
 exists, so every post owns a distinct angle rather than a slice of one.
 
+**108 pieces: 54 guides, 47 blog posts, 7 downloadable assets.** The blog side
+was 10 in the first draft of this document and that was an under-allocation, not
+a judgement: the AI and development harvest holds 4,888 queries after noise
+removal, with 1,158 on agents, 879 on automation platforms and 797 on cost of
+build. Ten posts against that is leaving the larger half of the research
+unused.
+
 ---
 
 ## The rule that produced this list
@@ -42,18 +49,31 @@ Nine clusters. Each has one hub that owns the head term and spokes that own the
 long tail. Spokes link up to the hub, the hub links down to all spokes, and
 siblings link across where a reader's next question is genuinely next door.
 
-    Cluster                     Hub   Spokes   Total
-    1. Filer status              1       7        8
-    2. PSEB and IT export        1       7        8
-    3. NTN registration          1       6        7
-    4. Company formation         1       8        9
-    5. Trademark and IP          1       6        7
-    6. Property tax              1       6        7
-    7. Cross-border              1       7        8
-    8. AI cost and failure       1       9       10
-    9. Buyer assets              -       7        7
-                                                ---
-                                                 71
+    GUIDES (/guides/)                Hub   Spokes   Total
+    1. Filer status                   1       7        8
+    2. PSEB and IT export             1       7        8
+    3. NTN registration               1       6        7
+    4. Company formation              1       8        9
+    5. Trademark and IP               1       6        7
+    6. Property tax                   1       6        7
+    7. Cross-border                   1       7        8
+                                                     ---
+                                                      54
+
+    BLOG (/blog/)
+    8.  AI agents, cost and failure    1       9       10
+    9.  When agents break              1       7        8
+    10. Automation platforms           1       7        8
+    11. What software costs            1       6        7
+    12. Shopify and e-commerce         1       6        7
+    13. Buying development work        1       6        7
+                                                     ---
+                                                      47
+
+    ASSETS (downloads, not articles)
+    14. International buyer assets     -       7        7
+
+                                             TOTAL   108
 
 ---
 
@@ -206,29 +226,135 @@ figure belongs to the separate other-country test in s.82(d).
 
 ---
 
-## Cluster 8: AI cost and failure
+## Cluster 8: AI agents, cost and failure (`/blog/`)
 
-**Why.** `ai-cost-intent-confirmed`: 2,042 of 5,263 AI queries are commercial,
-and "ai agent cost per month" and "ai agent development cost" both sit at
-maximum autocomplete prominence on both engines. Do not attack the definitional
-queries; `DEMAND.md` shows Zendesk and Salesforce own those.
+**Why.** 1,158 agent queries after noise removal, and `ai-cost-intent-confirmed`:
+2,042 of 5,263 AI/dev queries are commercial, with "ai agent cost per month" and
+"ai agent development cost" both at maximum autocomplete prominence on both
+engines. Do not attack the definitional queries: `DEMAND.md` records that
+Zendesk, Salesforce and Cognigy own those and the bar there is high.
 
 | # | Post | Owns |
 | --- | --- | --- |
 | 8.1 | **What an AI Agent Actually Costs Over Three Years** (hub) | the cost head term |
 | 8.2 | Per Month or Per Build: How Agent Pricing Models Differ | "ai agent cost per month" |
-| 8.3 | Agent Cost vs Hiring: The Comparison Done Honestly | "ai agent cost vs salary", a real harvested query |
-| 8.4 | You Probably Do Not Need an Agent | the contrarian, Gartner-backed |
-| 8.5 | Agent, Chatbot, or LLM: A Three-Way Answer | "ai agent vs chatbot vs llm", nobody writes the three-way |
-| 8.6 | Workflow Automation vs RPA vs Agents | "workflow automation vs rpa" |
-| 8.7 | Why Agents Hallucinate Instead of Querying the Database | failure cluster |
-| 8.8 | The Tool-Count Problem: Why a Third Tool Breaks Your Agent | failure cluster |
-| 8.9 | Confidence Thresholds: The Missing Safety Layer | failure cluster |
-| 8.10 | n8n vs Zapier vs Make, Priced at Real Volume | nobody prices at volume |
+| 8.3 | Agent Cost vs Hiring: The Comparison Done Honestly | "ai agent cost vs salary" |
+| 8.4 | The Hidden Costs: Maintenance, Model Deprecation, Re-Prompting | build is 25-35% of 3-year TCO |
+| 8.5 | You Probably Do Not Need an Agent | contrarian, Gartner-backed |
+| 8.6 | Agent Washing: Auditing a Vendor's "Agentic AI" Claim | Gartner: ~130 real vendors of thousands |
+| 8.7 | Agent, Chatbot, or LLM: A Three-Way Answer | "ai agent vs chatbot vs llm", nobody writes the three-way |
+| 8.8 | Workflow Automation vs RPA vs Agents | "workflow automation vs rpa" |
+| 8.9 | Rule-Based or AI: Which Chatbot Your Business Needs | "rule based chatbot vs ai chatbot" |
+| 8.10 | The 95% Failure Stat Is Disputed. Here Is What It Measured | `mit-95pc-contested`, publish as disputed only |
 
 ---
 
-## Cluster 9: International buyer assets
+## Cluster 9: When agents break (`/blog/`)
+
+**Why.** Nearly uncontested, because admitting failure modes is off-brand for
+vendors. The evidence is real practitioner pain documented on the n8n community
+forum, and the service pages already answer "What happens when an automation
+breaks?" in two sentences, so the expertise exists and is invisible to search.
+
+| # | Post | Owns |
+| --- | --- | --- |
+| 14.1 | **Your AI Pilot Failed. Here Is the Diagnostic.** (hub) | the rescue buyer |
+| 14.2 | Why Agents Hallucinate Instead of Querying the Database | documented failure |
+| 14.3 | The Tool-Count Problem: Why a Third Tool Breaks Your Agent | iteration-limit loops |
+| 14.4 | Confidence Thresholds: The Missing Safety Layer | auto-executed low-confidence decisions |
+| 14.5 | Agents That Report Actions They Never Performed | documented failure |
+| 14.6 | RAG Returns Wrong Answers: A Chunking Triage | ingestion, not the model |
+| 14.7 | When Retrieval Is the Problem, Not the Model | "why is my chatbot giving wrong answers" |
+| 14.8 | Error Handling in n8n: What Production Actually Needs | "n8n error handling" |
+
+Do not use the RAG failure percentages that circulate ("80% of failures trace to
+chunking", "retrieval fails 73% of the time"). None traces to a named study. Use
+the claim shape to structure the content and cite our own client data.
+
+---
+
+## Cluster 10: Automation platforms (`/blog/`)
+
+**Why.** 879 queries on n8n, Zapier, Make and RPA after noise removal, the
+largest single technology cluster in the harvest. `DEMAND.md`: the comparison
+SERP is saturated but shallow, every post recycling the same three facts and
+ending in "it depends", and nobody prices at real volume.
+
+| # | Post | Owns |
+| --- | --- | --- |
+| 10.1 | **n8n vs Zapier vs Make, Priced at Real Volume** (hub) | the comparison head term |
+| 10.2 | What 10,000 Executions a Month Actually Costs on Each | the pricing gap nobody fills |
+| 10.3 | Self-Hosted n8n: The Ops Cost Everyone Omits | "n8n self hosted vs cloud" |
+| 10.4 | Is n8n Worth It? An Honest Read on the Free Tier | "n8n free", "is n8n worth it" |
+| 10.5 | When Zapier Is the Right Answer | contrarian, we sell the alternative |
+| 10.6 | Migrating From Zapier to n8n: What Breaks | migration intent |
+| 10.7 | n8n and MCP: What It Changes | "n8n mcp", emerging |
+| 10.8 | Building Your First Production Workflow | "n8n workflow", practitioner |
+
+---
+
+## Cluster 11: What software costs (`/blog/`)
+
+**Why.** 797 cost-of-build queries. `DEMAND.md`: ranking articles quote PKR
+15,000 to 1,500,000+, a 100x spread with no explanation of what moves a project
+between tiers and almost no statement of what is excluded. The gap is a cost
+article organised by scope decision rather than price tier.
+
+| # | Post | Owns |
+| --- | --- | --- |
+| 11.1 | **What a Website Costs, by Scope Decision** (hub) | the cost head term |
+| 11.2 | What a Website Quote Excludes | the TCO gap |
+| 11.3 | What a Website Costs to Run, Per Year | "website cost per year" |
+| 11.4 | App Development Cost: What Actually Moves the Number | "app development cost" |
+| 11.5 | Website vs Web App vs Mobile App: How to Decide | decision intent |
+| 11.6 | PWA or Native, on Pakistani Android Devices | 78% of digital payments are in-app |
+| 11.7 | Fixed Price or Time and Materials: Which Protects You | contract intent |
+
+11.3 is separate from 11.2 deliberately: "what does it cost to build" and "what
+does it cost to keep" are different searchers, and the second is the one nobody
+answers.
+
+---
+
+## Cluster 12: Shopify and e-commerce (`/blog/`)
+
+**Why.** 349 queries. `DEMAND.md` records the sharpest gap found in any cluster:
+unresolved Shopify Community threads currently rank page one for Pakistani
+payment queries. When a forum question with no answer ranks, no page is
+satisfying the query.
+
+| # | Post | Owns |
+| --- | --- | --- |
+| 12.1 | **Accepting Payments on Shopify in Pakistan** (hub) | the blocker |
+| 12.2 | Getting Paid *From* Shopify: The Payoneer Myth | the top misconception |
+| 12.3 | Daraz vs Your Own Store: The Real Fee Arithmetic | BLOCKED, verify rate card |
+| 12.4 | COD Unit Economics: What RTO Actually Costs | publish the range, never one number |
+| 12.5 | Shopify vs WooCommerce, for Pakistan Specifically | Shopify Payments unavailable changes the maths |
+| 12.6 | Choosing a Courier: What Changes Your Margin | operational intent |
+| 12.7 | Reducing RTO: Confirmation, Address Quality, Partial Prepay | the fix, not the diagnosis |
+
+---
+
+## Cluster 13: Buying development work (`/blog/`)
+
+**Why.** 162 offshore and hiring queries, plus the buyer-stage inventory in
+`DEMAND.md`. `g2-security-review-delay` and `g2-cfo-veto` show what actually
+stalls these deals, and almost the entire offshore information space is written
+by sellers with no methodology.
+
+| # | Post | Owns |
+| --- | --- | --- |
+| 13.1 | **How to Vet a Development Agency** (hub) | the vetting stage |
+| 13.2 | What Offshore Development Actually Costs, and Why Rate Tables Lie | rejected rate tables, honestly explained |
+| 13.3 | Questions That Expose a Weak Vendor | "questions to ask an agency" |
+| 13.4 | Protecting IP When You Outsource | the top stated objection |
+| 13.5 | Fixed Price, Time and Materials, or Outcome | `g2-cfo-veto`: outcome pricing doubled |
+| 13.6 | Inheriting a Codebase: What to Check First | "inherited a codebase" |
+| 13.7 | Your Agency Disappeared. Now What? | the rescue stage |
+
+---
+
+## Cluster 14: International buyer assets
 
 **Why.** `g2-security-review-delay`: 39% of buyers, 50% of enterprise, name
 security review as the biggest evaluation delay. `g2-cfo-veto`: CFO involvement
@@ -237,13 +363,13 @@ downloads that remove friction from a buying process.
 
 | # | Asset | Owns |
 | --- | --- | --- |
-| 9.1 | Our Vendor Security Questionnaire, Pre-Filled | the 39% delay |
-| 9.2 | Working With a Pakistani Agency Under GDPR: SCCs and a TIA | `pk-no-gdpr-adequacy` |
-| 9.3 | What We Charge, and How We Arrive at It | the CFO veto |
-| 9.4 | Saudi PDPL Does Not Require Data Localization | corrects a live vendor error |
-| 9.5 | How to Vet an AI Agency | buyer-stage intent |
-| 9.6 | Inheriting a Codebase: A Fixed-Fee Takeover Audit | the rescue stage |
-| 9.7 | Pakistan Left the FATF Grey List in 2022 | `pk-fatf-delisted` |
+| 14.1 | Our Vendor Security Questionnaire, Pre-Filled | the 39% delay |
+| 14.2 | Working With a Pakistani Agency Under GDPR: SCCs and a TIA | `pk-no-gdpr-adequacy` |
+| 14.3 | What We Charge, and How We Arrive at It | the CFO veto |
+| 14.4 | Saudi PDPL Does Not Require Data Localization | corrects a live vendor error |
+| 14.5 | How to Vet an AI Agency | buyer-stage intent |
+| 14.6 | Inheriting a Codebase: A Fixed-Fee Takeover Audit | the rescue stage |
+| 14.7 | Pakistan Left the FATF Grey List in 2022 | `pk-fatf-delisted` |
 
 ---
 
