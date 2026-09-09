@@ -1,0 +1,175 @@
+# Questions Google surfaces
+
+Harvested from live SERPs. These are Google's own related questions, in
+the words searchers use, so they are the right H2s and the right FAQ
+schema entries. Second column is the query that surfaced them.
+
+- Can I apply online for the PSEB internship program in 2026?  <!-- pseb registration online -->
+- Can I build my own AI agent for free?  <!-- ai agent development cost -->
+- Can I check if a name has been trademarked?  <!-- trademark registration check online pakistan -->
+- Can I get my SECP verification online through CNIC?  <!-- secp registration number -->
+- Can I register for FBR online using my CNIC?  <!-- ntn registration process -->
+- Can I register my company online in Pakistan?  <!-- company registration in pakistan -->
+- Can my CNIC be my NTN number?  <!-- ntn registration requirements -->
+- Do you have to pay for an AI agent?  <!-- ai agent cost per month -->
+- Does your CNIC have lifetime validity?  <!-- ntn registration process -->
+- How can I calculate the registry fee in Pakistan?  <!-- company registration fee in pakistan -->
+- How can I check if a company is registered in Pakistan?  <!-- company register in pakistan -->
+- How can I check if a name is available for trademark registration?  <!-- trademark registration in pakistan -->
+- How can I check my NTN status?  <!-- ntn registration status -->
+- How can I check NTN with CNIC?  <!-- ntn registration check -->
+- How can I get a filer?  <!-- how to become a filer in fbr -->
+- How can I get an NTN number from CNIC?  <!-- ntn registration online -->
+- How can I register my trademark in Pakistan?  <!-- trademark registration fee in pakistan -->
+- How do I check a registered trademark?  <!-- trademark registration check online pakistan -->
+- How do I check my local property tax?  <!-- property tax punjab online check pakistan -->
+- How do I check my own NTN number?  <!-- ntn registration check -->
+- How do I do a registered trademark?  <!-- how to register trademark in pakistan -->
+- How do I get a business registration certificate from the FBR in Pakistan?  <!-- secp registration certificate -->
+- How do I get a company registration certificate in Pakistan?  <!-- secp registration certificate -->
+- How do I get a SECP certificate?  <!-- secp registration number -->
+- How do I know if I am a filer or non-filer?  <!-- difference between filer and non filer -->
+- How do I know if I am filer or non-filer in Pakistan?  <!-- what is a non filer -->
+- How do I register a company in the SECP?  <!-- secp registration number -->
+- How do I register a FBR filer?  <!-- how to become a filer -->
+- How do I register for sales tax in Pakistan?  <!-- sales tax registration fee in pakistan -->
+- How do I register with PSEB?  <!-- pseb registration certificate -->
+- How does it cost that much?  <!-- ai agent development cost -->
+- How Does Online Trademark Registration Work in Pakistan?  <!-- trademark registration check online pakistan -->
+- How is Salary Tax Calculated in Pakistan?  <!-- pakistan salary tax slabs -->
+- How long does it take to complete trademark application filing and registration in Pakistan?  <!-- trademark registration in pakistan -->
+- How long does PSEB registration take?  <!-- pseb registration check -->
+- How long does the PSEB registration take in 2026?  <!-- pseb registration check -->
+- How much does an AI agent cost?  <!-- ai agent cost per month -->
+- How Much Does It Actually Cost to Build a Custom Agentic AI System?  <!-- ai agent development cost -->
+- How much does it cost to apply for a trade mark?  <!-- trademark registration fee in pakistan -->
+- How Much Does It Cost to Build a Custom AI Agent in 2026?  <!-- ai agent development cost -->
+- How Much Does It Cost to Build an AI Agent?  <!-- ai agent development cost -->
+- How much does it cost to build an AI agent in 2026?  <!-- ai agent development cost -->
+- How Much Does It Cost to Build an AI App in 2026?  <!-- ai agent development cost -->
+- How much does it cost to develop an AI agent?  <!-- ai agent cost per month -->
+- How much does it cost to develop an AI system?  <!-- ai agent development cost -->
+- How much does it cost to register a company in Pakistan?  <!-- online company registration in pakistan -->
+- How much does it cost to register a trademark in Pakistan?  <!-- how to register trademark in pakistan -->
+- How Much Does It Really Cost to Build an AI Agent in 2026?  <!-- ai agent development cost -->
+- How much does trademark registration cost in Pakistan?  <!-- trademark registration fee in pakistan -->
+- How Much Does Your AI Agent Actually Cost?  <!-- ai agent cost per month -->
+- How much fees to become filer in Pakistan?  <!-- how to become a filer in pakistan -->
+- How much is the company filing fee?  <!-- company registration fee in pakistan -->
+- How much is the fee to become filer in Pakistan?  <!-- how to become a filer in pakistan online -->
+- How much should AI cost per month?  <!-- ai agent cost per month -->
+- How much should an AI agent cost?  <!-- ai agent cost per month -->
+- How much tax on 50,000 salary in Pakistan?  <!-- how to become a filer in pakistan -->
+- How much tax on filer and non-filer in Pakistan?  <!-- filer vs non filer pakistan -->
+- How much tax on non-filers?  <!-- difference between filer and non filer -->
+- How Much Tax Will Be Levied on What Income?  <!-- pakistan salary tax slabs -->
+- How much tax will I pay in 25-26?  <!-- income tax slabs 25-26 pakistan -->
+- How much tax will you pay?  <!-- income tax slabs 25-26 pakistan -->
+- How much to charge for building OS with AI Agents?  <!-- ai agent development cost -->
+- How much will it cost to register a company in Pakistan?  <!-- company register in pakistan -->
+- How to apply for filer online?  <!-- how to become a filer in pakistan -->
+- How to apply for NTN online?  <!-- ntn registration form -->
+- How to apply for PSEB?  <!-- pseb registration requirements -->
+- How to Become a Filer in Pakistan?  <!-- how to become a filer in pakistan -->
+- How to Become a Tax Filer in Lahore, Pakistan?  <!-- how to become a filer in pakistan -->
+- How to become filer in Pakistan ?  <!-- how to become a filer in pakistan -->
+- How to become non-filer from filer?  <!-- what is a non filer -->
+- How to calculate FBR tax on salary?  <!-- tax slabs in pakistan -->
+- How to check if a name is trademarked in Pakistan?  <!-- trademark registration in pakistan -->
+- How to check IPO registration?  <!-- trademark registration check online pakistan -->
+- How to check ntn by CNIC?  <!-- ntn registration status -->
+- How to check NTN online?  <!-- ntn registration online -->
+- How to check NTN registration?  <!-- ntn registration certificate -->
+- How to check property owner name online in Punjab?  <!-- property tax punjab online check pakistan -->
+- How to check PSEB registration?  <!-- pseb registration certificate -->
+- How to check SECP registration?  <!-- secp registration certificate -->
+- How to check SECP registration number?  <!-- secp registration number -->
+- How to check trademark registration online?  <!-- trademark registration check online pakistan -->
+- How to estimate software project costs?  <!-- software development cost estimation -->
+- How to file a tax step by step?  <!-- how to file tax in pakistan -->
+- How to file income tax for the first time?  <!-- how to file tax in pakistan -->
+- How to filer in FBR online by CNIC?  <!-- how to become a filer in pakistan -->
+- How to get a PSEB certificate?  <!-- pseb registration certificate -->
+- How to get a sales tax registration certificate online?  <!-- sales tax registration in pakistan -->
+- How to get NTN registration?  <!-- ntn registration check -->
+- How to get registered with PSEB in Pakistan?  <!-- pseb registration check -->
+- How to give estimates for software development?  <!-- software development cost estimation -->
+- How to pay property tax online in Punjab?  <!-- property tax punjab online check pakistan -->
+- How to Pay Property Tax Online in Punjab Using the ePay Punjab App?  <!-- property tax punjab online check pakistan -->
+- How to pay PSEB registration fee?  <!-- pseb registration check -->
+- How to Pay the Filing Fee?  <!-- trademark registration fee in pakistan -->
+- How to register a company in FBR?  <!-- company registration fee in pakistan -->
+- How to register a PVT Ltd company in Pakistan?  <!-- company registration fee in pakistan -->
+- How to register an NTN number online?  <!-- ntn registration requirements -->
+- How to Register for NTN in Pakistan?  <!-- ntn registration process -->
+- How to register with NTN?  <!-- ntn registration requirements -->
+- How to register with PSEB in Pakistan?  <!-- pseb registration online -->
+- How to renew PSEB registration?  <!-- pseb registration check -->
+- How to start a business with 50,000 rupees in Pakistan?  <!-- company registration in pakistan -->
+- How to submit FBR tax online?  <!-- how to file tax in pakistan -->
+- Is CNIC your NTN number?  <!-- ntn registration status -->
+- Is CNIC your NTN number online?  <!-- ntn registration form -->
+- Is making AI agents profitable?  <!-- ai agent development cost -->
+- Is my CNIC my NTN number?  <!-- ntn registration certificate -->
+- Is NTN the same as CNIC?  <!-- ntn registration process -->
+- Is software development capex or opex?  <!-- software development cost estimation -->
+- Is there an 18% sales tax on online shopping?  <!-- sales tax registration fee in pakistan -->
+- What are four types of trademarks?  <!-- how to register trademark in pakistan -->
+- What are the 5 levels of cost estimation?  <!-- software development cost estimation -->
+- What are the 7 stages of SDLC?  <!-- software development cost estimation -->
+- What are the benefits of having a PSEB certificate?  <!-- pseb registration certificate -->
+- What are the charges?  <!-- company registration fee in pakistan -->
+- What are the disadvantages of being a non-filer in Pakistan?  <!-- filer vs non filer pakistan -->
+- What are the FBR property tax rates for 2026 in Pakistan?  <!-- property tax punjab online check pakistan -->
+- What are the FBR tax slabs for 2026?  <!-- income tax slabs 25-26 pakistan -->
+- What are the five types of trademarks?  <!-- trademark registration fee in pakistan -->
+- What are the four types of cost estimation?  <!-- software development cost estimation -->
+- What are the income tax slabs for 2026 and 2027?  <!-- tax slabs in pakistan -->
+- What are the income tax slabs in Pakistan for 2026‑27?  <!-- tax slabs in pakistan -->
+- What are the new tax brackets for 2026?  <!-- income tax slabs 25-26 pakistan -->
+- What are the NTN registration fees in Pakistan?  <!-- ntn registration process -->
+- What are the sales tax rules in Pakistan?  <!-- sales tax registration in pakistan -->
+- What business can I start with PKR 50,000?  <!-- online company registration in pakistan -->
+- What do you mean by filer and non-filer?  <!-- what is a non filer -->
+- What documents are required for company registration in the SECP?  <!-- company registration in pakistan -->
+- What documents are required for direct trademark registration in Pakistan?  <!-- how to register trademark in pakistan -->
+- What documents are required for filing?  <!-- pseb registration certificate -->
+- What documents are required for incorporation?  <!-- company registration in pakistan -->
+- What documents are required for trademark registration in Pakistan?  <!-- trademark registration in pakistan -->
+- What documents are required to become a filer in Pakistan?  <!-- how to become a filer in pakistan online -->
+- What Does Being a Filer or Non-Filer Mean?  <!-- difference between filer and non filer -->
+- What Does Filer vs Non-Filer Mean in Pakistan?  <!-- difference between filer and non filer -->
+- What Happens Without NTN Certificate?  <!-- ntn registration certificate -->
+- What information is required for GST registration in Pakistan?  <!-- sales tax registration in pakistan -->
+- What is a Filer?  <!-- filer vs non filer pakistan -->
+- What is a Filer in Pakistan?  <!-- how to become a filer in fbr -->
+- What is a Non-Filer?  <!-- filer vs non filer pakistan -->
+- What Is a Non-Filer in Pakistan?  <!-- what is a non filer -->
+- What is a non-filer tax?  <!-- difference between filer and non filer -->
+- What is a PSEB certificate?  <!-- pseb registration requirements -->
+- What is an NTN?  <!-- ntn registration process -->
+- What Is Company Registration?  <!-- company registration in pakistan -->
+- What is cost of company registration in Rawalpindi?  <!-- company registration fee in pakistan -->
+- What is PSEB certification?  <!-- pseb registration certificate -->
+- What is PVT Ltd company in Pakistan?  <!-- company registration in pakistan -->
+- What is registered for sales tax?  <!-- sales tax registration in pakistan -->
+- What is required for a PVT Ltd company?  <!-- online company registration in pakistan -->
+- What Is Sales Tax Registration in Pakistan?  <!-- sales tax registration fee in pakistan -->
+- What is section 42 company?  <!-- company register in pakistan -->
+- What is the cheapest AI calling agent available?  <!-- ai agent cost per month -->
+- What is the difference between a filer and a non-filer?  <!-- difference between filer and non filer -->
+- What is the income tax slab for fy 2026-27?  <!-- tax slabs in pakistan -->
+- What is the registration fee for PSEB in Pakistan?  <!-- pseb registration requirements -->
+- What is the SST rate in Pakistan?  <!-- sales tax registration fee in pakistan -->
+- What is the tax slab for fy 25-26?  <!-- income tax slabs 25-26 pakistan -->
+- What Is Trademark Registration in Pakistan?  <!-- trademark registration in pakistan -->
+- What was the full cost to get your AI agent setup off the ground?  <!-- ai agent cost per month -->
+- Where is a Pakistan company's registration number published?  <!-- secp registration number -->
+- Where to register for a small business?  <!-- online company registration in pakistan -->
+- Who are non-filers in Pakistan?  <!-- what is a non filer -->
+- Who is eligible for filer?  <!-- filer vs non filer pakistan -->
+- Who is eligible for filer in Pakistan?  <!-- difference between filer and non filer -->
+- Who is eligible for NTN?  <!-- ntn registration requirements -->
+- Who is eligible to be a filer?  <!-- how to become a filer in fbr -->
+- Who is exempted from sales tax registration in Pakistan?  <!-- sales tax registration in pakistan -->
+- Who will pay the sales tax?  <!-- sales tax registration fee in pakistan -->

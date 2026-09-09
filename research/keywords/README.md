@@ -113,3 +113,74 @@ Recorded in `findings.jsonl` so they do not resurface:
   directly self-serving. Cluster aggregates only, from its own keyword panel.
 - **Similarweb dollar values beside keywords are CPC, not volume.** Easy to
   misread as volume; they are not.
+
+---
+
+# SERP competitive analysis
+
+Volume answers "how big is the prize". This answers "can we take it", which for
+a site with no rankings yet is the more useful question.
+
+    scrapling-py research/keywords/serp.py <queries.txt> <out.jsonl> [--gl pk]
+
+Per query it records the questions Google surfaces, the domains that rank, and
+a 0-5 `weakness` score: how much of page one is user-generated content, video
+and government pages rather than established commercial competitors.
+
+## Files
+
+    serp-pk.jsonl          raw, 70 queries, 35 usable
+    serp-pk-usable.jsonl   the 35 with 3+ domains extracted. USE THIS ONE.
+    serp-ai.jsonl          raw, 70 queries, 3 usable. DO NOT USE, see below.
+    QUESTIONS.md           169 unique questions, deduplicated, with sources
+
+## What the Pakistani data says
+
+35 queries, 193 top-10 slots:
+
+    56%  commercial
+    26%  user-generated content and video
+    18%  government
+
+**No incumbent owns this market.** The strongest commercial player holds 10 of
+193 slots, about 5%. YouTube is the single most frequent domain on page one.
+
+The weakest, most winnable queries:
+
+    difference between filer and non filer      SlideShare and LinkedIn rank
+    how to become a filer in pakistan           YouTube and LinkedIn on page one
+    trademark registration check online pk      YouTube and Scribd rank
+    ntn registration requirements               consultant blogs, no tooling
+
+A quarter of page one being video and slide decks is what a SERP looks like when
+nobody has written the authoritative page yet.
+
+Separately, on NTN, SECP and sales tax queries the top results are the
+**government portals themselves**. They satisfy the navigational intent and
+answer nothing underneath it: someone searching "ntn registration requirements"
+wants a document list and gets a login form.
+
+## Why the AI/dev run was discarded
+
+Google rate-limits SERP scraping from one IP after roughly 100-140 queries and
+then serves a ~6KB "unusual traffic" shell page. The AI run was collected after
+that threshold, so 67 of its 70 queries returned no domains, which the tool
+recorded as "no competitors found".
+
+Read naively that says the AI market has almost no competition. That is the
+opposite of what the verified competitor research found, and it is an artifact
+of being blocked rather than a finding. The run is marked `rejected` in
+`findings.jsonl`.
+
+`serp.py` now detects short shell responses and records an error instead of a
+confident-looking empty result, so this failure mode cannot recur silently.
+
+## Method limits for future runs
+
+- Cap at roughly 70 queries per session and space them 3 to 4 seconds.
+- Bing exposes ranked URLs in `<cite>` elements, which survive its redirect
+  wrapping, but returns topically wrong results for some queries. Validate that
+  returned domains plausibly match the query before trusting a batch.
+- Weakness is a composition heuristic, not a difficulty score. It says what
+  *kind* of page ranks, which for an unranked site is the more actionable
+  signal.
