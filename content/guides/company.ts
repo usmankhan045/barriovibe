@@ -911,7 +911,167 @@ const DEPRECIATION: Guide = {
   },
 };
 
-export const COMPANY_GUIDES: Guide[] = [SECP_REGISTRATION, CHOOSING_A_STRUCTURE, PARTNERSHIP, SECP_ANNUAL, DEPRECIATION];
+
+/**
+ * Guide 44: non-profits.
+ *
+ * Two corrections carry it.
+ *
+ * 1. s.100C is STILL a hundred per cent credit. I went into this research
+ *    believing it had been cut and the agent refuted it from the live text.
+ *    What actually changed was the Finance Act 2025 merging Tables 1 and 2 of
+ *    clause (66), so entities that had a straight exemption must now satisfy
+ *    the s.100C conditions. A narrowing of eligibility, not a cut in the rate,
+ *    and the two get conflated.
+ * 2. SECP s.42 and FBR s.2(36) are entirely separate approvals. A s.42 licence
+ *    confers no tax status whatever, and the Ordinance proves it by listing a
+ *    s.42 company as one of ten categories that must STILL get Commissioner
+ *    approval.
+ *
+ * The SECP Regulations detail is deliberately omitted: secp.gov.pk returns a
+ * genuine 403 and the figures reached us at tier 3 only.
+ */
+
+const NON_PROFITS: Guide = {
+  slug: 'non-profit-tax-status',
+  cluster: 'company',
+  title: 'Tax Status for a Non-Profit in Pakistan',
+  navLabel: 'Non-profits',
+  card: 'Why a SECP licence gives you no tax relief at all, what the hundred per cent credit actually requires, and the surplus that gets taxed at ten per cent.',
+
+  answer:
+    'Two separate approvals do two different jobs. A SECP section 42 licence decides whether you may exist as a non-profit company. Commissioner approval under section 2(36) decides your tax status, lasts three years, and is what unlocks the section 100C credit. Neither implies the other, and a section 42 licence on its own confers no tax relief.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'A SECP licence is not a tax exemption',
+      body: 'This is the assumption that costs organisations the most and it is easy to make, because the licence is the harder thing to get. Section 42 of the Companies Act lets SECP licence an association with charitable or not-for-profit objects to register as a public company without "Limited" in its name, and section 42(6) says no such association may be registered as a company at all without it. That is a corporate-form licence: it decides whether the entity may exist in that shape. Tax status is a separate decision by the Commissioner under section 2(36). The Ordinance makes the separation explicit by listing a not-for-profit company registered with SECP under section 42 as merely one of ten categories in section 100C(2) that must still obtain Commissioner approval. And it runs the other way too: trusts, waqfs, societies and welfare institutions can get section 2(36) approval with no SECP involvement whatever.',
+    },
+
+    {
+      kind: 'list',
+      heading: 'What section 2(36) actually requires',
+      intro:
+        'Three cumulative limbs, and organisations routinely satisfy the first two and forget the third.',
+      items: [
+        'Established for religious, educational, charitable or welfare purposes for the benefit of the general public, or for the promotion of amateur sport, excluding a recreational club whose joining fee for new members exceeds one million rupees',
+        'Formed and registered by or under any law as a non-profit organization',
+        'Approved by the Commissioner for a specified period, on a prescribed application',
+        'And no asset may confer, or be capable of conferring, a private benefit',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Approval expires, and three years passes quickly',
+      body: 'Rule 214 provides that approval remains in force for the subsequent three years, or until withdrawn under rule 217, whichever is earlier. So section 2(36) approval is not a status you obtain once. Rule 212 provides that approval is notified in the gazette and may carry conditions, rule 213 requires a refusal to be in writing with reasons, and rule 215 requires applications to be finalised within two months. Note the Rules here are as last consolidated on 24 November 2023, which is three Finance Acts ago, so confirm the procedural detail before relying on it.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'The hundred per cent credit was not cut. Eligibility was narrowed.',
+      body: 'This is worth stating carefully because we went looking for a rate cut and there is not one. Section 100C still allows a tax credit equal to one hundred per cent of tax payable under any provision of the Ordinance, including minimum and final taxes. The Finance Act 2026 did not touch it. What changed is elsewhere: the Finance Act 2025 merged Tables 1 and 2 of clause (66) of Part I of the Second Schedule, so entities that previously had a straight exemption must now satisfy the section 100C conditions to get the credit. That is a narrowing of who qualifies rather than a reduction in what they get, and coverage that describes it as a cut has conflated the two.',
+    },
+
+    {
+      kind: 'list',
+      heading: 'The conditions attached to the credit',
+      intro:
+        'Section 100C(4). Missing any one of them costs the whole credit, not part of it.',
+      items: [
+        'The return has been filed',
+        'Tax required to be deducted or collected has been deducted or collected and paid',
+        'Withholding statements for the relevant year have been filed',
+        'Administrative and management expenditure does not exceed fifteen per cent of total receipts, which is disapplied where activities began within the last three years or total receipts are under one hundred million rupees',
+        'Approval by the Commissioner under section 2(36)',
+        'No portion of income or property confers a private benefit on donors, authors or their families',
+        'A statement of voluntary contributions has been filed',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Surplus funds are taxed at ten per cent',
+      body: 'Section 100C(5) and (6) tax surplus funds at ten per cent, and the definition is cumulative rather than alternative, which is what makes it navigable. Surplus funds are money that is: not spent on charitable and welfare activities during the tax year; received in that year as donations, voluntary contributions, subscriptions and other income; more than twenty-five per cent of total receipts for the year; and not restricted funds, meaning funds the donor has obliged the organisation to hold. Note the time limit is the tax year itself rather than a multi-year window, which is a common misstatement. An organisation holding a large unrestricted donation across a year end should know this before the year end rather than after.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'A new full-year exemption certificate',
+      body: 'Section 159(1D), inserted by the Finance Act 2026, entitles a non-profit holding section 2(36)(c) approval for a tax year to a withholding exemption certificate for that whole tax year. That is practically significant and, as far as we can see, almost unreported. It removes the need to seek relief transaction by transaction for an organisation whose approval is already in place.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'What a donor gets, and the limits on it',
+      body: [
+        'Section 61 gives the donor a tax credit rather than a deduction, computed on a formula. The amount taken into account is capped at the lesser of the actual donations or thirty per cent of taxable income for an individual or association, and twenty per cent for a company. Where the recipient is an associate of the donor, those caps are halved to fifteen and ten per cent.',
+        'Two practical conditions. A cash donation counts only where it is paid by crossed cheque, so cash given over a counter does not qualify. And eligible recipients are boards of education and universities, government-run institutions, any non-profit organization or any person eligible for the section 100C credit, and the twenty-eight bodies named in the Thirteenth Schedule.',
+      ],
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'Does a SECP section 42 licence make my organisation tax exempt?',
+      answer:
+        'No. Section 42 is a corporate-form licence deciding whether you may register as a non-profit company. Tax status comes from Commissioner approval under section 2(36), and the Ordinance lists a section 42 company as one of ten categories that must still obtain it.',
+    },
+    {
+      question: 'Is the section 100C credit still a hundred per cent?',
+      answer:
+        'Yes. Section 100C allows a credit equal to one hundred per cent of tax payable under any provision of the Ordinance, including minimum and final taxes, and the Finance Act 2026 did not amend it. What changed is that the Finance Act 2025 merged the clause (66) tables, so entities with a former straight exemption must now meet the section 100C conditions.',
+    },
+    {
+      question: 'How long does non-profit tax approval last?',
+      answer:
+        'Three years under rule 214, or until withdrawn under rule 217, whichever is earlier. Approval is notified in the gazette and may carry conditions, and applications are to be finalised within two months.',
+    },
+    {
+      question: 'What are surplus funds and how are they taxed?',
+      answer:
+        'Under section 100C(5) and (6), at ten per cent. Surplus funds are money not spent on charitable and welfare activities during the tax year, received that year as donations, contributions, subscriptions and other income, exceeding twenty-five per cent of total receipts, and not restricted by the donor. All four limbs must be met.',
+    },
+    {
+      question: 'Is there a spending requirement for a non-profit?',
+      answer:
+        'Effectively, through two provisions. Administrative and management expenditure must not exceed fifteen per cent of total receipts for the section 100C credit, disapplied for the first three years or where receipts are under Rs 100 million. And unspent unrestricted income above twenty-five per cent of receipts is taxed as surplus funds.',
+    },
+    {
+      question: 'Can a trust get tax approval without registering with SECP?',
+      answer:
+        'Yes. Trusts, waqfs, societies and welfare institutions can obtain section 2(36) approval from the Commissioner with no SECP involvement at all. The two approvals are independent in both directions.',
+    },
+    {
+      question: 'What tax relief does a donor get?',
+      answer:
+        'A credit under section 61, not a deduction, capped at the lesser of actual donations or thirty per cent of taxable income for an individual or association and twenty per cent for a company, halved where the recipient is an associate. Cash donations count only if paid by crossed cheque.',
+    },
+    {
+      question: 'Can an approved non-profit stop tax being withheld from it?',
+      answer:
+        'Section 159(1D), inserted by the Finance Act 2026, entitles a non-profit holding section 2(36)(c) approval for a tax year to a withholding exemption certificate for that whole tax year, rather than seeking relief transaction by transaction.',
+    },
+  ],
+
+  publishedAt: '2026-10-01T07:00:00Z',
+  related: ['smc-vs-private-limited-vs-sole-proprietor', 'company-annual-compliance'],
+
+  seo: {
+    title: 'Tax Status for a Non-Profit in Pakistan',
+    description:
+      'Why a SECP section 42 licence confers no tax relief, what the hundred per cent section 100C credit requires, the three-year approval, and the ten per cent on surplus funds.',
+  },
+};
+
+export const COMPANY_GUIDES: Guide[] = [SECP_REGISTRATION, CHOOSING_A_STRUCTURE, PARTNERSHIP, SECP_ANNUAL, DEPRECIATION, NON_PROFITS];
+
 
 
 

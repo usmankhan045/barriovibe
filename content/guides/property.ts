@@ -1136,13 +1136,156 @@ const GIFTS_AND_INHERITANCE: Guide = {
   },
 };
 
-export const PROPERTY_GUIDES: Guide[] = [PROPERTY_TAX,
-  PROPERTY_GAINS,
-  RENTAL_INCOME,
-  PROVINCIAL_PROPERTY_TAX,
-  LANDLORD_DEDUCTIONS,
-  GIFTS_AND_INHERITANCE,
-];
+
+/**
+ * Guide 43: agricultural income.
+ *
+ * The correction that carries it is that the uniform story is wrong. "All
+ * provinces have taxed agricultural income at up to 45 per cent since
+ * 1 January 2025" is repeated everywhere and only KP matches it. Sindh carved
+ * out six months by a later Act, and Punjab moved its rates out of the statute
+ * into rules whose validity is now publicly disputed.
+ *
+ * The federal hook that makes any of this matter to our readers is the proviso
+ * to s.111(1): agricultural income explains an unexplained asset only to the
+ * extent of income worked back from provincial tax ACTUALLY PAID.
+ *
+ * Punjab's current position is published as disputed rather than asserted,
+ * because the ruling casting doubt on it reached us only through press behind
+ * a paywall and a Speaker's ruling is not self-executing law.
+ */
+
+const AGRICULTURAL_INCOME: Guide = {
+  slug: 'tax-on-agricultural-income',
+  cluster: 'property',
+  title: 'Tax on Agricultural Income in Pakistan',
+  navLabel: 'Agricultural income',
+  card: 'Why the federal exemption is narrower than it sounds, what each province actually enacted, and why agricultural income only shelters assets to the extent tax was paid.',
+
+  answer:
+    'Agricultural income is exempt from federal income tax under section 41, but the exemption is narrow and the tax is provincial rather than absent. The provinces did not all move together: Khyber Pakhtunkhwa\'s new rates ran from 1 January 2025, Sindh carved out the first six months by a later Act, and Punjab moved its rates out of the statute into rules.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Agricultural income only shelters an asset as far as tax was paid',
+      body: 'This is the federal provision that makes the provincial regimes matter, and it is the one most often stated wrongly. The proviso to section 111(1) says that where a taxpayer explains an unexplained credit, investment, money, valuable article or expenditure by way of agricultural income, that explanation shall be accepted TO THE EXTENT OF agricultural income worked back on the basis of agricultural income tax PAID under the relevant provincial law. So agricultural income does not explain an asset because it exists. It explains it in proportion to provincial tax actually paid on it. Declaring to the province without paying, or not declaring at all, leaves the asset unexplained and chargeable as income from other sources.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'The exemption is narrower than the word suggests',
+      body: 'Section 41(2) defines agricultural income in three limbs and each carries a limit worth knowing. The land must be SITUATED IN PAKISTAN and used for agricultural purposes. Income from a process counts only where it is a process ordinarily employed by a cultivator or receiver of rent-in-kind to render the produce fit to be taken to market, so value-added processing beyond that falls outside and is ordinary business income. And the sale limb covers the sale BY THAT SAME PERSON of produce on which no other process was performed, so a trader who buys and resells produce is not within it at all. The farm building limb requires the building to be on or in the immediate vicinity of the land.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'The provinces did not all move together, whatever you have read',
+      body: 'The story in circulation is that all provinces aligned agricultural income tax with federal rates from 1 January 2025, at up to 45 per cent. Only Khyber Pakhtunkhwa matches it cleanly. Sindh enacted the same structure and then, by a later amending Act, applied the OLD rates for 1 January to 30 June 2025 and moved the new slabs and the super tax to 1 July 2025. Press reports described that as deferring the 45 per cent rate for a year; the enacted text carves out six months. And Punjab took its rates out of the Act entirely. If you are working out what you owe for a period straddling early 2025, which province you are in changes the answer.',
+    },
+
+    {
+      kind: 'table',
+      heading: 'What each province actually did',
+      intro:
+        'Rates are set provincially and the structures now broadly mirror the federal slabs, but the commencement dates and the instruments differ.',
+      columns: ['Province', 'Instrument', 'Position'],
+      rows: [
+        ['Khyber Pakhtunkhwa', 'KP Agricultural Income Tax Act 2025', 'Rates in the Act, in force 1 January 2025'],
+        ['Sindh', 'Sindh Act II of 2025, amended by Act XXV of 2025', 'Old rates to 30 June 2025, new slabs from 1 July 2025'],
+        ['Punjab', 'Amendment Act 2024, rates by notification', 'Schedules omitted from the Act, rates prescribed by rules'],
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Punjab: we can tell you what was enacted, not that it is in force',
+      body: 'Punjab is the one to be careful about. The Punjab Agricultural Income Tax (Amendment) Act 2024 omitted both Schedules from the 1997 Act and made the rates "as may be prescribed", moving them into rules, with a new section 11(2) requiring any rules amendment as to rates during a financial year to be laid before the Assembly at the next Annual Budget. Rates were then prescribed by notification in the Punjab Gazette of 6 March 2025, on the same structure as the other provinces. It has since been reported that the Assembly Speaker ruled in April 2026 that those notifications breached section 11(2) and are to be treated as never having had legal existence. We have that from press reporting we could not get behind, a Speaker\'s ruling is not self-executing law, and we found no court judgment. So we can tell you what was enacted and by which instrument, and we are telling you plainly that its current validity is disputed. If you are in Punjab, this is a question for an adviser and for the Board of Revenue, not for a web page.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Punjab taxed livestock for seven months and then stopped',
+      body: 'A small point that illustrates how fast this is moving. The 2024 amendment brought livestock into the Punjab base, inserting a livestock head and a definition. The Punjab Agricultural Income Tax (Amendment) Act 2025, gazetted 5 August 2025, omitted both. So livestock income was inside the Punjab charge only between 1 January and 5 August 2025. Anyone computing a Punjab liability across that window needs the dates rather than the headline.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Why the exemption exists at all',
+      body: [
+        'Agricultural income tax is a provincial subject under the Constitution, which is why the federal Ordinance exempts agricultural income rather than taxing it: the federation is not the government entitled to tax it. Section 41 is a jurisdictional boundary rather than a relief.',
+        'That is the reason the reforms of 2024 and 2025 had to be enacted four times, once by each province, and the reason they diverge. It is also why "agricultural income is tax free in Pakistan" is a sentence that has never been true: it is federally exempt and provincially taxable, and the provincial side has just become considerably more real.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Corporate farming and super tax are in there too',
+      body: 'The new provincial Acts are not only about slabs for individuals. Khyber Pakhtunkhwa\'s Act, which is the clearest drafted of the three, sets corporate farming rates of 20 per cent for a small company and 29 per cent otherwise, a super tax running from 1 to 10 per cent between Rs 150 million and above Rs 500 million, and a per-acre floor by zone. Sindh set its own schedules on a similar structure, while Punjab set super tax by reference to the federal Ordinance rather than its own table. A farming company is now looking at a provincial corporate charge that did not meaningfully exist before.',
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'Is agricultural income tax free in Pakistan?',
+      answer:
+        'It is exempt from federal income tax under section 41, because agricultural income tax is a provincial subject. It is not untaxed: every province levies its own agricultural income tax, and the provincial regimes were substantially reformed in 2024 and 2025.',
+    },
+    {
+      question: 'What counts as agricultural income?',
+      answer:
+        'Section 41(2) is narrow. Rent or revenue from land situated in Pakistan used for agricultural purposes; income from agriculture or from a process ordinarily employed by a cultivator to make produce marketable; sale by that same person of produce on which no other process was performed; and income from a farm building on or in the immediate vicinity of the land.',
+    },
+    {
+      question: 'Is processing produce agricultural income?',
+      answer:
+        'Only where the process is one ordinarily employed by a cultivator or receiver of rent-in-kind to render the produce fit to be taken to market. Value-added processing beyond that falls outside section 41 and is ordinary business income.',
+    },
+    {
+      question: 'Can I use agricultural income to explain an unexplained asset?',
+      answer:
+        'Only to the extent of provincial tax actually paid. The proviso to section 111(1) accepts the explanation to the extent of agricultural income worked back on the basis of agricultural income tax paid under the relevant provincial law.',
+    },
+    {
+      question: 'Did all provinces tax agricultural income at 45% from January 2025?',
+      answer:
+        'No, and this is the most repeated error. Khyber Pakhtunkhwa did. Sindh applied the old rates to 30 June 2025 and moved the new slabs and super tax to 1 July 2025 by a later amending Act. Punjab moved its rates out of the statute into rules.',
+    },
+    {
+      question: 'What are the agricultural income tax rates in Punjab?',
+      answer:
+        'Punjab omitted both Schedules from its 1997 Act in 2024 and prescribed rates by notification in March 2025 on the same structure as the other provinces. It has been reported that the Assembly Speaker ruled in April 2026 that those notifications were invalid. We could not verify that beyond press reporting, so treat the current Punjab position as disputed.',
+    },
+    {
+      question: 'Is livestock income taxed in Punjab?',
+      answer:
+        'It was, briefly. The 2024 amendment brought livestock into the Punjab base and the Amendment Act of 2025, gazetted 5 August 2025, omitted it. Livestock was within the charge only between 1 January and 5 August 2025.',
+    },
+    {
+      question: 'Does a farming company pay agricultural income tax?',
+      answer:
+        'Yes, under the new provincial regimes. Khyber Pakhtunkhwa sets corporate farming at 20 per cent for a small company and 29 per cent otherwise, with a super tax band above Rs 150 million. The other provinces adopted broadly similar structures.',
+    },
+  ],
+
+  publishedAt: '2026-10-01T03:00:00Z',
+  related: ['provincial-property-tax', 'how-to-file-your-tax-return'],
+
+  seo: {
+    title: 'Tax on Agricultural Income in Pakistan',
+    description:
+      'Why the section 41 exemption is narrower than it sounds, what each province actually enacted in 2025, and why agricultural income shelters assets only as far as tax was paid.',
+  },
+};
+
+export const PROPERTY_GUIDES: Guide[] = [PROPERTY_TAX, PROPERTY_GAINS, RENTAL_INCOME, PROVINCIAL_PROPERTY_TAX, LANDLORD_DEDUCTIONS, GIFTS_AND_INHERITANCE, AGRICULTURAL_INCOME];
+
 
 
 

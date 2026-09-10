@@ -1322,7 +1322,158 @@ const GETTING_A_REFUND: Guide = {
   },
 };
 
-export const FILING_GUIDES: Guide[] = [FILING_A_RETURN, PAYING_FBR, IRIS_ACCESS, AMENDED_ASSESSMENT, ADVANCE_TAX, WITHHOLDING_STATEMENTS, APPEALING_AN_ORDER, GETTING_A_REFUND];
+
+/**
+ * Guide 42: being selected for audit.
+ *
+ * The finding that carries it, verified verbatim: s.177(1) requires the
+ * Commissioner to record reasons in writing AND communicate them to the
+ * taxpayer, but s.214C(2) applies s.177 "except the first proviso to
+ * sub-section (1) of section 177". So a Commissioner-initiated audit comes
+ * with reasons and a Board ballot does not. Nobody states this correctly.
+ *
+ * Second: the audit immunity in clause (105A) is real, current, and was
+ * changed twice by the Finance Act 2025: four years to three, and "audited"
+ * to "SELECTED for audit", so selection alone starts the clock.
+ *
+ * The LHC disclosure decision is published as contested, from press reporting
+ * only, because the judgment itself was not obtained.
+ */
+
+const BEING_AUDITED: Guide = {
+  slug: 'selected-for-tax-audit',
+  cluster: 'filing',
+  title: 'Selected for a Tax Audit',
+  navLabel: 'Audit selection',
+  card: 'Why one kind of selection comes with reasons and the other does not, the three-year immunity most people have never heard of, and what happens if you do not produce records.',
+
+  answer:
+    'There are two routes. The Commissioner can select you under section 177, and must record his reasons in writing and communicate them to you. The Board can ballot you under section 214C, and there the duty to give reasons is expressly disapplied. Separately, clause 105A gives immunity from selection where you were selected in any of the preceding three tax years.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Whether you are told why depends on who selected you',
+      body: 'This distinction is in the statute and we have not found it stated correctly anywhere else. The first proviso to section 177(1) requires the Commissioner, when calling for records, to record reasons in writing and to communicate those reasons to the taxpayer. So a Commissioner-initiated audit comes with an explanation you are entitled to. Section 214C(2) then applies section 177 to a Board selection EXCEPT the first proviso to sub-section (1) of section 177, which is precisely that duty. A ballot selection therefore carries no obligation to tell you why. Knowing which route selected you tells you what you can ask for, and asking for reasons on a ballot selection is asking for something the Ordinance has deliberately withheld.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'The three-year immunity almost nobody knows about',
+      body: 'Clause 105A of Part IV of the Second Schedule disapplies both section 177 and section 214C, for the purpose of selecting a person for audit, where the person\'s income tax affairs have been selected for audit in any of the preceding three tax years. The Finance Act 2025 made two changes to it at once and the second matters more than the first: the period went from four years to three, and the trigger went from having been AUDITED to having been SELECTED for audit. So selection alone now starts the clock, whether or not the audit was ever completed. There is a proviso: the Commissioner may still select under section 177 with the approval of the Board. FBR\'s own circular explains the redraft was needed because the old wording was being applied inconsistently by field formations.',
+    },
+
+    {
+      kind: 'table',
+      heading: 'The two routes compared',
+      intro:
+        'They are expressly independent. Identical Explanations in both sections say the Commissioner\'s power under section 177 is independent of the Board\'s, and nothing in section 214C restricts it.',
+      columns: ['', 'Section 177', 'Section 214C'],
+      rows: [
+        ['Who selects', 'The Commissioner', 'The Board, by computer ballot'],
+        ['Basis', 'The Commissioner\'s own reasons', 'Random or parametric'],
+        ['Must you be told why', 'Yes, reasons recorded and communicated', 'No, the proviso is disapplied'],
+        ['Are the parameters public', 'Not applicable', 'No, section 214C(1A) keeps them confidential'],
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Not producing records displaces your return entirely',
+      body: 'The consequence is worse than a penalty and the wording is what makes it so. Under section 177(10) and section 121(1)(d) the Commissioner may assess to the best of his judgement, and the assessment treated as having been made on the basis of your filed return SHALL BE OF NO LEGAL EFFECT. So the return-based assessment is not adjusted, it is displaced. Section 177(2AA) adds that where records are not produced, are incomplete or are unexplained, income is deemed to have been incorrectly declared and the assessment is made on sectoral benchmark ratios rather than on your figures. Producing incomplete records is closer to producing none than most people assume.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'How far back the audit can reach',
+      body: [
+        'The second proviso to section 177(1) sets a six-year limit on calling for records. That is a longer window than the five years in section 122 for amending an assessment, and the difference is worth holding in mind: the power to ask for documents and the power to change an assessment do not run out together.',
+        'There is no monetary or turnover threshold below which selection does not apply. We checked the whole of both sections for one and there is none. The only turnover-linked carve-out is the SME regime in the Fourteenth Schedule, where sections 177 and 214C do not apply to an SME that has opted for the fixed turnover regime, and selections of SMEs under normal law are capped at five per cent of the relevant population.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Two things the Finance Act 2026 added',
+      body: 'Section 177(6B) creates a re-audit power: the Board may have an audit conducted again by an accountant, a cost and management accountant or an actuary from a panel it maintains, with the approval of the Chief Commissioner, and the taxpayer has fifteen days to object. And section 122E introduces faceless audit and assessment covering both section 177 and section 214C, conducted through e-hearing under section 227E, with the officer\'s facial and voice identity kept confidential. Both are new this year and neither is yet widely described.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Section 214D no longer exists',
+      body: 'Automatic selection for audit on late filing, under section 214D, was omitted by the Finance Act 2018. Vendor pages still describe it as live, and the reason is a familiar one: the omitted text is reproduced in full in the consolidation\'s own footnotes, so a reader searching the Ordinance finds it and does not notice the marker saying it was removed. Section 214E survives only to close out audits already triggered by the repealed provision.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Whether you can find out why the ballot picked you',
+      body: [
+        'Section 214C(1A), added by the Finance Act 2013, requires the Board to keep the selection parameters confidential, and section 214C(2) removes the duty to give reasons. On the face of the statute, therefore, you cannot.',
+        'It has been reported that the Lahore High Court held in 2019 that a taxpayer once selected should be informed of the particular risk parameter applied to them if they ask, grounded in the constitutional rights to information. We have that from press reporting rather than from the judgment, we do not know whether it was appealed, and we cannot say how field practice treats it. So the honest position is that the statute says no, a superior court is reported to have said otherwise, and this is worth raising with an adviser rather than treating as settled either way.',
+      ],
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'Will FBR tell me why I was selected for audit?',
+      answer:
+        'It depends who selected you. Under section 177 the Commissioner must record reasons in writing and communicate them to you. Under a section 214C Board ballot that duty is expressly disapplied, because section 214C(2) applies section 177 except the first proviso to sub-section (1).',
+    },
+    {
+      question: 'Can FBR audit me two years running?',
+      answer:
+        'Generally not. Clause 105A of Part IV of the Second Schedule disapplies sections 177 and 214C for selection where your affairs were selected for audit in any of the preceding three tax years. The Commissioner may still select under section 177 with the Board\'s approval.',
+    },
+    {
+      question: 'Is the audit immunity three years or four?',
+      answer:
+        'Three. It was four until the Finance Act 2025, which also changed the trigger from having been audited to having been SELECTED for audit, so selection alone starts the clock whether or not the audit was completed.',
+    },
+    {
+      question: 'What happens if I do not produce records in an audit?',
+      answer:
+        'The Commissioner may assess to the best of his judgement under section 121(1)(d), and the assessment based on your filed return is of no legal effect. Section 177(2AA) also allows assessment on sectoral benchmark ratios where records are not produced, are incomplete or are unexplained.',
+    },
+    {
+      question: 'How many years back can an audit go?',
+      answer:
+        'The second proviso to section 177(1) sets a six-year limit on calling for records. Note that is longer than the five-year limit in section 122 for amending an assessment, so the two powers do not expire together.',
+    },
+    {
+      question: 'Is there a turnover threshold below which I cannot be audited?',
+      answer:
+        'No. Neither section 177 nor section 214C carries one. The only turnover-linked carve-out is the SME regime, where the sections do not apply to an SME on the fixed turnover regime and ballot selections of SMEs are capped at five per cent.',
+    },
+    {
+      question: 'Does late filing automatically trigger an audit?',
+      answer:
+        'Not any more. Section 214D, which did that, was omitted by the Finance Act 2018. It still appears in the consolidation as footnoted omitted text, which is why pages continue to describe it as current.',
+    },
+    {
+      question: 'Can I demand to know which risk parameter selected me?',
+      answer:
+        'Section 214C(1A) requires the Board to keep the parameters confidential and section 214C(2) removes the duty to give reasons, so on the statute no. The Lahore High Court is reported to have held otherwise in 2019, but we have that from press reporting rather than the judgment and cannot say how it is applied.',
+    },
+  ],
+
+  publishedAt: '2026-09-30T07:00:00Z',
+  related: ['when-fbr-amends-your-assessment', 'appealing-an-fbr-order'],
+
+  seo: {
+    title: 'Selected for a Tax Audit in Pakistan: Sections 177 and 214C',
+    description:
+      'Why a Commissioner audit comes with reasons and a Board ballot does not, the three-year immunity in clause 105A, and what a best-judgement assessment actually does.',
+  },
+};
+
+export const FILING_GUIDES: Guide[] = [FILING_A_RETURN, PAYING_FBR, IRIS_ACCESS, AMENDED_ASSESSMENT, ADVANCE_TAX, WITHHOLDING_STATEMENTS, APPEALING_AN_ORDER, GETTING_A_REFUND, BEING_AUDITED];
+
 
 
 
