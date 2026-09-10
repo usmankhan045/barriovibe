@@ -185,6 +185,27 @@ Expect an agent to score itself honestly. One returned 68/100 and named its own
 remediation list; that brief was more useful than a confident one would have
 been.
 
+### Require provenance, and spot-check the load-bearing claim
+
+**Insist on `source_id` and a saved file in `raw/`, not just a URL.** One agent
+returned 23 findings on provincial property tax, all labelled tier 1, all
+carrying URLs, and none with a file on disk. Nothing was reproducible.
+
+Four of them cited a URL as a current consolidation "whose footnotes cite the
+Punjab Finance Act 2026". Downloading it showed no year later than 2013, no
+Schedule at all, and a levy section still printing the repealed ten-per-cent
+annual-value charge: the exact regime the guide was meant to be correcting.
+
+The substance turned out to be right, confirmed later from the enacting Finance
+Act itself. That is the uncomfortable part. A brief can be correct in every
+particular and still cite a document that contradicts it, and the tier-1 label
+is the agent's own assessment rather than an audit.
+
+So: **download the one source the guide's lead depends on and read it
+yourself.** Not all of them, just the claim that would be most embarrassing to
+get wrong. It took one fetch here and it caught a page that would have opened
+with a schedule attributed to a document saying the opposite.
+
 ---
 
 ## 6. The status gate

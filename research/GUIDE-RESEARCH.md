@@ -563,7 +563,7 @@ been absorbed by the shipped hubs.
 | # | Guide | Cluster | Basis | State |
 | --- | --- | --- | --- | --- |
 | 23 | Rental income: what the tenant withholds and what you still owe | property | `s155-*`, `s16-*`, `s15a-*` | Ready |
-| 24 | Provincial property tax, and how it differs from 236C and 236K | property | agent | Pending |
+| 24 | Provincial property tax, and how it differs from 236C and 236K | property | Punjab Finance Act 2024, re-verified | Ready, Punjab only |
 | 25 | Tax on a car: registration, transfer and the five-year cutoff | filer | `s231b-*` | Ready |
 | 26 | Tax on a pension | salary | `pension-*`, `s12-2a-*` | Ready, `lib/tax/pension.ts` added |
 | 27 | Paying FBR: the PSID, the challan and the CPR | filing | agent, 19 findings | Ready |
@@ -573,8 +573,42 @@ been absorbed by the shipped hubs.
 | 31 | Deductions a landlord can actually claim | property | `s15a-*` | Ready |
 | 32 | Reserved | | | Held for whichever agent finding is strongest |
 
-Eight are now writable. One waits on the provincial property tax agent. One
-slot is held deliberately rather than filled with something thin.
+Nine are writable. One slot is held deliberately rather than filled with
+something thin.
+
+### The provincial property tax agent, and why its lead had to be re-verified
+
+The brief was strong and the reform it describes is real, but four records cited
+`excise.punjab.gov.pk/system/files/18.pdf` as a current consolidation "whose
+footnotes cite the Punjab Finance Act 2026". That file has no year later than
+2013 in it, no Schedule at all, and a levy section still printing the repealed
+ten-per-cent annual-value charge: precisely the regime the guide exists to
+correct.
+
+I marked all four contested, then went to the enacting instrument. The **Punjab
+Finance Act 2024 s.4** confirms the substance verbatim, and three records are
+restored to verified against it: s.3(2) substituted to charge on taxable value
+at Schedule rates, `valuation table` defined by reference to the Stamp Act 1899,
+the Rs 5 million residential exemption, s.6-A self-assessment with a one-time
+penalty equal to the tax evaded, and the Schedule at 0.07/0.07/0.08/0.09 with a
+transitional floor for property taxed on or before 31.12.2024.
+
+**Guide 24 is therefore Punjab only.** Three things stay open and the guide says
+so rather than guessing:
+
+- **Commencement.** s.1(3) defers s.4 to a Gazette notification that is still
+  unlocated. The 1 January 2025 date is an inference from the statutory
+  31.12.2024 pivot, not a read date.
+- **Rebate and surcharge.** Not in the Finance Act 2024 and no readable source
+  obtained, so no percentages are published.
+- **Sindh, KP and ICT.** Sindh's department publishes no due date, rebate or
+  surcharge; `sindhlaws.gov.pk` fails at TCP level. The ICT rate instrument
+  S.R.O. 404(I)/2024 is unpublished and the levy is in active litigation. The
+  guide covers the structure and the litigation, not a rate.
+
+The lead the guide keeps is the one that survived: **the levying department's
+own live page publishes repealed law.** That is the project's core failure mode
+in its purest form, and it is checkable in thirty seconds by a reader.
 
 ### What the payment and access agent settled
 
