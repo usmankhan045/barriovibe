@@ -40,6 +40,9 @@ export type ClusterSlug =
   | 'trademark'
   | 'property'
   | 'salestax'
+  | 'salary'
+  | 'filing'
+  | 'creator'
   | 'cross-border';
 
 export interface Cluster {

@@ -6,6 +6,9 @@ import { TRADEMARK_GUIDES } from './trademark';
 import { PROPERTY_GUIDES } from './property';
 import { PSEB_GUIDES } from './pseb';
 import { SALESTAX_GUIDES } from './salestax';
+import { SALARY_GUIDES } from './salary';
+import { FILING_GUIDES } from './filing';
+import { CREATOR_GUIDES } from './creator';
 
 export type { Cluster, ClusterSlug, Guide, GuideSection } from './types';
 
@@ -87,6 +90,30 @@ export const CLUSTERS: Cluster[] = [
       'Sales tax registration is decided by what you do rather than what you earn, and by whether you supply goods or services. Both of those are widely misreported, and getting either wrong means registering with the wrong authority.',
     icon: 'receipt',
   },
+  {
+    slug: 'salary',
+    title: 'Salary and slabs',
+    card: 'What is deducted from a Pakistani salary, the bands it is deducted on, and the surcharge that was withdrawn this year.',
+    intro:
+      'The slab table here is rendered from the same module the salary calculator computes with, so the two cannot disagree. Where a figure appears, it is the figure the tool uses.',
+    icon: 'calculator',
+  },
+  {
+    slug: 'filing',
+    title: 'Filing a return',
+    card: 'The IRIS screens in order, the wealth statement that catches people out, and what late filing actually costs.',
+    intro:
+      'Written from FBR\'s own IRIS manual rather than from a description of it, which is why the amount codes are here. Those codes are what you are looking at on screen.',
+    icon: 'document',
+  },
+  {
+    slug: 'creator',
+    title: 'Creator income',
+    card: 'The withholding on YouTube, TikTok and social media revenue, and why calling it a final tax is wrong for nearly everyone.',
+    intro:
+      'Section 154B arrived on 1 July 2026 and almost every account of it is wrong in the same way. What follows is read from the statute, including the part that decides whether the 5 percent is the end of the matter or only the start.',
+    icon: 'play',
+  },
 ];
 
 /** Every guide, due or not. Use `PUBLISHED_GUIDES` for anything reader-facing. */
@@ -98,6 +125,9 @@ export const ALL_GUIDES: Guide[] = [
   ...PROPERTY_GUIDES,
   ...PSEB_GUIDES,
   ...SALESTAX_GUIDES,
+  ...SALARY_GUIDES,
+  ...FILING_GUIDES,
+  ...CREATOR_GUIDES,
 ];
 
 /**

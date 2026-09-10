@@ -200,4 +200,194 @@ const PSEB_RATE: Guide = {
   },
 };
 
-export const PSEB_GUIDES: Guide[] = [PSEB_RATE];
+/**
+ * The freelancer guide.
+ *
+ * Separate from the PSEB guide because the searcher is different: this one has
+ * not decided to register yet, or is not exporting at all, and needs the whole
+ * picture before the PSEB question is even live.
+ *
+ * It carries the KPK finding, which is the opposite of what most pages assume.
+ * Islamabad zero-rates exported services under s.3(1A) of the ICT Ordinance.
+ * The KP Act contains no such relief and s.3(4) expressly taxes a service that
+ * originates in the Province and terminates outside Pakistan. Since the firm
+ * is in Khyber Pakhtunkhwa, getting that right matters more here than anywhere.
+ */
+const FREELANCER_TAX: Guide = {
+  slug: 'tax-for-freelancers',
+  cluster: 'pseb',
+  title: 'Tax for Freelancers in Pakistan',
+  navLabel: 'Freelancer tax',
+  card: 'Which rate applies to your export receipts, why domestic clients usually withhold nothing, and the provincial question that catches people in KPK.',
+
+  answer:
+    'Freelance income is business income, taxed on the non-salaried slabs, not the gentler salaried ones. Export receipts are withheld by your bank under section 154A: 0.25% if you are registered with PSEB, 1% if not. A domestic client withholds nothing unless it is a prescribed person. The 80% banking-channel rule you have read about was repealed in 2022.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Your slabs are not the salaried slabs',
+      body: 'This is the most expensive assumption a freelancer makes. Division I of the First Schedule has two tables, and the salaried one applies only where salary exceeds seventy-five percent of taxable income. On the first taxable band a salaried person pays one percent and a freelancer pays fifteen. On Rs 1.2 million of taxable income that is Rs 6,000 against Rs 90,000.',
+    },
+
+    {
+      kind: 'table',
+      heading: 'The non-salaried table',
+      intro:
+        'Unchanged by the Finance Act 2026, which reduced the salaried rates and left these alone. The gap widened this year rather than narrowing.',
+      columns: ['Taxable income', 'Rate on the excess', 'Tax at the floor'],
+      rows: [
+        ['Up to Rs 600,000', 'Nil', '-'],
+        ['Rs 600,001 to Rs 1,200,000', '15%', '-'],
+        ['Rs 1,200,001 to Rs 1,600,000', '20%', 'Rs 90,000'],
+        ['Rs 1,600,001 to Rs 3,200,000', '30%', 'Rs 170,000'],
+        ['Rs 3,200,001 to Rs 5,600,000', '40%', 'Rs 650,000'],
+        ['Above Rs 5,600,000', '45%', 'Rs 1,610,000'],
+      ],
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Exporting: two rates, and PSEB is what separates them',
+      body: [
+        'Section 154A requires every authorised dealer in foreign exchange, which in practice means your bank, to deduct tax when it realises your foreign proceeds. There are two relevant limbs and competitors collapse them into one.',
+        'Clause (a) covers exports of computer software, IT services or IT enabled services where the exporter is registered with and duly certified by PSEB, and the rate is 0.25%. Clause (b) covers services or technical services rendered outside Pakistan or exported from Pakistan generally, and the rate is 1%.',
+        'So an unregistered freelancer exporting services is not outside section 154A. They are inside it at four times the rate. The Finance Act 2026 extended the 0.25% rate to tax year 2029.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'The 80% banking rule does not exist',
+      body: 'Nearly every freelancer guide states that 80% of your proceeds must arrive through normal banking channels to qualify for the reduced rate. That condition was a proviso to section 65F(1)(c), and the Finance Act 2022 omitted the whole clause. It was never a condition of section 154A, and it would make no sense there: section 154A operates at the moment your bank realises foreign exchange, so the money is already in a banking channel by definition.',
+    },
+
+    {
+      kind: 'calculator',
+      toolSlug: 'freelancer-tax',
+      heading: 'What the registration is worth',
+      body: 'Enter your annual export receipts to see the gap between 0.25% and 1%, against the Rs 1,000 a year PSEB registration costs.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Domestic clients usually withhold nothing',
+      body: [
+        'Section 153 requires withholding on services, but only where the payer is a prescribed person. That list includes companies, associations of persons, and individuals or associations with turnover of Rs 100 million or more, among others. An ordinary small business paying you for a website is not on it.',
+        'There is also a floor: services are only caught where payments to you aggregate above Rs 30,000 in a financial year. Below the prescribed-person threshold and below that floor, nothing is withheld, and the income is simply declared in your return with advance tax under section 147 if it applies.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'A genuine ambiguity if a large company does withhold',
+      body: 'The Finance Act 2026 touched two entries that could both describe a freelance developer. IT services and IT enabled services as defined in section 2 are withheld at 4%. Independent professional services remain at 15%, and the Act inserted an express list naming software engineers or developers working independently. We can find no ruling resolving which applies to a self-employed developer billing a Pakistani company, and the difference is large enough that it is worth asking your client which entry they are applying before the payment is made.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'What counts as IT and IT enabled services',
+      body: [
+        'The definitions are in section 2. IT services include but are not limited to software development, software maintenance, system integration, web design, web development, web hosting and network design. IT enabled services include but are not limited to call centres, medical transcription, remote monitoring, graphics design, accounting services, HR services, telemedicine, data entry, cloud computing and data storage.',
+        'Both lists are inclusive rather than exhaustive, and what is missing is conspicuous: video editing, translation, copywriting, general virtual assistance and social media management are not named. Whether they qualify is a real question for a large number of Pakistani freelancers, and we have found no FBR ruling on it. If your work sits outside the named list, get advice rather than assuming the answer.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Sales tax in Khyber Pakhtunkhwa is not what most guides assume',
+      body: 'Islamabad zero-rates the export of services under section 3(1A) of the ICT Ordinance. The Khyber Pakhtunkhwa Sales Tax on Services Act 2022 contains no equivalent relief. Section 3(4) says the opposite: unless otherwise specified by Government, where a taxable service originates from the Province but terminates outside Pakistan, the provider is required to pay tax on it. The word export appears twice in the whole Act and neither time as an exemption. Entry 15 of the Second Schedule taxes digital and IT-based services at 2% without input tax adjustment, and names web design, mobile app development, custom software development and SEO among others.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'One point we cannot resolve for you',
+      body: 'Entry 15 carries an Explanation excluding people providing software or IT-based system development in their individual capacity, and points them at item (g) of entry 19 instead. But entry 19 spells out its reduced rate of 2% only for medical and legal practitioners. So the Act sends an individual software freelancer to a reduced rate whose figure is not stated for that category in the text. We are not going to invent one. If you are an individual freelancer in KPK, ask KPRA directly, and ask us if you want help framing the question.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Inward remittance is not tax-free',
+      body: [
+        'Section 111(4) is widely misdescribed. It provides that the unexplained-income rules do not apply to foreign exchange remitted through normal banking channels not exceeding five million rupees in a tax year, encashed into rupees by a scheduled bank, with a certificate produced to that effect. The Finance Act 2022 added that money service bureaus, exchange companies and money transfer operators count as normal banking channels.',
+        'Three things follow that guides rarely state. It is capped at Rs 5 million a year. It requires encashment and a certificate, not merely receipt. And it is only a shield against being asked to explain the source: it is not an exemption from tax on the income itself, which remains taxable under section 154A or on the slabs.',
+      ],
+    },
+
+    {
+      kind: 'list',
+      heading: 'Housekeeping that catches people out',
+      items: [
+        'A personal NTN is enough, and PSEB actively requires a personal NTN with no business name for a freelancer registration.',
+        'But section 114A requires you to declare the bank account you use for business transactions, through the registration form.',
+        'Records must be kept for six years after the end of the tax year under section 174, and indefinitely for foreign-source matters.',
+        'Final tax does not mean no filing. Section 114(1)(ae) requires a return from anyone whose income is subject to final taxation, and section 154A(2)(a) makes filing a condition of the final-tax treatment itself.',
+        'Minimum tax under section 113 applies to an individual only at Rs 100 million turnover, so it is almost certainly not your problem.',
+      ],
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'How much tax do freelancers pay in Pakistan?',
+      answer:
+        'On export receipts, your bank withholds 0.25% if you are registered with PSEB and 1% if not, under section 154A. Domestic income is taxed on the non-salaried slabs, which start at 15% on income above Rs 600,000 and reach 45% above Rs 5.6 million.',
+    },
+    {
+      question: 'Do freelancers pay the same tax rates as salaried people in Pakistan?',
+      answer:
+        'No, and the difference is large. The salaried table applies only where salary exceeds seventy-five percent of taxable income. At the first taxable band a salaried person pays 1% and a freelancer pays 15%.',
+    },
+    {
+      question: 'Do I need to bring 80% of my freelance earnings through a bank?',
+      answer:
+        'No. That condition was a proviso to section 65F(1)(c) and the Finance Act 2022 omitted the clause entirely. It was never part of section 154A, which operates when your bank realises the foreign exchange in any event.',
+    },
+    {
+      question: 'Do Pakistani clients deduct tax from freelancers?',
+      answer:
+        'Only if they are a prescribed person under section 153, which covers companies, associations of persons, and individuals or associations with turnover of Rs 100 million or more, among others. There is also a Rs 30,000 aggregate floor per financial year. An ordinary small client withholds nothing.',
+    },
+    {
+      question: 'Is foreign remittance taxable in Pakistan?',
+      answer:
+        'The remittance itself is not treated as unexplained income up to Rs 5 million a year under section 111(4), provided it comes through normal banking channels, is encashed into rupees and a bank certificate is produced. That is a shield against having to explain the source. The income remains taxable.',
+    },
+    {
+      question: 'Do freelancers in KPK have to register for sales tax?',
+      answer:
+        'Possibly, and exporting does not obviously help. Unlike Islamabad, which zero-rates exported services, the KP Act has no export relief and section 3(4) taxes a service originating in the Province that terminates outside Pakistan. Entry 15 of the Second Schedule taxes digital and IT-based services at 2%. The position for an individual freelancer under entry 19 is ambiguous on the face of the Act, so ask KPRA.',
+    },
+    {
+      question: 'Do I need a business NTN as a freelancer?',
+      answer:
+        'No. A personal NTN is sufficient, and PSEB specifically requires a personal NTN with no business name attached for freelancer registration. You do have to declare the bank account you use for business under section 114A.',
+    },
+    {
+      question: 'Is video editing or translation an IT enabled service?',
+      answer:
+        'Not named in section 2(30AE), which lists call centres, medical transcription, remote monitoring, graphics design, accounting, HR services, telemedicine, data entry, cloud computing and data storage among others. The list is inclusive rather than exhaustive, so the question is open and we have found no FBR ruling on it.',
+    },
+    {
+      question: 'If my tax is final, do I still have to file a return?',
+      answer:
+        'Yes, twice over. Section 114(1)(ae) requires a return from anyone whose income is subject to final taxation, and section 154A(2)(a) makes filing a return a condition of the final-tax treatment. Fail to file and you lose the 0.25% rate.',
+    },
+  ],
+
+  publishedAt: '2026-09-23',
+  related: ['pseb-registration-and-the-025-rate', 'how-to-get-an-ntn'],
+
+  seo: {
+    title: 'Tax for Freelancers in Pakistan: Rates and Rules',
+    description:
+      'Why freelancers use the non-salaried slabs, the 0.25% and 1% export rates under section 154A, the repealed 80% banking rule, and what KPK sales tax actually says about exported services.',
+  },
+};
+
+export const PSEB_GUIDES: Guide[] = [PSEB_RATE, FREELANCER_TAX];

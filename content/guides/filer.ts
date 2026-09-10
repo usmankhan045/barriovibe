@@ -378,4 +378,160 @@ const HOW_TO_BECOME_A_FILER: Guide = {
   },
 };
 
-export const FILER_GUIDES: Guide[] = [FILER_VS_NON_FILER, HOW_TO_BECOME_A_FILER];
+/**
+ * The status-check guide.
+ *
+ * Verification intent is 208 of the 2,233 harvested Pakistani queries, and the
+ * four highest-prominence tool queries are all "...registration check". The
+ * site has no verification tool yet, and building one needs an external data
+ * source rather than the in-browser arithmetic the calculators use.
+ *
+ * So this is the honest version: explain the official routes precisely, say
+ * what each one tells you, and cover the case the SMS reply cannot explain.
+ * It captures the informational half of the intent at the cost of a page
+ * rather than an integration.
+ */
+const CHECKING_ATL_STATUS: Guide = {
+  slug: 'check-your-atl-status',
+  cluster: 'filer',
+  title: 'How to Check Whether You Are on the Active Taxpayer List',
+  navLabel: 'Checking ATL status',
+  card: 'Every official route, what the reply actually means, and why you can be registered, have filed, and still not appear.',
+
+  answer:
+    'Send ATL followed by a space and your 13-digit CNIC to 9966, or use FBR\'s online status page. An association or company sends its 7-digit NTN instead, and Azad Jammu and Kashmir uses AJKATL. The list is rebuilt daily and a person filing by the due date is included immediately, which is a change from the weekly update FBR\'s own page still describes.',
+
+  sections: [
+    {
+      kind: 'list',
+      heading: 'The official routes',
+      intro:
+        'All of these are FBR\'s own. The syntax differs by taxpayer type, which is where most failed checks come from.',
+      items: [
+        'SMS for an individual: ATL, a space, then your 13-digit CNIC with no dashes, to 9966',
+        'SMS for an association or company: ATL, a space, then the 7-digit NTN, to 9966',
+        'SMS in Azad Jammu and Kashmir: AJKATL rather than ATL, with a CNIC or an 11-digit NTN',
+        'Online: FBR\'s Active Taxpayer List status page, and its separate taxpayer profile inquiry',
+        'The full list: FBR publishes the whole Active Taxpayer List for download, which is what you want if you are checking many people at once',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Azad Jammu and Kashmir has its own list',
+      body: 'It is a separate Active Taxpayer List with its own SMS keyword, and it has been treated at par with the income tax ATL since the Finance Act 2018. Sending ATL rather than AJKATL for an AJK taxpayer returns the wrong answer rather than an error, which is the kind of failure that goes unnoticed.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'What the answer actually tells you',
+      body: [
+        'The list records who has filed a return for the relevant tax year. That is all it records. It is not a statement that your tax affairs are in order, that you owe nothing, or that a past year was filed correctly.',
+        'It matters because being on it changes the rate withheld on property, vehicles, banking and dividends. Somebody checking your status before a transaction is checking which column of the rate table applies to you, not forming a view about you.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'FBR contradicts itself on how often the list updates',
+      body: 'FBR\'s Active Taxpayer List page still says the list is updated every Monday. FBR\'s own press release of 18 October 2024 says it moved to daily updates, and that a taxpayer filing by the due date is included immediately, replacing the older practice of shifting the list annually each March. The press release is the current position and the download page carries a daily date stamp. If you filed on time, you are not waiting a week.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Registered, filed, and listed are three different states',
+      body: [
+        'This is the reason most "why am I not showing" questions arise. Registration under section 181 gives you a National Tax Number. Filing a return under section 114 is a separate act. The Active Taxpayer List is built from who has filed.',
+        'So a person who registered years ago and never filed holds an NTN and is not on the list. A person who filed last year but not this one may drop off. And a person holding only a CNIC has neither, even though section 181(4) makes that CNIC their National Tax Number for when they do register.',
+      ],
+    },
+
+    {
+      kind: 'steps',
+      heading: 'If the check says you are not on it',
+      intro: 'Work through these in order. Most cases resolve at the second step.',
+      steps: [
+        {
+          title: 'Check you sent the right thing',
+          body: 'Thirteen digits without dashes for an individual, seven for an association or company, and AJKATL rather than ATL if you are in Azad Jammu and Kashmir.',
+        },
+        {
+          title: 'Check whether you actually filed',
+          body: 'In IRIS, the return and the wealth statement should both be in Completed Task rather than Draft. A return left in Draft was never filed, and this is the single most common cause.',
+        },
+        {
+          title: 'Check which year you filed for',
+          body: 'The list is built from the last completed tax year. Filing for an earlier year does not put you on the current list.',
+        },
+        {
+          title: 'If you filed late, pay the surcharge',
+          body: 'Under section 182A inclusion after the due date requires a surcharge of Rs 25,000 for an individual, Rs 50,000 for an association and Rs 100,000 for a company, unless you give the Commissioner an undertaking not to acquire property for six months.',
+        },
+      ],
+    },
+
+    {
+      kind: 'calculator',
+      toolSlug: 'property-purchase-tax',
+      heading: 'What the status is worth on a transaction',
+      body: 'If you are checking before buying property, this shows the difference the answer makes in rupees. A filer pays a flat 1.25% and a non-filer pays a banded rate rising to 18.5%.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Checking someone else',
+      body: 'The list is public, and checking a counterparty before a property transaction or a large contract is ordinary practice rather than an intrusion. You need their CNIC or NTN, and the same routes work. If you are verifying many people, download the full list rather than sending a hundred texts.',
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'How do I check my filer status by CNIC?',
+      answer:
+        'Send ATL, a space, and your 13-digit CNIC without dashes to 9966. You can also use FBR\'s online Active Taxpayer List status page. An association of persons or a company sends its 7-digit NTN instead of a CNIC.',
+    },
+    {
+      question: 'How often is the Active Taxpayer List updated?',
+      answer:
+        'Daily. FBR moved to daily updates in October 2024 and stated that a taxpayer filing by the due date is included immediately. FBR\'s own ATL page still says every Monday, which is out of date, and the older practice of shifting the list annually each March has also gone.',
+    },
+    {
+      question: 'I filed my return but I am not on the Active Taxpayer List. Why?',
+      answer:
+        'Most often because the return is still sitting in the Draft folder in IRIS rather than in Completed Task, which means it was never actually filed. Other causes are filing for an earlier tax year than the one the current list is built from, or filing late without paying the section 182A surcharge.',
+    },
+    {
+      question: 'What is the SMS format to check ATL status in Pakistan?',
+      answer:
+        'ATL, a space, then your 13-digit CNIC with no dashes, sent to 9966. For an association or company it is ATL, a space, then the 7-digit NTN. In Azad Jammu and Kashmir the keyword is AJKATL rather than ATL.',
+    },
+    {
+      question: 'Does having an NTN mean I am on the Active Taxpayer List?',
+      answer:
+        'No. Registration and filing are separate. An NTN means you are registered with FBR; the list records who has filed a return. A person who registered and never filed holds an NTN and is not on the list.',
+    },
+    {
+      question: 'Can I check someone else\'s filer status?',
+      answer:
+        'Yes. The Active Taxpayer List is public and you need only their CNIC or NTN. Checking a counterparty before a property transaction or a large contract is ordinary practice, and FBR publishes the full list for download if you are verifying many people.',
+    },
+  ],
+
+  publishedAt: '2026-09-21',
+  related: ['filer-vs-non-filer', 'how-to-become-a-filer'],
+
+  seo: {
+    title: 'How to Check Your Active Taxpayer List Status in Pakistan',
+    description:
+      'Every official route including the SMS formats to 9966, why the list now updates daily rather than weekly, and what to do when you have filed but are still not showing.',
+  },
+};
+
+export const FILER_GUIDES: Guide[] = [
+  FILER_VS_NON_FILER,
+  HOW_TO_BECOME_A_FILER,
+  CHECKING_ATL_STATUS,
+];
