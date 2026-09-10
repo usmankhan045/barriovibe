@@ -595,5 +595,177 @@ const PARTNERSHIP: Guide = {
   },
 };
 
-export const COMPANY_GUIDES: Guide[] = [SECP_REGISTRATION, CHOOSING_A_STRUCTURE, PARTNERSHIP];
+
+/**
+ * Guide 32: what a company owes SECP after incorporation.
+ *
+ * The section that earns it its place is s.17: subscription money must
+ * actually be paid within 30 days of incorporation, and a chartered or cost
+ * and management accountant's certificate filed within 45, or the shares are
+ * deemed cancelled and the subscriber comes off the register. Essentially no
+ * competitor guide mentions it, and founders who treat authorised capital as a
+ * paper figure walk straight into it.
+ *
+ * Second correction: the Form A exemption in s.130(5) is a two-part structure,
+ * not a simple threshold. Any company with unchanged particulars is exempt
+ * from FILING; a positive duty to NOTIFY no change is then imposed on everyone
+ * EXCEPT single member companies and private companies with paid-up capital
+ * not over Rs 3 million. So a small company files nothing at all and a larger
+ * one must still write in.
+ */
+
+const SECP_ANNUAL: Guide = {
+  slug: 'company-annual-compliance',
+  cluster: 'company',
+  title: 'What Your Company Owes SECP After Incorporation',
+  navLabel: 'Annual compliance',
+  card: 'The share money you have thirty days to actually pay, the form due within fifteen days of any change, and when an annual return is not required at all.',
+
+  answer:
+    'Within thirty days of incorporation the subscription money has to be paid in, and within forty-five days a chartered or cost and management accountant\'s certificate confirming receipt must reach the registrar. After that: Form 29 within fifteen days of any change of directors or officers, and an annual return on Form A or B within thirty days of the AGM, unless nothing has changed since the last one.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'The share money is not a paper figure, and you have thirty days',
+      body: 'Section 17(2) is the trap nobody warns about. Subscription money payable in cash is due within thirty days of incorporation, and where it is not paid the shares are deemed cancelled and the subscriber is removed from the register of members. Section 17(3) then requires receipt of that money to be reported to the registrar within forty-five days, with a certificate from a chartered accountant or a cost and management accountant in practice. Founders who declare capital on the incorporation form and treat it as notional are describing a share allotment that can simply evaporate, and the certificate requirement means a professional has to be engaged in the first six weeks rather than at the first audit.',
+    },
+
+    {
+      kind: 'table',
+      heading: 'The recurring filings, and what triggers each',
+      intro:
+        'Two of these deadlines are commonly published wrong. Form 29 is fifteen days rather than thirty, and the forty-five days attached to the annual return is an extension ceiling for listed companies, not a separate class of deadline.',
+      columns: ['Filing', 'Deadline', 'Section'],
+      rows: [
+        ['Report of subscription money received', '45 days from incorporation', 's.17(3)'],
+        ['Form 29, change of directors or officers', '15 days from the change', 's.197(3)'],
+        ['Form A or B, annual return', '30 days from the AGM', 's.130(3)'],
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Form 29 does not cover the first appointment',
+      body: 'The proviso to section 197(3) excludes the first appointment of directors made at incorporation, which is already before the registrar in the incorporation documents. So the fifteen-day clock starts at the first CHANGE, not at the beginning. What it does catch is every subsequent appointment, cessation, resignation and change of particulars of a director, chief executive, secretary, chief financial officer, auditor or legal adviser, and fifteen days is short enough that a resignation accepted at a meeting can be late before anyone has drafted minutes.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'When you do not have to file an annual return at all',
+      body: [
+        'Section 130(5) is subtler than the summaries suggest, and reading it as a simple threshold gets it wrong in both directions. The exemption from filing applies to any company where there has been no change of particulars since the last annual return filed. That part is not limited by size.',
+        'The proviso then adds a separate positive duty: a company OTHER THAN a single member company or a private company with paid-up capital of not more than three million rupees must inform the registrar that there is no change. So a small company with nothing to report files nothing at all, and a larger company with nothing to report must still write in and say so. Both are commonly reported as "there is no exemption", which is wrong.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'A dormant company still files an income tax return',
+      body: 'Whatever the position with SECP, section 114(1)(a) of the Income Tax Ordinance requires a return from every company regardless of income or activity. There is no dormancy relief on the tax side. A company that traded nothing, and that is genuinely exempt from filing an annual return under section 130(5), still files with FBR. The two regulators ask separate questions and satisfying one says nothing about the other.',
+    },
+
+    {
+      kind: 'list',
+      heading: 'How many directors you must actually have',
+      intro:
+        'Section 154(1), and worth checking against what your company currently has, because a resignation can take you below the floor without anyone noticing.',
+      items: [
+        'A single member company: at least one director',
+        'Any other private company: not less than two',
+        'An unlisted public company: not less than three',
+        'A listed company: not less than seven',
+        'Section 154(2): only a natural person shall be a director, so a company cannot sit on its own board',
+      ],
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Audit is a separate question with three different thresholds',
+      body: [
+        'Three provisions use three figures for three different purposes, and they are constantly collapsed into one. Section 223(5) exempts a private company with paid-up capital not exceeding one million rupees from audit, and section 223(9) applies that carve-out to single member companies. That is the audit exemption.',
+        'Section 247(1) is not an exemption at all: it decides WHO may audit. At or above three million rupees of paid-up capital a private company needs a chartered accountant; below that a cost and management accountant also qualifies. Competitors routinely cite that three million figure as the audit threshold, which gets a reader\'s obligation wrong in both directions at once.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Filing electronically is cheaper, not just faster',
+      body: 'Under the Seventh Schedule in force from 21 April 2025, electronic submission through eZfile costs materially less than filing on paper: incorporation at nominal capital up to Rs 100,000 is Rs 6,050 electronically against Rs 11,000 physically, and a company limited by guarantee is Rs 22,000 against Rs 33,000. The general rule the schedule follows is that paper roughly doubles the fee. Pages describing eServices are describing a platform SECP has replaced.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'What this costs if you ignore it',
+      body: [
+        'The Companies Act carries penalties for each of these filings, and the practical consequence arrives earlier than a penalty does: a company that has not filed cannot cleanly do the things that require a clean record, from opening certain accounts to satisfying a counterparty\'s due diligence.',
+        'The share money point is the one with a substantive rather than procedural consequence. Deemed cancellation under section 17(2) changes who owns the company, which is a different order of problem from a late filing fee.',
+      ],
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'What does a new company have to file after incorporation in Pakistan?',
+      answer:
+        'Subscription money must be paid within thirty days under section 17(2), and its receipt reported to the registrar within forty-five days with a certificate from a practising chartered accountant or cost and management accountant under section 17(3). After that, Form 29 within fifteen days of any change of officers, and an annual return within thirty days of the AGM.',
+    },
+    {
+      question: 'What happens if the subscription money is not paid?',
+      answer:
+        'Section 17(2) deems the shares cancelled and the subscriber is removed from the register of members. That changes who owns the company, which is a more serious consequence than a late filing fee.',
+    },
+    {
+      question: 'When is Form 29 due?',
+      answer:
+        'Within fifteen days of the appointment or change, under section 197(3). It is commonly published as thirty days, which is wrong. The proviso excludes the first appointment of directors made at incorporation.',
+    },
+    {
+      question: 'Does a dormant company have to file an annual return with SECP?',
+      answer:
+        'Not necessarily. Section 130(5) exempts a company with no change of particulars since its last annual return. But a company other than a single member company or a private company with paid-up capital of not more than three million rupees must still inform the registrar that there is no change.',
+    },
+    {
+      question: 'Does a dormant company have to file a tax return?',
+      answer:
+        'Yes. Section 114(1)(a) of the Income Tax Ordinance requires a return from every company regardless of income or activity. There is no dormancy relief with FBR, whatever the position with SECP.',
+    },
+    {
+      question: 'At what capital does a company need an audit in Pakistan?',
+      answer:
+        'Above one million rupees of paid-up capital. Section 223(5) exempts a private company at or below that, and section 223(9) extends it to single member companies. The three million rupee figure is section 247 and decides who may audit, not whether an audit is required.',
+    },
+    {
+      question: 'How many directors must a private company have?',
+      answer:
+        'Not less than two under section 154(1), or one for a single member company. An unlisted public company needs at least three and a listed company at least seven. Only a natural person can be a director.',
+    },
+    {
+      question: 'Is it cheaper to file with SECP online or on paper?',
+      answer:
+        'Online. Under the Seventh Schedule effective 21 April 2025, electronic incorporation at nominal capital up to Rs 100,000 is Rs 6,050 against Rs 11,000 on paper, and the schedule broadly doubles fees for physical filing.',
+    },
+  ],
+
+  publishedAt: '2026-09-25T07:00:00Z',
+  related: ['secp-company-registration', 'smc-vs-private-limited-vs-sole-proprietor'],
+
+  seo: {
+    title: 'Company Annual Compliance in Pakistan: What SECP Requires',
+    description:
+      'The thirty-day share money deadline nobody warns about, Form 29 in fifteen days, when an annual return is not required, and the three audit thresholds that do different jobs.',
+  },
+};
+
+export const COMPANY_GUIDES: Guide[] = [
+  SECP_REGISTRATION,
+  CHOOSING_A_STRUCTURE,
+  PARTNERSHIP,
+  SECP_ANNUAL,
+];
+
 

@@ -312,3 +312,61 @@ A reader searching "property tax Punjab" wants the Urban Immovable Property Tax
 under the Punjab Urban Immovable Property Tax Act 1958, not section 236K. Those
 are different taxes, different authorities, and different money, and conflating
 them is the kind of error that sends someone to the wrong office.
+
+---
+
+## Gap analysis for guides 32 to 41 (10 September 2026)
+
+Re-run against the harvest after 31 guides shipped. The headline is a limit
+worth recording rather than working around.
+
+### The Pakistani tax harvest is close to exhausted
+
+Twenty candidate themes tested against the 2,233 Pakistani queries. Almost
+everything scores under ten:
+
+| Theme | Queries |
+| --- | ---: |
+| NTN certificate and verification | 64 |
+| NPO, trust, section 42 | 7 |
+| Sales tax return and filing | 6 |
+| Trademark search and renewal | 3 |
+| Professional tax, FBR notices | 2 each |
+| Withholding statements, audit selection, appeals, agriculture, inheritance, provincial services tax | 0 |
+
+Several themes that are obviously real obligations return **zero** queries:
+section 165 withholding statements, SECP annual filings, audit selection under
+section 177 or 214C, appeals. That is not evidence they do not matter. It is
+evidence that autocomplete is a poor instrument for obligations people do not
+know they have, which is a different thing from a topic nobody searches.
+
+**So selection for this batch is led by unused verified material in the store
+rather than by query counts**, and the store is where the differentiation
+actually sits: twenty-odd verified findings on SECP compliance, e-commerce sales
+tax, provincial services tax and audit thresholds that no shipped guide uses.
+
+### The AI and development harvest is large and untouched
+
+5,263 queries, none of them served by a guide:
+
+| Theme | Queries |
+| --- | ---: |
+| Software and app build cost | 875 |
+| n8n, Zapier, Make and workflow automation | 577 |
+| Hiring developers and agencies | 489 |
+| Shopify and e-commerce development | 372 |
+| AI agent cost | 132 |
+| Agent versus chatbot versus LLM | 46 |
+
+**This is deliberately not being turned into guides**, and the reason is the
+rule in `content/guides/types.ts`. A guide is reference content: the current
+correct answer to a question, updated in place. An argument such as "you
+probably do not need an AI agent" is opinion with a shelf life and belongs on
+`/blog` with a date attached. Most of the demand above is argument, and the two
+themes that are genuinely reference-shaped, cost structures and platform
+comparison, are also the two that date fastest.
+
+Turning them into guides would quietly redefine what `/guides` is, in exchange
+for traffic. That is a strategy decision rather than a content one, and it is
+recorded here as an open choice instead of being made by drafting. `/blog`
+remains disabled, with `POSTS_ENABLED = false`.
