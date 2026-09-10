@@ -178,4 +178,184 @@ const US_LLC_FOREIGN_ASSET: Guide = {
   },
 };
 
-export const CROSS_BORDER_GUIDES: Guide[] = [US_LLC_FOREIGN_ASSET];
+
+/**
+ * Guide 19: whether a Pakistani may own a foreign entity.
+ *
+ * The companion to the s.116A guide, and the half nobody writes. Declaring an
+ * asset and being permitted to hold it are separate tests under separate
+ * regulators, and the answer differs sharply between a company and an
+ * individual.
+ *
+ * ── The finding that drives the guide ──
+ *
+ * The 2024 liberalisation that every consultant blog cites is Para 13(II)A,
+ * which applies to export-oriented COMPANIES in the IT sector. Para 13(II)D,
+ * the individual section, was not liberalised with it, and its three general
+ * permissions cover listed shares, employee stock options and sweat equity.
+ * None of them covers incorporating your own company abroad, which is exactly
+ * what most Pakistani freelancers with a US LLC have done.
+ *
+ * Stated as a gap rather than as a prohibition: we read the permissions and
+ * they do not reach it. We did not read a provision expressly forbidding it,
+ * and the guide says so rather than overclaiming in either direction.
+ *
+ * Read verbatim from Annexure A to FE Circular No. 01 of 11 July 2024.
+ */
+
+const FOREIGN_ENTITY_PERMISSION: Guide = {
+  slug: 'can-a-pakistani-company-own-a-foreign-entity',
+  cluster: 'cross-border',
+  title: 'Can a Pakistani Legally Own a Company Abroad?',
+  navLabel: 'Owning a company abroad',
+  card: 'What the State Bank actually permits, the limits that come with it, and why the answer for a company is not the answer for an individual.',
+
+  answer:
+    'A Pakistani company can, within limits set by Para 13 of Chapter 20 of the Foreign Exchange Manual, and the rules were widened for IT exporters in July 2024. A resident individual is in a different position: the general permissions cover listed shares, employee stock options and sweat equity, and none of them covers incorporating your own company abroad. That gap is where most freelancers with a US LLC are sitting.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'This is a State Bank question, not an FBR one',
+      body: 'Two regulators ask two different questions about the same foreign company, and satisfying one says nothing about the other. FBR asks whether you declared it: that is section 116A, and the answer is that a resident over the threshold must. The State Bank asks whether you were permitted to acquire it at all, under the Foreign Exchange Manual. It is entirely possible to be fully compliant on the tax side and outside the exchange regulations, and people routinely assume that filing the statement settles both.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'What changed for IT companies in 2024',
+      body: [
+        'FE Circular No. 01 of 11 July 2024 revised Para 13(II)A of Chapter 20 to make it easier for export-oriented companies, particularly in the IT sector, to expand abroad. Four changes: a new equity investment category for IT-sector exporters, removal of the requirement to designate a bank in advance where the funds come from an Exporter\'s Special Foreign Currency Account, express permission for IT export companies to acquire a percentage shareholding in an entity abroad rather than only establishing one, and relaxation of the rule limiting a company to one entity per jurisdiction.',
+        'That is a genuine liberalisation and it is the reason the question is worth asking again in 2026 if you last looked before it. What it is not is a general opening, and the detail below is where most applications actually turn.',
+      ],
+    },
+
+    {
+      kind: 'table',
+      heading: 'The three routes for a company, and what each allows',
+      intro:
+        'Para 13(II)(A1)(2). Which one applies decides both the ceiling and whether you need to designate a bank first.',
+      columns: ['Source of funds', 'How much', 'Prior bank designation'],
+      rows: [
+        ['Exporter\'s Special Foreign Currency Account', 'Funds available in the account', 'Not required'],
+        ['Special Foreign Currency Account holding equity raised from abroad', 'Funds available in the account', 'Not required'],
+        ['Neither, for an IT company not yet exporting', 'Average net profit of the last three years, or USD 100,000, whichever is higher', 'Required'],
+      ],
+    },
+
+    {
+      kind: 'list',
+      heading: 'The conditions that apply to all three',
+      intro:
+        'Para 13(II)(A1)(3). The first two are the ones that most often decide an application, and neither appears in the secondary coverage of the 2024 circular.',
+      items: [
+        'Total investment abroad must not exceed 80% of the company\'s equity, after adjusting for investments in subsidiaries and associates, goodwill, deferred tax assets and receivables from related entities, for a non-listed company',
+        'The foreign business must be of a similar nature to what the applicant already does in Pakistan. An extended line of business or vertical integration counts as similar; an unrelated venture does not',
+        'Operational expenses of a marketing, liaison or representative office abroad are capped at USD 30,000 a year from the second year, with increases of up to 10% a year on justification',
+        'More than one entity in a single jurisdiction requires justification to the satisfaction of the Authorized Dealer',
+        'An acquisition of an unlisted company above USD 1 million requires a valuation report from an accredited business valuation firm in the target country',
+        'Past performance counts: previous investments abroad are weighed on profit repatriation and increase in exports when a new request is assessed',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'The individual position is genuinely different',
+      body: 'Para 13(II)(D) grants a resident individual general permission for exactly three things. Investment in shares of LISTED companies abroad, capped at USD 25,000 a calendar year and at 1% of the investee. Participation in an employee stock option plan of a foreign parent, capped at USD 50,000 a year and 3%. And sweat equity, shares issued for your own efforts and services without monetary consideration, capped at 20% and requiring the agreement to go to the State Bank. Read the list for what is absent: there is no general permission for a resident individual to incorporate or acquire a private company abroad. That is precisely what a freelancer forming a US LLC in their own name has done, and it is not covered by any of the three.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'What we are and are not saying about that gap',
+      body: [
+        'We are saying the general permissions do not reach it. We read Para 13(II)(D) and its three categories do not describe forming your own company abroad, and the 2024 liberalisation that consultants cite applies to Para 13(II)A, which is about companies rather than individuals.',
+        'We are not saying it is prohibited, because we did not read a provision expressly prohibiting it, and the difference between "not generally permitted" and "prohibited" is real: the framework contemplates prior State Bank permission for cases outside the general permissions. What follows practically is that this is a question to put to your bank\'s designated branch or to take advice on, and not one to resolve by reading a formation vendor\'s FAQ.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'The startup flip has its own route, with three hard limits',
+      body: 'Para 13(II)(A2)(b) permits a Pakistani startup to put a holding company above its operating company abroad, which is the structure investors usually ask for. Three cumulative eligibility tests: the Pakistani company must be a private limited or unlisted public company incorporated for not more than 7 years and not formed by splitting up or reconstruction, with annual revenue below PKR 2 billion since incorporation, and equity including retained earnings below PKR 300 million per its latest audited accounts. The holding company must then repatriate at least 80% of funds raised abroad annually until USD 1 million, and at least 50% annually thereafter until USD 10 million cumulative, net of dividends the operating company sent up. No money may be remitted from Pakistan for the share transfer.',
+    },
+
+    {
+      kind: 'list',
+      heading: 'What you owe after the investment is made',
+      intro:
+        'Para 13(III). These are ongoing duties and the annual one is the one people forget, because nothing prompts it.',
+      items: [
+        'Documentary evidence of the establishment or acquisition, through your Authorized Dealer, within one month of making the investment',
+        'A return to the State Bank on form V-100, through the same channel, within one month',
+        'Audited financials of the investee company, submitted annually',
+        'Dividends and disinvestment proceeds, including capital gains, repatriated through normal banking channels, converted to rupees, with the original Proceeds Realization Certificate filed with the State Bank. Those amounts may not be credited to a foreign currency account',
+      ],
+    },
+
+    {
+      kind: 'prose',
+      heading: 'How this sits with the tax side',
+      body: [
+        'The two regimes meet at the point where money comes back. The exchange regulations require dividends and disposal proceeds to be repatriated and converted, and the tax side then asks what is taxable on that income and whether the holding itself was declared under section 116A.',
+        'They also fail together. An undeclared foreign company is a section 116A problem with a penalty running at 2% of the asset value for each year of default. If it was also acquired outside the exchange framework, that is a second and separate exposure with a different regulator, and neither cures the other.',
+      ],
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'Can a Pakistani company own a subsidiary abroad?',
+      answer:
+        'Yes, within Para 13 of Chapter 20 of the Foreign Exchange Manual. An export-oriented IT company can invest from its Exporter\'s Special Foreign Currency Account without designating a bank in advance, or, if it has no such balances, up to the higher of its average net profit over three years or USD 100,000 after designating one.',
+    },
+    {
+      question: 'Can a Pakistani individual open a company in the USA?',
+      answer:
+        'The State Bank\'s general permissions for resident individuals cover three things: shares in listed companies abroad up to USD 25,000 a year, employee stock option plans up to USD 50,000 a year, and sweat equity. Forming your own private company abroad is not among them. It is not expressly prohibited in what we read, but it is outside the general permissions, so it is a question for your bank or an adviser rather than an assumption.',
+    },
+    {
+      question: 'What did the State Bank change in July 2024?',
+      answer:
+        'FE Circular No. 01 of 11 July 2024 revised Para 13(II)A to create a new equity investment category for IT-sector exporters, remove prior bank designation where funds come from an Exporter\'s Special Foreign Currency Account, permit IT export companies to acquire a shareholding rather than only establish an entity, and relax the one-entity-per-jurisdiction restriction for them.',
+    },
+    {
+      question: 'How much can a Pakistani company invest abroad?',
+      answer:
+        'At any point the total investment abroad must not exceed 80% of the company\'s equity for a non-listed company, adjusted for investments in subsidiaries and associates, goodwill, deferred tax assets and related-party receivables. Within that, the ceiling depends on the route: available funds in an ESFCA or SFCA, or the higher of three-year average net profit and USD 100,000.',
+    },
+    {
+      question: 'Can a Pakistani startup do a Delaware flip?',
+      answer:
+        'There is a route in Para 13(II)(A2)(b), with three cumulative conditions: incorporated in Pakistan for not more than 7 years and not by splitting up or reconstruction, annual revenue below PKR 2 billion since incorporation, and equity including retained earnings below PKR 300 million. The holding company must then repatriate 80% of funds raised abroad until USD 1 million and 50% thereafter until USD 10 million cumulative.',
+    },
+    {
+      question: 'Do I have to report a foreign investment to the State Bank after making it?',
+      answer:
+        'Yes. Documentary evidence and a return on form V-100 within one month of the investment, audited financials of the investee company every year, and repatriation of dividends and disposal proceeds through banking channels with the original Proceeds Realization Certificate filed with the State Bank.',
+    },
+    {
+      question: 'Does the foreign business have to be related to what I do in Pakistan?',
+      answer:
+        'Yes, for a company. The business in which the investment is made should be of a similar nature to the applicant\'s Pakistani business. An extended line of business or vertical integration is treated as similar; an unrelated venture is not.',
+    },
+    {
+      question: 'If I declared my foreign company to FBR, am I compliant?',
+      answer:
+        'On the tax side, if the section 116A statement was filed correctly. Exchange control is a separate question with a separate regulator: whether you were permitted to acquire the shareholding at all is governed by the Foreign Exchange Manual, and declaring an asset does not authorise having acquired it.',
+    },
+  ],
+
+  publishedAt: '2026-09-28',
+  related: ['us-llc-foreign-asset-declaration', 'tax-for-freelancers'],
+
+  seo: {
+    title: 'Can a Pakistani Legally Own a Company Abroad?',
+    description:
+      'What Para 13 of the Foreign Exchange Manual permits, the 2024 changes for IT exporters, the startup holding company route, and why individuals are not covered.',
+  },
+};
+
+export const CROSS_BORDER_GUIDES: Guide[] = [US_LLC_FOREIGN_ASSET, FOREIGN_ENTITY_PERMISSION];
+
