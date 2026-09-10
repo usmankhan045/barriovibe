@@ -549,3 +549,81 @@ looking for answers already on disk:
 | `arrival-departure-days-count-secondary` | `rule14-day-counting-verbatim`, which upgrades it from practitioner statement to law |
 
 Live open items: 19.
+
+---
+
+## Research for guides 23 to 32 (10 September 2026)
+
+Selected from the demand analysis in `DEMAND.md` rather than by extending the
+original `POSTS.md` plan, which the scope correction above showed had already
+been absorbed by the shipped hubs.
+
+### The slate
+
+| # | Guide | Cluster | Basis | State |
+| --- | --- | --- | --- | --- |
+| 23 | Rental income: what the tenant withholds and what you still owe | property | `s155-*`, `s16-*`, `s15a-*` | Ready |
+| 24 | Provincial property tax, and how it differs from 236C and 236K | property | agent | Pending |
+| 25 | Tax on a car: registration, transfer and the five-year cutoff | filer | `s231b-*` | Ready |
+| 26 | Tax on a pension | salary | `pension-*`, `s12-2a-*` | Ready, `lib/tax/pension.ts` added |
+| 27 | Paying FBR: the PSID, the challan and the CPR | filing | agent | Pending |
+| 28 | Getting back into IRIS | filing | agent | Pending |
+| 29 | When FBR amends your assessment | filing | `s122-*` | Ready |
+| 30 | Advance tax under section 147 | filing | agent, plus s.147 | Pending |
+| 31 | Deductions a landlord can actually claim | property | `s15a-*` | Ready |
+| 32 | Reserved | | | Held for whichever agent finding is strongest |
+
+Four are writable from the consolidation already on disk. Four wait on the two
+commissioned agents. One is blocked on our own code, below. One slot is held
+deliberately rather than filled with something thin.
+
+### What the Ordinance gave up this pass
+
+**Pension is the find of the batch.** The general exemption is gone: the Finance
+Act 2025 omitted Second Schedule clause (8), which exempted pension from a
+former employer, and the armed-forces limb of clause (9) with it. What replaced
+it in s.12(2A) is much gentler than "pension is now taxable" implies, and the
+guide has to lead with that rather than with alarm: nil up to Rs 10 million,
+5 per cent on the excess, final tax, and nil at any figure once the individual
+has attained seventy. The sting is s.12(2A)(ii), where continuing to work for the
+former employer or an associate throws the whole pension onto the ordinary
+salary slabs.
+
+**Rental income has four uncovered points.** A boutique, beauty parlour,
+hospital, clinic or maternity home is a prescribed person by virtue of what it
+is, with no threshold, while an individual only becomes one at Rs 1.5 million of
+gross rent. Rent withholding stopped being a final tax in 2010 and pages still
+describe it as a discharge. A 2021 Explanation closes the argument that rent
+taxed as business income escapes s.155. And a non-adjustable deposit is taxable
+rent spread over ten years which also sits inside the withholding base.
+
+**Vehicles** gave the five-year transfer cutoff, the anti-flipping rule in
+s.231B(2A), and s.231B(4), which is the provision a reader needs when asked to
+pay a second time on the same car.
+
+**Assessments** gave a limitation period that competitors flatten: five years
+from the end of the FINANCIAL YEAR in which the order issued, not from filing.
+
+### Guide 26 was blocked on our own code, and has been unblocked
+
+The s.12(2A) pension regime was not modelled in `lib/tax/` at all. What existed
+was `RELIEF.pensionIncomeRate`, which caps the s.63 pension CONTRIBUTION credit
+and is a different provision entirely.
+
+Under the no-figures rule that blocked the guide, because a rate typed into
+prose is a second source of truth no check can see. That is a different kind of
+blocker from the UAE guide: that one has no publishable source, this one had a
+perfectly good source and a house rule in the way, and the fix was ours.
+
+**`lib/tax/pension.ts` now models it**, with seven assertions in
+`scripts/check-tax.ts`. The module deliberately does NOT compute the
+s.12(2A)(ii) case where the pensioner still works for the former employer,
+because that routes to the ordinary salary slabs and duplicating that
+computation would create exactly the second source of truth the codebase exists
+to avoid. It reports the fact and the caller routes.
+
+The assertions were checked by sabotage rather than by trusting a green run:
+moving the threshold to Rs 5 million and the age to 75 each failed two
+independent checks. Boundary cases are covered explicitly, since the proviso
+charges only the amount EXCEEDING ten million and a reader at exactly the
+threshold owes nothing.

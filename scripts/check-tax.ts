@@ -33,6 +33,7 @@ import {
   TAX_YEAR,
 } from '../lib/tax/pakistan';
 import { taxOnSlabs } from '../lib/tax/slabs';
+import { PENSION, pensionTax } from '../lib/tax/pension';
 import {
   BUSINESS_SLABS,
   calculateBusiness,
@@ -1410,6 +1411,71 @@ for (let x = 0; x <= 50_000_000; x += 250_000) {
   }
 }
 
+// ── Section 12(2A): pension ─────────────────────────────────────────────────
+//
+// Worth checking carefully despite being only two bands, because the whole
+// point of the section is that most pensioners owe nothing and a bug here
+// would tell a retired reader they owe tax they do not.
+//
+// Source: s.12(2A) and the proviso to clause (2) of Division I, Part I of the
+// First Schedule, in the Ordinance amended to 30 June 2026.
+eq('pension threshold', PENSION.threshold, 10_000_000, 0);
+eq('pension rate on excess', PENSION.rateOnExcess, 0.05, 1e-9);
+eq('pension exempt age', PENSION.exemptFromAge, 70, 0);
+
+// Nil at the threshold itself: the proviso charges only the amount EXCEEDING
+// ten million, so the boundary case pays nothing.
+eq(
+  'pension at exactly the threshold is nil',
+  pensionTax({ annualPension: PENSION.threshold, age: 60, stillWorkingForFormerEmployer: false }).tax,
+  0,
+);
+
+// One rupee over, and 5% applies to that one rupee rather than to the whole.
+eq(
+  'pension just above the threshold is charged on the excess only',
+  pensionTax({ annualPension: PENSION.threshold + 100, age: 60, stillWorkingForFormerEmployer: false }).tax,
+  5,
+);
+
+// Hand-computed: (12,000,000 - 10,000,000) x 5% = 100,000.
+eq(
+  'pension of 12m',
+  pensionTax({ annualPension: 12_000_000, age: 60, stillWorkingForFormerEmployer: false }).tax,
+  100_000,
+);
+
+// s.12(2A)(i): seventy removes the charge at any amount.
+eq(
+  'pension at seventy is nil however large',
+  pensionTax({ annualPension: 50_000_000, age: 70, stillWorkingForFormerEmployer: false }).tax,
+  0,
+);
+
+// A typical pensioner, far below the threshold, owes nothing. This is the
+// case the guide leads with and the one most readers are in.
+eq(
+  'ordinary pension is nil',
+  pensionTax({ annualPension: 1_800_000, age: 63, stillWorkingForFormerEmployer: false }).tax,
+  0,
+);
+
+// s.12(2A)(ii): still working for the former employer routes to the ordinary
+// slabs instead, so this module must not return a 12(2A) figure for it.
+{
+  const stillWorking = pensionTax({
+    annualPension: 12_000_000,
+    age: 60,
+    stillWorkingForFormerEmployer: true,
+  });
+  if (!stillWorking.usesOrdinarySlabs || stillWorking.tax !== 0) {
+    failures++;
+    console.error(
+      '  ✗ pension for someone still working for the former employer must defer to the ordinary slabs',
+    );
+  }
+}
+
 // ── Report ──────────────────────────────────────────────────────────────────
 if (failures > 0) {
   console.error(`\n  ✗ Tax check failed: ${failures} problem(s). Do not ship this.\n`);
@@ -1419,7 +1485,7 @@ if (failures > 0) {
 console.log(
   `\n  ✓ Tax check passed: ${SLABS.length} salary, ${BUSINESS_SLABS.length} business and ` +
     `${RENT_SLABS.length} rent slabs reconcile with the First Schedule; company, 4C, 113, 154A, ` +
-    `231AB, 236C, 236K, 231B, 235, 236, 37 and 37A rates verified for ${TAX_YEAR.label}`,
+    `231AB, 236C, 236K, 231B, 235, 236, 37, 37A and 12(2A) rates verified for ${TAX_YEAR.label}`,
 );
 console.log(
   `    plus all ${TAX_YEARS.length} salary tax years (${TAX_YEARS[TAX_YEARS.length - 1]!.searchLabel} ` +
