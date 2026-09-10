@@ -118,6 +118,20 @@ Recorded in full in `DEAD-ENDS.md`. The short version:
   download URL. No header trick helps. Get the file another way or manually.
 - **Scanned PDFs** have no text layer. `pdftotext` returns nothing and the
   document has to be read as images.
+- **A negative grep on a PDF extraction is not evidence of absence.** Layout
+  breaks phrases at arbitrary points, so "the 25th day of September" can exist
+  in the document and match nothing. This produced a wrong finding: searching
+  for the phrase returned nothing, and the conclusion drawn was that s.147 had
+  no separate company timetable, when s.147(5A) sets one out in full. **Search
+  the rarest single token, then read the surrounding block.**
+- **A 200 is not a hit, and this is the most frequent trap of all.** Five
+  distinct instances in one session: WIPO Lex serving Serbian design law, an FBR
+  page serving "The Requested Page does not Exist" with a 200, an SBP URL
+  serving site chrome, KPMG serving HTML from a `.pdf` path, and
+  `iris.fbr.gov.pk` serving its Angular shell for routes that do not exist.
+  **Grep every fetch for a term the document must contain and treat its absence
+  as a failed fetch, whatever the status code.** For a PDF, checking the file
+  begins with `%PDF` costs nothing.
 - **Google rate-limits SERP scraping** after roughly 100 to 140 queries from
   one IP, then serves a 6KB shell that reads as "no results". Cap a session at
   70 and space requests.

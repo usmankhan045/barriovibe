@@ -566,16 +566,43 @@ been absorbed by the shipped hubs.
 | 24 | Provincial property tax, and how it differs from 236C and 236K | property | agent | Pending |
 | 25 | Tax on a car: registration, transfer and the five-year cutoff | filer | `s231b-*` | Ready |
 | 26 | Tax on a pension | salary | `pension-*`, `s12-2a-*` | Ready, `lib/tax/pension.ts` added |
-| 27 | Paying FBR: the PSID, the challan and the CPR | filing | agent | Pending |
-| 28 | Getting back into IRIS | filing | agent | Pending |
+| 27 | Paying FBR: the PSID, the challan and the CPR | filing | agent, 19 findings | Ready |
+| 28 | Getting back into IRIS | filing | agent, verified verbatim | Ready |
 | 29 | When FBR amends your assessment | filing | `s122-*` | Ready |
-| 30 | Advance tax under section 147 | filing | agent, plus s.147 | Pending |
+| 30 | Advance tax under section 147 | filing | `s147-*`, corrected | Ready |
 | 31 | Deductions a landlord can actually claim | property | `s15a-*` | Ready |
 | 32 | Reserved | | | Held for whichever agent finding is strongest |
 
-Four are writable from the consolidation already on disk. Four wait on the two
-commissioned agents. One is blocked on our own code, below. One slot is held
-deliberately rather than filled with something thin.
+Eight are now writable. One waits on the provincial property tax agent. One
+slot is held deliberately rather than filled with something thin.
+
+### What the payment and access agent settled
+
+Six checkable corrections, of which three are worth naming here.
+
+**The PSID "7-day validity" is not an FBR rule.** Nearly every competitor states
+it. It traces to a PTA press release of January 2020 whose own title scopes it
+to *Mobile Device Registration* applications: a DIRBS handset rule transplanted
+onto income tax. Six FBR sources on disk mention validity, expiry or seven days
+exactly zero times. Publish the negative and assert neither seven days nor
+"never expires", because neither is sourced.
+
+**IRIS has a self-service Account Recovery branch**, and this is the most useful
+thing in the batch. Verified verbatim from the live portal: one route "where you
+have access to your Email Address and Mobile Number registered with FBR", and a
+second "where you do not have access to either... and want to recover your
+account by updating your Mobile Number registered against your CNIC". Almost
+every competitor sends readers to an RTO or a paid recovery agent for precisely
+the case FBR made self-service.
+
+**There is no forgot-PIN flow.** Change PIN requires being logged in, so a
+forgotten PIN is recovered password-first. Guides telling readers to "reset your
+PIN" are describing something that does not exist.
+
+Also settled: FBR's own *Pay Income Tax* page still says deposit the slip at NBP
+or SBP, while FBR's own ADC list shows NBP with ATM and internet banking both
+disabled across 28 ADC-enabled banks. Two live FBR surfaces contradicting each
+other, the same shape as the ATL weekly-versus-daily case.
 
 ### What the Ordinance gave up this pass
 
