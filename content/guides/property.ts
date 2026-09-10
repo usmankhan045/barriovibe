@@ -79,36 +79,10 @@ const PROPERTY_TAX: Guide = {
     },
 
     {
-      kind: 'prose',
-      heading: 'Capital gains: the acquisition date decides everything',
-      body: [
-        'Section 37 splits on a single date. Property acquired on or after 1 July 2024 is taxed at a flat 15% for a person on the Active Taxpayer List at the date of disposal, however long it was held. There is no holding-period relief at all.',
-        'Property acquired on or before 30 June 2024 stays on the old holding-period table for every later tax year, and that table differs by what the property is. Open plots, constructed property and flats have materially different schedules, which is the detail most published tables flatten into one column.',
-      ],
-    },
-
-    {
-      kind: 'table',
-      heading: 'Capital gains on property acquired before 1 July 2024',
-      intro:
-        'Three different schedules. Flats reach nil fastest at three years, constructed property at five, open plots at six.',
-      columns: ['Holding period', 'Open plots', 'Constructed', 'Flats'],
-      rows: [
-        ['Up to 1 year', '15%', '15%', '15%'],
-        ['1 to 2 years', '12.5%', '10%', '7.5%'],
-        ['2 to 3 years', '10%', '7.5%', 'Nil'],
-        ['3 to 4 years', '7.5%', '5%', '-'],
-        ['4 to 5 years', '5%', 'Nil', '-'],
-        ['5 to 6 years', '2.5%', '-', '-'],
-        ['Over 6 years', 'Nil', '-', '-'],
-      ],
-    },
-
-    {
       kind: 'note',
       tone: 'info',
-      heading: 'A non-filer does not get the flat 15%',
-      body: 'A person not on the Active Taxpayer List at the date of disposal is charged at the ordinary Division I rates for individuals and associations, or Division II for companies, subject to a floor: the tax shall not be less than 15% of the gain. So a non-filer pays somewhere between 15% and the top slab rate depending on the size of the gain, not a single figure.',
+      heading: 'Capital gains is a separate charge, and the date you bought decides it',
+      body: 'Section 236C is advance tax on the transfer. Section 37 taxes the profit, and it splits on a single date: property acquired on or after 1 July 2024 is flat 15% for a person on the Active Taxpayer List however long it was held, while property acquired on or before 30 June 2024 stays on a holding-period table that reaches nil, at different points for open plots, constructed property and flats. A person off the list does not get the flat rate at all. That is a whole subject rather than a paragraph, and the mechanics, the cost base and the same-year resale trap are set out in the capital gains guide below.',
     },
 
     {
@@ -175,12 +149,7 @@ const PROPERTY_TAX: Guide = {
     {
       question: 'How is capital gains tax calculated on property in Pakistan?',
       answer:
-        'The acquisition date decides the regime. Property acquired on or after 1 July 2024 is taxed at a flat 15% for a person on the Active Taxpayer List, whatever the holding period. Property acquired before that date follows a holding-period table that differs for open plots, constructed property and flats, reaching nil at six, five and three years respectively.',
-    },
-    {
-      question: 'Do non-filers pay 15% capital gains tax on property?',
-      answer:
-        'No. A person not on the Active Taxpayer List at the date of disposal is charged at the ordinary slab rates for individuals and associations, subject to a floor of 15% of the gain. The result is between 15% and the top slab rate depending on the size of the gain.',
+        'Under section 37, and the acquisition date decides the regime. Property acquired on or after 1 July 2024 is taxed at a flat 15% for a person on the Active Taxpayer List, and property acquired earlier stays on a holding-period table that reaches nil. The mechanics, the cost base and the same-year resale rule are set out in our capital gains guide.',
     },
     {
       question: 'Is section 7E still applicable?',
@@ -200,6 +169,13 @@ const PROPERTY_TAX: Guide = {
   ],
 
   publishedAt: '2026-09-12T07:00:00Z',
+
+  cta: {
+    heading: 'Buying or selling, and want the figure checked?',
+    body:
+      'The advance tax, the capital gain and the provincial charge are three different questions on one transaction. Getting them straight before the transfer is cheaper than correcting afterwards.',
+    buttonLabel: 'Talk to us about your sale',
+  },
   related: ['filer-vs-non-filer'],
 
   seo: {
@@ -386,7 +362,7 @@ const PROPERTY_GAINS: Guide = {
   ],
 
   publishedAt: '2026-09-17T07:00:00Z',
-  related: ['tax-on-buying-and-selling-property', 'filer-vs-non-filer'],
+  related: ['tax-on-buying-and-selling-property', 'filer-vs-non-filer', 'tax-on-gifts-and-inheritance', 'capital-gains-on-shares'],
 
   seo: {
     title: 'Capital Gains Tax on Property in Pakistan',
@@ -600,7 +576,7 @@ const RENTAL_INCOME: Guide = {
   ],
 
   publishedAt: '2026-09-21T03:00:00Z',
-  related: ['tax-on-buying-and-selling-property', 'how-to-file-your-tax-return'],
+  related: ['tax-on-buying-and-selling-property', 'how-to-file-your-tax-return', 'landlord-tax-deductions'],
 
   seo: {
     title: 'Tax on Rental Income in Pakistan',
@@ -811,7 +787,7 @@ const PROVINCIAL_PROPERTY_TAX: Guide = {
   ],
 
   publishedAt: '2026-09-21T07:00:00Z',
-  related: ['tax-on-buying-and-selling-property', 'tax-on-rental-income'],
+  related: ['tax-on-buying-and-selling-property', 'tax-on-rental-income', 'tax-on-agricultural-income'],
 
   seo: {
     title: 'Provincial Property Tax in Pakistan (Punjab and Beyond)',
@@ -1212,6 +1188,13 @@ const AGRICULTURAL_INCOME: Guide = {
       tone: 'info',
       heading: 'Punjab taxed livestock for seven months and then stopped',
       body: 'A small point that illustrates how fast this is moving. The 2024 amendment brought livestock into the Punjab base, inserting a livestock head and a definition. The Punjab Agricultural Income Tax (Amendment) Act 2025, gazetted 5 August 2025, omitted both. So livestock income was inside the Punjab charge only between 1 January and 5 August 2025. Anyone computing a Punjab liability across that window needs the dates rather than the headline.',
+    },
+
+    {
+      kind: 'calculator',
+      toolSlug: 'agriculture-tax',
+      heading: 'What the provincial charge comes to',
+      body: 'The provincial slabs now broadly mirror the federal table. Enter the farm income to see the figure, and read it alongside the commencement caveats above rather than instead of them.',
     },
 
     {

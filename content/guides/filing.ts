@@ -84,6 +84,13 @@ const FILING_A_RETURN: Guide = {
     },
 
     {
+      kind: 'calculator',
+      toolSlug: 'salary-tax',
+      heading: 'Work out the figure before you open IRIS',
+      body: 'The Admitted Income Tax box is the number IRIS computes for you, and knowing it in advance is how you tell a correct return from a mistyped one. Enter your annual salary here first, then check it against code 9203 on screen.',
+    },
+
+    {
       kind: 'prose',
       heading: 'The wealth statement is not optional',
       body: [
@@ -200,7 +207,14 @@ const FILING_A_RETURN: Guide = {
   ],
 
   publishedAt: '2026-09-16T03:00:00Z',
-  related: ['salary-tax-slabs', 'how-to-become-a-filer'],
+
+  cta: {
+    heading: 'Rather have the return filed for you?',
+    body:
+      'We file through IRIS every day, including the wealth statement reconciliation that stops most people. If the deadline is close, that is the conversation to have now.',
+    buttonLabel: 'Talk to us about filing',
+  },
+  related: ['salary-tax-slabs', 'how-to-become-a-filer', 'iris-login-and-account-recovery', 'how-to-get-a-tax-refund'],
 
   seo: {
     title: 'How to File Your Income Tax Return in Pakistan (IRIS)',
@@ -366,7 +380,7 @@ const PAYING_FBR: Guide = {
   ],
 
   publishedAt: '2026-09-23T03:00:00Z',
-  related: ['how-to-file-your-tax-return', 'filer-vs-non-filer'],
+  related: ['how-to-file-your-tax-return', 'filer-vs-non-filer', 'advance-tax-section-147'],
 
   seo: {
     title: 'How to Pay Your Tax to FBR: PSID, Challan and CPR',
@@ -677,7 +691,14 @@ const AMENDED_ASSESSMENT: Guide = {
   ],
 
   publishedAt: '2026-09-24T03:00:00Z',
-  related: ['how-to-file-your-tax-return', 'how-to-pay-fbr-tax'],
+
+  cta: {
+    heading: 'A notice is the start of a process, not the end',
+    body:
+      'Section 122(9) means an assessment cannot be amended without hearing you. Answering properly and on time is the whole of that opportunity, and it is worth doing with someone who has read the file.',
+    buttonLabel: 'Talk to us about the notice',
+  },
+  related: ['how-to-file-your-tax-return', 'how-to-pay-fbr-tax', 'selected-for-tax-audit'],
 
   seo: {
     title: 'When FBR Amends Your Assessment: Section 122',
@@ -1153,7 +1174,14 @@ const APPEALING_AN_ORDER: Guide = {
   ],
 
   publishedAt: '2026-09-29T03:00:00Z',
-  related: ['when-fbr-amends-your-assessment', 'how-to-file-your-tax-return'],
+
+  cta: {
+    heading: 'Thirty days, from the right date',
+    body:
+      'An appeal filed late needs the Commissioner to accept a reason, and a strong case is no help if the clock ran out. If you are holding a demand notice, the date on it is the thing to check first.',
+    buttonLabel: 'Talk to us about your appeal',
+  },
+  related: ['when-fbr-amends-your-assessment', 'how-to-file-your-tax-return', 'how-fbr-recovers-unpaid-tax'],
 
   seo: {
     title: 'Appealing an FBR Order: Section 127',
@@ -1463,6 +1491,13 @@ const BEING_AUDITED: Guide = {
   ],
 
   publishedAt: '2026-09-30T07:00:00Z',
+
+  cta: {
+    heading: 'Selected, and not sure what to produce?',
+    body:
+      'An audit turns on what you can evidence and by when. If a notice has arrived, the useful conversation happens before the records deadline rather than after a best-judgement assessment.',
+    buttonLabel: 'Talk to us about your audit',
+  },
   related: ['when-fbr-amends-your-assessment', 'appealing-an-fbr-order'],
 
   seo: {
@@ -1604,6 +1639,13 @@ const TAX_RECOVERY: Guide = {
   ],
 
   publishedAt: '2026-10-03T03:00:00Z',
+
+  cta: {
+    heading: 'A recovery notice has a clock on it',
+    body:
+      'The recovery powers open only once the notice has gone unanswered, so the window between the two is the whole opportunity. That is the point to get advice, not after an account is attached.',
+    buttonLabel: 'Talk to us before the deadline',
+  },
   related: ['appealing-an-fbr-order', 'when-fbr-amends-your-assessment'],
 
   seo: {

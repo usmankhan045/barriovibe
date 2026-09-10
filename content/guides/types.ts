@@ -130,6 +130,27 @@ export interface Guide {
   publishedAt: string;
 
   /**
+   * The one ask at the foot of the page, where the generic default is wrong.
+   *
+   * Every guide used to end with the same sentence, which is fine for a reader
+   * comparing company structures and badly wrong for one holding a recovery
+   * notice. The tools already solved this: each carries its own button label
+   * rather than sharing one.
+   *
+   * Optional on purpose. Most guides are served perfectly well by the default,
+   * and a bespoke ask on all forty-seven would be noise. Set it where the
+   * reader's situation is specific enough that a generic invitation reads as
+   * though nobody thought about them.
+   */
+  cta?: {
+    heading: string;
+    body: string;
+    buttonLabel: string;
+    /** Defaults to /contact. Use a `?service=` param to preselect a subject. */
+    href?: string;
+  };
+
+  /**
    * Sibling guides worth a reader's next click, by slug.
    *
    * Named rather than automatic: a reader on the wrong guide wants the right

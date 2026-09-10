@@ -418,16 +418,15 @@ export function GuidePage({ guide }: { guide: Guide }) {
             <div className="u-tile flex flex-col gap-8 p-8 lg:flex-row lg:items-center lg:justify-between lg:p-10">
               <div className="max-w-[52ch]">
                 <h2 className="font-display text-h3 text-ink">
-                  Rather have someone handle it?
+                  {guide.cta?.heading ?? 'Rather have someone handle it?'}
                 </h2>
                 <p className="mt-3 text-[15px] leading-[1.65] text-ink-body">
-                  We file returns through IRIS every day. If the answer above
-                  raises a question about your own case, that is the
-                  conversation to have before the deadline rather than after it.
+                  {guide.cta?.body ??
+                    'We file returns through IRIS every day. If the answer above raises a question about your own case, that is the conversation to have before the deadline rather than after it.'}
                 </p>
               </div>
-              <Button href="/contact" size="lg" className="flex-none">
-                Talk to us
+              <Button href={guide.cta?.href ?? '/contact'} size="lg" className="flex-none">
+                {guide.cta?.buttonLabel ?? 'Talk to us'}
               </Button>
             </div>
           </Reveal>

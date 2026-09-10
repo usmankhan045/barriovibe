@@ -220,7 +220,7 @@ const FILER_VS_NON_FILER: Guide = {
   ],
 
   publishedAt: '2026-09-10T03:00:00Z',
-  related: ['how-to-become-a-filer'],
+  related: ['how-to-become-a-filer', 'tax-on-buying-a-car'],
 
   seo: {
     title: 'Filer vs Non-Filer in Pakistan: The Real Cost',

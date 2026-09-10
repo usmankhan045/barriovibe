@@ -224,7 +224,14 @@ const US_LLC_FOREIGN_ASSET: Guide = {
   ],
 
   publishedAt: '2026-09-18T07:00:00Z',
-  related: ['tax-for-freelancers', 'how-to-file-your-tax-return'],
+
+  cta: {
+    heading: 'Holding a foreign company, and behind on filing?',
+    body:
+      'The penalty runs at 2% of the asset value for each year of default, and the criminal limb attaches to ignoring a notice rather than to the original omission. Acting before one arrives is materially different.',
+    buttonLabel: 'Talk to us about your overseas filing',
+  },
+  related: ['tax-for-freelancers', 'how-to-file-your-tax-return', 'us-llc-annual-compliance'],
 
   seo: {
     title: 'Declaring a US LLC in Pakistan: Section 116A',
@@ -460,6 +467,13 @@ const FOREIGN_ENTITY_PERMISSION: Guide = {
   ],
 
   publishedAt: '2026-09-19T03:00:00Z',
+
+  cta: {
+    heading: 'Already set up abroad without permission?',
+    body:
+      'There is no published amnesty route, and the exchange control question is separate from the tax one. What that leaves is a conversation with your bank and an adviser, framed properly.',
+    buttonLabel: 'Talk to us about your structure',
+  },
   related: ['us-llc-foreign-asset-declaration', 'tax-for-freelancers'],
 
   seo: {
@@ -679,7 +693,7 @@ const RESIDENCY: Guide = {
   ],
 
   publishedAt: '2026-09-19T07:00:00Z',
-  related: ['us-llc-foreign-asset-declaration', 'how-to-file-your-tax-return'],
+  related: ['us-llc-foreign-asset-declaration', 'how-to-file-your-tax-return', 'overseas-pakistani-tax-obligations'],
 
   seo: {
     title: 'Tax Residency for Overseas Pakistanis: The 183-Day Rule',
@@ -863,7 +877,7 @@ const MONEY_FROM_ABROAD: Guide = {
   ],
 
   publishedAt: '2026-09-20T03:00:00Z',
-  related: ['tax-for-freelancers', 'us-llc-foreign-asset-declaration'],
+  related: ['tax-for-freelancers', 'us-llc-foreign-asset-declaration', 'paying-foreign-suppliers'],
 
   seo: {
     title: 'Receiving Money From Abroad in Pakistan: Section 111(4)',

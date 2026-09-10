@@ -105,6 +105,13 @@ const CREATOR_TAX: Guide = {
     },
 
     {
+      kind: 'calculator',
+      toolSlug: 'freelancer-tax',
+      heading: 'What the slabs come to on your revenue',
+      body: 'Because the 5% is a floor rather than a settlement for a resident, the figure that decides your actual liability is the slab computation underneath it. Enter your platform revenue to see both, and which one governs.',
+    },
+
+    {
       kind: 'prose',
       heading: 'The slabs still apply underneath',
       body: [

@@ -191,7 +191,14 @@ const PSEB_RATE: Guide = {
   ],
 
   publishedAt: '2026-09-13T03:00:00Z',
-  related: ['how-to-get-an-ntn', 'filer-vs-non-filer'],
+
+  cta: {
+    heading: 'Exporting IT services and want the rate secured?',
+    body:
+      'The 0.25% is conditional on registration and on the filing conditions in section 154A(2), including the withholding statements. We handle both halves.',
+    buttonLabel: 'Talk to us about PSEB',
+  },
+  related: ['how-to-get-an-ntn', 'filer-vs-non-filer', 'tax-on-youtube-and-social-media-income'],
 
   seo: {
     title: 'PSEB Registration and the 0.25% IT Export Tax Rate',
@@ -381,7 +388,7 @@ const FREELANCER_TAX: Guide = {
   ],
 
   publishedAt: '2026-09-16T07:00:00Z',
-  related: ['pseb-registration-and-the-025-rate', 'how-to-get-an-ntn'],
+  related: ['pseb-registration-and-the-025-rate', 'how-to-get-an-ntn', 'exemption-and-lower-rate-certificates'],
 
   seo: {
     title: 'Tax for Freelancers in Pakistan: Rates and Rules',

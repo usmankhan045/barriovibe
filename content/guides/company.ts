@@ -244,6 +244,13 @@ const SECP_REGISTRATION: Guide = {
   ],
 
   publishedAt: '2026-09-11T07:00:00Z',
+
+  cta: {
+    heading: 'Rather have the incorporation handled?',
+    body:
+      'The share money has to be paid within thirty days and certified within forty-five, and most founders find that out late. We do the filing and the certificate together.',
+    buttonLabel: 'Talk to us about registering',
+  },
   related: ['how-to-get-an-ntn', 'trademark-registration-cost'],
 
   seo: {
@@ -413,7 +420,7 @@ const CHOOSING_A_STRUCTURE: Guide = {
   ],
 
   publishedAt: '2026-09-14T03:00:00Z',
-  related: ['secp-company-registration', 'how-to-get-an-ntn'],
+  related: ['secp-company-registration', 'how-to-get-an-ntn', 'registering-a-partnership-firm', 'non-profit-tax-status'],
 
   seo: {
     title: 'SMC vs Private Limited vs Sole Proprietor in Pakistan',

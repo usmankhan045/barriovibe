@@ -228,7 +228,7 @@ const HOW_TO_GET_NTN: Guide = {
   ],
 
   publishedAt: '2026-09-10T07:00:00Z',
-  related: ['filer-vs-non-filer', 'how-to-become-a-filer', 'secp-company-registration'],
+  related: ['filer-vs-non-filer', 'how-to-become-a-filer', 'secp-company-registration', 'ntn-registration-documents'],
 
   seo: {
     title: 'How to Get an NTN in Pakistan: Free, Step by Step',
