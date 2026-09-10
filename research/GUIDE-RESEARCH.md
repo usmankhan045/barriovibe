@@ -8,30 +8,40 @@ Query `python3 research/query.py --grep <term>` for the underlying records.
 
 ---
 
-## The pattern that recurs across all five
+## The pattern that recurs, and how it was refined
 
-**A consolidated PDF is not the current law.** It came up in three separate
-guides and it is the single most useful thing this research produced.
+**Check the "amended up to" date on any consolidation before you cite it.**
 
-FBR publishes the Income Tax Ordinance as a consolidated document with an
-"amended up to" date. Both consolidations available during this work (31 July
-2025 and 20 February 2026) **predate the Finance Act 2026**, which took effect
-1 July 2026. So all three of these are true at once:
+The original form of this note said that every available consolidation predates
+the Finance Act 2026 and therefore prints repealed law. That was true of the two
+editions in hand at the time, 31 July 2025 and 20 February 2026, and it explained
+several apparent contradictions at once: section 7E printed in full though
+repealed, Tenth Schedule Rule 1A printed though omitted, the section 182A
+surcharge reading Rs 1,000 when it is Rs 25,000, and Division IVA reading "up to
+tax year 2026" when the rate runs to 2029.
 
-- Section 7E is printed in full in the consolidation, and was repealed.
-- Rule 1A of the Tenth Schedule is printed in full, and was omitted.
-- The section 182A surcharge reads Rs 1,000, and is now Rs 25,000.
-- Division IVA reads "up to tax year 2026", and was extended to 2029.
+It is no longer true as a general statement. FBR publishes a consolidation
+**amended up to 30 June 2026** which postdates the Act: it prints section 154B
+in full, marks section 7E as omitted by the Finance Act 2026, and carries the
+Act's amendments throughout. Verified by download and text extraction; recorded
+as `ordinance-consolidation-30jun2026`.
 
-Anyone who "goes to the primary source" and stops at the consolidation
-publishes repealed law with total confidence. Every guide that touches a rate
-needs the consolidation **and** the Finance Act, and the guides say so.
+The lesson survives and is sharper for the correction. The date on the cover is
+the difference between current law and repealed law, and **a newer edition may
+exist than the one a search returns**. Two of the three documents FBR was
+serving in September 2026 were stale; the third was not.
 
-FBR's own Salient Features document has the mirror-image problem: it was
-written against the **Bill** and states s.236K at 1.5% where the enacted Act
-says 1.25%. A live FBR-hosted PDF contradicts the statute.
+FBR's Salient Features has the mirror-image problem and it has not been fixed.
+It was written against the **Bill**, states section 236K at 1.5 percent where the
+enacted Act says 1.25, and is still live on fbr.gov.pk. Two FBR-published
+documents contradict each other, which is what makes it dangerous: a writer
+sourcing "from FBR" can land on the wrong number in good faith. Recorded as a
+rejected finding so it cannot resurface.
 
----
+**The best single source for what the Act changed** is FBR Circular No. 02 of
+2026-27 dated 8 September 2026. Its listing page is a JavaScript form, but the
+FBR homepage exposes a download handler that redirects to the PDF. It is scanned,
+with no text layer, so it has to be read as images.
 
 ## Guide 1: Filer vs non-filer
 
@@ -267,3 +277,88 @@ In priority order, because every one of these moved in 2026:
 5. Whether s.114C has been notified.
 6. The SECP fee escalator.
 7. Whether the trademark fee schedule has been revised.
+
+---
+
+## Guides 11 to 15: research complete, not yet written
+
+Ranked by the usual score. All research is recorded in `findings.jsonl`.
+
+| # | Guide | Queries | SERP weakness | Score |
+| ---: | --- | ---: | ---: | ---: |
+| 11 | Salary tax and what your employer withholds | 95 | 4.0 | 9.91 |
+| 12 | Income tax slabs 2026-27 | 125 | 2.0 | 6.30 |
+| 13 | How to file your return in IRIS | 94 | 2.0 | 5.93 |
+| 14 | Tax for freelancers | 63 | 1.5 | 4.52 |
+| 15 | Tax on YouTube and social media income | 24 | 1.5 | 3.49 |
+
+The salary weakness of 4.0 is the highest measured anywhere in this project.
+**Facebook ranks on page one** for "pakistan salary tax slabs", alongside two
+consultant blogs. A commercial query being won by a social post.
+
+### What guides 11 to 13 carry
+
+**The slab table is settled from three independent directions.** FBR Circular
+No. 02 of 2026-27 para 7 sets out the substituted eight-band table; the Finance
+Act 2026 gazette contains it; and `lib/tax/pakistan.ts` already holds all eight
+bands, matching exactly, reconciled by `check:tax` on every build. The guide can
+interpolate rather than restate, which is the no-figures rule working.
+
+**The section 4AB story resolves a contradiction across every source.** Three
+steps: the Finance Act 2024 inserted it at 10 percent above Rs 10 million; the
+Finance Act 2025 reduced it to 9 percent for salaried persons; the Finance Act
+2026 withdrew it for salaried persons entirely while leaving 10 percent for
+others. Every published figure is a real rate from a different year. A salaried
+person's top marginal rate for tax year 2027 is a clean 35 percent, not 38.15.
+
+**The comparison that carries guide 12.** Salaried rates fell and business rates
+did not, so the gap widened. On Rs 5.6 million a salaried person pays Rs 976,000
+and a business individual pays Rs 1,610,000. At the entry band it is starker
+still: 1 percent against 15 percent.
+
+**Two different percentage tests get conflated.** Salary must exceed 75 percent
+of taxable income for the salaried rate table to apply. FBR's filing page offers
+the salaried return form where salary is more than 50 percent. Different tests,
+different purposes.
+
+**The section 182 tapering relief is almost never published**: the late-filing
+penalty is reduced by 75, 50 or 25 percent where the return is filed within one,
+two or three months of the due date. Directly actionable for anyone reading in
+October.
+
+### What guides 14 and 15 carry
+
+**Section 154B is minimum tax, not final tax.** Every published account calls it
+a 5 percent final tax. Section 154B(3) makes it minimum for a resident and final
+only for a non-resident without a permanent establishment. Given section 82(d),
+the final limb reaches almost no Pakistani reader. The 5 percent is a floor, not
+a settlement.
+
+**Where the 10 percent actually comes from.** Division IIIAB says 5 percent and
+nothing else. The 10 percent arises from Tenth Schedule Rule 1 doubling for
+non-ATL persons. Rule 10 exempts sections 154 and 154A from that doubling but
+not 154B, which is why export proceeds are not doubled and creator revenue is.
+
+**Your bank is the collector, not the platform.** Section 154B(1) names banking
+and non-banking financial institutions. Google, Meta and TikTok deduct nothing.
+
+**A twentyfold question the rules do not answer.** A bank seeing a USD credit
+from Google must decide between section 154A at 0.25 or 1 percent and section
+154B at 5 percent. Section 154B(4) empowers the Board to prescribe identification
+mechanisms and no such notification was traced. Publish as an open question.
+
+**Section 111(4) is capped at Rs 5 million.** The inward remittance shield
+requires encashment into rupees and a bank certificate, and it protects only
+against unexplained-income treatment. It is not an exemption from tax.
+
+### Open before writing
+
+- `kpra-export-services-unknown`. Whether KPK zero-rates exported services, and
+  the KPRA rates for IT services. The firm's home jurisdiction and the least
+  sourced item in the project: kpra.gov.pk returns 403 and only tier-4 summaries
+  exist. Download the Act in a browser.
+- `s154b-rules-not-notified`. Recheck FBR SROs issued after 1 July 2026.
+- `s153-it-vs-professional-fork`. Whether a freelance developer billing a
+  domestic company is withheld at 4 percent as IT services or 15 percent as an
+  independent software engineer. Both entries are verbatim; the resolution is
+  not. Publish as a tension rather than an answer.
