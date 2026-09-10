@@ -233,7 +233,7 @@ const TRADEMARK_REGISTRATION: Guide = {
     },
   ],
 
-  publishedAt: '2026-09-14',
+  publishedAt: '2026-09-12T03:00:00Z',
   related: ['secp-company-registration'],
 
   seo: {

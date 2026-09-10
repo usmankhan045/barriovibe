@@ -2,32 +2,41 @@ name: Publish scheduled guides
 
 # ── What this does, and why it is a deploy hook rather than a commit ──
 #
-# Guides carry a `publishedAt` date and content/guides/index.ts filters on the
-# build date, so a guide appears when the site is next built on or after its
-# date. Nothing in the repository needs to change for a guide to go live: the
+# Guides carry a `publishedAt` timestamp and content/guides/index.ts filters on
+# the build time, so a guide appears when the site is next built at or after its
+# slot. Nothing in the repository needs to change for a guide to go live: the
 # scheduling is entirely a property of when the build runs.
 #
-# Vercel builds on push. With no push, it does not rebuild, so a guide dated
-# tomorrow would sit unpublished until the next unrelated commit. This workflow
-# is the thing that makes the date mean something: once a day it asks Vercel to
-# rebuild, and the date filter does the rest.
+# Vercel builds on push. With no push, it does not rebuild, so a guide scheduled
+# for tomorrow would sit unpublished until the next unrelated commit. This
+# workflow is the thing that makes the timestamp mean something: at each slot it
+# asks Vercel to rebuild, and the filter does the rest.
 #
 # The alternative, committing an empty change to force a push, was rejected. It
 # writes a commit a day into the history for no reason, it races with real work
 # on main, and it makes `git log` useless for finding out what actually changed.
 #
-# ── Why 03:00 UTC ──
+# ── Why 03:00 and 07:00 UTC ──
 #
-# 08:00 in Pakistan (UTC+5). A guide dated today is live before the working day
-# starts, and the run is well clear of midnight in every timezone the build
-# might see, so there is no ambiguity about which date the runner thinks it is.
+# 08:00 and 12:00 in Pakistan (UTC+5): two guides a day, four hours apart. The
+# first lands before the working day starts and the second around midday.
+#
+# `publishedAt` is a full timestamp and the gate compares timestamps, so a slot
+# only goes live once a build runs after it. That is why there are two crons
+# rather than one: a single morning run would publish both of the day's guides
+# at once and the four-hour gap would be fiction.
+#
+# Both runs are well clear of midnight in every timezone the runner might see,
+# so there is no ambiguity about which day it thinks it is.
 
 on:
   schedule:
-    # 03:00 UTC daily. GitHub's scheduler is best-effort and can lag under load;
-    # that is acceptable here because the only cost of a late run is that a
-    # guide appears later in the morning.
+    # 03:00 and 07:00 UTC daily, one per publishing slot. GitHub's scheduler is
+    # best-effort and can lag under load; that is acceptable here because the
+    # gate is "at or before now" rather than "equals now", so a late or missed
+    # run delays a guide to the next build instead of skipping it.
     - cron: '0 3 * * *'
+    - cron: '0 7 * * *'
   # Manual trigger, for publishing something ahead of schedule or re-running a
   # failed day without waiting twenty-four hours.
   workflow_dispatch:
@@ -54,13 +63,16 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
-      # ── Is anything actually due today? ──
+      # ── Is anything actually due? ──
       #
-      # Asking first means a deploy hook only fires on days a guide is due,
-      # rather than 365 rebuilds a year to publish 54 guides. It also gives the
+      # Asking first means a deploy hook only fires when a guide is genuinely
+      # waiting, rather than rebuilding twice a day forever. It also gives the
       # run log a plain statement of what went live, which is the record you
       # want when someone asks why a page appeared.
-      - name: Check for guides due today
+      #
+      # "Due" means scheduled at or before now and not yet published, so this
+      # correctly picks up a slot that a missed run left behind.
+      - name: Check for guides due now
         id: due
         run: pnpm tsx scripts/guides-due.ts >> "$GITHUB_OUTPUT"
 
@@ -91,7 +103,7 @@ jobs:
           HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
         run: |
           if [ -z "$HOOK" ]; then
-            echo "::error::VERCEL_DEPLOY_HOOK is not set. Guides due today will not publish."
+            echo "::error::VERCEL_DEPLOY_HOOK is not set. Guides due at this slot will not publish."
             echo "Create a deploy hook in Vercel (Settings > Git > Deploy Hooks)"
             echo "and add it as a repository secret named VERCEL_DEPLOY_HOOK."
             exit 1
@@ -108,4 +120,4 @@ jobs:
 
       - name: Nothing due
         if: steps.due.outputs.due != 'true'
-        run: echo "No guides scheduled for today. Vercel was not asked to rebuild."
+        run: echo "No guide is due at this slot. Vercel was not asked to rebuild."

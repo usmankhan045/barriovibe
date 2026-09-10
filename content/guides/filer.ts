@@ -219,7 +219,7 @@ const FILER_VS_NON_FILER: Guide = {
     },
   ],
 
-  publishedAt: '2026-09-10',
+  publishedAt: '2026-09-10T03:00:00Z',
   related: ['how-to-become-a-filer'],
 
   seo: {
@@ -368,7 +368,7 @@ const HOW_TO_BECOME_A_FILER: Guide = {
     },
   ],
 
-  publishedAt: '2026-09-12',
+  publishedAt: '2026-09-11T03:00:00Z',
   related: ['filer-vs-non-filer', 'how-to-get-an-ntn'],
 
   seo: {
@@ -520,7 +520,7 @@ const CHECKING_ATL_STATUS: Guide = {
     },
   ],
 
-  publishedAt: '2026-09-21',
+  publishedAt: '2026-09-15T07:00:00Z',
   related: ['filer-vs-non-filer', 'how-to-become-a-filer'],
 
   seo: {

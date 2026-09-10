@@ -195,7 +195,7 @@ const SALES_TAX_REGISTRATION: Guide = {
     },
   ],
 
-  publishedAt: '2026-09-17',
+  publishedAt: '2026-09-13T07:00:00Z',
   related: ['how-to-get-an-ntn', 'secp-company-registration'],
 
   seo: {

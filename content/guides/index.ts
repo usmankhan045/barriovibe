@@ -141,21 +141,46 @@ export const ALL_GUIDES: Guide[] = [
 ];
 
 /**
- * "Now", as the build sees it.
+ * "Now", as the build sees it, as a UTC ISO timestamp.
  *
- * Pinned to a date rather than a timestamp so a guide dated today appears on
- * any rebuild that day, whatever hour it runs and whatever timezone the runner
- * is in. Comparing full timestamps would mean a 02:00 UTC build hid a guide
- * dated today until the next run.
+ * This compares full timestamps rather than dates, because the schedule runs
+ * two guides a day four hours apart and a date-only comparison would publish
+ * both on the first build of the morning.
+ *
+ * The trade-off is real and worth stating: a slot only appears once a build
+ * runs after it. The publishing workflow therefore runs at each slot time. A
+ * missed run delays a guide to the next build rather than losing it, since the
+ * comparison is "at or before now" rather than "equals today".
+ *
+ * ## Compared as instants, never as strings
+ *
+ * `publishedAt` is written `2026-09-10T03:00:00Z` and `toISOString()` returns
+ * `2026-09-10T03:00:00.000Z`. Those are the same moment and they do NOT compare
+ * equal as strings: `Z` sorts after `.`, so `"...00Z" <= "...00.000Z"` is
+ * false. A guide would then stay hidden for the whole of its own slot and
+ * appear at the next one, four hours late, which is exactly the kind of bug
+ * that looks like a scheduling mistake rather than a comparison mistake.
+ * Everything below goes through `Date.parse`.
  */
-function buildDate(): string {
+function buildNow(): string {
   /*
    * GUIDE_BUILD_DATE exists for QA: it lets a build render the whole scheduled
-   * slate at once so every guide can be checked before its date arrives. It is
-   * never set in CI, so a normal build uses the real date and the schedule
+   * slate at once so every guide can be checked before its slot arrives. It is
+   * never set in CI, so a normal build uses the real clock and the schedule
    * holds.
+   *
+   * A bare date is accepted and read as the very end of that day, so
+   * GUIDE_BUILD_DATE=2026-09-20 shows everything scheduled up to and including
+   * the last slot on the 20th, which is what someone checking a day's output
+   * means by it.
    */
-  return process.env.GUIDE_BUILD_DATE ?? new Date().toISOString().slice(0, 10);
+  const override = process.env.GUIDE_BUILD_DATE;
+  if (override) {
+    return /^\d{4}-\d{2}-\d{2}$/.test(override)
+      ? `${override}T23:59:59Z`
+      : override;
+  }
+  return new Date().toISOString();
 }
 
 /**
@@ -165,8 +190,10 @@ function buildDate(): string {
  * rendering an unfinished page, and absent from the sitemap, so it is not
  * announced before it exists.
  */
+const BUILD_INSTANT = Date.parse(buildNow());
+
 export const PUBLISHED_GUIDES: Guide[] = ALL_GUIDES.filter(
-  (g) => g.publishedAt <= buildDate(),
+  (g) => Date.parse(g.publishedAt) <= BUILD_INSTANT,
 );
 
 export const CLUSTER_BY_SLUG: Record<ClusterSlug, Cluster> = Object.fromEntries(

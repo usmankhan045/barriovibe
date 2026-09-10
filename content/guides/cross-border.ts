@@ -223,7 +223,7 @@ const US_LLC_FOREIGN_ASSET: Guide = {
     },
   ],
 
-  publishedAt: '2026-09-27',
+  publishedAt: '2026-09-18T07:00:00Z',
   related: ['tax-for-freelancers', 'how-to-file-your-tax-return'],
 
   seo: {
@@ -459,7 +459,7 @@ const FOREIGN_ENTITY_PERMISSION: Guide = {
     },
   ],
 
-  publishedAt: '2026-09-28',
+  publishedAt: '2026-09-19T03:00:00Z',
   related: ['us-llc-foreign-asset-declaration', 'tax-for-freelancers'],
 
   seo: {
@@ -678,7 +678,7 @@ const RESIDENCY: Guide = {
     },
   ],
 
-  publishedAt: '2026-09-29',
+  publishedAt: '2026-09-19T07:00:00Z',
   related: ['us-llc-foreign-asset-declaration', 'how-to-file-your-tax-return'],
 
   seo: {
@@ -862,7 +862,7 @@ const MONEY_FROM_ABROAD: Guide = {
     },
   ],
 
-  publishedAt: '2026-09-30',
+  publishedAt: '2026-09-20T03:00:00Z',
   related: ['tax-for-freelancers', 'us-llc-foreign-asset-declaration'],
 
   seo: {
@@ -1041,7 +1041,7 @@ const US_LLC_CALENDAR: Guide = {
     },
   ],
 
-  publishedAt: '2026-10-01',
+  publishedAt: '2026-09-20T07:00:00Z',
   related: ['us-llc-foreign-asset-declaration', 'can-a-pakistani-company-own-a-foreign-entity'],
 
   seo: {

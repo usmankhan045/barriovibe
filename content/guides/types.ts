@@ -105,15 +105,27 @@ export interface Guide {
   faqs: Faq[];
 
   /**
-   * The date this guide becomes visible.
+   * The moment this guide becomes visible.
    *
-   * ISO 8601. A guide with a future date is excluded from the routes, the
-   * sitemap, the hub listings and the nav, so the whole slate can sit in the
-   * repo, reviewed and merged, and appear one per day without anyone touching
-   * the repository on the day.
+   * A UTC ISO 8601 timestamp, `YYYY-MM-DDTHH:MM:SSZ`. A guide timestamped in
+   * the future is excluded from the routes, the sitemap, the hub listings and
+   * the nav, so the whole slate can sit in the repo, reviewed and merged, and
+   * appear on schedule without anyone touching the repository on the day.
    *
-   * The daily GitHub Action just rebuilds and redeploys; the date does the
-   * scheduling. See .github/workflows/publish-guides.yml.
+   * ## Why a timestamp rather than a date
+   *
+   * Two guides a day, four hours apart, cannot be expressed as a date: both
+   * would go live on the first build of the morning. The gate compares
+   * timestamps so the second one waits for its slot.
+   *
+   * The cost is that a build now has to happen after a slot for that slot to
+   * appear. `.github/workflows/publish-guides.yml` runs at each slot time for
+   * exactly that reason, and `scripts/guides-due.ts` reports what a build at
+   * this instant would publish.
+   *
+   * Always UTC, always with the `Z`. A local time here would drift with
+   * daylight saving in whichever timezone wrote it, and the runner's clock is
+   * UTC regardless.
    */
   publishedAt: string;
 

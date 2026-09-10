@@ -190,7 +190,7 @@ const PSEB_RATE: Guide = {
     },
   ],
 
-  publishedAt: '2026-09-16',
+  publishedAt: '2026-09-13T03:00:00Z',
   related: ['how-to-get-an-ntn', 'filer-vs-non-filer'],
 
   seo: {
@@ -380,7 +380,7 @@ const FREELANCER_TAX: Guide = {
     },
   ],
 
-  publishedAt: '2026-09-23',
+  publishedAt: '2026-09-16T07:00:00Z',
   related: ['pseb-registration-and-the-025-rate', 'how-to-get-an-ntn'],
 
   seo: {

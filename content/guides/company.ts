@@ -243,7 +243,7 @@ const SECP_REGISTRATION: Guide = {
     },
   ],
 
-  publishedAt: '2026-09-13',
+  publishedAt: '2026-09-11T07:00:00Z',
   related: ['how-to-get-an-ntn', 'trademark-registration-cost'],
 
   seo: {
@@ -412,7 +412,7 @@ const CHOOSING_A_STRUCTURE: Guide = {
     },
   ],
 
-  publishedAt: '2026-09-18',
+  publishedAt: '2026-09-14T03:00:00Z',
   related: ['secp-company-registration', 'how-to-get-an-ntn'],
 
   seo: {
@@ -585,7 +585,7 @@ const PARTNERSHIP: Guide = {
     },
   ],
 
-  publishedAt: '2026-09-26',
+  publishedAt: '2026-09-18T03:00:00Z',
   related: ['smc-vs-private-limited-vs-sole-proprietor', 'how-to-get-an-ntn'],
 
   seo: {

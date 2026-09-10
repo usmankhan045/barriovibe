@@ -227,7 +227,7 @@ const HOW_TO_GET_NTN: Guide = {
     },
   ],
 
-  publishedAt: '2026-09-11',
+  publishedAt: '2026-09-10T07:00:00Z',
   related: ['filer-vs-non-filer', 'how-to-become-a-filer', 'secp-company-registration'],
 
   seo: {
@@ -395,7 +395,7 @@ const NTN_DOCUMENTS: Guide = {
     },
   ],
 
-  publishedAt: '2026-09-19',
+  publishedAt: '2026-09-14T07:00:00Z',
   related: ['how-to-get-an-ntn', 'filer-vs-non-filer'],
 
   seo: {

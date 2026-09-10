@@ -199,7 +199,7 @@ const PROPERTY_TAX: Guide = {
     },
   ],
 
-  publishedAt: '2026-09-15',
+  publishedAt: '2026-09-12T07:00:00Z',
   related: ['filer-vs-non-filer'],
 
   seo: {
@@ -385,7 +385,7 @@ const PROPERTY_GAINS: Guide = {
     },
   ],
 
-  publishedAt: '2026-09-25',
+  publishedAt: '2026-09-17T07:00:00Z',
   related: ['tax-on-buying-and-selling-property', 'filer-vs-non-filer'],
 
   seo: {

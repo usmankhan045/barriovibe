@@ -199,7 +199,7 @@ const FILING_A_RETURN: Guide = {
     },
   ],
 
-  publishedAt: '2026-09-22',
+  publishedAt: '2026-09-16T03:00:00Z',
   related: ['salary-tax-slabs', 'how-to-become-a-filer'],
 
   seo: {

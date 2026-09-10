@@ -173,7 +173,7 @@ const CREATOR_TAX: Guide = {
     },
   ],
 
-  publishedAt: '2026-09-24',
+  publishedAt: '2026-09-17T03:00:00Z',
   related: ['tax-for-freelancers', 'filer-vs-non-filer'],
 
   seo: {

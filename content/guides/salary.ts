@@ -191,7 +191,7 @@ const SALARY_TAX: Guide = {
     },
   ],
 
-  publishedAt: '2026-09-20',
+  publishedAt: '2026-09-15T03:00:00Z',
   related: ['filer-vs-non-filer'],
 
   seo: {
