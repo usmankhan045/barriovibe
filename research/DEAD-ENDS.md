@@ -217,3 +217,29 @@ after WIPO Lex, an FBR content page, an SBP URL and a KPMG PDF path.
 PDFs under `e.fbr.gov.pk` return status 000 without `www.` and 200 with it.
 If a known-good FBR PDF path appears dead, try the `www.` form before recording
 it as unreachable.
+
+## excise.punjab.gov.pk prepends HTML before the %PDF header
+
+`https://excise.punjab.gov.pk/system/files/18.pdf` returns HTTP 200 with
+`Content-Length: 144484`, and the first 110 bytes are a Google site-verification
+`<head>` block sitting in front of the `%PDF` magic. The file is therefore not a
+valid PDF as delivered: `pdftotext` reports `May not be a PDF file` and produces
+nothing usable, and `file` sees HTML.
+
+The fix is one line, and it is worth keeping because the same shape will recur
+on any CMS that injects a verification tag globally:
+
+```sh
+python3 -c "d=open('f.raw','rb').read(); i=d.find(b'%PDF'); open('f.pdf','wb').write(d[i:])"
+```
+
+Separately, `fetch.py` on this URL writes raw PDF bytes into the `.txt`, which is
+the documented `get_all_text()` behaviour for PDF responses. Between the two,
+this URL fails in two different ways at once.
+
+**And the file is not worth having anyway.** It is a consolidation of the Punjab
+UIPT Act 1958 whose latest footnote is 2013, still printing the repealed
+ten-per-cent annual-value charge. The Punjab Finance Act 2024 is the instrument
+that actually rewrote the regime, and it downloads cleanly from
+`excise.punjab.gov.pk/system/files/punjab-finance-act-2024-pdf.pdf` with no
+prefix problem.
