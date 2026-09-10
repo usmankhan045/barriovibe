@@ -571,7 +571,7 @@ been absorbed by the shipped hubs.
 | 29 | When FBR amends your assessment | filing | `s122-*` | **Drafted** |
 | 30 | Advance tax under section 147 | filing | `s147-*`, corrected | **Drafted** |
 | 31 | What a landlord can deduct | property | `s15a-*` | **Drafted** |
-| 32 | Reserved | | | Still held |
+| 32 | Reserved | | | Superseded, see the batch below |
 
 Nine are writable. One slot is held deliberately rather than filled with
 something thin.
@@ -728,3 +728,74 @@ would have skipped.
 PSID validity period, no documented CPR escalation route, no documented cause of
 IRIS account suspension, no Punjab commencement date to the day, no Punjab
 rebate or surcharge percentage, and no ICT rate at all.
+
+
+---
+
+## Guides 32 to 47 (10 September 2026)
+
+Sixteen more, taking the slate to **47 guides** running two a day to 3 October.
+The held slot at 32 was released and used.
+
+| # | Guide | Cluster | Rests on |
+| --- | --- | --- | --- |
+| 32 | What your company owes SECP after incorporation | company | `secp-first-45-days`, `form-a-exemption-structure`, `form29-fifteen-days` |
+| 33 | Tax on selling online | salestax | `s6a-ecommerce-rates-verified`, `s6a-export-proceeds-carve-out`, `s6a-adjustable-above-200m` |
+| 34 | Tax on gifts and inherited property | property | `s79-non-recognition-gift-inheritance`, `s79-family-settlement-explanation-2026`, `s85-5-relative-live-definition` |
+| 35 | Capital gains on shares and mutual funds | property | `lib/tax/investments.ts`, interpolated |
+| 36 | Filing a monthly sales tax return | salestax | agent brief, `sta-30jun2026`, `str2006`, `sta-footnote-convention-inconsistent` |
+| 37 | Exemption and lower rate certificates | pseb | s.159 provisos read verbatim, `s159-no-timeline-for-noncompanies` |
+| 38 | Withholding statements under s.165 | filing | s.165(2) and its provisos, FBR Circular 3 of 2020 |
+| 39 | Appealing an FBR order | filing | `s127-appeal-thirty-days-and-fee`, `s126a-pecuniary-split-omitted-2025` |
+| 40 | Getting a tax refund from FBR | filing | `s170-refund-three-years-sixty-days`, `s171-refund-compensation-kibor`, `s170a-refund-without-application` |
+| 41 | Depreciation on business assets | company | `s22-depreciation-rates`, `s22-initial-allowance-third-schedule`, `s22-depreciation-denied-if-withholding-missed` |
+| 42 | Selected for a tax audit | filing | agent brief, s.177 and s.214C read verbatim, clause 105A |
+| 43 | Tax on agricultural income | property | agent brief, provincial Acts, s.41 and the s.111(1) proviso |
+| 44 | Tax status for a non-profit | company | agent brief, s.2(36), s.100C, Companies Act s.42 |
+| 45 | Tax on payments to foreign suppliers | cross-border | `s6-nonresident-payment-heads`, `div-iv-nonresident-rates`, `s2-22b-offshore-digital-services` |
+| 46 | What an overseas Pakistani still owes | cross-border | `s115-3-nonresident-carveout`, `s236k4-expatriate-scheme`, `gulf-trc-obtainable` |
+| 47 | How FBR recovers unpaid tax | filing | `s138-modes-of-recovery`, `s138-3a-immediate-payability`, `s140-third-party-attachment` |
+
+### Corrections this batch made to our own work
+
+Three, and each is recorded as a finding rather than only fixed in place.
+
+**The vehicle transfer cut-off was wrong in the code.** Drafting guide 25 forced
+a reconciliation the calculator had never had: Division VII clause (2) reduces
+the transfer RATE by a tenth a year, and the proviso to s.231B(2) stops
+COLLECTION after five years. The cut-off binds first. `lib/tax/vehicle.ts` was
+charging tax in years six to nine that the statute does not impose, and
+`check-tax` was asserting the bug. Both fixed, boundary now pinned.
+
+**s.100C had not been cut.** I briefed the agent that it probably had. The live
+text still reads a hundred per cent of tax payable including minimum and final
+taxes. What changed was the Finance Act 2025 merging the clause (66) tables, so
+entities with a former straight exemption must now meet the s.100C conditions:
+a narrowing of eligibility, not a cut in the rate.
+
+**The s.165 hedge was unnecessary.** Guide 38 was drafted saying the Rules
+"still say monthly" from a 2017 consolidation. The real history is monthly, then
+biannual by SRO 849(I)/2019, then quarterly by statute in 2020 with rule 44
+never conforming. FBR's own Circular No. 3 of 2020 settles it in a sentence.
+
+### New method traps recorded
+
+- **`sta-footnote-convention-inconsistent`**: the Sales Tax Act consolidation
+  uses the OPPOSITE footnote convention to the Income Tax Ordinance. Read the
+  live bracketed text and confirm load-bearing figures against the gazette.
+- **Check the vintage of the RULES**, not only the Act. A finding sat contested
+  purely because a Rules consolidation was three stages out of date.
+- **Where a regulator changed something, find its circular at the point of
+  change.** One sentence in Circular 3 of 2020 settled what two consolidations
+  could not.
+
+### Published as open rather than asserted
+
+- Punjab's agricultural rates: what was enacted is stated with its gazette
+  reference, and its current validity is called disputed, because the ruling
+  casting doubt reached us only through paywalled press.
+- The reported Lahore High Court decision on disclosing audit selection
+  parameters: press account only, no judgment, appeal status unknown.
+- Whether a given payment to a foreign supplier is Pakistan-source under s.101:
+  fact-specific, so guide 45 sets out rates, definitions and exclusions rather
+  than answering for a reader whose facts we do not have.

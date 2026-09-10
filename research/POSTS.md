@@ -7,6 +7,16 @@ Supersedes the flat list in `ARTICLES.md`, which was 41 titles chosen by
 category. This is built the other way round: from the query mass that actually
 exists, so every post owns a distinct angle rather than a slice of one.
 
+> **Status, 10 September 2026.** The guide half of this plan is delivered and
+> its shape changed in the delivering. **47 guides shipped**, not 54, because
+> the hub-and-spoke allocation below was drawn up before any guide existed and
+> the hubs turned out to absorb most of their own spokes. Several planned
+> spokes were dropped after checking rather than written, and roughly a third
+> of what shipped came from topics this plan never listed, found by reading the
+> Ordinance rather than the query harvest. See `GUIDE-RESEARCH.md` for the
+> per-guide record and the scope correction that explains the gap. The blog and
+> asset halves are untouched: `/blog` is still `POSTS_ENABLED = false`.
+
 **108 pieces: 54 guides, 47 blog posts, 7 downloadable assets.** The blog side
 was 10 in the first draft of this document and that was an under-allocation, not
 a judgement: the AI and development harvest holds 4,888 queries after noise
