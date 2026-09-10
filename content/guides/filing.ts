@@ -1472,7 +1472,149 @@ const BEING_AUDITED: Guide = {
   },
 };
 
-export const FILING_GUIDES: Guide[] = [FILING_A_RETURN, PAYING_FBR, IRIS_ACCESS, AMENDED_ASSESSMENT, ADVANCE_TAX, WITHHOLDING_STATEMENTS, APPEALING_AN_ORDER, GETTING_A_REFUND, BEING_AUDITED];
+
+/**
+ * Guide 47: how FBR recovers unpaid tax.
+ *
+ * Written to be accurate rather than alarming, because the subject invites the
+ * opposite. The powers are genuinely severe, including arrest and detention up
+ * to six months, and almost no taxpayer-facing content mentions that. But the
+ * sequence matters more than the list: s.138(2) recovery only opens after a
+ * s.138(1) notice has gone unanswered, so the notice is the moment to act.
+ *
+ * The finding worth leading with is s.140, because it is the provision behind
+ * a frozen account and it is drafted far wider than a bank: it reaches anyone
+ * who owes the taxpayer money or MAY owe it, so a notice can land on a client.
+ *
+ * s.138(3A) is presented by its conditions rather than its override, since the
+ * conditions are what a reader in a live dispute actually needs: it bites only
+ * after three appellate losses including the High Court.
+ */
+
+const TAX_RECOVERY: Guide = {
+  slug: 'how-fbr-recovers-unpaid-tax',
+  cluster: 'filing',
+  title: 'How FBR Recovers Unpaid Tax',
+  navLabel: 'Recovery',
+  card: 'The notice that starts everything, the provision behind a frozen account, and why the recovery powers do not reach a live dispute.',
+
+  answer:
+    'Recovery starts with a notice under section 138(1) requiring payment within a specified time. Only if that goes unanswered do the recovery modes open: attachment and sale of property, appointment of a receiver, and arrest with detention up to six months. Section 140 separately lets the Commissioner require anyone who owes you money to pay it to him instead.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Nothing happens until a notice has gone unanswered',
+      body: 'The sequence is the most useful thing on this page and it is usually lost in the list of powers. Section 138(1) requires the Commissioner to serve a notice in the prescribed form requiring payment within a specified time. Section 138(2) opens the recovery modes only if the amount is not paid within that time, or within any further time the Commissioner allows. So the recovery powers are not standing powers exercisable at will: they are consequences of an unanswered notice. The practical implication is that the notice is the point at which to engage, including by asking for further time, which the section expressly contemplates.',
+    },
+
+    {
+      kind: 'list',
+      heading: 'What section 138(2) actually allows',
+      intro:
+        'Once the notice has gone unanswered, one or more of these. The third is real, statutory, and almost never mentioned in content aimed at taxpayers.',
+      items: [
+        'Attachment and sale of movable or immovable property of the taxpayer',
+        'Appointment of a receiver for the management of that property',
+        'Arrest of the taxpayer and detention in prison for a period not exceeding six months',
+        'The modes specified in section 48(1)(a), (ca) and (d) of the Sales Tax Act 1990',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'The provision behind a frozen bank account is wider than banks',
+      body: 'Section 140 is what people are describing when they say an account was attached, and its drafting reaches much further than a bank. The Commissioner may by notice in writing require any person owing or who MAY OWE money to the taxpayer, or holding or who may hold money for or on account of the taxpayer, or holding money on account of someone else for payment to the taxpayer, to pay that money to him. Read the first limb: a customer with an unpaid invoice owes you money. So recovery does not require the department to locate your assets, only to locate someone who owes you, and a notice can land on a client rather than on you. For a services business that is a commercial exposure as much as a financial one.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'The Commissioner has a civil court\'s powers, and that cuts both ways',
+      body: 'Section 138(3) gives the Commissioner, for the purposes of recovery, the same powers a Civil Court has under the Code of Civil Procedure 1908 for recovering an amount due under a decree. That is a wide grant, and it is worth understanding what it implies: recovery proceeds under a recognised procedural code with its own protections rather than at large. Where a taxpayer believes a step has gone beyond what that code permits, the reference point exists.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Immediate payability needs three losses, not one',
+      body: 'Section 138(3A) is a strong override on its face, applying notwithstanding anything in the Ordinance, any other law, any rule, or any decision or judgment of any court, forum or authority. But the conditions are what matter to anyone in a live dispute, and they are narrower than the opening suggests. Tax becomes immediately payable only where the case has been decided in favour of the department at THREE appellate forums including the High Court, and even then recovery is limited to the lowest amount of demand confirmed by any of those forums. So it is not a power to collect while a dispute is running. It is a power to collect once the dispute has substantially gone against the taxpayer, and it caps itself at the most favourable figure any forum reached.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'What to do when a recovery notice arrives',
+      body: [
+        'The honest answer is take advice, and quickly, because the timetable is short and the notice itself specifies it. What can be said generally is that the section contemplates further time being allowed, so a request is not a concession that the amount is due, and that the recovery modes do not open while the specified time is running.',
+        'It is also worth separating two questions that get merged. Whether the tax is properly due is an appeal question under section 127, with its own thirty-day clock from service of the demand notice. Whether it is being recovered lawfully is a different question under this Part. A person can have a strong appeal and still face recovery if the appeal was never filed in time, which is the most common way this becomes serious.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Default surcharge runs alongside all of this',
+      body: 'Separately from recovery, section 205 charges default surcharge on tax paid late at twelve per cent a year or KIBOR plus three per cent, whichever is higher, from the due date to the date of payment. So the amount being recovered grows while the dispute continues. That is worth weighing against the cost of paying under protest where a dispute is likely to be long, and it is a calculation to make with an adviser rather than by instinct.',
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'Can FBR freeze my bank account?',
+      answer:
+        'Section 140 allows the Commissioner to require any person holding money for or on account of the taxpayer to pay it to him, which is the provision behind an attached account. It also reaches anyone who owes or may owe you money, so a notice can go to a customer rather than a bank.',
+    },
+    {
+      question: 'Can I be arrested for unpaid tax in Pakistan?',
+      answer:
+        'Section 138(2) includes arrest of the taxpayer and detention in prison for a period not exceeding six months among the modes of recovery. It becomes available only after a notice under section 138(1) has gone unpaid within the time specified or any further time allowed.',
+    },
+    {
+      question: 'What happens first when tax is unpaid?',
+      answer:
+        'A notice under section 138(1) in the prescribed form, requiring payment within a specified time. The recovery modes in section 138(2) open only if that notice goes unanswered, so the notice is the point at which to engage.',
+    },
+    {
+      question: 'Can FBR recover tax while my appeal is pending?',
+      answer:
+        'Section 138(3A) makes tax immediately payable notwithstanding any judgment, but only where the case has been decided for the department at three appellate forums including the High Court, and recovery is then capped at the lowest demand any of those forums confirmed.',
+    },
+    {
+      question: 'Can my client be told to pay FBR instead of me?',
+      answer:
+        'On the face of section 140, yes. The notice may be served on any person owing or who may owe money to the taxpayer, which includes a customer with an unpaid invoice, requiring them to pay the Commissioner instead.',
+    },
+    {
+      question: 'Does interest keep running during a dispute?',
+      answer:
+        'Yes. Section 205 charges default surcharge at twelve per cent a year or KIBOR plus three per cent, whichever is higher, from the due date until payment, independently of any recovery action.',
+    },
+    {
+      question: 'Can I ask for more time to pay?',
+      answer:
+        'Section 138(2) expressly contemplates it, referring to the time specified in the notice or any further time allowed by the Commissioner. Asking is not an admission that the amount is due.',
+    },
+    {
+      question: 'Is challenging the tax the same as challenging the recovery?',
+      answer:
+        'No, and merging them is a common and expensive error. Whether the tax is due is an appeal under section 127, within thirty days of service of the demand notice. Whether recovery is lawful is a separate question, and a strong appeal is no help if it was never filed in time.',
+    },
+  ],
+
+  publishedAt: '2026-10-03T03:00:00Z',
+  related: ['appealing-an-fbr-order', 'when-fbr-amends-your-assessment'],
+
+  seo: {
+    title: 'How FBR Recovers Unpaid Tax',
+    description:
+      'The notice that has to go unanswered first, the section behind a frozen account, the arrest power nobody mentions, and why immediate payability needs three appellate losses.',
+  },
+};
+
+export const FILING_GUIDES: Guide[] = [FILING_A_RETURN, PAYING_FBR, IRIS_ACCESS, AMENDED_ASSESSMENT, ADVANCE_TAX, WITHHOLDING_STATEMENTS, APPEALING_AN_ORDER, GETTING_A_REFUND, BEING_AUDITED, TAX_RECOVERY];
+
 
 
 
