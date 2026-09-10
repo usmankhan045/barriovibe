@@ -732,6 +732,13 @@ const MONEY_FROM_ABROAD: Guide = {
     },
 
     {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'If you have seen "USD 100,000", that figure is not law',
+      body: 'It circulates widely, including on pages badged 2026, and it is wrong twice over. It began as a Finance Bill 2023 proposal that was dropped before enactment, so it was never in force. And it gets reinforced by confusion with a real USD 100,000 figure that does exist elsewhere: the foreign ASSETS threshold in section 116A, which triggers a filing obligation and has nothing to do with a remittance ceiling. The section 111(4) threshold is five million rupees in a tax year and has been since the Finance Act 2019.',
+    },
+
+    {
       kind: 'list',
       heading: 'The four conditions, all of which have to hold',
       intro:
@@ -774,6 +781,13 @@ const MONEY_FROM_ABROAD: Guide = {
         'Nothing automatic, and that is worth saying plainly rather than alarmingly. Exceeding the ceiling does not make the money taxable and does not create a presumption against you. What it does is remove the statutory shortcut, so the ordinary position applies: if asked, you explain the nature and source of the amount, and section 111 bites only where no explanation is offered or the Commissioner does not find it satisfactory.',
         'For most people reading this, the explanation is easy and documented: an invoice, a contract, a client, a platform statement. The shortcut in section 111(4) exists for cases where producing that is awkward. Keeping the underlying records is what makes the ceiling a formality rather than a cliff.',
       ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Banks now upload to a central data hub, at a threshold far above this',
+      body: 'Section 165AB, inserted by the Finance Act 2026, requires every banking company and electronic money institution to upload information to a Central Data Hub for algorithmic cross-matching against tax records, and it overrides the banking secrecy statutes by name, including the Protection of Economic Reforms Act 1992. Worth knowing about, and worth putting in proportion: the reporting trigger is deposits or withdrawals exceeding one hundred million rupees in a reporting period, which is far above ordinary remittance levels. The section also provides that the information is not visible to any Income Tax Authority during the cross-matching itself, and only a gross mismatch feeds the risk management system.',
     },
 
     {
@@ -820,6 +834,11 @@ const MONEY_FROM_ABROAD: Guide = {
       question: 'What certificate do I need for a foreign remittance?',
       answer:
         'The Ordinance requires a bank certificate of encashment but never prescribes a form, because the power in section 111(5) was never exercised. In practice it is the State Bank\'s Proceeds Realization Certificate. Ask for the e-PRC for the specific credit and the statement of PRCs for the tax year, since the five million rupee test works on the year\'s aggregate.',
+    },
+    {
+      question: 'Is the foreign remittance limit USD 100,000?',
+      answer:
+        'No. That figure was a Finance Bill 2023 proposal that was dropped and never became law, and it is reinforced by confusion with the genuine USD 100,000 foreign assets threshold in section 116A, which triggers a filing obligation rather than capping remittances. The section 111(4) figure is five million rupees in a tax year.',
     },
     {
       question: 'What happens if my remittances exceed five million rupees?',
