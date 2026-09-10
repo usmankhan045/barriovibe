@@ -223,7 +223,8 @@ export function VehicleTaxCalculator() {
                   Transferring an already-registered vehicle is a fixed amount rather than a
                   percentage, so the value of the car does not enter it. The amount falls by a
                   tenth for each year since the vehicle was first registered in Pakistan, and
-                  reaches nil at {VEHICLE.usedReductionYearsToNil} years.
+                  nothing is collected at all once the vehicle is{' '}
+                  {VEHICLE.transferCutoffYears} years old.
                 </p>
               )}
               <p className="mt-3">

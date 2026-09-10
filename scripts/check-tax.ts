@@ -867,9 +867,29 @@ eq(
   7_500,
 );
 
-// A tenth off per year, reaching nil at ten years and never going negative.
+// Two provisions interact and the boundary between them is the thing to pin.
+//
+// Division VII clause (2) reduces the RATE by a tenth each year from first
+// registration. The proviso to s.231B(2) stops COLLECTION entirely after five
+// years. So the taper runs 100% down to 60% across years zero to four, and
+// from year five there is nothing to collect at all.
+//
+// This file previously asserted a halving at five years and nil at ten, which
+// modelled the taper alone and charged tax in years six to nine that the
+// statute does not impose.
 eq(
-  '231B transfer after 5 years is halved',
+  '231B transfer at 4 years is reduced by 40 per cent',
+  calculateVehicle({
+    engineCc: 1300,
+    value: 0,
+    transaction: 'transfer',
+    status: 'filer',
+    yearsSinceRegistration: 4,
+  }).tax,
+  4_500,
+);
+eq(
+  '231B transfer at exactly 5 years is nil, the s.231B(2) cut-off',
   calculateVehicle({
     engineCc: 1300,
     value: 0,
@@ -877,10 +897,10 @@ eq(
     status: 'filer',
     yearsSinceRegistration: 5,
   }).tax,
-  3_750,
+  0,
 );
 eq(
-  '231B transfer after 10 years is nil',
+  '231B transfer after 10 years is still nil',
   calculateVehicle({
     engineCc: 1300,
     value: 0,

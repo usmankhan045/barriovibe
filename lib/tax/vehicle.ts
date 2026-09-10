@@ -87,11 +87,29 @@ export const VEHICLE = {
   nonFilerMultiple: 3,
   /**
    * The transfer charge falls by a tenth for each year since the vehicle was
-   * first registered in Pakistan, reaching nil at ten years. It applies to the
-   * TRANSFER clause only, never to a first registration.
+   * first registered in Pakistan. It applies to the TRANSFER clause only,
+   * never to a first registration.
+   *
+   * Two provisions interact here and getting only one of them produces a
+   * plausible wrong answer, which is what happened in this file until it was
+   * reconciled against the Ordinance.
+   *
+   * Division VII, Part IV, clause (2), second proviso reduces the RATE by ten
+   * per cent a year from first registration. Read alone, that taper reaches
+   * nil at ten years, which is what this module used to model.
+   *
+   * But the proviso to section 231B(2) stops COLLECTION altogether: "no
+   * collection of advance tax under this sub-section shall be made on transfer
+   * of vehicles after five years from the date of first registration in
+   * Pakistan". The cut-off binds first, so the taper only ever runs from 100%
+   * down to 50% and the charge is nil from five years, not ten.
+   *
+   * Section 231B(1) carries its own separate five-year proviso for a first
+   * registration.
    */
   usedReductionPerYear: 0.1,
-  usedReductionYearsToNil: 10,
+  /** Not a taper endpoint: the statutory cut-off, after which nothing is due. */
+  transferCutoffYears: 5,
   /**
    * A vehicle with no engine capacity (an electric vehicle) valued at or above
    * this is charged a flat percentage on registration, and a fixed amount on
@@ -186,8 +204,12 @@ export function calculateVehicle(input: VehicleInput): VehicleResult {
 
   const gross = input.status === 'filer' ? filerAmount : nonFilerAmount;
 
-  // A tenth off for each year since first registration, floored at nil.
-  const reduction = Math.min(1, years * VEHICLE.usedReductionPerYear);
+  // A tenth off the rate for each year since first registration, and nothing at
+  // all once the section 231B(2) five-year cut-off is reached.
+  const reduction =
+    years >= VEHICLE.transferCutoffYears
+      ? 1
+      : Math.min(1, years * VEHICLE.usedReductionPerYear);
   const applied = (amount: number) => amount * (1 - reduction);
 
   return {
