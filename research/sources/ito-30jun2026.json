@@ -1,0 +1,11 @@
+{
+  "id": "ito-30jun2026",
+  "url": "https://download1.fbr.gov.pk/Docs/ (FBR consolidated Income Tax Ordinance 2001)",
+  "status": 200,
+  "fetched_at": "2026-09-10T11:32:15.309280+00:00",
+  "sha256": "a31f2c8b1296b9ed",
+  "chars": 2520943,
+  "note": "Income Tax Ordinance 2001, cover reads AMENDED UPTO 30TH JUNE, 2026. Postdates Finance Act 2026 (26 June 2026). Backfilled record: fetched in an earlier session, URL recorded as served by FBR's income tax act listing.",
+  "backfilled": true,
+  "verified_marker": "cover 'AMENDED UPTO' line present in raw text"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "iris-faqs",
+  "url": "https://e.fbr.gov.pk/SOP/IRIS/Iris_FAQs.pdf",
+  "status": 200,
+  "fetched_at": "2026-09-10T11:34:31.354752+00:00",
+  "sha256": "aa3d7dfd55f23786",
+  "pdf_sha256_full": "77569f40981d3ea98f1ac09ce9fee155be9894aaa2bfd288b18cb11ad6d4eb5d",
+  "bytes": 178735,
+  "last_modified": "2023-01-20T10:19:00Z",
+  "note": "FBR Iris FAQs. Linked as 'FAQs (PDF)' from https://e.fbr.gov.pk/SOP/IRIS/help/index.html. Byte-identical to raw/iris-faqs.pdf (cmp clean, SHA-256 match), independently re-downloaded and grep-verified for four must-contain terms. No newer version published. Undated internally: Last-Modified is a SERVER timestamp, not a publication date, so cite as 'current as retrieved'. Note e.fbr.gov.pk needs no www here, unlike the download paths in DEAD-ENDS.md."
+}

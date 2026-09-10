@@ -1,0 +1,12 @@
+{
+  "id": "income-tax-rules",
+  "url": "https://download1.fbr.gov.pk/Docs/ (FBR consolidated Income Tax Rules 2002)",
+  "status": 200,
+  "fetched_at": "2026-09-10T11:32:15.322220+00:00",
+  "sha256": "cfdb88f661bdf05c",
+  "chars": 850435,
+  "note": "SUPERSEDED, DO NOT CITE. Income Tax Rules 2002 consolidated only to 10 FEBRUARY 2017. Two vintages stale: it predates SRO 849(I)/2019 (monthly to biannual) AND the Finance Act 2020 (biannual to quarterly in the statute). Its rule 44(2) reads MONTHLY and caused a wrong 'quarterly versus monthly' conflict finding in this store, since corrected. USE raw/income-tax-rules-24nov2023.txt instead, which is FBR's newest consolidation (24 November 2023). This file is kept only as evidence of what FBR was serving.",
+  "backfilled": true,
+  "verified_marker": "cover 'AMENDED UPTO' line present in raw text",
+  "superseded_by": "income-tax-rules-24nov2023"
+}

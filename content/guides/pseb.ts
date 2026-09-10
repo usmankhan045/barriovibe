@@ -390,4 +390,153 @@ const FREELANCER_TAX: Guide = {
   },
 };
 
-export const PSEB_GUIDES: Guide[] = [PSEB_RATE, FREELANCER_TAX];
+
+/**
+ * Guide 37: section 159 certificates.
+ *
+ * Two corrections, and the second is the one that saves a reader's time.
+ *
+ * 1. The fifteen-day deadline and the automatic deemed issuance are COMPANIES
+ *    ONLY. The provisos say "in case of a company" and "by the aforesaid
+ *    company" in terms. For an individual or an AOP there is no statutory
+ *    deadline and no deemed issuance at all, and secondary sources state the
+ *    rule as general.
+ * 2. A s.159 certificate is not a general escape from withholding. s.153(3)
+ *    makes services withholding MINIMUM tax and s.154A(2) makes export
+ *    withholding FINAL, and a floor is not a rate the Commissioner can find to
+ *    be lower. The honest answer for most IT readers is that this is not the
+ *    lever they are looking for.
+ */
+
+const EXEMPTION_CERTIFICATE: Guide = {
+  slug: 'exemption-and-lower-rate-certificates',
+  cluster: 'pseb',
+  title: 'Exemption and Lower Rate Certificates',
+  navLabel: 'Section 159 certificates',
+  card: 'The fifteen-day rule that only applies to companies, and why a certificate usually cannot touch a minimum or final tax.',
+
+  answer:
+    'Section 159 lets the Commissioner issue an exemption or lower rate certificate where income is exempt, is subject to a lower rate than the First Schedule provides, or carries a hundred per cent tax credit. A company gets a decision within fifteen days and automatic issuance by Iris if none comes. An individual or association has neither: no deadline and no deemed issuance.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'The fifteen-day rule is for companies only',
+      body: 'This is stated as a general rule almost everywhere and it is not one. Read the provisos to section 159(1). The first says that IN CASE OF A COMPANY the Commissioner shall issue the certificate within fifteen days of the application. The second says the Commissioner shall be deemed to have issued it on the expiry of fifteen days from filing BY THE AFORESAID COMPANY, and that Iris shall process and issue it automatically. Both limbs name the company. For an individual or an association of persons there is no statutory deadline and no deemed issuance anywhere in the Ordinance or the Rules, so an application simply sits until it is decided. Planning around a fifteen-day turnaround as a sole trader is planning around something the statute does not give you.',
+    },
+
+    {
+      kind: 'list',
+      heading: 'The three grounds, and they are narrow',
+      intro:
+        'Section 159(1). The Commissioner has to be satisfied of one of these; a certificate is not a discretionary favour and it is not available simply because withholding is inconvenient.',
+      items: [
+        'The income is exempt from tax under the Ordinance',
+        'The income is subject to tax at a rate lower than that specified in the First Schedule',
+        'The income is subject to a hundred per cent tax credit under the Ordinance, widened from the previous reference to section 100C by the Finance Act 2021',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'It usually cannot help with a minimum or a final tax',
+      body: 'This is the disappointing answer and it is better to have it early. Sections 153 and 154A both sit in Division III of Part V, which section 159(1) covers, so there is no jurisdictional obstacle. The problem is the nature of the charge. Section 153(3) makes the deduction on services MINIMUM tax for a resident, and section 154A(2) makes the export deduction FINAL tax where its conditions are met. A minimum tax is a floor rather than a rate, so there is generally no finding available that the income is taxed at a lower rate than the Schedule provides, which is what the second ground requires. A certificate is not a general escape from a minimum or final tax regime, and an adviser who offers one as the fix for a 4 or 15 per cent deduction should be asked which of the three grounds they are relying on.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Where it does work',
+      body: [
+        'The clearest case is exempt income. Where the income genuinely falls outside the charge, the first ground is satisfied on its own terms and a certificate stops a withholding agent deducting from something the Ordinance does not tax.',
+        'Section 159(1A) is a separate and narrower route worth knowing: on application by a person whose income is not likely to be chargeable to tax, the Commissioner shall issue an exemption certificate for profit on debt under section 151(1)(c). That is aimed at someone below the threshold having tax deducted from bank profit, and it is a different provision from the general certificate.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'A certificate binds the person paying you',
+      body: 'Section 159(2) is what gives the document its effect: the withholding agent is required to comply with it. So the certificate is not advice you show your client, it is an instruction to them. That also explains why it has to be in place before the payment rather than produced afterwards, because once tax has been deducted the route is a refund through your return, not a correction by the payer.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'There is no general validity period, whatever you have read',
+      body: 'The Ordinance prescribes no standard duration for a certificate, and rule 40 prescribes the forms rather than a period. The certificate form itself carries a validity period field, so the duration is set case by case. Two exceptions exist and both are narrow: section 159(1C) and (1D), inserted by the Finance Act 2026, provide for a whole tax year in specific cases, and section 159(1B) gives a once in fifteen years certificate for section 236C on a personal residence. Any page stating a flat "valid for one year" is asserting something the law does not say.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Do not confuse it with the section 145 certificate',
+      body: 'Rule 223 prescribes a tax exemption certificate under section 145, which applies to a person leaving Pakistan. It is a different instrument for a different purpose and it comes up first for anyone searching FBR\'s Rules for an exemption certificate. If what you need is relief from withholding on your business receipts, section 159 is the provision and section 145 is not.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'The cross-reference that matters more for an IT exporter',
+      body: [
+        'If you are PSEB-registered and reading this to reduce withholding, the more valuable provision is probably not section 159 at all. Section 154A(2) conditions final tax treatment on having filed your return, your withholding statements under section 165 where required, and your sales tax returns where required, with a proviso disapplying the sales tax condition for clause (a) exporters.',
+        'So the thing protecting your 0.25 per cent position is compliance with the statement obligations rather than a certificate. A missed section 165 statement is a live risk to final tax treatment in a way that most exporters do not realise, and that is worth more attention than an application the Commissioner has no deadline to decide.',
+      ],
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'What is a section 159 exemption certificate?',
+      answer:
+        'A certificate from the Commissioner directing that tax be deducted at a lower rate, or not at all, where the income is exempt, is taxed at a rate lower than the First Schedule provides, or carries a hundred per cent tax credit. Section 159(2) requires the withholding agent to comply with it.',
+    },
+    {
+      question: 'Does the Commissioner have to decide within fifteen days?',
+      answer:
+        'Only for a company. The provisos to section 159(1) say the fifteen-day deadline and the deemed automatic issuance by Iris apply in the case of a company and by the aforesaid company. For an individual or association there is no statutory deadline and no deemed issuance.',
+    },
+    {
+      question: 'Can a section 159 certificate reduce my 4% IT services withholding?',
+      answer:
+        'Usually not. Section 153(3) makes that deduction minimum tax for a resident, and a minimum tax is a floor rather than a rate, so the ground requiring a lower rate than the Schedule is generally not available. The section covers Division III of Part V, so the obstacle is the nature of the charge rather than jurisdiction.',
+    },
+    {
+      question: 'How long is a section 159 certificate valid?',
+      answer:
+        'There is no general statutory period. The form carries a validity field so the duration is set per certificate. The exceptions are sections 159(1C) and (1D), inserted by the Finance Act 2026, which provide for a whole tax year in specific cases, and section 159(1B) for a once in fifteen years certificate on a personal residence.',
+    },
+    {
+      question: 'Can I get an exemption certificate for bank profit?',
+      answer:
+        'Section 159(1A) is the route. On application by a person whose income is not likely to be chargeable to tax, the Commissioner shall issue an exemption certificate for profit on debt under section 151(1)(c).',
+    },
+    {
+      question: 'Is the section 145 certificate the same thing?',
+      answer:
+        'No. Rule 223 prescribes a tax exemption certificate under section 145 for a person leaving Pakistan. It is a different instrument, and it is the one most likely to come up first when searching FBR\'s Rules.',
+    },
+    {
+      question: 'Do I show the certificate to my client or to FBR?',
+      answer:
+        'To the person paying you. Section 159(2) requires the withholding agent to comply with it, so it operates as an instruction to them, and it needs to be in place before the payment rather than produced after tax has already been deducted.',
+    },
+    {
+      question: 'What protects my 0.25% export rate if not a certificate?',
+      answer:
+        'Compliance. Section 154A(2) conditions final tax treatment on having filed your return, your section 165 withholding statements where required, and your sales tax returns where required, with a proviso disapplying the sales tax condition for clause (a) exporters.',
+    },
+  ],
+
+  publishedAt: '2026-09-28T03:00:00Z',
+  related: ['pseb-registration-and-the-025-rate', 'tax-for-freelancers'],
+
+  seo: {
+    title: 'Section 159 Exemption and Lower Rate Certificates',
+    description:
+      'Why the fifteen-day deadline and automatic issuance apply only to companies, the three narrow grounds, and why a certificate cannot usually touch a minimum or final tax.',
+  },
+};
+
+export const PSEB_GUIDES: Guide[] = [PSEB_RATE, FREELANCER_TAX, EXEMPTION_CERTIFICATE];
+

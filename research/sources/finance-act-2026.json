@@ -1,0 +1,11 @@
+{
+  "id": "finance-act-2026",
+  "url": "https://download1.fbr.gov.pk/Docs/ (Finance Act 2026 gazette)",
+  "status": 200,
+  "fetched_at": "2026-09-10T11:32:15.326548+00:00",
+  "sha256": "7d2f86dfb3124be1",
+  "chars": 211749,
+  "note": "Finance Act 2026, Gazette of Pakistan Extraordinary, 26 June 2026. 42MB, downloaded via curl --max-time. Backfilled record.",
+  "backfilled": true,
+  "verified_marker": "cover 'AMENDED UPTO' line present in raw text"
+}

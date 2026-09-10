@@ -355,5 +355,151 @@ const SELLING_ONLINE: Guide = {
   },
 };
 
-export const SALESTAX_GUIDES: Guide[] = [SALES_TAX_REGISTRATION, SELLING_ONLINE];
+
+/**
+ * Guide 36: the monthly sales tax return.
+ *
+ * The flagship correction is that filing and payment are DIFFERENT dates and
+ * are separately penalised. s.2(9) sets the due date at the 15th; rule 18(9)
+ * of the Sales Tax Rules says the tax is deposited by the 15th and the return
+ * submitted electronically by the 18th. Pages giving a single date are wrong
+ * whichever one they give.
+ *
+ * The second is that the input tax you lose when a supplier does not file is
+ * not simply gone: rule 18(3) creates a provisional return that becomes valid
+ * on payment of a recomputed amount, with carve-outs in rule 18A.
+ *
+ * The penalty figures were raised fivefold and tenfold by the Finance Act 2026
+ * and were confirmed against the gazette, because the consolidation's own
+ * footnote is written in the opposite convention to the Income Tax Ordinance
+ * and reads as though the new figure were the old one.
+ */
+
+const SALES_TAX_RETURN: Guide = {
+  slug: 'filing-a-sales-tax-return',
+  cluster: 'salestax',
+  title: 'Filing a Monthly Sales Tax Return',
+  navLabel: 'Sales tax return',
+  card: 'Two deadlines rather than one, what happens to your input tax when a supplier does not file, and the penalties that went up fivefold in 2026.',
+
+  answer:
+    'Pay by the 15th of the month following the tax period and file by the 18th. Those are separate obligations under separate provisions and each carries its own penalty. Input tax on a purchase depends on your supplier declaring the corresponding supply, and where they do not, your return sits provisionally until the system recomputes it.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'There are two deadlines, not one',
+      body: 'Almost every page on this subject gives a single date, and whichever one it gives is wrong. Section 2(9) of the Sales Tax Act defines the due date as the 15th of the month following the tax period, and expressly allows different dates for different parts or annexures. Rule 18(9) of the Sales Tax Rules then says it plainly: the tax due shall be deposited by the 15th and the return shall be submitted electronically by the 18th of the same month. Paying on the 18th along with the return meets the filing date and breaches the payment date, and section 33 penalises late filing and late payment as separate defaults. Seven sectors have their own paired dates, and a filer with activity in more than one files a single return on the date for their major activity.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'The penalties went up fivefold in June 2026',
+      body: 'Section 33, entry 1: failing to furnish a return within the due date now costs fifty thousand rupees, and where the return is filed within ten days of the due date, two thousand rupees for each day of default. The Finance Act 2026 raised those from ten thousand and two hundred, so the daily figure is ten times what it was. We confirmed both against the Finance Act gazette rather than the consolidation alone, because the consolidation footnotes this change in a way that reads as though fifty thousand were the OLD figure. The gazette settles it: for the word ten, the word fifty shall be substituted. Any page published before July 2026 has the old numbers.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Your input tax depends on someone else filing',
+      body: [
+        'This is the structural feature that makes sales tax different from income tax, and the source of most of the pain. The input tax you claim on a purchase is matched against what your supplier declares in their own return. If they have not declared the supply, the deduction is not simply accepted on your invoice.',
+        'Three separate provisions sit behind that, which is worth knowing because they are usually described as one rule. Section 8(1)(ca) disallows input where the tax has not been deposited by the supplier. Section 8(1)(caa) covers a CREST discrepancy or input not verifiable in the supply chain. Section 8(1)(l) covers a supplier who has not declared or paid. Section 8A adds joint and several liability, and it puts the burden of proof expressly on the department rather than on you.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'A supplier who has not filed does not destroy your return',
+      body: 'The mechanism is more forgiving than the field usually describes, and it has a name. Under the second proviso to rule 18(3), your return sits PROVISIONALLY in IRIS until the seller files, up to the last day of the month in which the due date falls. If the seller still has not filed by then, the system deletes those invoices and the corresponding input tax, recomputes your liability, and your provisional return becomes valid once you pay the recomputed amount. Rule 18A then carves out six categories from that treatment, including utilities, independent power producers, petroleum exploration and production, and cases where the supplier pays within six days. So the input is at risk, but the process is defined rather than arbitrary.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'An incomplete annexure makes the return invalid, not late',
+      body: 'Rule 18(1) is stricter than people expect. Failing to fill any applicable column of the return, or of any annexure, makes the return invalid. That is a different and worse outcome than filing late: an invalid return has not been filed at all, so the late-filing penalty runs from the due date while you believe you have complied. Two of the sixteen annexures are populated for you rather than typed: Annexure A loads from your counterparty\'s Annexure C, and Annexure P is filled by the system from the province-wise data in Annexure C.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Input tax is capped at ninety per cent of output tax',
+      body: 'Section 8B limits input tax adjustment to ninety per cent of output tax for the period, with carve-outs for fixed assets and capital goods, exclusions the Board may notify, and an annual true-up under section 8B(2) and (3) against audited accounts. The Finance Act 2026 added something new: the Board may now reduce or enhance that limit for a particular registered person, based on compliance with production monitoring, digital invoicing, e-bilty or point-of-sale integration. So the cap is becoming a compliance-linked figure rather than a flat one. A Tier-1 retailer who has not integrated loses sixty per cent of input tax under section 8B(6), which is a far heavier consequence than the general cap.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Pay your suppliers through the bank, and inside 180 days',
+      body: 'Section 73 is omitted from most coverage and it disallows input tax on its own terms. Payment for a taxable supply must be made through the banking channel from the buyer\'s business bank account to the supplier\'s business account, where payments to that supplier aggregate over fifty thousand rupees in the tax period. The aggregate test was added by the Finance Act 2024, so paying in several smaller instalments does not avoid it. For a credit transaction there is a hard limit of one hundred and eighty days for the payment to be made. And section 73(3) penalises the supplier where the funds land in an account that is not their declared business account.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Filing when you had no activity',
+      body: [
+        'A registered person with nothing to report still files. What is worth knowing is that the Sales Tax Act contains no express nil-return provision: the words do not appear. The duty comes from section 26(1), which requires every registered person to furnish a return, reinforced by the deletion of the words "making taxable supplies" from that section in 1999.',
+        'That is a striking contrast with income tax, where section 165 of the Income Tax Ordinance expressly requires a withholding statement even where no tax was collected. If you genuinely have no continuing activity, the exit is de-registration under section 21 with a final return under section 28, and note that after six months you need the Commissioner\'s approval to file at all.',
+      ],
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'When is the sales tax return due in Pakistan?',
+      answer:
+        'There are two dates. The tax is deposited by the 15th of the month following the tax period, and the return is submitted electronically by the 18th, under rule 18(9) of the Sales Tax Rules. They are separate obligations with separate penalties under section 33.',
+    },
+    {
+      question: 'What is the penalty for filing a sales tax return late?',
+      answer:
+        'Fifty thousand rupees under section 33, entry 1, or two thousand rupees for each day of default where the return is filed within ten days of the due date. The Finance Act 2026 raised these from ten thousand and two hundred rupees.',
+    },
+    {
+      question: 'What happens if my supplier does not file their sales tax return?',
+      answer:
+        'Your return sits provisionally in IRIS until they file, up to the last day of the month in which the due date falls. If they still have not filed, the system deletes those invoices and the input tax, recomputes your liability, and your return becomes valid on paying the recomputed amount. Rule 18A carves out six categories.',
+    },
+    {
+      question: 'Can I claim input tax if the supplier has not paid it?',
+      answer:
+        'Not generally. Sections 8(1)(ca), 8(1)(caa) and 8(1)(l) each disallow input tax where the supplier has not deposited it, where there is a CREST discrepancy or it is not verifiable in the supply chain, or where the supplier has not declared or paid. Section 8A adds joint and several liability with the burden of proof on the department.',
+    },
+    {
+      question: 'Is there a limit on input tax adjustment?',
+      answer:
+        'Yes. Section 8B caps it at ninety per cent of output tax, with carve-outs for fixed assets and capital goods and an annual true-up against audited accounts. The Finance Act 2026 lets the Board vary the limit per person based on compliance with digital invoicing and similar systems.',
+    },
+    {
+      question: 'Do I have to file if I had no sales?',
+      answer:
+        'Yes. Section 26(1) requires every registered person to furnish a return, and the Act carries no express nil-return provision at all. If you have no continuing activity the route is de-registration under section 21 with a final return under section 28.',
+    },
+    {
+      question: 'Does an incomplete annexure just delay my return?',
+      answer:
+        'No, it invalidates it. Rule 18(1) provides that failing to fill any applicable column of the return or of any annexure makes the return invalid, which means it has not been filed and the late-filing penalty is running.',
+    },
+    {
+      question: 'Do I have to pay suppliers by bank transfer?',
+      answer:
+        'For input tax purposes, yes. Section 73 requires payment through the banking channel from your business account to the supplier\'s, where payments to that supplier aggregate over fifty thousand rupees in the tax period, with a one hundred and eighty day limit for credit transactions.',
+    },
+  ],
+
+  publishedAt: '2026-09-27T07:00:00Z',
+  related: ['sales-tax-registration', 'tax-on-selling-online'],
+
+  seo: {
+    title: 'Filing a Monthly Sales Tax Return in Pakistan',
+    description:
+      'Pay by the 15th and file by the 18th, why an incomplete annexure invalidates the return, what happens when a supplier does not file, and the 2026 penalty increases.',
+  },
+};
+
+export const SALESTAX_GUIDES: Guide[] = [SALES_TAX_REGISTRATION, SELLING_ONLINE, SALES_TAX_RETURN];
+
 

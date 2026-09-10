@@ -74,6 +74,28 @@ the text now says.
 against a section nearby that uses the same word without amendment**, in this
 case s.15(1) charging "a person". Recorded as `s15a-person-not-company`.
 
+### And the convention is not the same across statutes
+
+The rule above holds for the Income Tax Ordinance consolidation. It does **not**
+hold for the Sales Tax Act consolidation, which uses the opposite convention.
+
+At s.33 Table entry 1, footnote 484 reads *"the word 'fifty' Substituted through
+Finance Act, 2026"*, the live text reads `[fifty] thousand rupees`, and the
+Finance Act 2026 gazette says *"for the word ten, the word fifty shall be
+substituted"*. Here the footnote names the word that went **in**.
+
+So the safe procedure, which supersedes the rule above rather than adding to it:
+
+1. **Read the live text inside the bracket.** That is the operative word,
+   whatever the footnote says about it.
+2. **Where the figure is load-bearing, confirm against the enacting Finance Act
+   gazette.** The gazette states the substitution unambiguously in both
+   directions and settles it in one grep.
+
+Recorded as `sta-footnote-convention-inconsistent`. Both consolidations were
+checked against the gazette; they genuinely differ, and this is not one
+misprinted footnote.
+
 ### The corollary that saved a guide
 
 When two sources conflict, **check whether one of them contradicts itself**.
@@ -302,6 +324,25 @@ always the second.
 ---
 
 ## 10. What is still missing
+
+**Check the vintage of the RULES, not only of the Act.** The "amended up to"
+discipline in section 1 applies to subordinate legislation just as hard, and it
+is easier to forget because the Act is the document you were thinking about.
+
+A finding was recorded as contested on the strength of a Rules consolidation
+amended to 10 February 2017, which was three stages out of date: rule 44 said
+monthly, SRO 849(I)/2019 made it biannual, and the Finance Act 2020 made the
+statute quarterly. FBR publishes a 24 November 2023 consolidation that would
+have shown the middle stage immediately. The conflict was not a conflict, it was
+a stale file.
+
+Two useful by-products of that episode. FBR leaves subordinate legislation
+unconformed for years, so a Rule contradicting its parent Act is normal rather
+than a puzzle, and the resolution is that a rule made under s.237 cannot survive
+against a later express provision. And where a regulator has changed something,
+**look for its own circular at the point of change**: Circular No. 3 of 2020
+states the biannual-to-quarterly move in one sentence and settles what two
+consolidations could not.
 
 **Searching the wrong instrument.** The Ordinance is not the only source of
 Pakistani income tax law, and twice this cost us. We searched the whole

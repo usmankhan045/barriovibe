@@ -843,13 +843,169 @@ const ADVANCE_TAX: Guide = {
   },
 };
 
-export const FILING_GUIDES: Guide[] = [
-  FILING_A_RETURN,
-  PAYING_FBR,
-  IRIS_ACCESS,
-  AMENDED_ASSESSMENT,
-  ADVANCE_TAX,
-];
+
+/**
+ * Guide 38: withholding statements.
+ *
+ * Written because this obligation catches people who do not know they have it,
+ * and because the consequence sits somewhere nobody looks: s.154A(2)(b) makes
+ * final tax treatment for a PSEB-registered IT exporter conditional on having
+ * filed these statements. A missed statement is a live risk to the 0.25 per
+ * cent position, not merely a penalty.
+ *
+ * Two corrections. The statements are QUARTERLY, due on the 20th, since the
+ * Finance Act 2020 replaced "biannual"; the consolidation's footnote reproduces
+ * the old half-yearly dates and those still circulate. And a nil statement is
+ * expressly required, which the Sales Tax Act notably does not say about sales
+ * tax returns.
+ *
+ * One conflict published as an open question: the Income Tax Rules FBR
+ * publishes are consolidated only to 10 February 2017 and rule 44(2) still
+ * prescribes a monthly statement. The statute is later and prescribes the
+ * schedule expressly, so quarterly governs, but we say so rather than hide it.
+ */
+
+const WITHHOLDING_STATEMENTS: Guide = {
+  slug: 'withholding-statements-section-165',
+  cluster: 'filing',
+  title: 'Withholding Statements Under Section 165',
+  navLabel: 'Withholding statements',
+  card: 'Who has to file them, why a nil statement is still required, and the cross-reference that puts an exporter\'s 0.25% rate at risk.',
+
+  answer:
+    'Anyone who collects or deducts tax under the withholding provisions must file a quarterly statement, due on the 20th of April, July, October and January. A statement is required even where nothing was withheld. For a PSEB-registered IT exporter the stakes are higher than the penalty suggests, because section 154A(2) conditions final tax treatment on having filed them.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Missing these can cost an exporter their 0.25% treatment',
+      body: 'This is the reason to read the page rather than a compliance footnote. Section 154A(2) makes the export deduction final tax only where three conditions are met, and the second is that withholding tax statements for the relevant year have been filed where required. So for a PSEB-registered IT exporter a missed section 165 statement is not just a penalty: it is a threat to the final tax treatment of the whole export receipt, which is the thing the registration was for. There is a proviso disapplying the sales tax return condition for clause (a) exporters, but nothing disapplying the statement condition.',
+    },
+
+    {
+      kind: 'table',
+      heading: 'When each statement is due',
+      intro:
+        'Section 165(2). These are quarterly, and the older half-yearly dates that still circulate were replaced by the Finance Act 2020.',
+      columns: ['Quarter ending', 'Due'],
+      rows: [
+        ['31 March', '20 April'],
+        ['30 June', '20 July'],
+        ['30 September', '20 October'],
+        ['31 December', '20 January'],
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'A nil statement is expressly required',
+      body: 'The first proviso to section 165 is unusually direct: every person as provided in sub-section (1) shall be required to file a withholding statement EVEN WHERE NO WITHHOLDING TAX is collected or deducted during the period. There is no reading of that which excuses a quiet quarter. It is worth contrasting with sales tax, where the Sales Tax Act carries no express nil-return clause at all and the duty has to be drawn from the general obligation to furnish a return. Here the Ordinance says it in terms.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Who actually has to file one',
+      body: [
+        'The obligation follows the withholding, so it falls on a person who collects or deducts tax under the relevant Divisions, Chapter XII or the Tenth Schedule. In practice that means anyone who is a prescribed person for section 153 purposes and has been deducting from suppliers or service providers, and any employer deducting from salary under section 149.',
+        'The threshold question matters for a small business. A company is a prescribed person at any turnover. An individual or association of persons becomes one only at a hundred million rupees of turnover in any preceding year, raised from fifty million by the Finance Act 2020. So a small firm that has never deducted anything from anyone is generally not filing these, and a company is, from its first quarter.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Salary is reported twice, and the second one is annual',
+      body: 'An employer deducting under section 149 reports it in the quarterly statement, and separately in an annual statement under section 165(6). There are two further obligations in the same section that most coverage omits entirely: section 165(7) requires an annual statement within thirty days of the end of the tax year, and section 165(8) requires a reconciliation statement by the due date for the return under section 118. So an employer with a single employee has more than four filings a year here, not four.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'The penalty is per day once you are past ninety days',
+      body: 'Entry 1A of the section 182 penalty table has two limbs and the difference between them is large. Where the tax was paid on time and the statement is filed within ninety days of the due date, the penalty is fifty thousand rupees. Otherwise it is two thousand five hundred rupees for each day of default, with a minimum of ten thousand. Where no tax was deductible at all, the minimum is ten thousand. So a statement forgotten for a quarter is an expensive fixed sum, and one forgotten for a year is a daily accrual.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'A late statement does not remove you from the Active Taxpayer List',
+      body: 'Worth stating because the opposite is widely asserted and it causes unnecessary alarm. Section 182A, which governs removal from the Active Taxpayer List, turns on the return under section 114. It does not turn on section 165 statements. The real consequence of a missed statement is the penalty above and, for an exporter, the section 154A(2) condition, not your filer status.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'When the statement is not required at all',
+      body: [
+        'The second proviso to section 165 disapplies the section where the information required under sub-section (1) has been furnished under section 165A. That is the banking information provision, so the carve-out is narrow and specific rather than general relief.',
+        'Note it is section 165A and not section 165AB. Section 165AB is the Central Data Hub inserted by the Finance Act 2026, requiring banks and electronic money institutions to upload for algorithmic cross-matching, and it does not carry the same disapplication.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'FBR\'s own Rules and forms still say something else',
+      body: 'The dates above are quarterly and that is settled, but you will meet three FBR documents saying otherwise, so it is worth knowing why. Rule 44 of the Income Tax Rules currently reads "biannual", because SRO 849(I)/2019 changed it from monthly in July 2019 and the Finance Act 2020 then moved the statute to quarterly without anyone conforming the Rule. Older consolidations of the Rules still print monthly, which is where that figure comes from. And the prescribed form in Part X is still titled Biannual Statement, while the contents page reads "Annual and Monthly Statements". Three different vintages, none of them current. What settles it is section 165(2), which fixes the dates in primary legislation, and FBR\'s own Circular No. 3 of 2020, which says in terms that the obligation to file withholding tax statements on a biannual basis has been changed to quarterly. A rule made under section 237 cannot survive against a later express provision of the Act.',
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'When are withholding statements due in Pakistan?',
+      answer:
+        'Quarterly, on the 20th of April, July, October and January, under section 165(2). The half-yearly dates of 31 July and 31 January that still circulate were replaced by the Finance Act 2020.',
+    },
+    {
+      question: 'Do I have to file a withholding statement if I deducted nothing?',
+      answer:
+        'Yes. The first proviso to section 165 requires every person within sub-section (1) to file a statement even where no withholding tax was collected or deducted during the period.',
+    },
+    {
+      question: 'Who has to file a section 165 statement?',
+      answer:
+        'Anyone collecting or deducting tax under the withholding provisions. In practice a prescribed person under section 153 who has been deducting, and any employer deducting from salary. A company is a prescribed person at any turnover; an individual or association only at Rs 100 million of turnover in a preceding year.',
+    },
+    {
+      question: 'What is the penalty for not filing a withholding statement?',
+      answer:
+        'Under entry 1A of the section 182 table, fifty thousand rupees where the tax was paid on time and the statement is filed within ninety days of the due date. Otherwise two thousand five hundred rupees for each day of default, with a minimum of ten thousand.',
+    },
+    {
+      question: 'Does a late withholding statement remove me from the ATL?',
+      answer:
+        'No. Section 182A turns on the return under section 114, not on section 165 statements. The consequences are the penalty and, for a PSEB-registered exporter, the section 154A(2) condition.',
+    },
+    {
+      question: 'How do withholding statements affect the 0.25% export rate?',
+      answer:
+        'Section 154A(2) makes the export deduction final tax only where the return, the withholding statements for the year, and sales tax returns have been filed where required. A missed statement therefore puts final tax treatment of the export receipt at risk, not just a penalty.',
+    },
+    {
+      question: 'Are withholding statements monthly, biannual or quarterly?',
+      answer:
+        'Quarterly. All three figures are in circulation because rule 44 said monthly until SRO 849(I)/2019 made it biannual, and the Finance Act 2020 then made the statute quarterly without conforming the Rule, which still reads biannual today. Section 165(2) fixes the dates in primary law and FBR Circular No. 3 of 2020 confirms the change.',
+    },
+    {
+      question: 'Does an employer file anything beyond the quarterly statement?',
+      answer:
+        'Yes. Section 165(6) requires an annual statement for salary deductions, section 165(7) an annual statement within thirty days of the end of the tax year, and section 165(8) a reconciliation statement by the section 118 return due date.',
+    },
+  ],
+
+  publishedAt: '2026-09-28T07:00:00Z',
+  related: ['pseb-registration-and-the-025-rate', 'how-to-file-your-tax-return'],
+
+  seo: {
+    title: 'Withholding Statements Under Section 165',
+    description:
+      'Quarterly dates, why a nil statement is still required, the per-day penalty past ninety days, and why a missed statement threatens an exporter\'s final tax treatment.',
+  },
+};
+
+export const FILING_GUIDES: Guide[] = [FILING_A_RETURN, PAYING_FBR, IRIS_ACCESS, AMENDED_ASSESSMENT, ADVANCE_TAX, WITHHOLDING_STATEMENTS];
+
 
 
 

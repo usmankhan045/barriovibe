@@ -243,3 +243,93 @@ ten-per-cent annual-value charge. The Punjab Finance Act 2024 is the instrument
 that actually rewrote the regime, and it downloads cleanly from
 `excise.punjab.gov.pk/system/files/punjab-finance-act-2024-pdf.pdf` with no
 prefix problem.
+
+## FBR has no working site search, and /Downloads/ serves a 200 that is not a hit
+
+Verified 10 September 2026 while tracing the Iris FAQs document.
+
+- `https://www.fbr.gov.pk/Downloads/` returns HTTP 200 with a body reading
+  "The Requested Page does not Exist". Same trap as the `/categ/` paths.
+- `SearchResult?searchtext=`, `Search?q=` and `searchresult?SearchText=` all
+  return 200 and serve **the homepage**, byte-identical at 90,831 bytes each.
+  A status-code check reads as success on all three.
+- `https://www.fbr.gov.pk/categ/iris/51147/131188/131190` returns 500 with the
+  does-not-exist body.
+
+Search engines were no help either: `WebSearch` returned "unavailable"
+intermittently, DuckDuckGo HTML returned a 202 challenge, DDG Lite served a
+CAPTCHA, Bing returned nothing.
+
+**What worked: the Wayback CDX API used as a URL index rather than as an
+archive.** Enumerating a host through CDX surfaces paths that FBR's own site
+will not, and the path is then verified against the live server. This is the
+route to use when a known-to-exist FBR document cannot be found by navigation.
+
+## Iris help documents live on e.fbr.gov.pk, not on download1.fbr.gov.pk
+
+The `download1.fbr.gov.pk/Docs/<numericid><Slug>.pdf` pattern that serves the
+Acts and Rules does **not** cover the Iris help material. A CDX sweep of 6,968
+`download1.fbr.gov.pk/Docs/` documents contains no Iris FAQ at all.
+
+The live paths, verified 10 September 2026:
+- Iris login help index: `https://e.fbr.gov.pk/SOP/IRIS/help/index.html`
+- Iris FAQs (English):   `https://e.fbr.gov.pk/SOP/IRIS/Iris_FAQs.pdf`
+- Iris FAQs (Urdu):      `https://e.fbr.gov.pk/SOP/IRIS/Iris_FAQ_Urdu.pdf`
+
+Note this contradicts nothing in the earlier `e.fbr.gov.pk needs the www prefix`
+note: that applied to PDFs under the `Docs` tree. These `/SOP/IRIS/` paths serve
+200 without `www`.
+
+`Iris_FAQs.pdf` carries `Last-Modified: Fri, 20 Jan 2023`, which is a **server
+timestamp, not a publication date**. The document is undated internally, so it
+predates the Finance Acts 2025 and 2026 and must never be cited for a rate or a
+date, only for process.
+
+## FBR listing pages are DataTables grids; the JSON endpoints are the way in
+
+FBR's SRO and circular listings render through DataTables and return an EMPTY
+table to curl, so a sweep that reads the HTML concludes there is nothing there.
+The backing endpoints, which return the complete indexes:
+
+- SROs:      `POST https://www.fbr.gov.pk/Home/LoadDataSROSearch`
+- Circulars: `POST https://www.fbr.gov.pk/Home/ShowOrdersFiltered`
+
+A partial DataTables body returns HTTP 500. Send the full parameter set with
+`length=5000` to get everything in one call. This produced the complete Income
+Tax SRO index, 1,066 records from 1984 to September 2026, which is what settled
+the rule 44 question by proving only two SROs ever touched that rule.
+
+**The 18,050-byte signature.** `fbr.gov.pk` serves "The Requested Page does not
+Exist" with HTTP 200 at exactly 18,050 bytes. Checking the length is a cheap
+second test alongside grepping the body.
+
+## The Income Tax Rules 2002 consolidation on disk was two vintages stale
+
+`raw/income-tax-rules.txt` is FBR's consolidation **amended to 10 February
+2017**, and citing it produced a wrong finding in this store.
+
+Its rule 44(2) prescribes a **monthly** withholding statement. That is not
+merely out of date against the statute, it is out of date against the Rules
+themselves: **SRO 849(I)/2019** dated 24 July 2019 had already changed rule 44
+from monthly to **biannual**, and the Finance Act 2020 then made the statute
+**quarterly**. Reading the 2017 file produced a "quarterly versus monthly"
+conflict that does not exist; the real residual conflict is quarterly versus
+biannual.
+
+The newest consolidation FBR publishes is **24 November 2023**, at
+`download1.fbr.gov.pk/Docs/2023112416114319348IncomeTaxRules2002AmendedUpto24.11.2023.pdf`,
+listed at `fbr.gov.pk/categ/income-tax-rules-2002/335`. It is 121MB, so use
+`curl --max-time 180`. Saved as `raw/income-tax-rules-24nov2023.*`. Nothing
+exists for 2024 to 2026.
+
+Two lessons worth keeping:
+
+- **Check the cover date of a Rules consolidation exactly as for an Act.** The
+  METHOD.md rule about stale consolidations was written for statutes and
+  applies with equal force to subordinate legislation.
+- **FBR does not conform its Rules to its own Finance Acts.** A consolidation
+  published on 8 September 2020, *after* the 30 June 2020 Finance Act, still
+  read biannual, and so does the 2023 one. So the lag is not a publication
+  artifact that a newer file will fix: the Rules are simply unamended. Where
+  the Ordinance and the Rules disagree, the Ordinance governs, and FBR's own
+  explanatory circular is the cleanest corroboration to cite.
