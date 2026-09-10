@@ -357,5 +357,331 @@ const FOREIGN_ENTITY_PERMISSION: Guide = {
   },
 };
 
-export const CROSS_BORDER_GUIDES: Guide[] = [US_LLC_FOREIGN_ASSET, FOREIGN_ENTITY_PERMISSION];
+
+/**
+ * Guide 20: residency, and the numbers the field repeats wrongly.
+ *
+ * Three corrections, all read verbatim from s.82 and its footnotes:
+ *
+ *   1. The presence test is 183 days, not 182. "Eighty-two" was substituted by
+ *      the Finance Act 2006. The 182 figure belongs to s.82(d), a different
+ *      test about other countries, and summaries quote it for both.
+ *   2. The 120-day rule is not law. Clause (ab) was inserted by the Finance
+ *      Act 2019 and OMITTED by the Finance Act 2021, after two tax years. It
+ *      is still cited constantly.
+ *   3. s.82(d) can make a Pakistani citizen resident while living abroad, and
+ *      it is the limb that catches the globally mobile.
+ *
+ * The open question is day counting: the Ordinance contains no rule on
+ * part-days, arrival or departure. Sources assert one confidently. We could
+ * not obtain the Income Tax Rules 2002 to check whether it lives there, so the
+ * guide says exactly that. See no-day-counting-rule and DEAD-ENDS.md.
+ */
+
+const RESIDENCY: Guide = {
+  slug: 'tax-residency-for-overseas-pakistanis',
+  cluster: 'cross-border',
+  title: 'The 183-Day Rule Overseas Pakistanis Get Wrong',
+  navLabel: 'Tax residency',
+  card: 'Why the number is 183 and not 182, why the 120-day rule you have read about was repealed, and the limb that makes a citizen resident without setting foot in Pakistan.',
+
+  answer:
+    'You are a resident individual if you are in Pakistan for 183 days or more in the tax year. Separately, section 82(d) makes a Pakistani citizen resident if they were not in any other single country for more than 182 days, or are not a resident taxpayer of any other country. That second limb catches people who live abroad but move between countries, or live somewhere that taxes nobody. The 120-day rule was repealed in 2021.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Two different numbers, and they are not interchangeable',
+      body: 'Section 82(a) is 183 days: present in Pakistan for a period, or periods amounting in aggregate, to one hundred and eighty-three days or more in the tax year. The word "eighty-three" was substituted for "eighty-two" by the Finance Act 2006, so the 182 figure has been wrong for twenty years. Section 82(d) does use 182, but it is a different test measuring time in some OTHER country. Published summaries routinely quote 182 for both, which matters for anyone landing within a day of the line.',
+    },
+
+    {
+      kind: 'table',
+      heading: 'The tests that actually exist',
+      intro:
+        'Section 82 in its current form has three limbs. Any one of them makes you resident; they are alternatives rather than cumulative conditions.',
+      columns: ['Limb', 'Test', 'Who it catches'],
+      rows: [
+        ['82(a)', 'Present in Pakistan 183 days or more in aggregate in the tax year', 'Anyone, citizen or not'],
+        ['82(c)', 'An employee or official of the Federal or a Provincial Government posted abroad', 'Government staff on foreign posting'],
+        ['82(d)', 'A citizen of Pakistan not present in any other country for more than 182 days, or not a resident taxpayer of any other country', 'Citizens living abroad'],
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'The 120-day rule is not law and has not been since 2021',
+      body: 'Clause (ab) made an individual resident on 120 days in Pakistan combined with 365 days across the four preceding years. It was inserted by the Finance Act 2019 and omitted by the Finance Act 2021, so it was live for two tax years. It is still repeated across Pakistani tax blogs and diaspora forums as though it were current, and it is the single most common piece of stale advice on this subject. An older 90-day plus 365-day test in clause (b) went in 2003.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Why section 82(d) is the one that surprises people',
+      body: [
+        'It reverses the intuition. Most people reason that leaving Pakistan for most of the year ends their Pakistani residency, and under section 82(a) alone that would be right. Section 82(d) asks a different question of Pakistani citizens: where else are you resident?',
+        'Read the two branches. Not present in any other single country for more than 182 days catches someone who spends the year across three or four countries without settling anywhere long enough. Not a resident taxpayer of any other country catches someone living permanently somewhere that does not tax individuals, because there is no other jurisdiction treating them as a resident taxpayer. A Pakistani citizen working in a Gulf state with no personal income tax can satisfy the second branch while being nowhere near Pakistan.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'What "resident taxpayer of another country" requires is not defined',
+      body: 'The Ordinance does not say what evidences being a resident taxpayer elsewhere, and this is the practical crux of section 82(d). A tax residency certificate is the obvious answer where one is available. Where it is not, because the country issues none or taxes no individual income, the position is genuinely uncertain and the honest advice is to document what you can, keep the evidence of where you actually were, and take advice on your own facts rather than assume the branch is satisfied.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'What being resident actually means',
+      body: [
+        'Section 11 charges a resident on worldwide income. That is the whole consequence and it is a large one: income earned abroad, from foreign clients, paid into a foreign account, is within the charge if you are resident, whether or not it ever reaches Pakistan.',
+        'A non-resident is taxed only on Pakistan-source income. So the residency question is not a formality that decides which form you file, it decides how much of your income Pakistan is taxing, and it is the first question to settle before any other.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'The Ordinance does not say how to count a day',
+      body: 'There is no provision in the Ordinance on part-days, on days of arrival and departure, or on days spent in transit. Sections 81 to 84 set the tests and are silent on computing them. Several published sources state confidently that any part of a day in Pakistan counts as a whole day. We could not verify that: it is not in the Ordinance, and we were unable to obtain the consolidated Income Tax Rules 2002 to check whether it lives there. If you are within a few days of 183, that gap is not academic, and it is a reason to keep your own travel record rather than rely on someone\'s arithmetic rule.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Residency of a company is a different test entirely',
+      body: [
+        'Section 83 makes a company resident if it is incorporated or formed under any law in force in Pakistan, or if the control and management of its affairs is situated wholly in Pakistan at any time in the year, or if it is a Provincial or Local Government.',
+        'The middle limb is the one worth knowing if you have a company abroad. Incorporating in Wyoming or Dubai settles where the company was formed; it does not settle where it is controlled and managed. Note also the asymmetry with associations of persons: section 84 makes an association resident if control and management is wholly OR PARTLY in Pakistan, a materially wider test than the one applied to companies.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'If you are resident, two further obligations follow',
+      body: 'Section 116A requires a foreign income and assets statement from a resident individual with foreign income of USD 10,000 or more or foreign assets of USD 100,000 or more, with a penalty of 2% of the asset value for each year of default. And section 111(4) shields foreign exchange remitted through normal banking channels from the unexplained-income provisions only up to five million rupees in a tax year, and only where it is encashed into rupees with a bank certificate. Neither is an exemption from tax on the income; both are obligations that follow from being resident.',
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'How many days can I stay in Pakistan without becoming a tax resident?',
+      answer:
+        'Up to 182 days, because section 82(a) makes you resident at 183 days or more in aggregate in the tax year. Note that staying under that does not settle the question for a Pakistani citizen, because section 82(d) can make you resident on separate grounds.',
+    },
+    {
+      question: 'Is the rule 182 days or 183 days in Pakistan?',
+      answer:
+        '183 for presence in Pakistan under section 82(a). The word "eighty-three" was substituted for "eighty-two" by the Finance Act 2006. The 182-day figure belongs to section 82(d), which measures time spent in another country, and the two get quoted interchangeably in error.',
+    },
+    {
+      question: 'Is the 120-day rule still applicable in Pakistan?',
+      answer:
+        'No. Clause (ab) of section 82, the 120-day plus 365-day test, was inserted by the Finance Act 2019 and omitted by the Finance Act 2021. It applied for two tax years and is still widely cited as current, which it is not.',
+    },
+    {
+      question: 'Can an overseas Pakistani be a tax resident of Pakistan?',
+      answer:
+        'Yes, under section 82(d). A citizen of Pakistan is resident if not present in any other single country for more than 182 days in the tax year, or if not a resident taxpayer of any other country. Someone moving between several countries, or living where individuals are not taxed, can be caught while spending almost no time in Pakistan.',
+    },
+    {
+      question: 'Do overseas Pakistanis pay tax on foreign income?',
+      answer:
+        'Only if resident. Section 11 charges a resident on worldwide income and a non-resident on Pakistan-source income only. So the answer depends entirely on the section 82 tests, and section 82(d) is the one that most often decides it for someone living abroad.',
+    },
+    {
+      question: 'How are days counted for Pakistani tax residency?',
+      answer:
+        'The Ordinance does not say. Sections 81 to 84 set the tests and contain no rule on part-days, arrival and departure days, or transit. Sources that state a part-day counts as a full day are not citing the Ordinance, and we could not confirm whether such a rule appears in the Income Tax Rules 2002.',
+    },
+    {
+      question: 'Is my foreign company resident in Pakistan?',
+      answer:
+        'Under section 83 a company is resident if incorporated or formed under Pakistani law, or if the control and management of its affairs is situated wholly in Pakistan at any time in the year. Incorporating abroad answers only the first limb. For an association of persons, section 84 is wider still: control and management wholly or partly in Pakistan.',
+    },
+    {
+      question: 'Do I need a tax residency certificate from another country?',
+      answer:
+        'Section 82(d) turns partly on whether you are a resident taxpayer of another country, and a certificate is the clearest evidence where one is available. The Ordinance does not prescribe what proof is required, which leaves people in countries that issue none in a genuinely uncertain position.',
+    },
+  ],
+
+  publishedAt: '2026-09-29',
+  related: ['us-llc-foreign-asset-declaration', 'how-to-file-your-tax-return'],
+
+  seo: {
+    title: 'Tax Residency for Overseas Pakistanis: The 183-Day Rule',
+    description:
+      'Why section 82(a) is 183 days and not 182, why the 120-day rule was repealed in 2021, and how section 82(d) makes a citizen resident while living abroad.',
+  },
+};
+
+
+/**
+ * Guide 21: money from abroad, and what s.111(4) actually does.
+ *
+ * Two corrections carry it, both read from the section and its footnotes:
+ *
+ *   1. There is a five million rupee annual cap. Sources describing s.111(4)
+ *      as unlimited are describing the pre-2021 text, which genuinely had no
+ *      ceiling for about seventeen years. They are stale rather than wrong.
+ *   2. It is a shield against being asked to explain the SOURCE of money. It
+ *      is not an exemption from tax on the income. A freelancer's export
+ *      receipts stay taxable under s.154A whatever s.111(4) does.
+ *
+ * The second is the one that costs people money, because "remittances are
+ * tax free in Pakistan" is repeated everywhere and is a confusion of two
+ * different provisions doing two different jobs.
+ */
+
+const MONEY_FROM_ABROAD: Guide = {
+  slug: 'receiving-money-from-abroad',
+  cluster: 'cross-border',
+  title: 'Receiving Money From Abroad: What Section 111(4) Does and Does Not Do',
+  navLabel: 'Money from abroad',
+  card: 'The five million rupee ceiling most pages omit, why a shield against questions is not an exemption from tax, and what the bank certificate is for.',
+
+  answer:
+    'Section 111(4) stops FBR asking you to explain the source of foreign exchange remitted through normal banking channels, up to five million rupees in a tax year, where a scheduled bank encashes it into rupees and issues a certificate. It is a shield against the unexplained-income provisions, not an exemption. Income that is taxable stays taxable: a freelancer\'s export receipts are charged under section 154A regardless.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'There is a five million rupee ceiling, and it is recent',
+      body: 'Section 111(4) applies to foreign exchange remitted through normal banking channels "not exceeding five million Rupees in a tax year". A great many pages describe the protection as unlimited, and they are not making it up: the sub-section as substituted by the Finance Act 2004 carried no cap at all, and it stayed that way for roughly seventeen years. The ceiling arrived with the text substituted by the Finance Act 2021. So the unlimited version was real law for most of the time the internet has existed, and the pages describing it are stale rather than inventive. Check the date on anything that tells you there is no limit.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'A shield against questions is not an exemption from tax',
+      body: 'This is the confusion that costs the most, and it is encouraged by the phrase "remittances are tax free in Pakistan". Section 111 is the unexplained-income provision: it lets the Commissioner treat an unexplained credit, investment or expenditure as income from other sources. Section 111(4) disapplies that machinery for qualifying remittances. What it does not do is decide whether the underlying income was taxable. If you are a resident freelancer and the money is payment for exported services, it is taxable under section 154A whatever section 111(4) says about explaining its source. Two different questions, two different provisions, and satisfying one leaves the other exactly where it was.',
+    },
+
+    {
+      kind: 'list',
+      heading: 'The four conditions, all of which have to hold',
+      intro:
+        'Read closely, because three of the four are things you have to do rather than things that happen automatically.',
+      items: [
+        'The money is foreign exchange remitted from outside Pakistan',
+        'It comes through normal banking channels',
+        'It does not exceed five million rupees in the tax year',
+        'A scheduled bank encashes it into rupees AND issues a certificate to that effect, which you produce',
+      ],
+    },
+
+    {
+      kind: 'prose',
+      heading: 'The encashment condition is the one people fail',
+      body: [
+        'The section requires the foreign exchange to be encashed into rupees by a scheduled bank, with a certificate produced. Money that arrives and sits in a foreign currency account has not been encashed, so the condition on its face is not met.',
+        'The certificate is the other half. It is not enough that the encashment happened; the statute says a certificate from the bank is produced to that effect. Ask for it at the time. Reconstructing a certificate for a transaction three years old, from a bank that has since reorganised its branches, is a great deal harder than requesting one when the money lands.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Payoneer and Wise are inside the section, by express words',
+      body: 'An Explanation inserted by the Finance Act 2022 removes the doubt: remittance through money service bureaus, exchange companies or money transfer operators is deemed to constitute foreign exchange remitted from outside Pakistan through normal banking channels. That settles a question people used to worry about, and it means the route the money took is not the weak point in most cases. The encashment and the certificate still are.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'What happens above five million',
+      body: [
+        'Nothing automatic, and that is worth saying plainly rather than alarmingly. Exceeding the ceiling does not make the money taxable and does not create a presumption against you. What it does is remove the statutory shortcut, so the ordinary position applies: if asked, you explain the nature and source of the amount, and section 111 bites only where no explanation is offered or the Commissioner does not find it satisfactory.',
+        'For most people reading this, the explanation is easy and documented: an invoice, a contract, a client, a platform statement. The shortcut in section 111(4) exists for cases where producing that is awkward. Keeping the underlying records is what makes the ceiling a formality rather than a cliff.',
+      ],
+    },
+
+    {
+      kind: 'calculator',
+      toolSlug: 'freelancer-tax',
+      heading: 'What the income itself is taxed at',
+      body: 'Since section 111(4) says nothing about the tax on the income, this is the figure that actually matters for an exporter of services. The calculator shows the position with and without PSEB registration, which is where the difference is largest.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'If you sold property, one account type changes everything',
+      body: 'A separate provision worth knowing if the money is coming the other way. Under a proviso to section 236C(1), where a non-resident individual holding a POC, NICOP or CNIC sells property they acquired through a Foreign Currency Value Account or an NRP Rupee Value Account, the advance tax collected on the sale is a final discharge in lieu of the capital gains taxable under section 37. There is then no separate section 37 computation. What decides it is the account the purchase was made through, years earlier, so it is not a choice available at the point of sale.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'And if you are resident, the declaration obligations are separate again',
+      body: [
+        'Section 111(4) concerns money arriving. Section 116A concerns assets held: a resident individual with foreign assets of USD 100,000 or more, or foreign income of USD 10,000 or more, must file a foreign income and assets statement with the return, and the penalty for not doing so runs at 2% of the asset value for every year of default.',
+        'They interact in the obvious way. Money that came in under section 111(4) and was spent is not a foreign asset. Money that stayed abroad, or bought something abroad, is. A person can be entirely clean on the remittance question and in default on the declaration one.',
+      ],
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'Is foreign remittance taxable in Pakistan?',
+      answer:
+        'The remittance itself is not a separate charge, but section 111(4) does not make the underlying income tax free. It only stops FBR treating the money as unexplained income, up to five million rupees a year and subject to encashment and a bank certificate. If the money is payment for services you exported, it is taxable under section 154A regardless.',
+    },
+    {
+      question: 'What is the limit for foreign remittance in Pakistan?',
+      answer:
+        'Five million rupees in a tax year for the section 111(4) protection. Pages describing it as unlimited are describing the pre-2021 text, which genuinely had no cap from 2004 until the Finance Act 2021 substituted the sub-section.',
+    },
+    {
+      question: 'Does section 111(4) cover Payoneer and Wise?',
+      answer:
+        'Yes. An Explanation inserted by the Finance Act 2022 deems remittance through money service bureaus, exchange companies or money transfer operators to be remittance through normal banking channels for the purposes of the sub-section.',
+    },
+    {
+      question: 'What certificate do I need for a foreign remittance?',
+      answer:
+        'Section 111(4) requires that a scheduled bank encashes the foreign exchange into rupees and that a certificate from the bank to that effect is produced. Ask the bank for it at the time of encashment rather than years later.',
+    },
+    {
+      question: 'What happens if my remittances exceed five million rupees?',
+      answer:
+        'The statutory shortcut stops applying and the ordinary position resumes: section 111 catches an amount only where no explanation of its nature and source is offered, or the explanation is not satisfactory to the Commissioner. With invoices and contracts, that is usually straightforward.',
+    },
+    {
+      question: 'Does the money have to be converted into rupees?',
+      answer:
+        'For section 111(4), yes. The sub-section requires the foreign exchange to be encashed into rupees by a scheduled bank with a certificate produced. Funds left sitting in a foreign currency account have not been encashed.',
+    },
+    {
+      question: 'Do freelancers pay tax on money received from abroad?',
+      answer:
+        'Yes, on the income. Export proceeds for IT and IT-enabled services are withheld under section 154A at 0.25% for a PSEB-registered exporter and 1% otherwise. Section 111(4) is about explaining the source of funds and does not change that charge.',
+    },
+    {
+      question: 'Is a remittance the same as a foreign asset for tax purposes?',
+      answer:
+        'No, and they are governed by different sections. Section 111(4) deals with money arriving from abroad. Section 116A requires a resident individual holding foreign assets of USD 100,000 or more, or foreign income of USD 10,000 or more, to file a foreign income and assets statement, with a penalty of 2% of the value for each year of default.',
+    },
+  ],
+
+  publishedAt: '2026-09-30',
+  related: ['tax-for-freelancers', 'us-llc-foreign-asset-declaration'],
+
+  seo: {
+    title: 'Receiving Money From Abroad in Pakistan: Section 111(4)',
+    description:
+      'The five million rupee annual ceiling, why a shield against unexplained-income questions is not a tax exemption, and the encashment certificate the statute requires.',
+  },
+};
+
+export const CROSS_BORDER_GUIDES: Guide[] = [
+  US_LLC_FOREIGN_ASSET,
+  FOREIGN_ENTITY_PERMISSION,
+  RESIDENCY,
+  MONEY_FROM_ABROAD,
+];
+
+
 
