@@ -530,8 +530,171 @@ const CHECKING_ATL_STATUS: Guide = {
   },
 };
 
-export const FILER_GUIDES: Guide[] = [
-  FILER_VS_NON_FILER,
+
+/**
+ * Guide 25: tax on a car.
+ *
+ * The guide that found a bug in our own calculator. Two provisions interact
+ * and most coverage carries only one of them: Division VII clause (2) reduces
+ * the transfer RATE by a tenth each year, and the proviso to s.231B(2) stops
+ * COLLECTION entirely after five years. The cut-off binds first, so the taper
+ * never runs past 50 per cent and a car five years old carries no transfer tax
+ * at all. Our module tapered to ten years until this was reconciled.
+ *
+ * The other two points nobody covers: s.231B(2A), the anti-flipping rule for a
+ * car sold before it is registered, and s.231B(4), which is what a reader
+ * needs when a second collection is demanded on the same vehicle.
+ */
+
+const VEHICLE_TAX: Guide = {
+  slug: 'tax-on-buying-a-car',
+  cluster: 'filer',
+  title: 'Tax on Buying and Transferring a Car in Pakistan',
+  navLabel: 'Vehicle tax',
+  card: 'What is collected at registration and at transfer, the five-year point after which nothing is due, and the rule that stops you paying twice on the same car.',
+
+  answer:
+    'Advance tax under section 231B is collected twice over a car\'s life: once by the Excise and Taxation registering authority at first registration, charged on value in engine-capacity bands, and again on any later transfer of registration, as a fixed amount by band. The transfer charge falls by a tenth for each year since first registration, and nothing at all is collected once the vehicle is five years old.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Nothing is collected on a transfer after five years',
+      body: 'This is the point most coverage misses, and it changes the arithmetic completely on an older car. The rate does fall by ten per cent a year from first registration, which is the part everyone quotes. But the proviso to section 231B(2) says something stronger: no collection of advance tax under that sub-section shall be made on transfer of vehicles after five years from the date of first registration in Pakistan. The cut-off arrives before the taper finishes. So the reduction only ever runs from a hundred per cent down to sixty, and from five years the charge is nil rather than continuing to shrink toward year ten. Buying a car older than five years, the filer and non-filer gap on this section does not arise at all, because neither pays anything.',
+    },
+
+    {
+      kind: 'calculator',
+      toolSlug: 'vehicle-tax',
+      heading: 'What it comes to on your car',
+      body: 'Enter the engine capacity, the transaction and the age. The calculator applies the band, the taper and the five-year cut-off, and shows what the other filer status would pay on the same car.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Two different charges, and they work differently',
+      body: [
+        'Section 231B(1) is the charge at first registration of a locally manufactured vehicle, collected by the Excise and Taxation registering authority at the Division VII rates. It is calculated on the value of the vehicle within engine-capacity bands, so a more expensive car in the same band pays more.',
+        'Section 231B(2) is the charge on a later transfer of registration or ownership, and it is a fixed amount per band rather than a percentage. The value of the car does not enter it at all. Someone selling a well-maintained car and someone selling a wreck of the same engine size face the same figure, subject to the age reduction.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Not on the Active Taxpayer List costs three times, not twice',
+      body: 'The usual shorthand is that a non-filer pays double. On vehicles it is triple. The Tenth Schedule increases the rate by one hundred per cent by default, but section 231B carries a proviso taking the increase to two hundred per cent, which makes the figure three times the filer amount rather than twice it. On a mid-sized car that is a difference worth more than the cost of filing a return.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'You should not pay twice on the same vehicle',
+      body: 'Section 231B(4) is the provision to know if you are asked for advance tax at registration having already paid at the showroom or at import. It disapplies the sub-section (1) charge where the person produces evidence that tax was already collected from the same person under sub-section (3), which is the manufacturer collecting at the point of sale, or under section 148, which is collection at import. Keep the manufacturer\'s or the customs receipt, and keep it in the name of the person registering the vehicle, because the section requires it to have been collected from the same person.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Selling your allocation before the car is registered',
+      body: [
+        'Booking a car and selling the allocation before taking delivery, sometimes called own-money, has its own rule. Section 231B(2A) requires the registering authority to collect tax at the Division VII rates at registration where a locally manufactured vehicle has been sold prior to registration by the person who originally bought it from the manufacturer.',
+        'The effect is that the transaction does not escape the section by happening before the car reaches the register. Whoever finally registers it pays, and the person who flipped the allocation has not removed the charge, only moved it.',
+      ],
+    },
+
+    {
+      kind: 'list',
+      heading: 'Who the section does not apply to',
+      intro:
+        'The proviso to section 231B(1) lists the exemptions, and they are institutional rather than personal. There is no exemption here for a first-time buyer, a small car or a low income.',
+      items: [
+        'The Federal Government',
+        'A Provincial Government',
+        'A Local Government',
+        'A foreign diplomat',
+        'A diplomatic mission in Pakistan',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'It is no longer only about private cars',
+      body: 'The section used to read "advance tax on private motor vehicles" and the Finance Act 2022 omitted the word "private" from both the heading and the operative sub-section. The Ordinance\'s own contents page still carries the old title, which is a good illustration of why the operative text is what to read. Secondary coverage almost universally still calls it a tax on private motor vehicles.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Electric vehicles are handled by value, not capacity',
+      body: 'Where engine capacity does not apply and the vehicle is worth five million rupees or more, Division VII charges a flat percentage at registration and a fixed twenty thousand rupees on transfer, rather than trying to place it in a cc band. The ten per cent annual reduction and the five-year cut-off apply to the transfer figure in the same way.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'What this tax is, and is not',
+      body: [
+        'It is advance income tax, not a road tax and not a registration fee. It is collected by the Excise and Taxation department but it belongs to your federal income tax account, and it is creditable against your liability for the year in the ordinary way.',
+        'That is worth separating from provincial motor vehicle token tax, which is a genuinely different provincial charge levied annually on keeping a vehicle on the road. The two are collected by the same department and are constantly confused, in much the same way that federal advance tax on property and provincial property tax are confused.',
+      ],
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'How much tax do I pay when buying a car in Pakistan?',
+      answer:
+        'At first registration, advance tax under section 231B(1) at the Division VII rates, charged on the value of the vehicle within engine-capacity bands. On a later transfer, a fixed amount by band instead, reduced by a tenth for each year since first registration.',
+    },
+    {
+      question: 'Is there tax on transferring a car older than five years?',
+      answer:
+        'No. The proviso to section 231B(2) provides that no collection shall be made on transfer of vehicles after five years from the date of first registration in Pakistan. The ten per cent annual reduction stops mattering at that point because there is nothing left to collect.',
+    },
+    {
+      question: 'How much more does a non-filer pay on a car?',
+      answer:
+        'Three times the filer amount, not double. The Tenth Schedule doubles rates by default, but section 231B carries a proviso taking the increase to two hundred per cent, which trebles the figure.',
+    },
+    {
+      question: 'I paid tax at the showroom. Do I pay again at registration?',
+      answer:
+        'You should not. Section 231B(4) disapplies the registration charge where you produce evidence that tax was already collected from the same person under sub-section (3), by the manufacturer, or under section 148 on import. Keep the receipt and check it is in the name of the person registering the vehicle.',
+    },
+    {
+      question: 'Is advance tax on a car the same as token tax?',
+      answer:
+        'No. Section 231B is federal advance income tax, creditable against your income tax liability for the year. Motor vehicle token tax is a separate provincial charge for keeping a vehicle on the road. Both are handled by Excise and Taxation, which is why they get confused.',
+    },
+    {
+      question: 'What if I sell my car booking before registering it?',
+      answer:
+        'Section 231B(2A) requires the registering authority to collect at the Division VII rates where a locally manufactured vehicle was sold before registration by the person who originally bought it from the manufacturer. The charge is not avoided, only shifted to whoever registers it.',
+    },
+    {
+      question: 'Does section 231B apply to commercial vehicles?',
+      answer:
+        'It is no longer limited to private ones. The Finance Act 2022 omitted the word "private" from the heading and from sub-section (1), although the Ordinance contents page and most published summaries still carry the old title.',
+    },
+    {
+      question: 'How is an electric vehicle taxed under section 231B?',
+      answer:
+        'By value rather than engine capacity. Where capacity does not apply and the vehicle is worth five million rupees or more, Division VII sets a flat percentage at registration and a fixed twenty thousand rupees on transfer, with the same annual reduction and five-year cut-off.',
+    },
+  ],
+
+  publishedAt: '2026-09-22T03:00:00Z',
+  related: ['filer-vs-non-filer', 'check-your-atl-status'],
+
+  seo: {
+    title: 'Tax on Buying and Transferring a Car in Pakistan',
+    description:
+      'Section 231B explained: what is collected at registration and transfer, why nothing is due after five years, the triple rate for non-filers, and how not to pay twice.',
+  },
+};
+
+export const FILER_GUIDES: Guide[] = [FILER_VS_NON_FILER,
   HOW_TO_BECOME_A_FILER,
-  CHECKING_ATL_STATUS,
-];
+  CHECKING_ATL_STATUS, VEHICLE_TAX];
+

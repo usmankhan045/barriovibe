@@ -209,4 +209,342 @@ const FILING_A_RETURN: Guide = {
   },
 };
 
-export const FILING_GUIDES: Guide[] = [FILING_A_RETURN];
+
+/**
+ * Guide 27: paying FBR.
+ *
+ * The correction that leads is a source-attribution one. "A PSID is valid for
+ * 7 days" is everywhere, and it is PTA's rule for mobile device registration
+ * under DIRBS, not an FBR income tax rule. Six FBR sources mention validity
+ * exactly zero times, so the honest publication is the negative: FBR documents
+ * no expiry, and we assert neither seven days nor "never".
+ *
+ * The second is another FBR-contradicts-FBR case, the same shape as the ATL
+ * weekly-versus-daily one: the Pay Income Tax page still says deposit the slip
+ * at NBP or SBP, while FBR's own ADC list shows NBP with ATM and internet
+ * banking both disabled across 28 enabled banks.
+ */
+
+const PAYING_FBR: Guide = {
+  slug: 'how-to-pay-fbr-tax',
+  cluster: 'filing',
+  title: 'How to Pay Your Tax to FBR',
+  navLabel: 'Paying your tax',
+  card: 'What a PSID is, where the seven-day expiry story actually comes from, which banks take which channels, and what to do when the receipt does not appear.',
+
+  answer:
+    'Create a Payment Slip ID in IRIS, which you can do without logging in, then pay it through your bank: at an ATM, in internet or mobile banking, or over the counter. FBR publishes a list of ADC-enabled banks with a channel-by-channel matrix, and coverage is not uniform. The Computerized Payment Receipt appears in IRIS within 24 hours of payment.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'The seven-day PSID expiry is not an FBR rule',
+      body: 'Nearly every page on this subject states that a PSID is valid for seven days. That figure comes from a Pakistan Telecommunication Authority press release, and its own title scopes it: "7 Days Validity of Mobile Device Registration Application/Payment Slip Identification". It is a handset registration rule under the DIRBS system, transplanted onto income tax by repetition. We searched FBR\'s e-payment guides, its Pay Income Tax page, its ADC bank list and its ePayment press release for any mention of validity, expiry or seven days, and found none. So the honest position is the negative one: FBR does not document a validity period for an income tax PSID. We are not telling you it lasts seven days, and we are not telling you it never expires either, because neither is sourced. If a slip is old, generate a fresh one, which costs nothing.',
+    },
+
+    {
+      kind: 'steps',
+      heading: 'Creating the payment slip',
+      intro:
+        'The PSID is the number your bank needs. Everything else follows from it.',
+      steps: [
+        {
+          title: 'Open the e-Payments interface',
+          body: 'It sits inside IRIS at the payment route. You do not have to be logged in: the form accepts a CNIC, an NTN or FTN, or a registration number, so it is available to unregistered taxpayers as well as registered ones.',
+        },
+        {
+          title: 'Choose the right head',
+          body: 'Income Tax offers Admitted Income Tax, Advance Income Tax, Demanded Income Tax, WPPF and WWF, and miscellaneous. Admitted is what you owe on your own return. Demanded is what an assessment or notice has raised. Advance is a section 147 instalment. Getting this wrong is how a payment goes missing against the wrong liability.',
+        },
+        {
+          title: 'Enter the tax year and the amount',
+          body: 'The slip carries the tax year, your registration number, your name, the nature of the payment, your email and mobile, and the amount.',
+        },
+        {
+          title: 'Generate and note the PSID',
+          body: 'That number is what you quote at the bank, the ATM or in your banking app.',
+        },
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'FBR\'s own page tells you to pay somewhere its own bank list contradicts',
+      body: 'Two FBR surfaces disagree and both are live. The Pay Income Tax page still instructs you to log into efile and says the payment slip "can be deposited in any National Bank (NBP)/State Bank (SBP) branch", asking you to pick a city. FBR\'s own List of ADC Enabled Banks shows twenty-eight banks with per-channel flags, and National Bank of Pakistan appears there with ATM and internet banking both marked unavailable. Meanwhile FBR\'s ePayment 2.0 announcement says the separate portal outside IRIS is gone and payment creation now sits directly within IRIS 2.0. Read the bank list rather than the instruction page.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Check your own bank before assuming the channel works',
+      body: 'The ADC list is a matrix rather than a yes or no. Some banks support all five channels: ATM, retail internet banking, corporate internet banking, mobile app, and over the counter. Others support one. A large bank supporting internet banking but not its mobile app, or over the counter but nothing electronic, is common in that table. The page carries no last-updated date, which is itself worth knowing, so treat the flags as indicative and confirm with your branch if a channel fails.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'After you pay: the CPR',
+      body: [
+        'The Computerized Payment Receipt is the proof, and FBR states it is generated after paying the tax due and reflected in IRIS within twenty-four hours of the payment being deposited. It also goes out by email and SMS.',
+        'Twenty-four hours is the documented expectation rather than an instant confirmation, so a receipt that has not appeared an hour after paying is not yet a problem.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Paid at the bank and no receipt appeared: check FBR\'s own record first',
+      body: 'This is the scenario that causes the most anxiety and it has a concrete first step nobody publishes. IRIS 2.0 exposes a public Online Verifications menu that works without logging in, and it includes Payment Slip ID and Computerized Payment Receipt verification. Look the PSID up there before doing anything else: it tells you whether FBR has the payment against your slip, which is a different question from whether your bank debited you. If FBR has it, the CPR is a timing matter. If FBR does not have it after twenty-four hours, you have a bank-side problem to raise with the branch, with your PSID and the debit on your statement.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'What we could not establish, and will not invent',
+      body: 'FBR documents the twenty-four hour expectation and the verification tool, and does not document what to do if the receipt still has not appeared afterwards. The advice that circulates, to take your bank statement and PSID to your RTO, is plausible and we have not found it in any FBR source. We are telling you it is what the field advises rather than presenting it as FBR procedure. FBR\'s own documented support channels are helpline@fbr.gov.pk and the helpline on (051) 111 772 772, open 9am to 11pm Monday to Friday. A widely circulated 0800 number appears in no FBR source we could find.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Advance tax is a different payment on a different timetable',
+      body: [
+        'Admitted tax on a return is due on the return\'s due date. Advance tax under section 147 is separate, and the dates depend on who you are: an individual pays by the fifteenth of September, December, March and June, while an association of persons or a company pays by the twenty-fifth for the first three and the fifteenth in June. Only the June quarter is shared, and tables printing one set of dates for everyone are wrong for half their readers.',
+        'Advance tax does not reach an individual whose latest assessed taxable income, excluding salary already taxed under section 149, is below one million rupees. And note the test is on assessed history rather than on what you expect to earn, so a first year of self-employment generally has nothing to compute against.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Late payment is a surcharge, not the late-filing penalty',
+      body: 'Two charges get run together. The section 182 penalty is for filing late, tapering by 75, 50 or 25 per cent if you file within one, two or three months of the due date. The section 205 default surcharge is for paying late, computed at twelve per cent a year or KIBOR plus three per cent, whichever is higher, running from the due date to the date of payment. Filing on time and paying late attracts the second and not the first.',
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'How long is a PSID valid in Pakistan?',
+      answer:
+        'FBR does not document a validity period for an income tax PSID. The seven-day figure that circulates is a Pakistan Telecommunication Authority rule for mobile device registration under DIRBS, and the PTA notice says so in its own title. If a slip is old, generate a new one.',
+    },
+    {
+      question: 'Can I create a PSID without logging into IRIS?',
+      answer:
+        'Yes. The e-Payments interface accepts a CNIC, an NTN or FTN, or a registration number without a login, so both registered and unregistered taxpayers can create one.',
+    },
+    {
+      question: 'Where can I pay my FBR tax?',
+      answer:
+        'Through a bank on FBR\'s List of ADC Enabled Banks, which covers twenty-eight banks across five channels: ATM, retail and corporate internet banking, mobile app, and over the counter. Coverage differs by bank, so check the matrix rather than assuming your channel works.',
+    },
+    {
+      question: 'How long does a CPR take to appear?',
+      answer:
+        'FBR states the Computerized Payment Receipt is reflected in IRIS within twenty-four hours of the payment being deposited, and is also sent by email and SMS.',
+    },
+    {
+      question: 'I paid but no CPR appeared. What do I do?',
+      answer:
+        'Use the public PSID and CPR verification service in the IRIS Online Verifications menu, which needs no login, to see whether FBR has the payment against your slip. That separates a timing question from a bank-side failure. FBR does not document an escalation route beyond that; the common advice to take your statement and PSID to your RTO is field practice rather than published procedure.',
+    },
+    {
+      question: 'Which payment head do I choose in IRIS?',
+      answer:
+        'Admitted Income Tax for what you owe on your own return, Demanded Income Tax for an amount raised by an assessment or notice, and Advance Income Tax for a section 147 instalment. Choosing the wrong head is how a payment ends up credited against the wrong liability.',
+    },
+    {
+      question: 'When is advance tax due in Pakistan?',
+      answer:
+        'For an individual, by 15 September, 15 December, 15 March and 15 June. For an association of persons or a company, by 25 September, 25 December, 25 March and 15 June. Only the June quarter is the same for everyone.',
+    },
+    {
+      question: 'What is the penalty for paying tax late?',
+      answer:
+        'Paying late attracts the section 205 default surcharge, at twelve per cent a year or KIBOR plus three per cent, whichever is higher, from the due date until payment. That is separate from the section 182 penalty, which is for filing late.',
+    },
+  ],
+
+  publishedAt: '2026-09-23T03:00:00Z',
+  related: ['how-to-file-your-tax-return', 'filer-vs-non-filer'],
+
+  seo: {
+    title: 'How to Pay Your Tax to FBR: PSID, Challan and CPR',
+    description:
+      'Creating a payment slip without logging in, why the seven-day expiry is a PTA rule, which banks support which channels, and what to do when the receipt does not appear.',
+  },
+};
+
+
+/**
+ * Guide 28: getting back into IRIS.
+ *
+ * The finding that carries it: IRIS has a self-service Account Recovery branch
+ * for people who have lost access to BOTH their registered email and mobile,
+ * verified verbatim from the live portal. Essentially every competitor sends
+ * that reader to an RTO or a paid recovery agent, and TaxationPk reported the
+ * feature was introduced precisely because people were doing exactly that.
+ *
+ * Second: there is no forgot-PIN flow. Change PIN requires being logged in, so
+ * a lost PIN is recovered password-first. Guides telling readers to "reset your
+ * PIN" describe something that does not exist.
+ *
+ * Third, and the structural explanation for everything else: a mobile number
+ * can be changed online through Form 181, and an email cannot. That asymmetry
+ * is why losing the email is the harder problem, and it is why the Account
+ * Recovery branch works by updating the mobile against your CNIC.
+ */
+
+const IRIS_ACCESS: Guide = {
+  slug: 'iris-login-and-account-recovery',
+  cluster: 'filing',
+  title: 'Getting Back Into IRIS',
+  navLabel: 'IRIS access',
+  card: 'The recovery route for people who have lost both their registered email and phone, why there is no forgot-PIN link, and what you can change online.',
+
+  answer:
+    'IRIS has two recovery routes, not one. Forgot Password works where you still have your registered email and mobile. Account Recovery exists for where you have lost access to either, and recovers the account by updating the mobile number registered against your CNIC. It is self-service: you do not need to visit an RTO, and you should not be paying an agent for it.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'If you have lost your email and your phone, there is still a route',
+      body: 'This is the thing worth knowing and almost nothing published says it. The IRIS recovery screen offers two branches in its own words. "Forgot Password? Where you have access to your Email Address and Mobile Number registered with FBR." And separately: "Account Recovery? Where you do not have access to either your Mobile Number or Email Address registered with FBR and want to recover your account by updating your Mobile Number registered against your CNIC." The second branch is the one people are told does not exist. It is self-service, and it was introduced precisely because taxpayers in that position were visiting RTOs or paying recovery agents.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Why Forgot Password fails for so many people',
+      body: [
+        'The ordinary route requires both channels. FBR issues a code to your registered email and a code to your registered mobile, and you need both, so losing either one breaks it. That is stricter than most portals and it is why the second branch had to exist.',
+        'It also explains a common frustration: someone who still has their phone but registered with an old work email finds Forgot Password unusable even though they can receive the SMS. That is the case Account Recovery covers.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'There is no forgot-PIN link, and looking for one wastes an afternoon',
+      body: 'IRIS uses two credentials. The password logs you in; the PIN authorises submissions, which is why you are asked for it when you file rather than when you sign in. Both are issued together at enrollment, to your email and your mobile. FBR documents e-enrollment, Forgot Password, Change Password and Change PIN, and Change PIN requires you to be logged in already. So there is no recovery flow for a forgotten PIN as such: you log in with your password and have a new PIN issued to your registered email. If you have lost both, the password comes first and the PIN follows.',
+    },
+
+    {
+      kind: 'table',
+      heading: 'What you can change online, and what needs a visit',
+      intro:
+        'From FBR\'s own change-of-particulars page. The split is the reason a lost email is a harder problem than a lost phone.',
+      columns: ['Change', 'How'],
+      rows: [
+        ['Mobile number', 'Online, through Form 181'],
+        ['Email address', 'RTO visit'],
+        ['Residential or business address', 'Online, through Form 181'],
+        ['Bank account', 'Online, through Form 181'],
+        ['CNIC number', 'RTO visit'],
+        ['Jurisdiction, or deregistration', 'RTO visit'],
+      ],
+    },
+
+    {
+      kind: 'prose',
+      heading: 'The asymmetry explains the design',
+      body: [
+        'A mobile number can be updated online and an email cannot. That is exactly why the Account Recovery branch works the way it does: it recovers your account by updating the mobile registered against your CNIC, using the one channel FBR is willing to let you change without a counter visit.',
+        'A modification is decided by the Commissioner, and where it is refused there is a representation to the Chief Commissioner available within thirty days. No FBR source we read documents a biometric or NADRA verification requirement for changing particulars, although vendors frequently assert one.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'The SIM has to be in your own name, and not already used with FBR',
+      body: 'Registration requires a mobile with a SIM registered against your own CNIC, and a personal email address belonging to you. For an association of persons or a company registering at a facilitation counter, FBR adds a constraint people trip over: the SIM must be registered against the person\'s own CNIC and not already registered with FBR. So a principal officer whose number is already tied to their personal registration cannot reuse it for the company. Plan a second number before the appointment rather than discovering it there.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Sessions close after fifteen minutes',
+      body: 'IRIS closes a session automatically after fifteen minutes of inactivity, which is short enough to catch you mid-return while you look for a figure. It does permit multiple simultaneous sessions, so you can have the return open in one tab and a verification service in another. Save often: the fifteen-minute timeout has cost more unsaved returns than any other feature of the portal.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Registration is not finished when you can log in',
+      body: [
+        'This is a different problem that presents the same way, and it is worth ruling out before assuming an access fault. FBR\'s own guide warns that just after login you cannot file a return unless the registration process is completed by submitting the registration application.',
+        'Form 181 has to be submitted from the Draft folder. Creating the login, seeing a dashboard and stopping there is the single most common structural failure in the whole process, and the symptom is that filing options appear absent rather than that anything looks broken.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'If Form 181 itself is unavailable, that may not be your account',
+      body: 'A note on something that looks like a personal fault and is not. FBR suspended the Form 181 change-in-particulars facility during 2026, reported in August, and the Pakistan Tax Bar Association wrote to the Member Inland Revenue asking for it to be restored. If the modification route is simply missing rather than rejecting you, it is worth checking whether the facility is available at all before assuming your registration is at fault. We have not been able to establish whether it has since been restored.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'What we could not establish about account suspension',
+      body: 'FBR documents cancellation of registration by the Commissioner, where there is no outstanding liability and the particulars warrant it. It does not document account suspension or lockout: what causes it, or how to get out of it. The advice that too many failed logins locks the account and that you should ring a particular 0800 number is tier-four material, and that number appears in no FBR source we could find. FBR\'s documented channels are helpline@fbr.gov.pk and (051) 111 772 772, 9am to 11pm Monday to Friday.',
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'I lost access to my registered email and phone. Can I still recover my IRIS account?',
+      answer:
+        'Yes, and without visiting an RTO. The IRIS recovery screen has a second branch, Account Recovery, for exactly that case: where you do not have access to either your registered mobile or email, and want to recover the account by updating the mobile number registered against your CNIC.',
+    },
+    {
+      question: 'How do I reset my IRIS password?',
+      answer:
+        'Through Forgot Password, which requires both your registered email and your registered mobile, because FBR sends a code to each. If you have lost access to either, use the Account Recovery branch instead.',
+    },
+    {
+      question: 'How do I reset my IRIS PIN?',
+      answer:
+        'There is no forgot-PIN flow. Change PIN requires you to be logged in, so recovery is password-first: log in with your password and have a new PIN issued to your registered email. Guides describing a PIN reset link are describing something that does not exist.',
+    },
+    {
+      question: 'What is the difference between the IRIS password and the PIN?',
+      answer:
+        'The password logs you in. The PIN authorises submissions, which is why it is asked for when you file rather than when you sign in. Both are issued together at e-enrollment, to your email and mobile.',
+    },
+    {
+      question: 'Can I change my registered email in IRIS online?',
+      answer:
+        'No. FBR allows the mobile number, addresses and bank account to be changed online through Form 181, but the email address, CNIC, jurisdiction and deregistration all require an RTO visit. That asymmetry is why a lost email is harder than a lost phone.',
+    },
+    {
+      question: 'Can I use the same mobile number for my company registration?',
+      answer:
+        'Not if it is already registered with FBR. For an association or company registering at a facilitation counter, the SIM must be registered against the person\'s own CNIC and not already registered with FBR, so a principal officer generally needs a second number.',
+    },
+    {
+      question: 'Why can I log into IRIS but not file a return?',
+      answer:
+        'Most likely because registration was never completed. FBR warns that just after login you cannot file unless the registration application has been submitted, which means Form 181 has to go from the Draft folder. A dashboard appearing does not mean registration finished.',
+    },
+    {
+      question: 'What is FBR\'s helpline number for IRIS problems?',
+      answer:
+        'helpline@fbr.gov.pk, and (051) 111 772 772 nationally, 9am to 11pm Monday to Friday. A widely circulated 0800 number appears in no FBR source we could find.',
+    },
+  ],
+
+  publishedAt: '2026-09-23T07:00:00Z',
+  related: ['how-to-file-your-tax-return', 'how-to-get-an-ntn'],
+
+  seo: {
+    title: 'Getting Back Into IRIS: Password, PIN and Account Recovery',
+    description:
+      'The self-service route for people who have lost both their registered email and phone, why there is no forgot-PIN link, and what needs an RTO visit.',
+  },
+};
+
+export const FILING_GUIDES: Guide[] = [FILING_A_RETURN, PAYING_FBR, IRIS_ACCESS];
+
+

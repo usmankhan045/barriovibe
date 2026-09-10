@@ -10,6 +10,7 @@ import { SALARY_GUIDES } from './salary';
 import { FILING_GUIDES } from './filing';
 import { CREATOR_GUIDES } from './creator';
 import { CROSS_BORDER_GUIDES } from './cross-border';
+import { PENSION_GUIDES } from './pension';
 
 export type { Cluster, ClusterSlug, Guide, GuideSection } from './types';
 
@@ -138,6 +139,7 @@ export const ALL_GUIDES: Guide[] = [
   ...FILING_GUIDES,
   ...CREATOR_GUIDES,
   ...CROSS_BORDER_GUIDES,
+  ...PENSION_GUIDES,
 ];
 
 /**
