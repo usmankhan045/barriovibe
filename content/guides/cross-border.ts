@@ -1051,14 +1051,337 @@ const US_LLC_CALENDAR: Guide = {
   },
 };
 
+
+/**
+ * Guide 45: paying foreign suppliers.
+ *
+ * Written because s.2(22B) reads like an invoice from our own audience's
+ * suppliers: hosting, online computing, storage and distribution of digital
+ * content, online advertising, closing with "any other online facility". Every
+ * Pakistani software house pays AWS, a CDN and an ad platform, and almost none
+ * of them has considered whether s.152 applies.
+ *
+ * The fork that matters is 15 per cent for a fee for technical services against
+ * 5 per cent for a fee for offshore digital services, on the same payment,
+ * decided by characterisation.
+ *
+ * The guide is careful about what it does NOT resolve: whether a given fee is
+ * Pakistan-source under s.101 is the gating question and it is fact-specific,
+ * so this sets out the test and the exclusions rather than asserting an answer
+ * for a reader whose facts we do not have.
+ */
+
+const PAYING_FOREIGN_SUPPLIERS: Guide = {
+  slug: 'paying-foreign-suppliers',
+  cluster: 'cross-border',
+  title: 'Tax on Payments to Foreign Suppliers',
+  navLabel: 'Paying foreign suppliers',
+  card: 'The 5 per cent on offshore digital services that catches hosting and ads, the 15 per cent that catches consultancy, and the exclusions that stop both.',
+
+  answer:
+    'Section 6 charges a non-resident on Pakistan-source royalty, fees for technical services, and fees for offshore digital services, and section 152 makes the payer withhold. The rates are 15% on royalty and technical services and 5% on offshore digital services, both on the gross amount. Payments through a permanent establishment in Pakistan are excluded.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'The definition reads like your own supplier list',
+      body: 'Section 2(22B) defines a fee for offshore digital services as consideration for services rendered by a non-resident for online advertising including digital advertising space, designing, creating, hosting or maintenance of websites, digital or cyber space for websites, e-mails, online computing, blogs, online content and online data, any facility for uploading, storing or distribution of digital content including digital text, audio or video, online collection or processing of data related to users in Pakistan, any facility for online sale of goods or services, or any other online facility. Read that against what a Pakistani software house actually buys: hosting, online computing, storage, a CDN, an ad platform. The category was drafted to reach precisely those services, and it closes with a catch-all that is about as wide as drafting gets.',
+    },
+
+    {
+      kind: 'table',
+      heading: 'The rates, and why characterisation is worth arguing about',
+      intro:
+        'First Schedule Part I Division IV, applied to the gross amount. The same payment can fall on either side depending on what it is for.',
+      columns: ['What the payment is for', 'Rate on gross'],
+      rows: [
+        ['Royalty', '15%'],
+        ['Fee for technical services', '15%'],
+        ['Fee for offshore digital services', '5%'],
+      ],
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Gross means gross',
+      body: [
+        'Section 6(2) computes the tax by applying the rate to the gross amounts of receipts. There is no deduction for the non-resident supplier\'s own costs, and no netting.',
+        'That matters commercially as well as technically. Most foreign suppliers price on the assumption of receiving the invoiced amount, so a withholding obligation either reduces what they receive or, where the contract grosses up, increases what you pay. Either way it is a term to settle before the first invoice rather than a surprise at the first audit.',
+      ],
+    },
+
+    {
+      kind: 'list',
+      heading: 'The heads section 6 actually covers',
+      intro:
+        'Broader than the royalty and technical services pair that most summaries stop at, and two of the additions matter to anyone taking payments online.',
+      items: [
+        'Pakistan-source royalty',
+        'Fee for offshore digital services',
+        'Fee for money transfer operations',
+        'Fee for card network services',
+        'Fee for payment gateway services',
+        'Fee for interbank financial telecommunication services',
+        'Fee for technical services',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Payment processor fees are named in the section',
+      body: 'Card network services, payment gateway services and money transfer operations are heads in their own right. So the fee a foreign processor charges on Pakistani-source receipts is within the charge rather than outside it, which is a point almost never made in coverage aimed at businesses taking online payments. If you are reconciling processor deductions against your own revenue, this is the provision that explains why the question of withholding arises at all.',
+    },
+
+    {
+      kind: 'list',
+      heading: 'When section 6 does not apply',
+      intro:
+        'Section 6(3). These are the exclusions to check before concluding you must withhold.',
+      items: [
+        'Any royalty where the property or right giving rise to it is effectively connected with a permanent establishment in Pakistan of the non-resident',
+        'Any fee where the services giving rise to it are rendered through a permanent establishment in Pakistan of the non-resident',
+        'Any royalty or fee for technical services that is exempt from tax under the Ordinance',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'The gating question is whether the fee is Pakistan-source, and we cannot answer it for you',
+      body: 'Section 6 charges Pakistan-source royalty and fees. Whether a particular payment to a particular supplier is Pakistan-source turns on section 101 and on the facts of the arrangement, and it is the question everything else depends on. We are setting out the rates, the definitions and the exclusions rather than telling you that your hosting bill is or is not caught, because that answer depends on facts we do not have. What we would say plainly is that a firm paying substantial sums to foreign digital suppliers and never having considered section 152 is carrying an unexamined position rather than a settled one, and the cost of examining it is small next to the cost of a s.161 assessment.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'A treaty can change the answer, and it has to be claimed',
+      body: 'Where Pakistan has a tax treaty with the supplier\'s country, section 107 gives the agreement effect notwithstanding other law, and treaty articles on royalties and technical fees frequently set lower rates than the Division IV figures. But relief is not automatic in practice: it depends on the supplier\'s residence being established and on the treaty applying to the payment, and the burden of getting that right sits with the payer who is being asked to withhold. Note the US treaty in particular is a 1957 instrument with no limitation on benefits article and no modern services provisions, so do not assume a treaty is modern simply because it exists.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'What happens if you should have withheld and did not',
+      body: [
+        'Two consequences, and the second is the expensive one. Section 161 can make the payer personally liable for the tax that should have been deducted, so the obligation does not disappear because the supplier has been paid in full.',
+        'And the proviso to section 22(1) removes the cost of a capital asset from your depreciation base entirely, in all relevant tax years, where tax deductible under section 152 was not deducted and deposited. So on a capital purchase from a foreign supplier the failure costs the withholding, the exposure under section 161, and the write-off for the life of the asset.',
+      ],
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'Do I have to withhold tax when paying a foreign software supplier?',
+      answer:
+        'Potentially. Section 6 charges a non-resident on Pakistan-source royalty, fees for technical services and fees for offshore digital services, and section 152 requires the payer to deduct. Whether a specific payment is caught turns on whether the fee is Pakistan-source and on the exclusions in section 6(3).',
+    },
+    {
+      question: 'What is the withholding rate on payments to non-residents?',
+      answer:
+        'Under Division IV of Part I, 15% of the gross amount for royalty or a fee for technical services, and 5% of the gross amount for a fee for offshore digital services. The 5% limb was inserted by the Finance Act 2025.',
+    },
+    {
+      question: 'Are hosting and cloud fees offshore digital services?',
+      answer:
+        'The section 2(22B) definition expressly includes hosting or maintenance of websites, online computing, and facilities for uploading, storing or distributing digital content, and closes with any other online facility. Whether your particular payment is caught still depends on it being Pakistan-source.',
+    },
+    {
+      question: 'Is tax charged on the gross payment or the supplier\'s profit?',
+      answer:
+        'Gross. Section 6(2) applies the rate to the gross amounts of receipts, with no deduction for the non-resident\'s own costs.',
+    },
+    {
+      question: 'Are payment gateway fees covered?',
+      answer:
+        'Yes, as separate heads. Section 6(1) names fees for money transfer operations, card network services, payment gateway services and interbank financial telecommunication services alongside royalty and technical services.',
+    },
+    {
+      question: 'When do I not have to withhold?',
+      answer:
+        'Section 6(3) excludes royalty where the right giving rise to it is effectively connected with the non-resident\'s permanent establishment in Pakistan, fees where the services are rendered through such a permanent establishment, and royalty or technical fees exempt under the Ordinance.',
+    },
+    {
+      question: 'Can a tax treaty reduce the rate?',
+      answer:
+        'It can. Section 107 gives a tax agreement effect notwithstanding other law, and treaty articles on royalties and technical fees often set lower rates. Relief depends on the supplier\'s residence and the treaty applying, and the risk of getting it wrong sits with the payer.',
+    },
+    {
+      question: 'What happens if I did not withhold?',
+      answer:
+        'Section 161 can make you personally liable for the tax that should have been deducted. And on a capital purchase, the proviso to section 22(1) removes that asset\'s cost from your depreciation base in all relevant tax years, so the write-off is lost for the life of the asset.',
+    },
+  ],
+
+  publishedAt: '2026-10-02T03:00:00Z',
+  related: ['tax-for-freelancers', 'depreciation-on-business-assets'],
+
+  seo: {
+    title: 'Tax on Payments to Foreign Suppliers from Pakistan',
+    description:
+      'The 5% on offshore digital services that reaches hosting and advertising, the 15% on royalty and technical fees, the permanent establishment exclusions, and what non-compliance costs.',
+  },
+};
+
+
+/**
+ * Guide 46: what an overseas Pakistani still owes.
+ *
+ * Sits alongside the residency guide rather than repeating it. That one
+ * answers whether you are resident; this answers what follows if you are not,
+ * which is the question people actually have next and which is answered badly
+ * everywhere.
+ *
+ * Two corrections carry it.
+ *
+ * 1. s.115(3) relieves a non-resident from filing ONLY by reason of the
+ *    property and vehicle triggers. Until 2008 holding an NTN alone relieved
+ *    them; the Finance Act 2008 removed that, so a non-resident with an NTN
+ *    files. Widely stated the other way.
+ * 2. The premise that a Pakistani in a zero-tax Gulf state cannot get a tax
+ *    residency certificate is FALSE, and this corrects our own earlier
+ *    framing. UAE, Saudi and Qatar all issue them to individuals, because
+ *    their residency tests turn on presence and abode rather than on liability
+ *    to tax.
+ */
+
+const OVERSEAS_OBLIGATIONS: Guide = {
+  slug: 'overseas-pakistani-tax-obligations',
+  cluster: 'cross-border',
+  title: 'What an Overseas Pakistani Still Owes',
+  navLabel: 'Overseas obligations',
+  card: 'Why holding an NTN means you file even as a non-resident, the reliefs that do exist, and the residency certificate you probably can get.',
+
+  answer:
+    'Being non-resident narrows what Pakistan taxes to Pakistan-source income, but it does not switch off filing. Section 115(3) relieves a non-resident from filing only where the trigger was owning immovable property, and holding an NTN has required a return since 2008. Specific reliefs exist for property purchase, school fees and vehicle transfers, each conditional on how the money moved.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Holding an NTN means you file, resident or not',
+      body: 'This is stated the other way round constantly and the legislative history is what settles it. Section 114(1)(b)(vii) requires a return from any person who has obtained a National Tax Number, and that sub-clause carries no residence qualifier, unlike sub-clauses (ix) and (x) which were expressly limited to a resident person. Section 115(3) is the carve-out, and it relieves a non-resident only in the case of ownership of immovable property, and only from the triggers in section 114(1)(b)(iii) to (vi). Until 2008 a non-resident holding an NTN was relieved; the Finance Act 2008 removed that limb. So an overseas Pakistani who obtained an NTN years ago to buy a plot is filing every year whether or not anything happened.',
+    },
+
+    {
+      kind: 'list',
+      heading: 'Who section 115(3) actually relieves',
+      intro:
+        'Verbatim, and note the fourth entry carries a condition the first three do not.',
+      items: [
+        'A widow',
+        'An orphan below the age of twenty-five years',
+        'A disabled person',
+        'A non-resident person, but only in the case of ownership of immovable property',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'You can almost certainly get a tax residency certificate',
+      body: 'Worth correcting because we have seen it assumed the other way, including in our own earlier thinking. The idea that a Pakistani in a zero-income-tax Gulf state cannot obtain a tax residency certificate is false. The UAE, Saudi Arabia and Qatar all issue them to individuals, and the reason is structural: their residency tests turn on presence and abode rather than on liability to tax. The UAE, for instance, qualifies a natural person through a 183-day limb, or a 90-day limb combined with nationality or a residence permit plus a permanent place of residence or employment. That matters because section 82(d) makes a Pakistani citizen resident where they are not a resident taxpayer of any other country, and a certificate is the most direct evidence against that limb.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'The one place Parliament said what proof of non-residence looks like',
+      body: 'Section 236I(6) exempts a non-resident from advance tax on educational institution fees, and it is worth reading even if you have no children in Pakistani schools, because it is the only place in the Ordinance where the evidence is specified. Three things: a copy of the passport showing that during the previous tax year the stay in Pakistan was less than one hundred and eighty-three days; a certificate that the person has no Pakistan-source income; and the fee remitted directly from abroad through normal banking channels to the institution\'s bank account. If you are wondering what a Pakistani authority is likely to accept as proof you were not here, that list is the closest thing to an answer in the statute.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Two reliefs where the route of the money is the condition',
+      body: 'Section 236K(4) disapplies the advance tax on property purchase entirely for a scheme introduced by the Federal or a Provincial Government, or an authority established under such a law, for expatriate Pakistanis. But the proviso is the whole provision: the mode of payment by the expatriate in that scheme must be foreign exchange remitted from outside Pakistan through normal banking channels. Pay from a local account and the relief is gone, whatever your status. The same structure appears in section 236I(6)(iii), where the school fee must be remitted directly from abroad. In both cases the relief attaches to how the money travelled, not merely to who you are.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'What being non-resident actually changes',
+      body: [
+        'Section 11(6) confines a non-resident to Pakistan-source income under each head, against section 11(5) which brings both Pakistan-source and foreign-source amounts into a resident\'s computation. That is the whole benefit and it is a large one: salary earned abroad, a foreign business, foreign investment income all fall outside.',
+        'What it does not change is the treatment of Pakistan-source income. Rent from a Pakistani property, gain on a Pakistani plot, profit on a Pakistani bank account are all still within the charge, and the withholding regimes reach them in the ordinary way. A non-resident with Pakistani property is often withheld more, not less, because filer status is harder to maintain from abroad.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'The filer question is separate and usually the expensive one',
+      body: 'Non-residence does not put you on the Active Taxpayer List, and being off it is what most overseas Pakistanis actually feel: higher rates on property transfers, on vehicle registration, on banking transactions. FBR operates a route by which a non-resident holding a POC or NICOP can obtain the filer rate on sections 236C and 236K without being on the list and without filing, through the Overseas Pakistanis facility. If you are selling or buying property from abroad, ask about that before accepting a non-filer deduction.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'The provision a former FBR chairman calls bad law',
+      body: [
+        'Section 82(d) makes a Pakistani citizen resident where they were not present in any other single country for more than 182 days, or are not a resident taxpayer of any other country. Syed Shabbar Zaidi, a former Chairman of the FBR, has argued publicly that this is bad law, on the basis that it can tax a Pakistani citizen who never comes to Pakistan at all, and that the drafting was copied from an Indian provision without the qualifications that made it workable there.',
+        'We are not in a position to say who is right, and a criticism is not a defence. What it is useful for is calibration: if you find yourself resident under clause (d) despite living abroad permanently, you are not misreading the section, and the position is contested by people with standing to contest it. That is a reason to take advice on your own facts rather than to assume you have misunderstood.',
+      ],
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'Do overseas Pakistanis have to file a tax return?',
+      answer:
+        'If they hold an NTN, yes. Section 114(1)(b)(vii) requires a return from anyone who has obtained one, with no residence qualifier, and section 115(3) relieves a non-resident only in the case of ownership of immovable property. Until the Finance Act 2008 holding an NTN alone relieved a non-resident; it no longer does.',
+    },
+    {
+      question: 'What income does Pakistan tax for a non-resident?',
+      answer:
+        'Pakistan-source income only, under section 11(6). Foreign salary, a foreign business and foreign investment income fall outside. Rent, capital gains and bank profit arising in Pakistan remain within the charge.',
+    },
+    {
+      question: 'Can I get a tax residency certificate in the UAE or Saudi Arabia?',
+      answer:
+        'Yes. All three main Gulf destinations issue them to individuals, because their residency tests turn on presence and abode rather than liability to tax. That matters because section 82(d) can make you Pakistani-resident where you are not a resident taxpayer of any other country.',
+    },
+    {
+      question: 'What proof of non-residence does Pakistan accept?',
+      answer:
+        'The Ordinance specifies it in one place, section 236I(6): a copy of the passport showing a stay of less than 183 days in Pakistan in the previous tax year, a certificate of no Pakistan-source income, and remittance of the relevant payment from abroad through normal banking channels.',
+    },
+    {
+      question: 'Is there relief from advance tax when buying property from abroad?',
+      answer:
+        'Section 236K(4) disapplies the section for a Federal or Provincial Government scheme for expatriate Pakistanis, but only where the expatriate pays in foreign exchange remitted from outside Pakistan through normal banking channels. Paying from a local account loses the relief.',
+    },
+    {
+      question: 'Do overseas Pakistanis pay non-filer rates?',
+      answer:
+        'Often, because non-residence does not put you on the Active Taxpayer List. FBR operates an Overseas Pakistanis route by which a non-resident holding a POC or NICOP can obtain the filer rate on sections 236C and 236K without being on the list, which is worth asking about before a property transaction.',
+    },
+    {
+      question: 'Are school fees in Pakistan taxed for a non-resident parent?',
+      answer:
+        'Section 236I(6) exempts a non-resident from the advance tax on educational institution fees where the passport, the no-Pakistan-source-income certificate and direct remittance from abroad conditions are all met.',
+    },
+    {
+      question: 'Is it fair that I am resident in Pakistan while living abroad?',
+      answer:
+        'It is contested. A former Chairman of the FBR has argued publicly that section 82(d) is bad law because it can tax a citizen who never enters Pakistan, and that it was copied from an Indian provision without its qualifications. That is a criticism rather than a defence, but it means the position is worth advice rather than resignation.',
+    },
+  ],
+
+  publishedAt: '2026-10-02T07:00:00Z',
+  related: ['tax-residency-for-overseas-pakistanis', 'receiving-money-from-abroad'],
+
+  seo: {
+    title: 'What an Overseas Pakistani Still Owes',
+    description:
+      'Why an NTN means you file even as a non-resident, the reliefs that turn on how the money travelled, and why you probably can get a Gulf residency certificate.',
+  },
+};
+
 export const CROSS_BORDER_GUIDES: Guide[] = [
   US_LLC_FOREIGN_ASSET,
   FOREIGN_ENTITY_PERMISSION,
   RESIDENCY,
   MONEY_FROM_ABROAD,
   US_LLC_CALENDAR,
+  PAYING_FOREIGN_SUPPLIERS,
+  OVERSEAS_OBLIGATIONS,
 ];
-
-
-
-
