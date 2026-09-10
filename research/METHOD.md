@@ -176,7 +176,35 @@ six months; "traced to a vendor blog, no Forrester source exists" is not.
 
 ---
 
-## 7. Publishing an open question
+## 7. A blocked guide is skipped, not stalled
+
+**If the evidence for a guide is genuinely missing, leave it and write the next
+one.** Waiting on a source that will not load stops the whole queue for one
+page, and there is always another guide whose sources are already on disk.
+
+The distinction that matters is between a gap *inside* a guide and a gap that
+*is* the guide:
+
+- **A gap inside a guide is not a blocker.** Publish the open question. Section
+  8 below is about exactly this, and those sections are among the most useful
+  things on the site.
+- **A gap that is the guide is a blocker.** The UAE Small Business Relief
+  countdown turns entirely on one date and one threshold. Both come from a
+  single tier 2 source, and both `mof.gov.ae` and `tax.gov.ae` time out from
+  here. There is no honest version of that page, so it waits.
+
+When you skip one, record why in `GUIDE-RESEARCH.md` under a heading that says
+whether it is **blocked** or **decided against**. Those are different states and
+the next session should not have to work out which.
+
+Two rules follow from this. Never write a thin version of a blocked guide to
+fill the slot: a page that hedges its central claim is worse than no page.
+And never let a blocker sit unrecorded, because an unrecorded blocker is
+rediscovered from scratch every time somebody plans the next batch.
+
+---
+
+## 8. Publishing an open question
 
 Several guides state that something could not be established. That is a
 feature, and it is what a firm can do that a content mill cannot.
@@ -201,7 +229,7 @@ always the second.
 
 ---
 
-## 8. Writing from the store
+## 9. Writing from the store
 
 - **Interpolate, do not retype.** Where `lib/tax/` holds a figure, render from
   it. The salary guide's slab table comes from the same array the calculator
@@ -218,7 +246,7 @@ always the second.
 
 ---
 
-## 9. What is still missing
+## 10. What is still missing
 
 **Searching the wrong instrument.** The Ordinance is not the only source of
 Pakistani income tax law, and twice this cost us. We searched the whole

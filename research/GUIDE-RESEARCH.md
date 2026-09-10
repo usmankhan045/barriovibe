@@ -494,3 +494,58 @@ store itself, where two SBP records cited a URL that now redirects and whose
 saved file was site chrome. The claims were right and were not reproducible
 from the saved evidence, which is the thing the store exists to prevent.
 **Grep every fetch for a term the document must contain.**
+
+---
+
+## Schedule: two a day from 10 September 2026
+
+All 22 guides were rescheduled from one a day to **two a day, four hours
+apart**, running 10 to 20 September. Slots are 03:00 and 07:00 UTC, which is
+08:00 and 12:00 in Pakistan. Publication order is unchanged.
+
+This required `publishedAt` to become a full UTC timestamp rather than a date,
+the gate in `content/guides/index.ts` to compare instants, and
+`.github/workflows/publish-guides.yml` to run at both slots rather than once.
+A single morning run would publish both of a day's guides at once and the
+four-hour gap would be fiction.
+
+**One bug found in the process, worth knowing about.** Comparing ISO strings
+looks correct and is not. `publishedAt` is written `2026-09-10T03:00:00Z` while
+`toISOString()` returns `2026-09-10T03:00:00.000Z`. Same instant, and they do
+not compare equal as strings, because `Z` sorts after `.`. Every guide would
+have stayed hidden for the whole of its own slot and appeared four hours late,
+which would have read as a scheduling mistake rather than a comparison one. It
+surfaced only from testing the exact slot boundary; times in the middle of a
+slot behaved correctly throughout. Both the gate and `scripts/guides-due.ts`
+now parse to instants before comparing.
+
+## Blocked, and therefore skipped
+
+Per METHOD.md section 7, a guide whose central evidence is missing is skipped
+rather than stalled on, and the reason is recorded so nobody rediscovers it.
+
+**UAE Small Business Relief.** Blocked. The guide turns entirely on one date
+(31 December 2026) and one threshold (AED 3,000,000), both from a single tier 2
+source. `mof.gov.ae` and `tax.gov.ae` each time out at the transport layer,
+twice. Recorded as `uae-gov-unreachable`. Needs the Federal Tax Authority's own
+decision, or a second independent source for both figures. There is no honest
+short version of this page, so it waits rather than shipping hedged.
+
+Nothing else in the current slate is blocked. Nineteen findings remain contested
+or unverified, but each is a gap *inside* a guide rather than a gap that is the
+guide, and those are published as open questions.
+
+## Four stale open items closed
+
+These were still marked contested or unverified after later work had resolved
+them, which inflated the open-items count and would have sent the next session
+looking for answers already on disk:
+
+| Was | Now resolved by |
+| --- | --- |
+| `s236c2-minimum-tax-flip` | `s236c2-minimum-tax-verified`, read from statute |
+| `stripe-ein-lag` | `stripe-ein-lag-verified`, and the original 2-3 week figure is wrong |
+| `s111-4-cap-history-per-fbr` | `s111-4-cap-history-resolved`; FBR was right and we misread a nested footnote |
+| `arrival-departure-days-count-secondary` | `rule14-day-counting-verbatim`, which upgrades it from practitioner statement to law |
+
+Live open items: 19.
