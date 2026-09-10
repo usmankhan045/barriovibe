@@ -1,0 +1,7 @@
+{
+  "id": "uae-sbr-ftadecision",
+  "url": "https://tax.gov.ae/en/taxes/corporate.tax/corporate.tax.topics/small.business.relief.aspx",
+  "status": null,
+  "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://tax.gov.ae/en/taxes/corporate.tax/corporate.tax.topics/small.business.relief.aspx\", waiting until \"load\"\n",
+  "fetched_at": "2026-09-10T06:36:20.400150+00:00"
+}

@@ -124,3 +124,52 @@ no provision on how days of presence are counted for s.82, and whether the
 Rules supply one is unresolved. The residency guide publishes that as an open
 question rather than adopting the widely repeated assertion that a part-day
 counts as a whole day, which no source we read supports.
+
+## sbp.org.pk PDFs are Cloudflare-blocked; the HTML pages are not
+
+Extending the earlier SBP note. As at September 2026, SBP **HTML** pages are
+reachable with scrapling's `StealthyFetcher`, but **every PDF on sbp.org.pk**
+sits behind Cloudflare and defeated six methods, including browser UA plus
+same-site `Referer` and StealthyFetcher with a warmed session.
+
+What worked instead: the `r.jina.ai` text proxy recovered Foreign Exchange
+Manual chapters verbatim.
+
+**The trap that nearly landed a fabricated source in the store.** Two files were
+written into `raw/` and `sources/` named for SBP Chapter 22 and the AML/CFT
+Regulations. Both were **Cloudflare HTML shells**, not the documents named.
+They were caught and deleted, but the filenames asserted content they never had.
+
+This is the WIPO Lex lesson again, and it is now the third occurrence, so treat
+it as the standing rule rather than an anecdote:
+
+> **A 200 is not a hit, and a filename is not provenance.** After every fetch,
+> grep the saved text for a term that MUST appear in the document you asked for,
+> before writing the record. If it is absent, delete the file.
+
+## PRC is not an export-only document
+
+Worth recording because a first pass got it wrong and self-corrected. Foreign
+Exchange Manual **Chapter 12 (EXPORTS)** ties every PRC mention to Form 'E',
+which makes the PRC look export-only. It is not. **Chapter 10 (Inward and
+Outward Remittances), para 2A** sits immediately before the Home Remittances
+paragraphs and covers realisation of funds received from abroad generally.
+
+Chapter 12 uses the qualified term "**Export** Proceeds Realization
+Certificate": a species, not the genus. Reading one chapter and generalising
+would have put a confident, checkable error into a guide.
+
+## UAE government sites time out from this environment
+
+Both `mof.gov.ae` and `tax.gov.ae` fail with a Playwright navigation timeout at
+60 seconds under `--stealth`, twice each. Like `wyo.gov`, this is a timeout
+rather than a block, so sending browser headers changes nothing: there is no
+response to get past.
+
+What it blocks is the UAE Small Business Relief guide. `uae-sbr-cliff` records
+the AED 3,000,000 revenue threshold and the 31 December 2026 expiry from PwC
+Worldwide Tax Summaries, which is a good tier 2 source, but the whole guide
+would turn on one date and one threshold from a single secondary source. Under
+the store's own rule that is not enough to publish, so the guide waits until
+the Federal Tax Authority's own decision can be read, or a second independent
+source confirms both figures.

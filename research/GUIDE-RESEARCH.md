@@ -406,3 +406,91 @@ guide could answer because the answer is that SECP is the wrong building.
 **The general lesson for the next planning pass.** Count spokes against what
 the hubs actually say, not against the plan that predates them. A spoke is only
 a guide if a reader who has read the hub still has an unanswered question.
+
+---
+
+## Guides 16 to 22, and why the batch is seven rather than ten
+
+Written 10 September 2026. Seven guides, taking the schedule to 1 October.
+
+| # | Guide | Cluster | Built on |
+| --- | --- | --- | --- |
+| 16 | Capital gains on property | property | s.37, Division VIII, interpolated from `lib/tax/property.ts` |
+| 17 | Registering a partnership firm | company | Partnership Act 1932, Companies Act s.9 |
+| 18 | Your US LLC is a declarable foreign asset | cross-border | s.116A, s.182 entry 1AAA, s.195A, s.195B, s.216, Companies Act s.452 |
+| 19 | Can a Pakistani own a company abroad | cross-border | FE Manual Ch.20 Para 13, FERA s.23, Companies Act s.199, ITO s.109A |
+| 20 | Tax residency for overseas Pakistanis | cross-border | s.82 and its footnotes |
+| 21 | Receiving money from abroad | cross-border | s.111(4) and its footnotes |
+| 22 | What a US LLC costs to keep | cross-border | Treas. Reg. 1.6038A, 6 Del. C. s.18-1107, W.S. 17-29-209 |
+
+**The cross-border cluster is now the largest in the set**, at five guides. It
+was the correct call: it was entirely unwritten, it is the one place where the
+tech half and the compliance half of the firm are both required to answer the
+question, and neither the offshore-formation vendors nor the Pakistani tax
+firms have a reason to write it.
+
+### Three guides that were planned and not written
+
+Being explicit about this, because "not yet" and "decided against" are
+different states and the next pass should not have to rediscover which is which.
+
+**UAE Small Business Relief.** Blocked, not abandoned. `uae-sbr-cliff` carries
+the AED 3,000,000 threshold and the 31 December 2026 expiry from PwC, which is
+a sound tier 2 source, but the entire guide turns on one date and one figure
+from one secondary source. Both `mof.gov.ae` and `tax.gov.ae` time out from
+here, twice each. Recorded as `uae-gov-unreachable`. Needs the FTA decision
+itself or a second independent source.
+
+**SECP fees itemised, name reservation, Form A and Form 29, trademark search,
+trademark renewal.** Decided against, and this is the scope correction recorded
+in the section above: each is already answered inside its hub. Writing them
+separately would produce two pages satisfying one searcher.
+
+**A dedicated s.153 IT withholding guide.** Decided against for the same
+reason. The 4 percent versus 15 percent tension, the prescribed-person
+threshold and the gaps in the s.2(30AD) and s.2(30AE) definitions are all
+already published in the freelancer guide, including as an open question.
+
+### What the agents changed about guides already written
+
+Three research agents ran against the two flagship cross-border guides, and
+both grew from ten and nine sections to fourteen. The additions worth noting:
+
+- **Companies Act s.452**, a thirty-day personal reporting duty on a Pakistani
+  citizen who is a substantial shareholder or officer of a Pakistani company
+  and holds shares in a foreign one. Its Explanation is drafted to catch a
+  foreign entity with no Pakistan nexus at all, and s.452(8) sends the register
+  to FBR. Entirely absent from our guides before this pass.
+- **s.101(2)**, which stops us conflating "foreign asset" with "foreign
+  income": profit from a business carried on in Pakistan is Pakistan-source
+  even where the vehicle is foreign.
+- **s.103(1) requires foreign tax PAID**, which is why "the treaty prevents
+  double taxation" is a non-answer for a lawfully zero-taxed LLC.
+- **FinCEN's final rule of 11 August 2026** removes BOI reporting for US-formed
+  entities, superseding the March 2025 interim rule that most published content
+  still describes. A vintage trap of exactly the kind METHOD.md is about.
+
+### Two claims deliberately not made
+
+- **The s.109A(4) rate.** Division III has limbs at 15 and 25 percent and
+  nothing read resolves which applies to attributed CFC income. No rate stated.
+- **"Offshore earnings put it outside SBP."** Chapter 20 Para 3 attaches
+  legality to the acquisition; FERA s.5(2)(b) carves out payments from services
+  income. Published as arguable both ways, which is more than the flat
+  assertions in circulation manage.
+
+### Three fetch failures, one lesson
+
+`wyo.gov`, `mof.gov.ae` and `tax.gov.ae` all time out at the transport layer.
+That is a different failure from the 403s in METHOD.md section 3: there is no
+response for headers to get past, so the retry advice does not apply. Where the
+Wyoming figures are used, the guide tells the reader they come from the state's
+own PDFs read at one remove from archive captures.
+
+Separately, two fetches returned **HTTP 200 carrying the wrong document**: WIPO
+Lex record 17010 serves Serbian design law, and an FBR URL serves "The
+Requested Page does not Exist" with a 200. A third instance turned up in the
+store itself, where two SBP records cited a URL that now redirects and whose
+saved file was site chrome. The claims were right and were not reproducible
+from the saved evidence, which is the thing the store exists to prevent.
+**Grep every fetch for a term the document must contain.**
