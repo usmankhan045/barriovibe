@@ -562,16 +562,16 @@ been absorbed by the shipped hubs.
 
 | # | Guide | Cluster | Basis | State |
 | --- | --- | --- | --- | --- |
-| 23 | Rental income: what the tenant withholds and what you still owe | property | `s155-*`, `s16-*`, `s15a-*` | Ready |
-| 24 | Provincial property tax, and how it differs from 236C and 236K | property | Punjab Finance Act 2024, re-verified | Ready, Punjab only |
-| 25 | Tax on a car: registration, transfer and the five-year cutoff | filer | `s231b-*` | Ready |
-| 26 | Tax on a pension | salary | `pension-*`, `s12-2a-*` | Ready, `lib/tax/pension.ts` added |
-| 27 | Paying FBR: the PSID, the challan and the CPR | filing | agent, 19 findings | Ready |
-| 28 | Getting back into IRIS | filing | agent, verified verbatim | Ready |
-| 29 | When FBR amends your assessment | filing | `s122-*` | Ready |
-| 30 | Advance tax under section 147 | filing | `s147-*`, corrected | Ready |
-| 31 | Deductions a landlord can actually claim | property | `s15a-*` | Ready |
-| 32 | Reserved | | | Held for whichever agent finding is strongest |
+| 23 | Rental income | property | `s155-*`, `s16-*` | **Drafted** |
+| 24 | Provincial property tax | property | Punjab Finance Act 2024 | **Drafted**, Punjab only |
+| 25 | Tax on buying and transferring a car | filer | `s231b-*` | **Drafted** |
+| 26 | Tax on a pension | salary | `pension-*`, `lib/tax/pension.ts` | **Drafted** |
+| 27 | How to pay your tax to FBR | filing | agent, 19 findings | **Drafted** |
+| 28 | Getting back into IRIS | filing | agent, verified verbatim | **Drafted** |
+| 29 | When FBR amends your assessment | filing | `s122-*` | **Drafted** |
+| 30 | Advance tax under section 147 | filing | `s147-*`, corrected | **Drafted** |
+| 31 | What a landlord can deduct | property | `s15a-*` | **Drafted** |
+| 32 | Reserved | | | Still held |
 
 Nine are writable. One slot is held deliberately rather than filled with
 something thin.
@@ -688,3 +688,43 @@ moving the threshold to Rs 5 million and the age to 75 each failed two
 independent checks. Boundary cases are covered explicitly, since the proviso
 charges only the amount EXCEEDING ten million and a reader at exactly the
 threshold owes nothing.
+
+
+---
+
+## Guides 23 to 31 drafted (10 September 2026)
+
+All nine written and scheduled, taking the slate to **31 guides** running two a
+day to 25 September. The held slot at 32 is still held.
+
+**One bug found by drafting.** The vehicle guide could not be written without
+reconciling two provisions the calculator only had one of: Division VII clause
+(2) reduces the transfer RATE by a tenth each year, and the proviso to s.231B(2)
+stops COLLECTION after five years. The cut-off binds first, so the taper never
+runs past 50 per cent. `lib/tax/vehicle.ts` was charging tax in years six to
+nine that the statute does not impose, and `check-tax` was asserting the bug.
+Both fixed, with the boundary now pinned at four years, five years and ten.
+
+That is the second time this batch that writing a guide has improved the code
+rather than merely consuming it, after `lib/tax/pension.ts`. Worth noting as a
+pattern: the no-figures rule forces a reconciliation that a prose-only guide
+would have skipped.
+
+**What each guide leads with**, since the lead is the differentiator:
+
+| Guide | Lead |
+| --- | --- |
+| 23 Rental income | Tenant withholding stopped being final tax in 2010 |
+| 24 Provincial property tax | The levying department publishes repealed law |
+| 25 Vehicles | Nothing is collected on a transfer after five years |
+| 26 Pension | Most pensioners owe nothing, despite the headline |
+| 27 Paying FBR | The seven-day PSID expiry is a PTA handset rule |
+| 28 IRIS access | Self-service recovery when email and phone are both lost |
+| 29 Assessments | Five years from the financial year, not from filing |
+| 30 Advance tax | The dates differ between individuals and companies |
+| 31 Landlord deductions | The statute is not company-only, and the fifth is free |
+
+**Where guides say what could not be established**, rather than filling it: no
+PSID validity period, no documented CPR escalation route, no documented cause of
+IRIS account suspension, no Punjab commencement date to the day, no Punjab
+rebate or surcharge percentage, and no ICT rate at all.

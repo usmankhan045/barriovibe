@@ -545,6 +545,312 @@ const IRIS_ACCESS: Guide = {
   },
 };
 
-export const FILING_GUIDES: Guide[] = [FILING_A_RETURN, PAYING_FBR, IRIS_ACCESS];
+
+/**
+ * Guide 29: when FBR amends your assessment.
+ *
+ * Written for someone who has just received a notice, which shapes it: the
+ * useful things are the limitation period and the right to be heard, and both
+ * belong near the top rather than after ten paragraphs of background.
+ *
+ * The correction is the limitation period. It runs five years from the end of
+ * the FINANCIAL YEAR in which the order issued, not five years from filing,
+ * which typically buys the reader several extra months over the version they
+ * have read.
+ */
+
+const AMENDED_ASSESSMENT: Guide = {
+  slug: 'when-fbr-amends-your-assessment',
+  cluster: 'filing',
+  title: 'When FBR Amends Your Assessment',
+  navLabel: 'Amended assessments',
+  card: 'How long FBR has to reopen a return, the hearing it cannot skip, and why filing is itself an assessment order.',
+
+  answer:
+    'Your filed return is treated as an assessment order deemed issued by the Commissioner, and section 122 lets him amend it within five years from the end of the financial year in which that order issued. No amendment can be made without giving you an opportunity of being heard, and that applies even to the broad power to correct an assessment prejudicial to revenue.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Your return is already an assessment order',
+      body: 'This surprises people and it explains the shape of everything else. Under section 120 a complete return is treated as an assessment order deemed to have been issued by the Commissioner on the day it was furnished. Nobody approves it. That is what self-assessment means, and it is why section 122 talks about AMENDING an assessment rather than making one: there is already an order in existence, and it is yours.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Five years from the end of the financial year, not five years from filing',
+      body: 'Section 122(2) says no order shall be amended after the expiry of five years from the end of the financial year in which the Commissioner issued, or is treated as having issued, the assessment order. The distinction matters and most summaries flatten it. The clock does not start when you filed, and it does not start at the end of the tax year the return relates to. It starts at the end of the financial year in which the order came into existence, which for a self-assessed return is the year you filed in. In practice that gives FBR longer than a naive reading suggests, and it is the figure to work from when someone tells you a year is closed.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'You cannot be assessed without being heard',
+      body: 'Section 122(9) is short and it is the provision to know if a notice has arrived: no assessment shall be amended, or further amended, under this section unless the taxpayer has been provided with an opportunity of being heard. Note where it bites hardest. Section 122(5A) gives the Commissioner a broad power to amend where he considers an assessment erroneous in so far as it is prejudicial to the interest of revenue, and that sub-section opens by making itself subject to sub-section (9). The widest power in the section is expressly conditioned on hearing you first.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'An amended assessment can itself be amended',
+      body: [
+        'Section 122(4) allows further amendment of an assessment that has already been amended, and it says so in terms: as many times as may be necessary. So a first amendment is not a settlement.',
+        'The window for that is the later of two periods: five years from the end of the financial year of the original order, or one year from the end of the financial year in which the amended order issued. The second limb is what keeps a late amendment open a little longer, and it is why a revision late in the five-year window does not close the matter the following month.',
+      ],
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Revising your own return is an amendment too',
+      body: [
+        'Section 122(3) treats a revised return under section 114(6) as an amended assessment made by the Commissioner, deemed issued on the day you furnished it. Your revision is not a request that someone then processes; it takes effect as an order.',
+        'That is worth knowing alongside the conditions on revising. Approval is not needed at all within sixty days of the original filing, is deemed granted if the Commissioner does not pass a written order within sixty days of your asking, is deemed granted where the revision declares more income or less loss, and must be granted for a bona fide omission or wrong statement.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'What a notice is asking for, and what it is not',
+      body: 'A notice under section 122 is the start of a process in which you are entitled to respond, not a demand that has already been decided. The Commissioner must record his reasons in writing where he forms an opinion that an amendment is needed, and section 122(9) requires the hearing. Answering it properly and on time is the whole of the opportunity the section gives you, and the most expensive thing a reader can do with one is to ignore it and deal with the consequence later.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Where the return is automatically corrected instead',
+      body: [
+        'Not everything that changes a return goes through section 122. A complete return is run through an automated system that can correct arithmetical errors, disallow claims that are wrong on the face of the return, and adjust losses.',
+        'FBR must issue a system-generated notice first and consider your response, and if you do not respond within thirty days the adjustment is made anyway. If no adjustment happens within six months of filing, the return as you declared it stands. So a small correction arriving shortly after filing is usually this rather than an assessment being reopened.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Foreign assets sit outside the ordinary limitation',
+      body: 'One important carve-out for anyone with assets abroad. Where an asset is situated outside Pakistan, section 111(2)(ii) charges an unexplained amount in the tax year immediately preceding the year in which the Commissioner discovers it, which is effectively an open-ended lookback rather than a fixed window. Section 123(1A) separately allows a provisional assessment at any time where an undeclared offshore asset comes to light. The five-year comfort in section 122 does not extend to an undeclared foreign asset.',
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'How long can FBR reopen my tax return?',
+      answer:
+        'Five years from the end of the financial year in which the assessment order was issued or treated as issued, under section 122(2). For a self-assessed return that means the financial year you filed in, not the tax year the return covers.',
+    },
+    {
+      question: 'Can FBR amend my assessment without telling me?',
+      answer:
+        'No. Section 122(9) provides that no assessment shall be amended or further amended unless the taxpayer has been provided with an opportunity of being heard, and the broad power in section 122(5A) is expressly made subject to it.',
+    },
+    {
+      question: 'Is my filed return an assessment order?',
+      answer:
+        'Yes. Section 120 treats a complete return as an assessment order deemed issued by the Commissioner on the day it was furnished. That is why section 122 speaks of amending an assessment rather than making one.',
+    },
+    {
+      question: 'Can an amended assessment be amended again?',
+      answer:
+        'Yes. Section 122(4) permits further amendment as many times as may be necessary, within the later of five years from the end of the financial year of the original order or one year from the end of the financial year in which the amended order issued.',
+    },
+    {
+      question: 'Does revising my own return count as an amendment?',
+      answer:
+        'Yes. Section 122(3) treats a revised return under section 114(6) as an amended assessment made by the Commissioner and deemed issued on the day you furnished it.',
+    },
+    {
+      question: 'What is section 122(5A)?',
+      answer:
+        'The power to amend where the Commissioner considers an assessment erroneous in so far as it is prejudicial to the interest of revenue. It is the widest power in the section and it opens by making itself subject to sub-section (9), the right to be heard.',
+    },
+    {
+      question: 'Does the five-year limit apply to foreign assets?',
+      answer:
+        'Not in the same way. Section 111(2)(ii) charges an unexplained offshore asset in the tax year immediately preceding the year the Commissioner discovers it, and section 123(1A) allows a provisional assessment at any time for an undeclared offshore asset.',
+    },
+    {
+      question: 'FBR corrected my return a few weeks after filing. Is that an amended assessment?',
+      answer:
+        'Probably not. A complete return is run through an automated process that corrects arithmetical errors and disallows claims wrong on the face of the return, after a system-generated notice. If no adjustment is made within six months of filing, the return as declared stands.',
+    },
+  ],
+
+  publishedAt: '2026-09-24T03:00:00Z',
+  related: ['how-to-file-your-tax-return', 'how-to-pay-fbr-tax'],
+
+  seo: {
+    title: 'When FBR Amends Your Assessment: Section 122',
+    description:
+      'How long FBR has to reopen a return, why the clock runs from the financial year rather than from filing, the hearing that cannot be skipped, and the offshore carve-out.',
+  },
+};
+
+
+/**
+ * Guide 30: advance tax under section 147.
+ *
+ * Two corrections carry it, and the first was one of our own. The instalment
+ * dates are NOT the same for everyone: s.147(5) gives an individual the 15th
+ * of September, December, March and June, while s.147(5A) gives an association
+ * or company the 25th for the first three and the 15th in June. Tables
+ * printing one set of dates are wrong for half their readers.
+ *
+ * The second is who is caught at all. The s.147(2) threshold measures LATEST
+ * ASSESSED taxable income, excluding salary already withheld under s.149, so a
+ * first-year self-employed reader has nothing to compute against and a purely
+ * salaried reader is generally outside the section entirely.
+ */
+
+const ADVANCE_TAX: Guide = {
+  slug: 'advance-tax-section-147',
+  cluster: 'filing',
+  title: 'Advance Tax in Pakistan: Who Pays and When',
+  navLabel: 'Advance tax',
+  card: 'Why most salaried people are outside it, why a first year of self-employment usually is too, and the quarterly dates that differ by who you are.',
+
+  answer:
+    'Advance tax under section 147 is paid quarterly by taxpayers whose latest assessed taxable income, excluding salary already withheld, reaches one million rupees. An individual pays by the fifteenth of September, December, March and June. An association or company pays by the twenty-fifth for the first three quarters and the fifteenth in June.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'The dates are not the same for everyone',
+      body: 'This is the most commonly copied error on the subject. Section 147(5) sets an individual\'s dates as the fifteenth day of September, December, March and June. Section 147(5A) sets separate dates for an association of persons or a company: the twenty-fifth of September, the twenty-fifth of December, the twenty-fifth of March, and the fifteenth of June. Three of the four differ by ten days, and only the June quarter is shared. A table giving one set of dates for all taxpayers is wrong for whichever half of its readers it does not describe.',
+    },
+
+    {
+      kind: 'table',
+      heading: 'When each instalment falls due',
+      intro:
+        'Sections 147(5) and 147(5A). Note that June is the exception in both columns.',
+      columns: ['Quarter', 'Individual', 'Association or company'],
+      rows: [
+        ['September', '15 September', '25 September'],
+        ['December', '15 December', '25 December'],
+        ['March', '15 March', '25 March'],
+        ['June', '15 June', '15 June'],
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'If you are salaried, this probably does not reach you',
+      body: 'Section 147(1)(c) excludes income subject to deduction at source under section 149, which is salary. Section 147(2) then measures the threshold on taxable income EXCLUDING that. So a salaried person whose employer is deducting correctly does not reach the one million rupee test on salary alone, and is generally outside advance tax entirely. The people actually caught are those with business income, property income or other unwithheld income above the threshold.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'A first year of self-employment usually has nothing to pay',
+      body: 'Read section 147(2) closely: it turns on the individual\'s LATEST ASSESSED taxable income, not on what you expect to earn this year. Someone in their first year of freelancing or business has no assessed history to measure against, so there is nothing for the section to compute an instalment from. That is a genuine and widely misunderstood point: advance tax is backward-looking, and the anxiety about owing quarterly instalments on a business that has only just started is usually misplaced. The liability catches up the following year, once a year has been assessed.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'How an individual\'s instalment is computed',
+      body: [
+        'Section 147(4B) gives the formula for an individual with latest assessed income of one million rupees or more: A divided by four, less B. A is the tax assessed for the latest tax year. B is tax already paid in that quarter and creditable under section 168, other than tax deducted under section 149.',
+        'So it is last year\'s assessed tax, spread across four quarters, reduced by whatever has already been collected from you during the quarter. The exclusion of section 149 salary deductions from B is deliberate and matches the exclusion of salary from the threshold itself.',
+      ],
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Where the estimate matters',
+      body: [
+        'The formula runs on last year, which is a problem in a year when income has moved. Section 147 provides for an estimate: a taxpayer required to pay under the company formula must estimate the tax payable for the relevant year before the second instalment is due, and where the figure is likely to exceed what the formula produces, furnish that estimate and pay half of it by the second quarter, with the remainder in two equal instalments in the third and fourth quarters.',
+        'Note the direction. The machinery is aimed at a year when income has RISEN above last year\'s, not at reducing instalments in a bad year. A business having a poor year should take advice rather than assume it can simply pay less.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Minimum and super tax count toward it',
+      body: 'Section 147(4AA) provides that liability under sections 4C, 113 and 113C is also taken into account in working out advance tax under the section. So a company computing instalments cannot look only at ordinary income tax: the super tax under 4C and the minimum turnover tax under 113 form part of the figure being spread across the quarters.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Paying late is a surcharge, and it is not the filing penalty',
+      body: 'Missing an instalment attracts the section 205 default surcharge, computed at twelve per cent a year or KIBOR plus three per cent, whichever is higher, and advance tax is dealt with specifically in section 205(1A). That is a different charge from the section 182 penalty for filing a return late, which tapers if you file within one, two or three months of the due date. The two are routinely conflated, and someone who has filed on time but paid late is looking at the surcharge only.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Advance tax is a credit, not an extra tax',
+      body: [
+        'Everything paid under section 147 is creditable against your liability for the year when you file. It is a timing mechanism rather than an additional charge, which is worth stating because the quarterly demand feels like a new tax when it first arrives.',
+        'Where the instalments exceed what the return eventually shows, the excess is recoverable through the return in the ordinary way. Where they fall short, the balance is due on the return\'s due date.',
+      ],
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'Who has to pay advance tax in Pakistan?',
+      answer:
+        'A taxpayer whose income was charged to tax for the latest tax year, subject to exclusions. For an individual, section 147(2) disapplies the section where latest assessed taxable income, excluding salary withheld under section 149 and certain other categories, is less than one million rupees.',
+    },
+    {
+      question: 'When is advance tax due?',
+      answer:
+        'For an individual, 15 September, 15 December, 15 March and 15 June. For an association of persons or a company, 25 September, 25 December, 25 March and 15 June. Only the June quarter is the same for both.',
+    },
+    {
+      question: 'Do salaried people pay advance tax?',
+      answer:
+        'Generally not. Section 147(1)(c) excludes income subject to section 149 salary withholding, and the section 147(2) threshold is measured excluding it, so a salaried person whose employer deducts correctly does not reach the test on salary alone.',
+    },
+    {
+      question: 'I just started freelancing. Do I owe advance tax this year?',
+      answer:
+        'Usually not. The threshold in section 147(2) is measured on your LATEST ASSESSED taxable income, so with no assessed year behind you there is nothing for the section to compute an instalment from. It generally begins to apply once a year has been assessed.',
+    },
+    {
+      question: 'How is an individual\'s advance tax instalment calculated?',
+      answer:
+        'Under section 147(4B), as A divided by four less B, where A is the tax assessed for the latest tax year and B is tax already paid in the quarter creditable under section 168 other than section 149 salary deductions.',
+    },
+    {
+      question: 'What happens if I miss an advance tax instalment?',
+      answer:
+        'The section 205 default surcharge applies, at twelve per cent a year or KIBOR plus three per cent, whichever is higher, with advance tax dealt with in section 205(1A). That is separate from the section 182 penalty for late filing.',
+    },
+    {
+      question: 'Is advance tax an extra tax?',
+      answer:
+        'No, it is a timing mechanism. Everything paid under section 147 is creditable against your liability for the year, and any excess is recoverable through your return.',
+    },
+    {
+      question: 'Does super tax count toward advance tax?',
+      answer:
+        'Yes. Section 147(4AA) provides that liability under sections 4C, 113 and 113C is taken into account in working out the advance tax liability, so super tax and minimum turnover tax form part of the figure spread across the quarters.',
+    },
+  ],
+
+  publishedAt: '2026-09-24T07:00:00Z',
+  related: ['how-to-pay-fbr-tax', 'tax-for-freelancers'],
+
+  seo: {
+    title: 'Advance Tax in Pakistan: Section 147 Explained',
+    description:
+      'Why most salaried people and most first-year freelancers are outside it, the quarterly dates that differ between individuals and companies, and how the instalment is computed.',
+  },
+};
+
+export const FILING_GUIDES: Guide[] = [
+  FILING_A_RETURN,
+  PAYING_FBR,
+  IRIS_ACCESS,
+  AMENDED_ASSESSMENT,
+  ADVANCE_TAX,
+];
+
+
 
 

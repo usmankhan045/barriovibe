@@ -820,12 +820,173 @@ const PROVINCIAL_PROPERTY_TAX: Guide = {
   },
 };
 
+
+/**
+ * Guide 31: what a landlord can deduct.
+ *
+ * The rental guide states the deductions in a list. This one is the working:
+ * why the repair allowance is a proportion rather than a reimbursement, what
+ * counts as a local rate, and the reading of the footnotes that decides
+ * whether an individual can claim any of it at all.
+ *
+ * That last point is the reason the guide exists separately. The consolidation
+ * makes it easy to read s.15A as company-only, and if you read it that way an
+ * individual landlord walks away from a fifth of their rent.
+ */
+
+const LANDLORD_DEDUCTIONS: Guide = {
+  slug: 'landlord-tax-deductions',
+  cluster: 'property',
+  title: 'What a Landlord Can Deduct in Pakistan',
+  navLabel: 'Landlord deductions',
+  card: 'The one-fifth repair allowance you get without spending it, the provincial property tax that reduces your federal bill, and why the statute is not company-only.',
+
+  answer:
+    'Section 15A allows a landlord to deduct a flat one-fifth of rent for repairs whether or not it was spent, insurance, local rates and taxes including provincial property tax, ground rent, profit on money borrowed to acquire or build the property, collection costs up to four per cent, legal costs of defending title, and irrecoverable rent. These are available to an individual, not only to a company.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'The repair allowance is a proportion, not a reimbursement',
+      body: 'Section 15A(1)(a) allows an allowance equal to one-fifth of the rent chargeable to tax for the year, computed before any other deduction under the section. Read that carefully, because it is more generous than landlords assume. It is not a claim for repairs you carried out and can evidence. It is a fixed proportion of rent, allowed whether you spent nothing on the property or spent more than a fifth. A landlord with a new building and no maintenance costs gets it, and a landlord who spent a third of the rent on repairs gets the same fifth and no more.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'The statute is not company-only, though it reads that way at first',
+      body: 'This is worth stating because getting it wrong costs an individual landlord a fifth of their rent. The footnotes to section 15A record that the word "person" was substituted by the Finance Act 2016 and the word "company" by the Finance Act 2021. Scanned quickly, that looks as though "company" was inserted in 2021 and the deductions are corporate. It is the opposite: in this convention the quoted word is the one being REPLACED, so "person" went out in 2016 and came back in when "company" was replaced in 2021. The operative text reads "person", and section 15(1) charges rent received by a person generally. An individual can claim all of it.',
+    },
+
+    {
+      kind: 'table',
+      heading: 'The deductions, and what each is limited by',
+      intro:
+        'Section 15A(1). Two are capped as a proportion of rent, and the rest are actual amounts.',
+      columns: ['Deduction', 'Limit'],
+      rows: [
+        ['Repairs', 'One-fifth of rent chargeable, computed before other deductions'],
+        ['Insurance premium against damage or destruction', 'Actual'],
+        ['Local rate, tax, charge or cess on the property', 'Actual, excluding tax under the Ordinance'],
+        ['Ground rent', 'Actual'],
+        ['Profit on money borrowed to acquire, construct, renovate, extend or reconstruct', 'Actual'],
+        ['Administration and collection charges', 'Four per cent of rent chargeable'],
+        ['Legal costs defending title or a suit connected with the property', 'Actual'],
+        ['Irrecoverable unpaid rent', 'The unpaid rent, on stated conditions'],
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Your provincial property tax belongs in that list',
+      body: 'Section 15A(1)(c) covers any local rate, tax, charge or cess in respect of the property, or the rent from it, paid or payable to any local authority or government, and then carves out only "any tax payable under this Ordinance". The annual Urban Immovable Property Tax your province charges is a tax in respect of the property paid to a government, and it is plainly not payable under the Income Tax Ordinance, so it sits inside the deduction. The carve-out is there to stop you deducting your own income tax, nothing more. Keep the provincial challan with your records: it is a deduction rather than just a receipt.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'The collection charge was cut, and the older figure still circulates',
+      body: [
+        'Clause (h) allows expenditure paid wholly and exclusively for the purpose of deriving rent, including administration and collection charges, capped as a proportion of rent chargeable for the year.',
+        'The cap was six per cent and the Finance Act 2020 substituted four. Pages quoting six per cent are six years out of date, which is a small error in itself but a useful signal about the rest of the page it appears on.',
+      ],
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Interest on the loan that bought the property',
+      body: [
+        'Clause (e) allows profit paid or payable on any money borrowed, including by way of mortgage, to acquire, construct, renovate, extend or reconstruct the property. Clause (g) covers profit or interest where the property is subject to a mortgage or other capital charge.',
+        'Note what the borrowing has to be for. It is the acquisition or improvement of the property producing the rent, not borrowing secured on it for another purpose. A loan taken against a rental property to fund a different business is not within the clause on its face.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Unpaid rent, and the conditions attached',
+      body: 'Clause (j) allows an allowance for unpaid rent where there are reasonable grounds for believing it is irrecoverable, and the conditions are specific rather than a general bad-debt rule. The tenancy must have been bona fide; the defaulting tenant must have vacated or steps must have been taken to compel them to vacate; the defaulting tenant must not be in occupation of any other property of yours; and you must have taken all reasonable steps to institute legal proceedings for recovery, or have reasonable grounds for believing legal proceedings would be pointless. Writing off rent because a tenant stopped paying, without more, does not meet it.',
+    },
+
+    {
+      kind: 'calculator',
+      toolSlug: 'rental-income-tax',
+      heading: 'What the rent is taxed at once deductions come off',
+      body: 'The deductions above reduce the figure the rent table is applied to. Enter the rent to see the bands, then work from the net figure rather than the gross.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'What is not deductible',
+      body: [
+        'Anything already claimed elsewhere, and the income tax itself. The carve-out in clause (c) is explicit on the second point.',
+        'The repair allowance also settles a question people ask in the other direction: because it is a fixed fifth rather than actual expenditure, there is no separate claim for the repairs themselves on top of it. The fifth is the repair deduction, whatever the invoices say.',
+      ],
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'Can I claim a repair allowance if I did not repair anything?',
+      answer:
+        'Yes. Section 15A(1)(a) gives an allowance equal to one-fifth of the rent chargeable for the year, computed before other deductions. It is a proportion of rent rather than a reimbursement of expenditure, so it is allowed whether or not you spent it.',
+    },
+    {
+      question: 'Can an individual landlord claim section 15A deductions, or only a company?',
+      answer:
+        'An individual can. The footnotes make it look company-only, but the convention is that a footnote names the word REPLACED, so "company" was replaced by "person" in 2021. The operative text reads "person", consistent with section 15(1).',
+    },
+    {
+      question: 'Is provincial property tax deductible against rental income?',
+      answer:
+        'Yes. Section 15A(1)(c) allows any local rate, tax, charge or cess in respect of the property paid to a local authority or government, excluding only tax payable under the Income Tax Ordinance. Provincial Urban Immovable Property Tax qualifies.',
+    },
+    {
+      question: 'Can I deduct my home loan interest against rent?',
+      answer:
+        'Profit on money borrowed to acquire, construct, renovate, extend or reconstruct the property is deductible under section 15A(1)(e). The borrowing must be for the property producing the rent, not merely secured against it for another purpose.',
+    },
+    {
+      question: 'How much can I claim for collecting the rent?',
+      answer:
+        'Up to four per cent of the rent chargeable for the year, for expenditure wholly and exclusively incurred in deriving the rent including administration and collection charges. The cap was six per cent until the Finance Act 2020 reduced it.',
+    },
+    {
+      question: 'Can I write off rent a tenant never paid?',
+      answer:
+        'Only on the conditions in clause (j). The tenancy must have been bona fide, the tenant must have vacated or steps taken to compel them, they must not occupy another property of yours, and you must have taken reasonable steps to sue or have grounds to believe proceedings would be pointless.',
+    },
+    {
+      question: 'Can I claim actual repair costs on top of the one-fifth allowance?',
+      answer:
+        'No. The one-fifth is the repair deduction. Because it is a fixed proportion rather than actual expenditure, there is no separate claim for the invoices on top of it.',
+    },
+    {
+      question: 'Is my income tax deductible against rental income?',
+      answer:
+        'No. Clause (c) allows local rates and taxes on the property but expressly excludes any tax payable under the Income Tax Ordinance itself.',
+    },
+  ],
+
+  publishedAt: '2026-09-25T03:00:00Z',
+  related: ['tax-on-rental-income', 'provincial-property-tax'],
+
+  seo: {
+    title: 'What a Landlord Can Deduct in Pakistan: Section 15A',
+    description:
+      'The one-fifth repair allowance allowed whether or not you spent it, provincial property tax as a deduction, the four per cent collection cap, and why it is not company-only.',
+  },
+};
+
 export const PROPERTY_GUIDES: Guide[] = [
   PROPERTY_TAX,
   PROPERTY_GAINS,
   RENTAL_INCOME,
   PROVINCIAL_PROPERTY_TAX,
+  LANDLORD_DEDUCTIONS,
 ];
+
 
 
 
