@@ -788,12 +788,193 @@ const MONEY_FROM_ABROAD: Guide = {
   },
 };
 
+
+/**
+ * Guide 22: the US LLC compliance calendar.
+ *
+ * The operational companion to the s.116A guide. That one answers what
+ * Pakistan wants; this one answers what the LLC itself owes, which is the
+ * question people actually ask after forming one.
+ *
+ * ── The correction that leads ──
+ *
+ * Delaware's LLC annual tax is USD 400, not 300. HB 400 raised it, and
+ * corp.delaware.gov serves BOTH figures: the Alt Entity Tax Instructions page
+ * says 400 while the Tax FAQ page still says 300. 6 Del. C. s.18-1107(b)
+ * settles it verbatim. A textbook instance of the METHOD.md rule that the
+ * dangerous errors come from genuinely official sources.
+ *
+ * ── Two caveats stated in the guide rather than hidden ──
+ *
+ * Wyoming's figures come from the state's own PDFs recovered from archive
+ * captures: all .wyo.gov hosts were unreachable at TCP level from here, and a
+ * live re-check during drafting timed out again. And "Wyoming has no state
+ * income tax", though universally reported, could not be confirmed from an
+ * official source, so it is not asserted anywhere in this guide.
+ */
+
+const US_LLC_CALENDAR: Guide = {
+  slug: 'us-llc-annual-compliance',
+  cluster: 'cross-border',
+  title: 'What a US LLC Actually Costs to Keep, Year After Year',
+  navLabel: 'Keeping a US LLC',
+  card: 'The federal filing that cannot be e-filed, the state fee Delaware\'s own website gets wrong, and why the registered agent is a permanent line item.',
+
+  answer:
+    'Every foreign-owned single-member LLC files Form 5472 with a pro forma Form 1120 by 15 April, by fax or post because it cannot be e-filed, and the penalty is USD 25,000 for each year missed. On top of that sits a state fee: Delaware charges USD 400 by 1 June, Wyoming USD 60 on your anniversary month, and New Mexico nothing at all. A commercial registered agent is unavoidable in all three.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'The federal filing is the one that bites, and it cannot be e-filed',
+      body: 'A US LLC wholly owned by one non-US person is treated as a corporation for the reporting rules in section 6038A, which means Form 5472 attached to a pro forma Form 1120. The instructions carry an explicit caution that this filing cannot be made electronically: it goes by fax, or by post to a dedicated address in Ogden with "Foreign-owned U.S. DE" written across the top of the 1120, and specifically not to the ordinary Form 1120 address. People who assume their accounting software handles it, or who post it to the address printed on the form, have not filed.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'A quiet year still files, and the penalty is per year',
+      body: 'The penalty for failing to file Form 5472 is USD 25,000 assessed for each taxable year in which the failure occurs, with a further USD 25,000 per related party for each 30-day period once a notice has gone unanswered for 90 days, and no maximum. It is not inflation-adjusted, which is why the figure has been the same for years. And a dormant year is not an exemption: the regulations make formation, contributions and distributions themselves reportable, so an LLC that traded nothing but was capitalised has a reportable transaction. A substantially incomplete form counts as a failure to file.',
+    },
+
+    {
+      kind: 'table',
+      heading: 'The state fee, and when it falls due',
+      intro:
+        'These are the three states Pakistani founders actually use. Note that the due dates work on different principles: a fixed calendar date in Delaware, and your own anniversary in Wyoming.',
+      columns: ['State', 'Annual fee', 'Due', 'Annual report'],
+      rows: [
+        ['Delaware', 'USD 400', '1 June', 'None for an LLC'],
+        ['Wyoming', 'USD 60 minimum', 'First day of your anniversary month', 'Yes'],
+        ['New Mexico', 'Nothing', 'Not applicable', 'None'],
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Delaware is USD 400, and Delaware\'s own website says otherwise',
+      body: 'Practically every formation guide prints USD 300, and so does one of Delaware\'s own pages: the Tax FAQ on corp.delaware.gov still says 300 while the Alternative Entity Tax Instructions page on the same site says 400. The statute settles it. 6 Del. C. section 18-1107(b) sets an annual tax "in the amount of $400", due on the first day of June following the close of the calendar year, with a USD 200 penalty and interest at 1.5% for each month it is late. If you budgeted 300 you are short, and if a vendor quotes you 300 they have not read the statute this year.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Do not let anyone quote you Delaware corporation numbers',
+      body: 'A Delaware corporation files an annual report and pays franchise tax with a minimum of USD 175, due 1 March. An LLC files no annual report, pays USD 400, and is due 1 June. Different filing, different amount, different date, and several published guides describe the corporation regime while the reader is forming an LLC.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Why Wyoming\'s USD 60 is almost always the figure',
+      body: [
+        'The Wyoming annual report license tax is USD 60, or USD .0002 per dollar of capital, property and assets located and employed in Wyoming, whichever is greater. Read the qualifier: located and employed in Wyoming. An LLC owned from Pakistan, banking online and serving clients elsewhere, generally has no Wyoming assets at all, so it pays the minimum.',
+        'The arithmetic on the alternative is worth knowing so you can recognise when it stops being academic: the asset-based figure only overtakes USD 60 above USD 300,000 of assets in Wyoming.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Where the Wyoming figures came from, since it matters',
+      body: 'We could not reach any wyo.gov host from our environment. The connection times out at the TCP level rather than returning a block, and a live re-check while drafting this timed out again, so the usual workaround of sending browser headers does not apply. The figures above come from Wyoming\'s own PDFs recovered from archive captures dated mid-2026, and the statute reference is W.S. 17-29-209(a). They are official documents read at one remove. Confirm the current amount on the Secretary of State\'s site before you pay, which you should do with any fee schedule in any case.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'New Mexico charges nothing annually, and that is not the whole story',
+      body: [
+        'A New Mexico LLC files no annual report and pays no annual fee. That is established by reading the New Mexico LLC Act through rather than by not finding a requirement: the Act contains no annual report provision, in contrast to the corporation article, which has a biennial one, and the LLP provision, which has an annual one. Formation is USD 50.',
+        'The trap is a widely circulating figure of a USD 10 annual report with a USD 10 late penalty. That is New Mexico CORPORATION data and does not apply to an LLC. Separately, New Mexico gross receipts tax reaches services performed in New Mexico, and a business without physical presence can still be caught above a receipts threshold, so "cheapest state" is a conclusion about filing fees rather than about tax.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'You cannot be your own registered agent from Pakistan',
+      body: 'In none of the three states can an owner living outside the United States serve as their own registered agent. Wyoming requires a physical address in the state and its own form says a drop box will not do. New Mexico requires an individual resident of New Mexico, or an entity with a place of business there. Delaware requires a registered office in Delaware with a street address. So a commercial registered agent is a permanent annual cost rather than a formation cost, and it is the line item most often folded into a headline formation price and then quietly renewed at a different one. The agent\'s address also becomes public record.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'The EIN wait that catches people at the Stripe stage',
+      body: 'A newly issued EIN can fail Stripe\'s tax ID verification because IRS records lag behind issuance. Stripe puts it at, on average, 3 to 4 weeks for the IRS, and accepts an uploaded SS-4 confirmation letter as the workaround for a TIN issued in roughly the last three months. The IRS states an EIN can be used immediately to open a bank account or file a paper return, but says to wait up to 2 weeks to pass TIN Matching, e-file, or pay electronically. Note the two figures come from the two parties and describe different checks, so quote them separately rather than splitting the difference. Plan the sequence: EIN first, then a buffer, then the payment processor.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'What none of this tells you about Pakistan',
+      body: [
+        'Everything above is what the LLC owes in the United States. It is entirely separate from what you owe in Pakistan, and satisfying it says nothing about section 116A, the State Bank\'s permission framework, or section 452 of the Companies Act.',
+        'The reverse is also true and is the more common mistake: people conclude from an accountant\'s assurance that no US federal income tax is due that there is nothing to do anywhere. Form 5472 is a reporting obligation rather than a tax, and it is owed whether or not any tax is.',
+      ],
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'What does a foreign-owned US LLC have to file every year?',
+      answer:
+        'Form 5472 attached to a pro forma Form 1120, due the 15th day of the fourth month after the year end, which is 15 April for a calendar year. It cannot be e-filed and must go by fax or to a dedicated postal address, not the ordinary Form 1120 one. A state fee may also be due depending on where the LLC was formed.',
+    },
+    {
+      question: 'What is the penalty for not filing Form 5472?',
+      answer:
+        'USD 25,000 for each taxable year in which the failure occurs, plus a further USD 25,000 per related party for each 30-day period once IRS notification has gone unanswered for 90 days. There is no maximum, and a substantially incomplete form is treated as a failure to file.',
+    },
+    {
+      question: 'Does a dormant LLC still have to file?',
+      answer:
+        'Yes, if it had any reportable transaction, and the regulations treat formation, contributions to the entity and distributions from it as reportable. So an LLC that traded nothing but was funded still files.',
+    },
+    {
+      question: 'How much is the Delaware LLC annual tax?',
+      answer:
+        'USD 400, due on or before 1 June, with a USD 200 penalty and interest of 1.5% a month if late. 6 Del. C. section 18-1107(b) states the figure. Pages quoting USD 300 are out of date, including one of Delaware\'s own, and the corporation figures of USD 175 and 1 March are a different regime.',
+    },
+    {
+      question: 'How much is the Wyoming LLC annual report fee?',
+      answer:
+        'USD 60, or USD .0002 per dollar of capital, property and assets located and employed in Wyoming, whichever is greater, due on the first day of your anniversary month. An LLC with no Wyoming assets pays the USD 60 minimum; the asset calculation only exceeds it above USD 300,000 of Wyoming assets.',
+    },
+    {
+      question: 'Does a New Mexico LLC file an annual report?',
+      answer:
+        'No. The New Mexico LLC Act contains no annual report requirement, unlike the corporation and LLP provisions. Formation is USD 50. The USD 10 annual report figure that circulates is corporation data and does not apply to LLCs.',
+    },
+    {
+      question: 'Can I be my own registered agent for my US LLC?',
+      answer:
+        'Not from Pakistan. Wyoming requires a physical in-state address and expressly excludes a drop box, New Mexico requires a resident individual or an entity with a place of business there, and Delaware requires a Delaware street address. A commercial registered agent is therefore a recurring annual cost, and its address becomes public record.',
+    },
+    {
+      question: 'Why is Stripe rejecting my new EIN?',
+      answer:
+        'Because IRS records lag behind issuance. Stripe says the IRS takes on average 3 to 4 weeks and accepts an uploaded SS-4 confirmation letter for a recently issued TIN. The IRS separately advises waiting up to 2 weeks before attempting TIN Matching or e-filing. Allow for the gap rather than applying to a processor the day the EIN arrives.',
+    },
+  ],
+
+  publishedAt: '2026-10-01',
+  related: ['us-llc-foreign-asset-declaration', 'can-a-pakistani-company-own-a-foreign-entity'],
+
+  seo: {
+    title: 'What a US LLC Costs to Keep: Form 5472 and State Fees',
+    description:
+      'The federal filing that cannot be e-filed and its USD 25,000 penalty, why Delaware is 400 and not 300, Wyoming and New Mexico compared, and the EIN wait before Stripe.',
+  },
+};
+
 export const CROSS_BORDER_GUIDES: Guide[] = [
   US_LLC_FOREIGN_ASSET,
   FOREIGN_ENTITY_PERMISSION,
   RESIDENCY,
   MONEY_FROM_ABROAD,
+  US_LLC_CALENDAR,
 ];
+
 
 
 
