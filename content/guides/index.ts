@@ -9,6 +9,7 @@ import { SALESTAX_GUIDES } from './salestax';
 import { SALARY_GUIDES } from './salary';
 import { FILING_GUIDES } from './filing';
 import { CREATOR_GUIDES } from './creator';
+import { CROSS_BORDER_GUIDES } from './cross-border';
 
 export type { Cluster, ClusterSlug, Guide, GuideSection } from './types';
 
@@ -114,6 +115,14 @@ export const CLUSTERS: Cluster[] = [
       'Section 154B arrived on 1 July 2026 and almost every account of it is wrong in the same way. What follows is read from the statute, including the part that decides whether the 5 percent is the end of the matter or only the start.',
     icon: 'play',
   },
+  {
+    slug: 'cross-border',
+    title: 'Cross-border',
+    card: 'Foreign companies, foreign accounts and foreign income, and what Pakistan requires you to declare about them.',
+    intro:
+      'A US LLC or a UAE company does not sit outside Pakistani tax law just because it sits outside Pakistan. These guides cover what a resident must declare, what the State Bank permits, and the penalties that make the difference between a filing question and a criminal one.',
+    icon: 'globe-arrows',
+  },
 ];
 
 /** Every guide, due or not. Use `PUBLISHED_GUIDES` for anything reader-facing. */
@@ -128,6 +137,7 @@ export const ALL_GUIDES: Guide[] = [
   ...SALARY_GUIDES,
   ...FILING_GUIDES,
   ...CREATOR_GUIDES,
+  ...CROSS_BORDER_GUIDES,
 ];
 
 /**
