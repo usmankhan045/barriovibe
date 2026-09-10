@@ -23,9 +23,21 @@ const AI_SEARCH_CRAWLERS = [
   'ChatGPT-User',
   'ClaudeBot',
   'PerplexityBot',
+  /*
+   * Google-Extended is the control for whether Gemini and AI Overviews may
+   * quote the site, and it is separate from Googlebot: blocking it does not
+   * affect ordinary Search ranking, and allowing it does not grant anything
+   * Googlebot did not already have for ranking purposes.
+   *
+   * It was already allowed by falling through the wildcard, so this changes
+   * nothing about behaviour. It is named because the whole point of this list
+   * is that the choice should be explicit and reviewable rather than the
+   * accidental result of an omission.
+   */
+  'Google-Extended',
 ];
 
-const AI_TRAINING_CRAWLERS = ['CCBot', 'anthropic-ai'];
+const AI_TRAINING_CRAWLERS = ['CCBot', 'anthropic-ai', 'cohere-ai'];
 
 // The kitchen sink is a component gallery for development, and the API route
 // has nothing to crawl.

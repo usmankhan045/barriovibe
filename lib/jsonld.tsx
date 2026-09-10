@@ -288,16 +288,68 @@ export function webSiteSchema() {
  * timestamp, for the reason set out in content/provenance.ts: a date that moves
  * on its own is a claim about work nobody did.
  */
+/**
+ * A procedure inside a guide, as HowTo.
+ *
+ * ## Why this exists when the rich result does not
+ *
+ * Google retired the HowTo rich result in 2023, so this buys no SERP
+ * decoration and it would be cargo-cult to pretend otherwise. It is here for a
+ * different consumer: an assistant extracting a procedure from the page gets
+ * an ordered, unambiguous list of steps instead of having to infer structure
+ * from prose. That is the whole case for it, and it is a real one for guides
+ * whose steps are genuinely numbered and causally ordered, which these are.
+ *
+ * ## What it deliberately does not claim
+ *
+ * No `totalTime`, `estimatedCost`, `tool` or `supply`. The content does not
+ * carry that data, and inventing a duration for a statutory filing process
+ * would be a misleading number dressed as structure.
+ *
+ * It is emitted as a sibling of the Article rather than as the page's primary
+ * type, because the page is a reference guide that contains a procedure, not a
+ * procedure with prose attached.
+ */
+export function howToSchema({
+  name,
+  description,
+  path,
+  steps,
+}: {
+  name: string;
+  description: string;
+  path: string;
+  steps: { title: string; body: string }[];
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    '@id': `${absoluteUrl(path)}#howto`,
+    name,
+    description,
+    inLanguage: 'en-PK',
+    step: steps.map((step, i) => ({
+      '@type': 'HowToStep',
+      position: i + 1,
+      name: step.title,
+      text: step.body,
+    })),
+  };
+}
+
 export function guideSchema({
   title,
   description,
   path,
   cluster,
+  publishedAt,
 }: {
   title: string;
   description: string;
   path: string;
   cluster: string;
+  /** The guide's own publication instant, from its `publishedAt`. */
+  publishedAt: string;
 }) {
   return {
     '@context': 'https://schema.org',
@@ -308,12 +360,43 @@ export function guideSchema({
     mainEntityOfPage: { '@type': 'WebPage', '@id': absoluteUrl(path) },
     articleSection: cluster,
     inLanguage: 'en-PK',
-    dateModified: RATES_REVIEWED,
-    datePublished: RATES_REVIEWED,
+    /*
+     * Two different dates doing two different jobs, and they used to be the
+     * same constant, which made every guide claim it was published on the day
+     * the rates were last reviewed. That was wrong on its face for any guide
+     * written afterwards, and it is the kind of claim a crawler can check
+     * against its own record of when the URL first appeared.
+     *
+     * `datePublished` is the guide's own slot. `dateModified` is the date the
+     * figures were last reconciled against the statute, which is a real and
+     * separate fact that RateProvenance renders visibly on the page.
+     *
+     * The Math.max guard matters for the next batch of scheduled guides: a
+     * guide published after the last rate review would otherwise report a
+     * dateModified earlier than its own datePublished.
+     */
+    datePublished: publishedAt,
+    dateModified:
+      publishedAt.slice(0, 10) > RATES_REVIEWED ? publishedAt.slice(0, 10) : RATES_REVIEWED,
     author: { '@id': `${SITE_URL}/#organization` },
     publisher: { '@id': `${SITE_URL}/#organization` },
     reviewedBy: { '@id': `${SITE_URL}/#organization` },
     citation: RATES_BASIS,
     isAccessibleForFree: true,
+    /*
+     * Points at the answer paragraph, which GuidePage renders with this id.
+     *
+     * Worth being honest about what this is and is not. Its documented
+     * consumer is voice read-aloud, not ChatGPT or Perplexity, and it will not
+     * on its own make an assistant cite us. It is here because it is a correct,
+     * zero-cost statement about our own markup: the element it names really is
+     * the canonical direct answer. What actually drives extraction is that the
+     * answer is the first paragraph and is self-contained, which is a content
+     * discipline rather than a schema one.
+     */
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['#guide-answer'],
+    },
   };
 }

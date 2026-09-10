@@ -118,6 +118,22 @@ jobs:
             *) echo "::error::Deploy hook returned $code"; exit 1 ;;
           esac
 
+      # ── Tell the search engines that support being told ──
+      #
+      # scripts/indexnow.ts has existed and worked for some time, and nothing
+      # called it, so every scheduled guide relied on an organic recrawl of the
+      # sitemap. That is the doorbell nobody presses.
+      #
+      # It runs after the deploy hook rather than before, because submitting a
+      # URL that is not yet built invites a crawl of a 404. It is also
+      # deliberately not allowed to fail the run: a guide that went live but
+      # was not announced is a smaller problem than a red workflow, and the
+      # sitemap still covers it.
+      - name: Ping IndexNow
+        if: steps.due.outputs.due == 'true'
+        continue-on-error: true
+        run: pnpm indexnow ${{ steps.due.outputs.paths }}
+
       - name: Nothing due
         if: steps.due.outputs.due != 'true'
         run: echo "No guide is due at this slot. Vercel was not asked to rebuild."

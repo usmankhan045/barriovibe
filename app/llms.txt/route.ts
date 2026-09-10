@@ -2,6 +2,7 @@ import { BRAND, TAGLINE, CONTACT } from '@/content/site';
 import { PRACTICE_GROUPS, SERVICES, serviceHref, practiceHref } from '@/content/services';
 import { TOOL_GROUPS, toolHref } from '@/content/tools';
 import { PUBLISHED_GUIDES, activeClusters, clusterHref, guideHref } from '@/content/guides';
+import { RATES_REVIEWED } from '@/content/provenance';
 import { absoluteUrl } from '@/lib/seo';
 
 /**
@@ -74,6 +75,12 @@ export function GET() {
     lines.push('');
     lines.push(
       `- [Guides](${absoluteUrl('/guides')}): reference answers on Pakistani tax and company compliance, each citing the section it comes from.`,
+    );
+    /* How the figures are produced, stated once for a crawler that reads this
+       file instead of fetching every guide. It is the thing that distinguishes
+       these pages from a tax blog, and it is invisible unless said plainly. */
+    lines.push(
+      `- Every rate in these guides is rendered from the same modules the site's calculators compute with, reconciled against the Income Tax Ordinance 2001 and the current Finance Act on each build, so a guide cannot state a figure its calculator disagrees with. Each guide names the provision it rests on, for example "section 231B(2)", rather than restating a number without a source. Where the law could not be established, the guide says so instead of guessing. Figures last checked against the statute on ${RATES_REVIEWED}.`,
     );
     for (const cluster of activeClusters()) {
       lines.push(`- [${cluster.title}](${absoluteUrl(clusterHref(cluster.slug))}): ${cluster.card}`);

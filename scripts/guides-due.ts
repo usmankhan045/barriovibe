@@ -35,7 +35,7 @@
  * The optional argument is for testing. Without it, now.
  */
 
-import { ALL_GUIDES, guideHref } from '../content/guides';
+import { ALL_GUIDES, clusterHref, guideHref } from '../content/guides';
 
 /**
  * The publishing slots, as UTC hours. Must match the crons in
@@ -127,6 +127,17 @@ const upcoming = ALL_GUIDES.filter((g) => at(g) > nowMs).sort((a, b) => at(a) - 
 // stdout: consumed by the workflow via $GITHUB_OUTPUT. Nothing else goes here.
 console.log(`due=${dueNow.length > 0}`);
 console.log(`count=${dueNow.length}`);
+/*
+ * The hrefs of what is going live, space separated, for the IndexNow ping.
+ *
+ * Submitting only the paths that actually changed is what the protocol asks
+ * for, and it is also the honest thing to send: a blanket resubmission of the
+ * whole site on every slot would be noise. The cluster hub goes with each
+ * guide because its listing changes when a guide appears beneath it.
+ */
+console.log(
+  `paths=${[...new Set(dueNow.flatMap((g) => [guideHref(g), clusterHref(g.cluster)]))].join(' ')}`,
+);
 
 // stderr: the run log.
 const log = (s: string) => console.error(s);
