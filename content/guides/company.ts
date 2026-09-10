@@ -761,11 +761,157 @@ const SECP_ANNUAL: Guide = {
   },
 };
 
-export const COMPANY_GUIDES: Guide[] = [
-  SECP_REGISTRATION,
-  CHOOSING_A_STRUCTURE,
-  PARTNERSHIP,
-  SECP_ANNUAL,
-];
+
+/**
+ * Guide 41: depreciation.
+ *
+ * Written for a software house, which decides the emphasis. Computer hardware
+ * carries 30 per cent depreciation against a 10 per cent general machinery
+ * rate, and 30 per cent initial allowance against 15, so the tax treatment of
+ * a workstation is dramatically better than the treatment of generic plant and
+ * almost nobody in our audience knows the gap is that large.
+ *
+ * The finding that earns the guide its place is the proviso to s.22(1):
+ * failing to withhold under s.152 or s.153 on a capital purchase removes that
+ * cost from the depreciation base IN ALL RELEVANT TAX YEARS. The write-off is
+ * lost for the life of the asset, which can dwarf the withholding itself.
+ */
+
+const DEPRECIATION: Guide = {
+  slug: 'depreciation-on-business-assets',
+  cluster: 'company',
+  title: 'Depreciation on Business Assets',
+  navLabel: 'Depreciation',
+  card: 'Why computer hardware is written off three times faster than general plant, and how failing to withhold can cost you the write-off entirely.',
+
+  answer:
+    'Section 22 allows a deduction computed by applying the Third Schedule rate to the written down value at the start of the year. Computer hardware is 30% where general machinery is 10%, and there is a separate initial allowance in the year an asset is first used, again 30% for hardware. Failing to withhold tax on a capital purchase removes that cost from the base permanently.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Not withholding costs you the asset\'s entire write-off',
+      body: 'This is the provision to know before it applies to you. The proviso to section 22(1) says depreciation shall not be allowed for the amount paid for the addition of capital assets to a seller, IN ALL RELEVANT TAX YEARS, where the tax deductible under section 152 or 153 on those payments has not been deducted and deposited in the treasury. The mechanism is that the amount is simply not added to your assets for computing tax depreciation. So a company that bought equipment from a supplier and did not deduct under section 153 has not merely exposed itself to a withholding penalty: it has permanently removed that equipment\'s cost from the depreciation base for the whole of the asset\'s life. On a substantial purchase the lost deduction dwarfs the withholding that was avoided.',
+    },
+
+    {
+      kind: 'table',
+      heading: 'The rates, and why an IT firm should care',
+      intro:
+        'Third Schedule Part I, applied to the written down value. Note the gap between computer hardware and everything else it might otherwise be grouped with.',
+      columns: ['Asset class', 'Rate on written down value'],
+      rows: [
+        ['Computer hardware, including printer, monitor and allied items', '30%'],
+        ['Technical or professional books', '20%'],
+        ['Machinery and plant, not otherwise specified', '10%'],
+        ['Furniture, including fittings', '10%'],
+        ['Factory, workshop, cinema, hotel, hospital', '10%'],
+        ['Building, not otherwise specified', '5%'],
+      ],
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Reducing balance, not straight line',
+      body: [
+        'Section 22(2) computes the deduction by applying the rate against the written down value at the beginning of the year, not against the original cost. So a workstation at 30 per cent gives you 30 per cent of cost in the first year, then 30 per cent of the remaining 70, and so on.',
+        'One consequence is worth stating plainly: on the rate alone an asset never reaches zero. The tail is dealt with on disposal rather than by the rate running out, which is why the written down value at disposal matters and why keeping the schedule accurate over years is not merely bookkeeping.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'The initial allowance is separate and comes on top',
+      body: 'Third Schedule Part II sets an initial allowance taken in the year the asset is first used, in addition to the ordinary depreciation deduction. Buildings of all types get 10 per cent. Furniture, general machinery and plant, motor vehicles, ships and technical books get 15 per cent. Computer hardware including printer, monitor and allied items gets 30 per cent, and so does machinery and equipment used in the manufacture of IT products, which was expressly inserted into that class. Do not confuse the two schedules: 30 per cent appears in both Part I and Part II and they are different allowances doing different jobs in the same year.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'What this means for a software house buying equipment',
+      body: [
+        'A firm equipping a development team is buying almost entirely into the fastest class the Schedule has. The same rupee spent on a workstation is relieved three times faster than a rupee spent on generic plant, and it also carries double the initial allowance.',
+        'That is a real planning point rather than a curiosity, because it changes the after-tax cost of hardware relative to other spending, and it applies to the printers and monitors alongside the machines. It is also one of the few places in the Ordinance where the IT sector is favoured by the ordinary rules rather than by a special regime that has to be applied for.',
+      ],
+    },
+
+    {
+      kind: 'calculator',
+      toolSlug: 'business-tax',
+      heading: 'What the deduction is worth against your income',
+      body: 'Depreciation reduces business income before the rate table applies, so its value depends on the band you are in. Enter your taxable income to see the marginal rate the deduction is actually saving you.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'The asset has to be used in the business',
+      body: 'Section 22(1) allows the deduction for depreciation of the person\'s depreciable assets USED IN THE PERSON\'S BUSINESS in the tax year. An asset bought but not yet in use has not started depreciating, and an asset used partly privately raises an apportionment question rather than a full claim. That matters most for vehicles and for equipment in a home office, which is where a large number of our readers actually work.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'A separate disallowance for not integrating with FBR',
+      body: 'Worth knowing alongside, because it works the same way. Where a person is required to integrate their business with the Board through an approved fiscal electronic device and software and fails to do so, expenditure attributable to sales is disallowed, subject to a cap of eight per cent of the allowable deduction. Like the withholding proviso above, it is a compliance failure that lands as a lost deduction rather than as a penalty, and it is the pattern to watch for in this Ordinance.',
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'What is the depreciation rate for computers in Pakistan?',
+      answer:
+        '30 per cent of written down value under Third Schedule Part I, for computer hardware including printer, monitor and allied items. That is three times the 10 per cent general rate for machinery and plant not otherwise specified.',
+    },
+    {
+      question: 'Is depreciation calculated on cost or written down value?',
+      answer:
+        'Written down value. Section 22(2) applies the Third Schedule rate to the written down value at the beginning of the year, so it is a reducing balance rather than straight line and the asset never reaches zero on the rate alone.',
+    },
+    {
+      question: 'What is the initial allowance?',
+      answer:
+        'A separate allowance under Third Schedule Part II, taken in the year the asset is first used and in addition to ordinary depreciation. Buildings 10 per cent, furniture and general machinery and vehicles 15 per cent, and computer hardware 30 per cent.',
+    },
+    {
+      question: 'Can I lose depreciation for not deducting withholding tax?',
+      answer:
+        'Yes, and permanently. The proviso to section 22(1) provides that depreciation is not allowed for the amount paid for a capital asset in all relevant tax years where tax deductible under section 152 or 153 was not deducted and deposited, because the amount is not added to the assets for computing depreciation.',
+    },
+    {
+      question: 'What is the depreciation rate for buildings in Pakistan?',
+      answer:
+        '5 per cent of written down value for a building not otherwise specified, and 10 per cent for a factory, workshop, cinema, hotel or hospital, and for residential quarters for labour.',
+    },
+    {
+      question: 'Does equipment for making IT products get the higher rate?',
+      answer:
+        'For the initial allowance, yes. Third Schedule Part II expressly includes machinery and equipment used in the manufacture of IT products in the 30 per cent class alongside computer hardware, aircraft and aero engines.',
+    },
+    {
+      question: 'Can I claim depreciation on an asset I have not started using?',
+      answer:
+        'No. Section 22(1) allows the deduction for depreciable assets used in the person\'s business in the tax year, so an asset bought but not yet in use has not begun to depreciate for tax.',
+    },
+    {
+      question: 'Are there other deductions I can lose for non-compliance?',
+      answer:
+        'Yes, and the pattern is worth noticing. Where a person required to integrate with the Board through an approved fiscal electronic device fails to do so, expenditure attributable to sales is disallowed, capped at eight per cent of the allowable deduction.',
+    },
+  ],
+
+  publishedAt: '2026-09-30T03:00:00Z',
+  related: ['smc-vs-private-limited-vs-sole-proprietor', 'withholding-statements-section-165'],
+
+  seo: {
+    title: 'Depreciation on Business Assets in Pakistan',
+    description:
+      'Computer hardware at 30% against 10% for general plant, the separate initial allowance, and the proviso that removes an asset from the base if you did not withhold.',
+  },
+};
+
+export const COMPANY_GUIDES: Guide[] = [SECP_REGISTRATION, CHOOSING_A_STRUCTURE, PARTNERSHIP, SECP_ANNUAL, DEPRECIATION];
+
 
 
