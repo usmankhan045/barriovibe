@@ -1,0 +1,8 @@
+{
+  "id": "iris-epay-public",
+  "url": "https://iris.fbr.gov.pk/payment",
+  "status": 200,
+  "fetched_at": "2026-09-10T10:24:19.820061+00:00",
+  "stealth": true,
+  "note": "StealthyFetcher render of Angular SPA; saved from session capture"
+}

@@ -198,3 +198,22 @@ Fourth instance this session of a 200 carrying the wrong content, after WIPO
 Lex, an FBR page and an SBP URL. The rule stands: **grep the fetched bytes for
 something the document must contain before recording it as a source.** For a
 PDF, checking that the file starts with `%PDF` costs nothing and catches this.
+
+## iris.fbr.gov.pk is an Angular SPA that returns 200 for routes that do not exist
+
+WebFetch against any `iris.fbr.gov.pk` path returns the `IRIS 2.0` application
+shell, not the page. Worse, an unknown route does not 404: the SPA serves the
+same shell, so a mistyped path looks exactly like a successful fetch.
+
+`StealthyFetcher` renders the app and returns real content. Every IRIS capture
+in `raw/` was grep-verified against a term the page had to contain, which is the
+only way to tell a rendered page from the shell.
+
+This is the fifth distinct instance this session of a 200 that is not a hit,
+after WIPO Lex, an FBR content page, an SBP URL and a KPMG PDF path.
+
+## e.fbr.gov.pk needs the www prefix
+
+PDFs under `e.fbr.gov.pk` return status 000 without `www.` and 200 with it.
+If a known-good FBR PDF path appears dead, try the `www.` form before recording
+it as unreachable.
