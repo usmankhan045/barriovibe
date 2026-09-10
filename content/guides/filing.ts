@@ -1004,7 +1004,327 @@ const WITHHOLDING_STATEMENTS: Guide = {
   },
 };
 
-export const FILING_GUIDES: Guide[] = [FILING_A_RETURN, PAYING_FBR, IRIS_ACCESS, AMENDED_ASSESSMENT, ADVANCE_TAX, WITHHOLDING_STATEMENTS];
+
+/**
+ * Guide 39: appealing an FBR order.
+ *
+ * Written for someone holding a demand notice, so the deadline and the clock's
+ * starting point come first. The correction that matters: the thirty days runs
+ * from SERVICE OF THE NOTICE OF DEMAND for an assessment or penalty appeal,
+ * not from the date on the order, and those are different dates.
+ *
+ * Second correction: s.126A, which split appellate jurisdiction at twenty
+ * million rupees, was omitted by the Finance Act 2025 after roughly a year.
+ * Anyone advising on forum choice from a 2024 source is on repealed law.
+ */
+
+const APPEALING_AN_ORDER: Guide = {
+  slug: 'appealing-an-fbr-order',
+  cluster: 'filing',
+  title: 'Appealing an FBR Order',
+  navLabel: 'Appeals',
+  card: 'Thirty days from the right date, what it costs, and the jurisdiction rule that was repealed a year after it arrived.',
+
+  answer:
+    'An appeal to the Commissioner (Appeals) must be lodged within thirty days, and for an assessment or penalty that runs from the date the notice of demand was served rather than from the date on the order. The fee is Rs 5,000 for a company and Rs 2,500 otherwise. A late appeal can be admitted where you were prevented by sufficient cause.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'The thirty days may not start when you think',
+      body: 'Section 127(5) sets out two different starting points and using the wrong one is the most common way an appeal is lost before it is argued. Where the appeal relates to an assessment or a penalty, the thirty days runs from the date of SERVICE OF THE NOTICE OF DEMAND relating to that assessment or penalty. In any other case it runs from the date the order being appealed was served. The date printed on the order is neither of those. If a demand notice reached you a fortnight after the order was signed, your clock started when it reached you, and if it reached you before you noticed, the clock started anyway.',
+    },
+
+    {
+      kind: 'table',
+      heading: 'What an appeal costs',
+      intro:
+        'Section 127(4). Small enough that cost is rarely the obstacle, which is worth saying to anyone who has been quoted a large figure to file one.',
+      columns: ['Appeal', 'Company', 'Anyone else'],
+      rows: [
+        ['Against an assessment', 'Rs 5,000', 'Rs 2,500'],
+        ['Any other case', 'Rs 5,000', 'Rs 5,000'],
+      ],
+    },
+
+    {
+      kind: 'list',
+      heading: 'What the appeal itself has to contain',
+      intro:
+        'Section 127(3). A defective appeal is a live risk, because the deadline does not pause while you correct it.',
+      items: [
+        'It must be in the prescribed form',
+        'It must be verified in the prescribed manner',
+        'It must state precisely the grounds upon which the appeal is made',
+        'It must be accompanied by the prescribed fee',
+        'It must be lodged with the Commissioner (Appeals) within the thirty days',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'A late appeal is not automatically dead',
+      body: 'The proviso to section 127(5) allows the Commissioner (Appeals) to admit an appeal after the thirty days where satisfied that the appellant was prevented by sufficient cause from lodging it in time. That is a real route rather than a formality, but it is a discretion to be persuaded rather than a right, and the application has to explain the cause rather than simply note the delay. It is much easier to file within time and amend the grounds than to explain a month of silence.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Which orders can be appealed',
+      body: [
+        'Section 127(1) lists them rather than granting a general right, and the list is worth checking before assuming. It covers orders under section 120(2A), sections 121, 122, 143, 144, 162, 170, 182 and 205, an order under section 161(1) holding a person personally liable for tax, and an order under section 172(3)(f) declaring a person to be the representative of a non-resident.',
+        'Two of those are worth noticing. Section 170 is a refund order, so a refusal to refund is appealable in the ordinary way. And section 182 is the penalty table, so a penalty is appealable separately from whatever assessment produced it.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'The twenty million rupee jurisdiction split no longer exists',
+      body: 'Section 126A divided appellate jurisdiction by value: the Commissioner (Appeals) where the assessment or refund at stake did not exceed twenty million rupees, and the Appellate Tribunal above it. It was inserted by the Tax Laws (Amendment) Act 2024 and OMITTED by the Finance Act 2025, so it was live for roughly a year. A great deal of commentary was written during that year and still describes the threshold as current. If a source tells you the value of your dispute decides which forum hears it first, check the date on that source.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'A state-owned enterprise cannot appeal here',
+      body: 'Section 127(1) was amended by the Tax Laws (Amendment) Act 2024 to exclude a State-Owned Enterprise from the persons who may appeal to the Commissioner (Appeals). It is a narrow carve-out and it will not touch most readers, but it is in the operative text and worth knowing if you act for one.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'What happens after you file',
+      body: [
+        'Section 128 requires the Commissioner (Appeals) to give notice of the day fixed for hearing to both the appellant and the Commissioner whose order is under appeal. So it is an adversarial hearing rather than a review on the papers, and the officer who made the decision is a party to it.',
+        'The practical consequence is that the grounds you stated in the appeal are the ones being argued. Section 127(3)(c) requires them to be stated precisely, and a set of grounds drafted as a general complaint gives you less to work with at the hearing than one that identifies the specific finding and the specific provision.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'If the order came out of an amended assessment, check the hearing first',
+      body: 'Before appealing an amended assessment, it is worth checking whether the amendment complied with section 122(9), which provides that no assessment shall be amended or further amended unless the taxpayer has been provided with an opportunity of being heard. That applies even to the broad power in section 122(5A), which is expressly made subject to it. An amendment made without that opportunity is a procedural ground available on the face of the statute, and it is a stronger starting point than arguing the figures alone.',
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'How long do I have to appeal an FBR order?',
+      answer:
+        'Thirty days under section 127(5). For an assessment or penalty appeal that runs from the date the notice of demand was served, and in any other case from the date the order was served. Neither is the date printed on the order.',
+    },
+    {
+      question: 'What does it cost to file an appeal to the Commissioner (Appeals)?',
+      answer:
+        'Under section 127(4), Rs 5,000 for a company appealing an assessment and Rs 2,500 for anyone else, with Rs 5,000 in any other case for a company.',
+    },
+    {
+      question: 'Can I appeal after thirty days?',
+      answer:
+        'Possibly. The proviso to section 127(5) lets the Commissioner (Appeals) admit a late appeal where satisfied the appellant was prevented by sufficient cause. It is a discretion to be persuaded, not a right, and the application has to explain the cause.',
+    },
+    {
+      question: 'Which FBR orders can be appealed?',
+      answer:
+        'Section 127(1) lists them, including orders under sections 120(2A), 121, 122, 143, 144, 162, 170, 182 and 205, an order under section 161(1) making a person personally liable, and one under section 172(3)(f) declaring a representative of a non-resident.',
+    },
+    {
+      question: 'Can I appeal a refusal to give me a refund?',
+      answer:
+        'Yes. Section 170 orders are in the appealable list, and section 170(5) separately allows an appeal against the Commissioner failing to pass a refund order within the sixty days that section allows.',
+    },
+    {
+      question: 'Does the value of my dispute decide which forum hears it?',
+      answer:
+        'Not any more. Section 126A split jurisdiction at twenty million rupees, but it was inserted in 2024 and omitted by the Finance Act 2025. Commentary written in that window still describes the threshold as current.',
+    },
+    {
+      question: 'Is a penalty appealed separately from the assessment?',
+      answer:
+        'Yes. Section 182, the penalty provision, is listed in section 127(1) in its own right, so a penalty order is appealable whether or not the underlying assessment is also under appeal.',
+    },
+    {
+      question: 'What is the strongest ground against an amended assessment?',
+      answer:
+        'Often a procedural one. Section 122(9) requires that no assessment be amended without giving the taxpayer an opportunity of being heard, and section 122(5A) is expressly subject to it, so an amendment made without a hearing is vulnerable on the face of the statute.',
+    },
+  ],
+
+  publishedAt: '2026-09-29T03:00:00Z',
+  related: ['when-fbr-amends-your-assessment', 'how-to-file-your-tax-return'],
+
+  seo: {
+    title: 'Appealing an FBR Order: Section 127',
+    description:
+      'Thirty days from service of the demand notice rather than the date on the order, what an appeal costs, and the jurisdiction threshold repealed in 2025.',
+  },
+};
+
+
+/**
+ * Guide 40: getting a refund out of FBR.
+ *
+ * Three things carry it and all three are in the statute rather than in
+ * practice folklore.
+ *
+ * 1. s.171: the state pays YOU compensation at KIBOR plus 0.5 per cent if a
+ *    refund is unpaid three months after it becomes due. Almost no taxpayer
+ *    knows this exists.
+ * 2. s.170(5)(b): an express right of appeal against SILENCE, where the
+ *    Commissioner fails to decide within sixty days. That is unusual and it is
+ *    the answer to "they just never replied".
+ * 3. s.170(3): the refund is applied against other liabilities BEFORE any money
+ *    moves, so a taxpayer with arrears elsewhere may correctly receive nothing.
+ */
+
+const GETTING_A_REFUND: Guide = {
+  slug: 'how-to-get-a-tax-refund',
+  cluster: 'filing',
+  title: 'Getting a Tax Refund from FBR',
+  navLabel: 'Refunds',
+  card: 'The three-year window, the sixty days FBR has to answer, what to do when it does not, and the compensation it owes you for the delay.',
+
+  answer:
+    'Apply within three years of the later of the assessment order or the date you paid. The Commissioner must pass an order within sixty days, and if he does not, section 170(5) gives you an express right of appeal against the silence. Where a refund goes unpaid for three months after becoming due, section 171 requires FBR to pay you compensation at KIBOR plus 0.5%.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'FBR owes you money for holding your money',
+      body: 'Section 171 is the provision worth knowing and it is almost never mentioned. Where a refund due to a taxpayer is not paid within three months of the date it becomes due, the Commissioner shall pay a further amount by way of compensation at KIBOR plus 0.5 per cent per annum, computed from the end of that three month period until the refund is actually paid. The word is shall, not may. There is a proviso suspending it where there is reason to believe the refund claimed is not admissible, so it does not apply to a disputed claim, but on a straightforward delayed refund the entitlement is in the statute.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Compare that with what you pay for being late',
+      body: 'The asymmetry is worth seeing in one place, because both figures come from the same Ordinance. If you pay tax late, section 205 charges default surcharge at twelve per cent a year or KIBOR plus three per cent, whichever is higher. If FBR pays you late, section 171 gives you KIBOR plus 0.5 per cent. The state charges roughly two and a half percentage points more over KIBOR than it pays, and it only starts paying after three months while your own surcharge runs from the due date.',
+    },
+
+    {
+      kind: 'steps',
+      heading: 'How the claim actually works',
+      intro:
+        'Section 170. The order of operations matters, particularly the third step.',
+      steps: [
+        {
+          title: 'Apply within three years',
+          body: 'Section 170(2)(c): within three years of the LATER of the date the Commissioner issued the assessment order for the relevant tax year, or the date the tax was paid. Taking the later of the two is more generous than it first reads.',
+        },
+        {
+          title: 'Use the prescribed form, verified',
+          body: 'Section 170(2)(a) and (b). An application that is not in the prescribed form and properly verified is not an application.',
+        },
+        {
+          title: 'FBR sets off before it pays',
+          body: 'Section 170(3) requires the excess to be applied first against other tax due under the Ordinance, then against your outstanding liability for other taxes, and only the remainder is refunded to you.',
+        },
+        {
+          title: 'Sixty days for a decision',
+          body: 'Section 170(4): the Commissioner shall pass an order within sixty days of receiving the application.',
+        },
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Silence is appealable, which is unusual',
+      body: 'Section 170(5) gives a right of appeal in two situations, and the second is the useful one. A person aggrieved by an order under sub-section (4) may appeal, and so may a person aggrieved by the FAILURE of the Commissioner to pass an order within the time specified. So an application that has simply been ignored for more than sixty days is not a dead end, and you do not have to wait for a decision in order to challenge the absence of one. That is a genuinely unusual provision and it is the answer to the most common complaint about refunds.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Why some refunds arrive without asking',
+      body: [
+        'Section 170A, which operates notwithstanding section 170, lets the Board process and issue a refund to a taxpayer who has filed a return WITHOUT requiring a refund application, to the extent of tax credit verified by the Board\'s own computerised system.',
+        'That explains the pattern people find inconsistent. Where the credit is something the system can verify by itself, typically withholding that the deductor has properly reported, it can be refunded automatically. Where the claim rests on evidence the system does not hold, the section 170 application is still the route. Section 170(6) separately empowers the Board to make rules for expeditious processing and automatic payment through a centralised system from a date it notifies.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'A refund can be correct and still produce no money',
+      body: 'Section 170(3) is the reason a taxpayer is sometimes told their refund was allowed and yet nothing arrives. The Commissioner must apply the excess in reduction of any other tax due under the Ordinance, then against any outstanding liability to pay other taxes, and refund only what is left. So arrears on another year, or another tax, absorb the refund before it reaches you. If you are expecting a payment and receive an adjustment instead, that is the provision doing its work rather than an error.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'The most common reason a refund exists at all',
+      body: [
+        'Over-withholding. Tax deducted at source under the withholding provisions is credited against your liability for the year, and where the deductions exceed the tax the return computes, the excess is a refund rather than a windfall to the state.',
+        'That is why the return matters even for someone with no tax to pay. A person whose bank, employer or clients have withheld more than the slabs produce has no route to that money except through filing, and the three-year clock in section 170(2)(c) is running from the later of assessment or payment whether or not they file.',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'A refund refusal is appealable in the ordinary way',
+      body: 'Section 170 orders appear in the list of appealable orders in section 127(1), so a refusal goes to the Commissioner (Appeals) within thirty days of service like any other order. Between that and the appeal against silence in section 170(5)(b), both outcomes of a refund application, a bad decision and no decision, have a route.',
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'How long do I have to claim a tax refund in Pakistan?',
+      answer:
+        'Three years under section 170(2)(c), running from the LATER of the date the Commissioner issued the assessment order for the tax year concerned, or the date the tax was paid.',
+    },
+    {
+      question: 'How long does FBR have to decide a refund application?',
+      answer:
+        'Sixty days from receipt, under section 170(4). If no order is passed within that time, section 170(5)(b) gives you an express right of appeal against the failure to decide.',
+    },
+    {
+      question: 'Does FBR pay interest on a late refund?',
+      answer:
+        'Yes. Section 171 requires compensation at KIBOR plus 0.5 per cent a year where a refund is not paid within three months of becoming due, computed from the end of that three month period until payment. A proviso suspends it where there is reason to believe the claim is not admissible.',
+    },
+    {
+      question: 'What can I do if FBR never responds to my refund application?',
+      answer:
+        'Appeal the silence. Section 170(5)(b) allows an appeal by a person aggrieved by the failure of the Commissioner to pass an order within the sixty days, so you do not have to wait for a decision to challenge the absence of one.',
+    },
+    {
+      question: 'My refund was approved but I received nothing. Why?',
+      answer:
+        'Probably section 170(3). The Commissioner must apply the excess first against other tax due under the Ordinance, then against outstanding liability for other taxes, and refund only the remainder. Arrears elsewhere absorb it before it reaches you.',
+    },
+    {
+      question: 'Do I need to apply, or does FBR refund automatically?',
+      answer:
+        'Both exist. Section 170A lets the Board issue a refund without an application to the extent of tax credit its own system can verify, typically properly reported withholding. Anything resting on evidence the system does not hold still needs the section 170 application.',
+    },
+    {
+      question: 'Can I appeal a refund refusal?',
+      answer:
+        'Yes. Section 170 orders are listed in section 127(1) as appealable, so a refusal goes to the Commissioner (Appeals) within thirty days of service.',
+    },
+    {
+      question: 'Why would I be owed a refund if I never paid tax directly?',
+      answer:
+        'Because of withholding. Tax deducted at source by your bank, employer or clients is credited against your liability, and where those deductions exceed what the slabs produce the difference is refundable. Filing is the only route to it.',
+    },
+  ],
+
+  publishedAt: '2026-09-29T07:00:00Z',
+  related: ['how-to-file-your-tax-return', 'appealing-an-fbr-order'],
+
+  seo: {
+    title: 'Getting a Tax Refund from FBR: Sections 170 and 171',
+    description:
+      'The three-year window, the sixty-day deadline, the right to appeal against silence, and the compensation FBR owes at KIBOR plus 0.5% when a refund runs late.',
+  },
+};
+
+export const FILING_GUIDES: Guide[] = [FILING_A_RETURN, PAYING_FBR, IRIS_ACCESS, AMENDED_ASSESSMENT, ADVANCE_TAX, WITHHOLDING_STATEMENTS, APPEALING_AN_ORDER, GETTING_A_REFUND];
+
+
 
 
 
