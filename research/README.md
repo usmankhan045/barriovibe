@@ -7,12 +7,14 @@ session that produced it.
 
 | File | What it holds |
 | --- | --- |
+| `METHOD.md` | **How to research for this site.** The traps, the source order, the fetch workarounds, and how to publish an open question. Read before commissioning an agent. |
 | `STRATEGY.md` | The conclusions. Why the intersection of tech and compliance is the wedge, what international buyers actually do, the four phases, and what not to build. |
-| `POSTS.md` | **The post plan.** 71 posts in nine hub-and-spoke clusters, built from the query harvest and SERP data. Start here. |
+| `POSTS.md` | The post plan: 108 pieces in fourteen clusters, built from the query harvest and SERP data. |
+| `GUIDE-RESEARCH.md` | Per-guide notes: what each is built on, what it corrects, what still blocks it. |
 | `EXECUTION.md` | How a guide gets built: URL shape, content model, anatomy, schema, definition of done, order of work. |
 | `ARTICLES.md` | Superseded by POSTS.md. Kept for its per-title status tags and finding ids. |
 | `DEMAND.md` | The raw observations: search demand by cluster, seasonality, who ranks today and why they are beatable. |
-| `OPEN-ITEMS.md` | Six verification items that block specific articles, each with what to fetch. |
+| `OPEN-ITEMS.md` | Verification items that block specific articles, each with what to fetch. Live count is in findings.jsonl: 18 contested or unverified. |
 | `DEAD-ENDS.md` | Fetch routes that do not work, so they are not walked twice. |
 | `findings.jsonl` | One record per claim, append-only, with a status that gates publication. |
 | `sources/` | Fetch metadata per URL: status, timestamp, hash. |
@@ -30,6 +32,12 @@ restated as fact six months later.
 Six of the 44 findings are recorded specifically so they are never used again,
 including a "63% of enterprises cite IP protection (Forrester 2024)" statistic
 that traces to a vendor blog and has no Forrester source behind it.
+
+Before starting new research, read `METHOD.md`. It records what actually went
+wrong across fifteen guides, and the headline is that every serious error came
+from a source that was genuinely official: a consolidation that predated the
+Finance Act, a regulator's summary written against the Bill, a government page
+that was three years stale.
 
 ## The rule that matters
 
