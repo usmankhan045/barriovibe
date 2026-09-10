@@ -119,6 +119,41 @@ const US_LLC_FOREIGN_ASSET: Guide = {
 
     {
       kind: 'note',
+      tone: 'warning',
+      heading: 'The profit may not be foreign income at all',
+      body: 'Worth separating two things the word "foreign" runs together. Section 101(2) provides that business income of a resident person is Pakistan-source income to the extent it is derived from any business carried on in Pakistan. If you run the LLC from Lahore, doing the work yourself in Pakistan, there is a real argument that the profit is Pakistan-source business income rather than foreign income, even though the LLC itself is unmistakably a foreign asset. It does not change whether you declare it, because section 11(5) computes a resident\'s income from both Pakistan-source and foreign-source amounts. It changes the characterisation, and characterisation is what the rest of the return runs on.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'The treaty is not the answer people think it is',
+      body: 'A US-Pakistan income tax convention does exist, signed in 1957 and still in force, and it is usually invoked to say double taxation is prevented. Two problems. Section 103(1) allows a credit for foreign income tax actually PAID, so if the LLC lawfully pays no US federal income tax there is no credit to take and nothing for a treaty to relieve: the Pakistani liability is the whole liability, not a residue after American tax. And the treaty is a 1957 instrument with no limitation on benefits article, no capital gains article and no services permanent establishment. Article II(1)(l) expressly excludes remuneration for labour or personal services from the industrial and commercial profits article, so the provision people reach for does not cover freelance fees at all.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'A thirty-day clock most people have never heard of',
+      body: 'Separate from anything FBR requires. Section 452 of the Companies Act 2017 obliges every substantial shareholder or officer of a Pakistani company who is a Pakistani citizen, resident or not, dual national or not, and who holds shares in a foreign company, to report that holding to their Pakistani company on a specified form within thirty days of acquiring it. The Explanation is drafted to catch a foreign entity with no Pakistan connection at all: it applies regardless of whether the foreign company has a place of business, any business activity, or a liaison office here. The company then files it with its annual return, and section 452(8) provides that the Commission shall give the information to the Federal Board of Revenue. So the register that starts at SECP ends up where the section 116A question is asked. Note the limb that catches individuals is about being a substantial shareholder or officer of a PAKISTANI company: a freelancer with a US LLC and no Pakistani company is not caught by it. Substantial means 10% or more. We read this in a consolidation dated 7 October 2022 and have not been able to check amendments after that date.',
+    },
+
+    {
+      kind: 'list',
+      heading: 'What the United States wants, separately',
+      intro:
+        'A US LLC wholly owned by one non-US person is treated as a corporation for the reporting rules in section 6038A, and the obligations survive a year of no trading. None of this is Pakistani law, and all of it applies alongside.',
+      items: [
+        'Form 5472 attached to a pro forma Form 1120, due the 15th day of the fourth month after year end, which is 15 April for a calendar-year LLC',
+        'It cannot be filed electronically. The instructions carry an express caution: fax it, or post it to the dedicated Ogden address with "Foreign-owned U.S. DE" written across the top, and not to the ordinary Form 1120 address',
+        'A dormant year still files, because formation, contributions and distributions are themselves reportable transactions',
+        'The penalty is USD 25,000 for each taxable year, with a further USD 25,000 per related party per 30-day period once a notice has gone unanswered for 90 days, and no maximum',
+        'FinCEN beneficial ownership reporting no longer applies to a US-formed LLC. The final rule of 11 August 2026 limits reporting companies to foreign-formed entities registered to do business in a US state, so ownership by Pakistani residents does not bring it back',
+      ],
+    },
+
+    {
+      kind: 'note',
       tone: 'info',
       heading: 'The separate question of whether you could hold it at all',
       body: 'Section 116A is a disclosure obligation and answers only what you must declare. Whether a Pakistani resident or a Pakistani company was permitted to acquire the foreign shareholding in the first place is a State Bank question under the Foreign Exchange Manual, not an FBR one, and the answer differs between an individual and a company. Declaring an asset and being permitted to hold it are separate tests, and satisfying one says nothing about the other.',
@@ -160,6 +195,26 @@ const US_LLC_FOREIGN_ASSET: Guide = {
       question: 'What happens to the consultant who set up my offshore structure?',
       answer:
         'Section 195B makes an enabler who advises or arranges a transaction resulting in offshore tax evasion liable to imprisonment up to seven years or a fine up to Rs 5 million or both, and section 216(6C) allows the Board to publish enablers\' names with no monetary threshold. The adviser\'s exposure is heavier than the taxpayer\'s.',
+    },
+    {
+      question: 'Do I have to file anything in the US for my LLC?',
+      answer:
+        'A US LLC wholly owned by one non-US person files Form 5472 with a pro forma Form 1120, due 15 April for a calendar year. It cannot be e-filed and must go to the dedicated address rather than the ordinary Form 1120 one. The penalty is USD 25,000 for each taxable year, and a year with no trading still files because formation, contributions and distributions are reportable.',
+    },
+    {
+      question: 'Does the US-Pakistan tax treaty stop me being taxed twice?',
+      answer:
+        'Not in the way it is usually invoked. Section 103(1) gives a credit for foreign tax actually paid, so where the LLC lawfully pays no US federal income tax there is nothing to credit and the Pakistani liability stands in full. The 1957 convention also excludes remuneration for labour or personal services from its industrial and commercial profits article, so it does not reach freelance fees.',
+    },
+    {
+      question: 'Do I have to file a FinCEN beneficial ownership report?',
+      answer:
+        'Not for a US-formed LLC. FinCEN\'s final rule of 11 August 2026 limits reporting companies to entities formed under foreign law that have registered to do business in a US state. The test is place of formation, not the owners\' nationality, so a Wyoming LLC owned by Pakistani residents has no BOI obligation. Content describing the earlier position is out of date.',
+    },
+    {
+      question: 'Is my LLC\'s profit foreign income or Pakistan income?',
+      answer:
+        'It depends on where the business is carried on. Section 101(2) makes business income of a resident Pakistan-source to the extent it is derived from a business carried on in Pakistan, so profit from work you do yourself in Pakistan may be Pakistan-source even though the LLC is a foreign asset. Either way section 11(5) brings both into your computation.',
     },
     {
       question: 'Is declaring my foreign company the same as being allowed to own it?',
@@ -295,6 +350,43 @@ const FOREIGN_ENTITY_PERMISSION: Guide = {
     },
 
     {
+      kind: 'note',
+      tone: 'warning',
+      heading: '"Fund it from offshore earnings and it is outside SBP" is the claim to be careful with',
+      body: 'The most common advice is that if no money leaves Pakistan, the exchange regulations never engage. Para 3 of Chapter 20 cuts against it: a Pakistan national resident in Pakistan who owns foreign securities may hold them provided he acquired them in a manner not involving a breach of the Foreign Exchange regulations. The proviso is drafted around the lawfulness of the ACQUISITION, not around the route the funds took. In fairness there is an argument the other way, because section 5(2)(b) of FERA 1947 carves out payments made with foreign exchange received for services not arising from a business in Pakistan. We are recording this as genuinely arguable rather than settled, which is more than the pages asserting it flatly do.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'What a contravention carries',
+      body: 'Section 23(1) of the Foreign Exchange Regulation Act 1947 makes contravention punishable with rigorous imprisonment up to five years, or a fine, or both, and the Tribunal may order confiscation of the property concerned. Section 23(2) makes the offence cognizable and non-bailable. Two practical brakes are worth knowing alongside that: under section 23(3) a Tribunal cannot take cognizance except on a written complaint by a person authorised by the State Bank, so SBP controls whether a prosecution starts at all, and where the charge is doing an act without permission, no complaint may be made until the accused has had an opportunity to show that he had it.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'A second permission your own members have to give',
+      body: 'Section 199(1) of the Companies Act 2017 prohibits a company from investing in an associated company or associated undertaking except under the authority of a special resolution stating the nature, period, amount and terms of the investment, and the Explanation includes equity, loans, advances and guarantees. A foreign subsidiary is an associated undertaking under section 2(4)(b). So a Pakistani company funding its own foreign subsidiary needs a members\' special resolution rather than a board resolution, and almost no guide to investing abroad mentions it.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Controlled foreign company rules, and why they often do not bite',
+      body: 'Section 109A can attribute a foreign company\'s income to a resident shareholder even where no dividend is paid, which sounds alarming and is frequently overstated. All four conditions in section 109A(2) must hold together, and one of them is that the company does NOT derive active business income. A genuine operating software subsidiary usually does, so it fails that condition and falls outside. Two de minimis rules cut it off further: attributable income is nil where the resident holds less than 10% of capital or voting rights, and the company\'s income is treated as nil where it is below PKR 10 million. Section 109A is a real risk for a passive holding structure and often not triggered for a trading one.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'If the company is already there without permission',
+      body: [
+        'No published State Bank instrument provides an amnesty, a condonation or a retrospective approval for a foreign entity already established without permission. The only mechanism in Chapter 20 is Para 13(IV)(3), under which your Authorized Dealer forwards an application for exemption or waiver to the Director of the Exchange Policy Department, and that is prospective and requires the bank\'s own recommendation.',
+        'The 2018 Foreign Assets Declaration and Repatriation Act is sometimes offered as the answer. It was a tax amnesty, it expired, and it did not cure exchange control contraventions. We are stating the absence rather than inventing a route: what the published material does not contain is a clean fix, and this is a position to take to your bank and an adviser rather than resolve from a web page.',
+      ],
+    },
+
+    {
       kind: 'prose',
       heading: 'How this sits with the tax side',
       body: [
@@ -339,6 +431,26 @@ const FOREIGN_ENTITY_PERMISSION: Guide = {
       question: 'Does the foreign business have to be related to what I do in Pakistan?',
       answer:
         'Yes, for a company. The business in which the investment is made should be of a similar nature to the applicant\'s Pakistani business. An extended line of business or vertical integration is treated as similar; an unrelated venture is not.',
+    },
+    {
+      question: 'What is the penalty for investing abroad without SBP permission?',
+      answer:
+        'Section 23(1) of the Foreign Exchange Regulation Act 1947 provides for rigorous imprisonment up to five years, or a fine, or both, with possible confiscation of the property, and section 23(2) makes the offence cognizable and non-bailable. A prosecution can only begin on a written complaint by someone authorised by the State Bank, and where the charge is acting without permission the accused must first be given a chance to show he had it.',
+    },
+    {
+      question: 'Can I regularise a foreign company I already set up?',
+      answer:
+        'No published State Bank instrument offers an amnesty or retrospective approval. Chapter 20 Para 13(IV)(3) allows an application for exemption or waiver through your Authorized Dealer, but it is prospective and needs the bank\'s recommendation. The 2018 Foreign Assets Act was a tax amnesty, has expired, and did not cure exchange control contraventions.',
+    },
+    {
+      question: 'Do controlled foreign company rules apply to my foreign subsidiary?',
+      answer:
+        'Only if all four conditions in section 109A(2) hold, and one is that the company does not derive active business income. A genuine operating software subsidiary usually does, which takes it outside. Attributable income is also nil where the resident holds under 10%, or where the company\'s income is below PKR 10 million.',
+    },
+    {
+      question: 'Does my Pakistani company need a board resolution to fund its foreign subsidiary?',
+      answer:
+        'More than that. Section 199(1) of the Companies Act 2017 requires a special resolution of the members, stating the nature, period, amount and terms, for any investment in an associated company or undertaking, and that includes equity, loans, advances and guarantees. A foreign subsidiary is an associated undertaking under section 2(4)(b).',
     },
     {
       question: 'If I declared my foreign company to FBR, am I compliant?',

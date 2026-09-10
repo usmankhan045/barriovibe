@@ -1,0 +1,7 @@
+{
+  "id": "uae-sbr-mof",
+  "url": "https://mof.gov.ae/corporate-tax-faq/",
+  "status": null,
+  "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://mof.gov.ae/corporate-tax-faq/\", waiting until \"load\"\n",
+  "fetched_at": "2026-09-10T06:26:55.604429+00:00"
+}
