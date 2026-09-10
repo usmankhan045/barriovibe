@@ -228,6 +228,35 @@ yourself.** Not all of them, just the claim that would be most embarrassing to
 get wrong. It took one fetch here and it caught a page that would have opened
 with a schedule attributed to a document saying the opposite.
 
+### Two agents agreeing is not verification
+
+Five SEO agents audited the guides. Two independently reported that
+`content/guides/pension.ts` and `securities.ts` were orphaned files, not
+imported into `ALL_GUIDES` and therefore dead content.
+
+Both are imported at `content/guides/index.ts` lines 13 and 14, and both guides
+are in `ALL_GUIDES`. One check settled it.
+
+The failure mode is worth naming because it is seductive: independent agreement
+feels like corroboration, and here it was two agents making the same reasonable
+inference from the same partial view. **Agreement raises confidence about
+plausibility, not about truth.** If two reports agree on something load-bearing
+and neither quotes the line it rests on, that is still one unverified claim
+rather than two.
+
+### An agent's brief can be wrong, and a good agent will say so
+
+Going into the non-profit research I told an agent that s.100C had probably been
+cut from a hundred per cent credit and to establish what replaced it. It came
+back with the live text: still a hundred per cent, untouched by the Finance Act
+2026. What had actually changed was the Finance Act 2025 merging two tables in
+clause (66), so entities with a former straight exemption must now meet the
+s.100C conditions. A narrowing of eligibility, not a cut in the rate.
+
+Had the brief been phrased as an instruction rather than a hypothesis, the guide
+would have gone out asserting a rate change that did not happen. **Phrase a
+premise as a premise, and ask to be corrected.**
+
 ---
 
 ## 6. The status gate

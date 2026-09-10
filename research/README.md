@@ -11,7 +11,7 @@ session that produced it.
 | `STRATEGY.md` | The conclusions. Why the intersection of tech and compliance is the wedge, what international buyers actually do, the four phases, and what not to build. |
 | `POSTS.md` | The post plan: 108 pieces in fourteen clusters, built from the query harvest and SERP data. |
 | `GUIDE-RESEARCH.md` | Per-guide notes: what each is built on, what it corrects, what still blocks it. |
-| `EXECUTION.md` | How a guide gets built: URL shape, content model, anatomy, schema, definition of done, order of work. |
+| `EXECUTION.md` | **How a guide gets built, and what has already gone wrong.** URL shape, content model, anatomy, schema with the reasoning behind each block, writing for AI citation, and a definition of done that now includes the checks the first forty-seven guides failed. Read before writing one. |
 | `ARTICLES.md` | Superseded by POSTS.md. Kept for its per-title status tags and finding ids. |
 | `DEMAND.md` | The raw observations: search demand by cluster, seasonality, who ranks today and why they are beatable. |
 | `OPEN-ITEMS.md` | Verification items that block specific articles, each with what to fetch. Live count is in findings.jsonl: 22 contested or unverified. |
@@ -35,6 +35,13 @@ again. Two examples show the range: a "63% of enterprises cite IP protection
 source behind it, and a "USD 100,000" remittance threshold that was a Finance
 Bill 2023 proposal, dropped before enactment, still published as live law on
 pages badged 2026.
+
+Before writing a guide, read `EXECUTION.md`. Its schema and definition-of-done
+sections record specific defects that shipped and were caught later: a false
+publication date on all forty-seven guides, twenty guides that nothing linked
+to, a table duplicated into two pages that could drift apart, and a working
+IndexNow script that nothing called for weeks. Each is a general trap rather
+than a one-off.
 
 Before starting new research, read `METHOD.md`. It records what actually went
 wrong across fifteen guides, and the headline is that every serious error came

@@ -799,3 +799,87 @@ never conforming. FBR's own Circular No. 3 of 2020 settles it in a sentence.
 - Whether a given payment to a foreign supplier is Pakistan-source under s.101:
   fact-specific, so guide 45 sets out rates, definitions and exclusions rather
   than answering for a reader whose facts we do not have.
+
+---
+
+## The SEO pass across all 47 guides (10 September 2026)
+
+Five audits: schema, technical, GEO, content and E-E-A-T, and SXO. What follows
+is the record of what changed and, more usefully, what was found to be already
+correct so nobody re-audits it.
+
+### The defect that mattered most
+
+**Every guide asserted a publication date that was false.** `guideSchema` set
+both `datePublished` and `dateModified` to `RATES_REVIEWED`, so all forty-seven
+claimed they were published on 2026-09-04, including guides written weeks later.
+
+It is worth being precise about why that is worse than a missed optimisation. It
+is a checkable false statement, on YMYL content, in the machine-readable layer,
+and it bought nothing. The reasoning and the fix now live in EXECUTION.md under
+Schema, with the general rule: a date in schema is a claim, so it has to be true.
+
+### The mechanism that existed and was never called
+
+`scripts/indexnow.ts` worked and nothing invoked it, so every scheduled guide
+waited on an organic recrawl. Its own header said "once this is wired into a
+deploy" and that read as documentation rather than as a TODO for weeks. Now
+wired into `publish-guides.yml` after the deploy hook, with paths from
+`guides-due.ts`.
+
+### What the audits changed
+
+| Change | Scope |
+| --- | --- |
+| `datePublished` from each guide's own `publishedAt` | 47 |
+| `HowTo` schema, as a sibling of Article | 12 with a `steps` section |
+| `speakable` pointing at `#guide-answer` | 47 |
+| Heading anchors for fragment-level citation | 472 across 47 |
+| IndexNow ping on publish | the workflow |
+| `Google-Extended` named in robots | Gemini and AI Overviews |
+| Sourcing method stated in `llms.txt` | the file |
+| Inbound sibling link | 20 guides had none, now zero |
+| Calculator link | 18 to 21 |
+| Bespoke call to action | 10 where the situation is specific |
+| Property duplication resolved | the hub and the CGT guide |
+
+### A bug that fell out of a fix nobody asked for
+
+Removing the duplicated holding-period table from the property hub also removed
+a second hardcoded copy of a table the capital gains guide interpolates from
+`lib/tax/property.ts`. It was a second source of truth for a table FBR's own
+consolidation prints incompletely, and the next Finance Act would have moved one
+and not the other.
+
+Nobody flagged it. It surfaced because the duplication fix was done by reading
+both pages rather than by deleting the obvious overlap. **A content fix and a
+correctness fix are frequently the same fix.**
+
+### Verified correct, do not re-audit
+
+- Canonicals, title and description uniqueness across all 47, OG image
+  inheritance. The historical bug where `pageMetadata` declared `openGraph`
+  without `images` is genuinely fixed for guide routes.
+- Sitemap: real git-derived lastmod, future-dated guides genuinely excluded,
+  sane priority and changefreq.
+- No dangling `@id`: `organizationRef()` is emitted inline on every guide page.
+- Core Web Vitals: no inline calculator widgets, native `<details>` FAQ with no
+  JS, self-hosted fonts with swap, tables bounded in `overflow-x-auto`.
+- URL structure `/guides/{cluster}/{slug}`: keep it. The redirect cost of
+  changing forty-seven URLs is not justified by removing one crawl hop.
+
+### Two things left open, both deliberately
+
+**The named reviewer.** `RATES_REVIEWER.credential` is `null` and the schema has
+no `Person` node. Two audits independently called this the highest-leverage
+improvement available. It is a business decision: name a real person with a real
+credential. It must not be closed by inventing one, since it is checkable
+against a public register and a fabrication would convert the site's strongest
+asset into its largest liability.
+
+**The publishing cadence.** Forty-five of forty-seven guides are date-gated
+through 3 October. Three audits observed that the drip-feed was designed on SEO
+pacing logic, and that AI crawlers have no equivalent suspicion of publishing
+bursts. Nothing can be cited that does not exist. Whether to bring the schedule
+forward is a strategy call rather than a content one, and it is recorded here
+rather than made by editing dates.
