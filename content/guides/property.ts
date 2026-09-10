@@ -979,13 +979,171 @@ const LANDLORD_DEDUCTIONS: Guide = {
   },
 };
 
-export const PROPERTY_GUIDES: Guide[] = [
-  PROPERTY_TAX,
+
+/**
+ * Guide 34: gifts and inheritance.
+ *
+ * The point that carries it is the carry-over cost basis in s.79(3)(b), which
+ * is almost never explained. A gift to a relative is not a tax-free step-up:
+ * the recipient inherits the giver's ORIGINAL cost, so the accrued gain is
+ * preserved and lands on the recipient when they eventually sell. Gifting
+ * before selling defers nothing, it moves the gain to someone else.
+ *
+ * The second is new this year. An Explanation inserted into s.79(1)(b) by the
+ * Finance Act 2026 brings a family settlement consequent upon death inside the
+ * non-recognition rule, which closes a real problem for heirs who redistribute
+ * property by agreement rather than taking exactly what the succession
+ * certificate allocates.
+ */
+
+const GIFTS_AND_INHERITANCE: Guide = {
+  slug: 'tax-on-gifts-and-inheritance',
+  cluster: 'property',
+  title: 'Tax on Gifts and Inherited Property in Pakistan',
+  navLabel: 'Gifts and inheritance',
+  card: 'Why a gift to a relative is not a clean slate, who counts as a relative, and the family settlement rule that arrived in 2026.',
+
+  answer:
+    'Section 79 provides that no gain or loss arises on transmission of an asset on death, or on a gift to a relative. But the recipient takes the asset at the giver\'s original cost, not its current value, so the accrued gain is preserved rather than erased and falls on the recipient when they sell. Pakistan has no separate inheritance or estate tax.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'A gift does not wipe out the gain, it moves it',
+      body: 'This is the misunderstanding that costs the most money and it is barely explained anywhere. Section 79(1)(c) means no gain arises when you gift an asset to a relative, so the giver pays nothing. Section 79(3)(b) then says the person acquiring the asset is treated as acquiring it for a cost equal to the cost of the asset for the person disposing of it. So your father who bought a plot for two million rupees in 2005 and gifts it to you at a market value of forty million has not passed you an asset worth forty million with a clean slate. He has passed you an asset with a cost of two million, and the thirty-eight million of accrued gain is now yours to be taxed on when you sell. Gifting before a sale defers nothing. It changes who pays.',
+    },
+
+    {
+      kind: 'list',
+      heading: 'When no gain or loss arises at all',
+      intro:
+        'Section 79(1). Anything not on this list is an ordinary disposal, valued as if it had been sold.',
+      items: [
+        'Between spouses under an agreement to live apart',
+        'Transmission of the asset to an executor or beneficiary on the death of a person',
+        'A gift of the asset to a relative, as defined in section 85(5)',
+        'Compulsory acquisition under any law, where the consideration is reinvested in an asset of a like kind within one year',
+        'By a company to its shareholders on liquidation',
+        'By an association of persons to its members on dissolution, where assets are distributed in accordance with their interests in the capital',
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Who counts as a relative is wider than people assume',
+      body: 'Section 85(5) defines a relative in relation to an individual as an ancestor, a descendant of any of the grandparents, or an adopted child, of the individual or of a spouse of the individual, and a spouse of the individual or of any of those people. Read the middle limb carefully: a descendant of any of your grandparents reaches your siblings, your uncles and aunts, and your first cousins. It also runs through your spouse, so your spouse\'s relatives are within it too. What it does not reach is a friend, a business partner or an unrelated party, and a gift to any of those is an ordinary disposal at market value.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'The gift limb was narrowed in 2018',
+      body: 'Section 79(1)(c) used to cover a gift of an asset generally. The Finance Act 2018 inserted the words limiting it to a gift to a relative as defined in section 85(5). So the position that a gift is outside capital gains regardless of who receives it is eight years out of date, and pages describing gifting as a general planning route are describing repealed law. If the recipient is not a relative within the definition, the disposal is treated as an ordinary one.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'The family settlement rule is new this year',
+      body: 'An Explanation inserted into section 79(1)(b) by the Finance Act 2026 clarifies, for removal of doubt, that transmission of immovable property to a beneficiary on death also includes transmission by reason of a family settlement amongst family members consequent upon the death. This closes a real problem. Heirs frequently redistribute inherited property among themselves by agreement rather than each taking exactly what the succession certificate allocates, and before the Explanation those redistributions were arguably taxable disposals between the heirs. Note two limits on its face: it speaks of immovable property, and of a settlement consequent upon the death, so a rearrangement among living family members is not within it.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'There is no inheritance tax, and that is a separate point',
+      body: [
+        'Pakistan has no estate duty or inheritance tax as such. Section 79(1)(b) means the transmission itself is not a taxable event, so an heir does not face a charge on receiving property.',
+        'What an heir does inherit, along with the property, is the deceased\'s cost basis under section 79(3)(b) and the eventual capital gains position that comes with it. So "no inheritance tax" is true and is not the same as "no tax", and the difference shows up years later at the point of sale.',
+      ],
+    },
+
+    {
+      kind: 'calculator',
+      toolSlug: 'property-capital-gains',
+      heading: 'What the gain would be on a later sale',
+      body: 'Because the cost carries over, the figure to enter is what the original owner paid, not what the property was worth when it came to you. That single input is what most people get wrong on an inherited or gifted property.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'Advance tax on the transfer is a different question again',
+      body: 'Section 79 deals with capital gains. It says nothing about the advance tax collected when a transfer is registered. Where an immovable property changes hands, sections 236C and 236K operate on the transfer itself, and whether a gift or an inheritance transfer attracts them depends on the transaction and the documentation rather than on section 79. Ask at the registry what will be collected before assuming a non-recognition transfer is also free of advance tax, because the two questions are decided by different provisions.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Documenting a gift properly matters more than the tax',
+      body: [
+        'Because a gift to a relative is outside the charge and a gift to anyone else is not, the relationship is doing the work, and it should be evidenced rather than assumed. The same applies to the money: an unexplained asset can be caught by section 111 regardless of what the parties call the transaction.',
+        'A gift deed, the relationship, and a clear trail for any consideration are what make the position defensible later. This is one of the places where an arrangement that is perfectly lawful becomes expensive purely because nobody wrote it down at the time.',
+      ],
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'Is there inheritance tax in Pakistan?',
+      answer:
+        'No. There is no estate duty or inheritance tax, and section 79(1)(b) means transmission of an asset to an executor or beneficiary on death gives rise to no gain or loss. What the heir does inherit is the deceased\'s cost basis, which affects the tax on a later sale.',
+    },
+    {
+      question: 'Is a gift taxable in Pakistan?',
+      answer:
+        'A gift of an asset to a relative as defined in section 85(5) gives rise to no gain or loss under section 79(1)(c). A gift to someone outside that definition is treated as an ordinary disposal. The gift limb was narrowed to relatives by the Finance Act 2018.',
+    },
+    {
+      question: 'Who counts as a relative for a tax-free gift?',
+      answer:
+        'Under section 85(5): an ancestor, a descendant of any of your grandparents, or an adopted child, of you or of your spouse, and a spouse of any of those. Descendants of a grandparent reaches siblings, uncles, aunts and first cousins.',
+    },
+    {
+      question: 'If I am gifted a property, what is my cost for capital gains?',
+      answer:
+        'The giver\'s cost, not the market value at the time of the gift. Section 79(3)(b) treats you as acquiring the asset for a cost equal to the cost it had for the person disposing of it, so the accrued gain carries over to you.',
+    },
+    {
+      question: 'Can I gift a property to my child before selling it to save tax?',
+      answer:
+        'It does not save the tax, it moves it. No gain arises on the gift itself, but the child takes your original cost under section 79(3)(b), so the whole accrued gain is still there and falls on them when they sell.',
+    },
+    {
+      question: 'Can heirs redistribute inherited property between themselves?',
+      answer:
+        'Yes, and since the Finance Act 2026 the position is explicit. An Explanation to section 79(1)(b) confirms that transmission of immovable property to a beneficiary on death includes transmission by family settlement among family members consequent upon the death.',
+    },
+    {
+      question: 'Does a gift avoid advance tax on a property transfer?',
+      answer:
+        'Not necessarily. Section 79 governs capital gains only. Advance tax under sections 236C and 236K operates on the transfer itself, and whether it is collected depends on the transaction and the documentation rather than on section 79.',
+    },
+    {
+      question: 'Do I need a gift deed?',
+      answer:
+        'The relationship is what takes a gift outside the charge, so it should be evidenced rather than assumed, and an unexplained asset can be caught by section 111 whatever the parties call the transaction. A gift deed and a clear trail are what make the position defensible later.',
+    },
+  ],
+
+  publishedAt: '2026-09-26T07:00:00Z',
+  related: ['capital-gains-tax-on-property', 'tax-on-buying-and-selling-property'],
+
+  seo: {
+    title: 'Tax on Gifts and Inherited Property in Pakistan',
+    description:
+      'Why a gift to a relative preserves the gain rather than erasing it, who counts as a relative, the 2026 family settlement rule, and why there is no inheritance tax but there is tax.',
+  },
+};
+
+export const PROPERTY_GUIDES: Guide[] = [PROPERTY_TAX,
   PROPERTY_GAINS,
   RENTAL_INCOME,
   PROVINCIAL_PROPERTY_TAX,
   LANDLORD_DEDUCTIONS,
+  GIFTS_AND_INHERITANCE,
 ];
+
 
 
 
