@@ -1,0 +1,9 @@
+{
+  "id": "iris-recovery",
+  "url": "https://iris.fbr.gov.pk/recovery-selection",
+  "status": 200,
+  "fetched_at": "2026-09-10T10:16:33.732123+00:00",
+  "sha256": "63638a6c05038a97",
+  "chars": 360,
+  "stealth": true
+}
