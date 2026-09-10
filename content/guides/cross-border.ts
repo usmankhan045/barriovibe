@@ -545,6 +545,27 @@ const RESIDENCY: Guide = {
     },
 
     {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'FBR\'s own page on section 82 is five years out of date',
+      body: 'This is worth knowing before you check anything against it. FBR\'s page for section 82 on fbr.gov.pk prints clause (ab), the 120-day test the Finance Act 2021 omitted, and leaves out clause (d), the citizen limb the Finance Act 2022 inserted. It is wrong in both directions at once: it shows a test that no longer exists and hides the one that catches most people living abroad. It also ranks well, which is a large part of why the field repeats both errors in good faith. Read the consolidated Ordinance and its footnotes instead.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'Being resident is not the same as being taxed on your salary',
+      body: 'Most coverage of clause (d) stops at the alarm, and the next provision matters more than the alarm does. Section 51(2) provides that where a citizen of Pakistan leaves Pakistan during a tax year and remains abroad during that year, salary earned outside Pakistan during that year is exempt. That is a true exemption and it is not conditioned on being non-resident. So a salaried Pakistani working abroad who is dragged into residence by clause (d) is resident, and his foreign salary can still be exempt. Section 51(1) adds a landing window for a genuine returner: foreign-source income of a citizen who was not resident in any of the four preceding tax years is exempt in the year of becoming resident and the following year.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'The Gulf case, where two reliefs you would expect both fail',
+      body: 'Section 102 exempts foreign-source salary received by a resident individual where the individual has PAID foreign income tax on it, and section 103 credits foreign tax actually paid. Both are keyed to tax being paid somewhere else. In the UAE, Saudi Arabia or Qatar a salaried person pays no personal income tax, so section 102 gives nothing and section 103 credits nothing. The same absence of foreign tax that makes the posting attractive disables both provisions. This is exactly why section 51(2) matters so much for that group: it is not conditioned on foreign tax at all, only on leaving Pakistan and remaining abroad for the year.',
+    },
+
+    {
       kind: 'prose',
       heading: 'What being resident actually means',
       body: [
@@ -554,10 +575,32 @@ const RESIDENCY: Guide = {
     },
 
     {
+      kind: 'list',
+      heading: 'How a day is counted, which is not in the Ordinance',
+      intro:
+        'The Ordinance is silent, and that silence is why so many pages assert a rule without citing one. It is in rule 14 of the Income Tax Rules 2002, which applies expressly for the purposes of section 82.',
+      items: [
+        'A part of a day present in Pakistan counts as a whole day, and that expressly includes the day of arrival and the day of departure. Fly in on the evening of one day and out on the morning of another and both are counted',
+        'A public holiday counts, if you were wholly or partly present',
+        'A day of leave counts, including sick leave',
+        'A day your activity here is interrupted by a strike, a lock-out or a delay in receipt of supplies counts',
+        'A holiday spent in Pakistan before, during or after any activity here counts',
+        'Time in transit does not count: a day or part of a day where you are in Pakistan solely because you are travelling between two places outside it is excluded',
+      ],
+    },
+
+    {
       kind: 'note',
       tone: 'warning',
-      heading: 'The Ordinance does not say how to count a day',
-      body: 'There is no provision in the Ordinance on part-days, on days of arrival and departure, or on days spent in transit. Sections 81 to 84 set the tests and are silent on computing them. Several published sources state confidently that any part of a day in Pakistan counts as a whole day. We could not verify that: it is not in the Ordinance, and we were unable to obtain the consolidated Income Tax Rules 2002 to check whether it lives there. If you are within a few days of 183, that gap is not academic, and it is a reason to keep your own travel record rather than rely on someone\'s arithmetic rule.',
+      heading: 'There is no equivalent rule for the other country',
+      body: 'Rule 14 computes only the days you are present in Pakistan, which is what section 82(a) needs. Section 82(d) asks a different question: whether a citizen was present in any OTHER country for more than 182 days. Neither the Ordinance nor the Rules supplies any method for that count, and none is prescribed for evidencing it either. So Pakistan has a detailed rule for the test that is easier to check and none at all for the test that decides most overseas cases. If you are relying on clause (d), keep your own records: there is no statutory method to fall back on.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'The UAE treaty may not tie-break at all for an employee',
+      body: 'Where two countries both claim you, a treaty tie-breaker usually decides. The Pakistan-UAE convention, in force since 30 November 1994, defines a resident of a Contracting State in Article 4(1) as a person who, under the laws of that State, "operates an industrial or commercial establishment, or is liable to tax therein". That is unusual: the first limb is about operating an establishment rather than about being taxed. A salaried employee in the UAE operates no establishment and, with no personal income tax, is not liable to tax there either, so he may satisfy neither limb, in which case the tie-breaker in Article 4(2) never engages at all. We have not found this resolved at any authoritative level, and it is the most consequential unanswered question on this page for the largest group of readers.',
     },
 
     {
@@ -606,7 +649,22 @@ const RESIDENCY: Guide = {
     {
       question: 'How are days counted for Pakistani tax residency?',
       answer:
-        'The Ordinance does not say. Sections 81 to 84 set the tests and contain no rule on part-days, arrival and departure days, or transit. Sources that state a part-day counts as a full day are not citing the Ordinance, and we could not confirm whether such a rule appears in the Income Tax Rules 2002.',
+        'Under rule 14 of the Income Tax Rules 2002, not the Ordinance, which is silent. A part of a day counts as a whole day, including the day of arrival and the day of departure. Public holidays, leave including sick leave, and days interrupted by a strike or lock-out all count. Time in transit between two places outside Pakistan does not count.',
+    },
+    {
+      question: 'Do overseas Pakistanis pay tax on their foreign salary?',
+      answer:
+        'Often not, even when resident. Section 51(2) exempts salary earned outside Pakistan by a citizen who leaves Pakistan during the tax year and remains abroad during it, and that exemption is not conditioned on being non-resident. Section 51(1) separately exempts foreign-source income for two years for someone who was not resident in any of the four preceding years.',
+    },
+    {
+      question: 'Why does FBR\'s own website show the 120-day rule?',
+      answer:
+        'Because the page has not been updated. FBR\'s section 82 page prints clause (ab), omitted by the Finance Act 2021, and leaves out clause (d), inserted by the Finance Act 2022. It is wrong in both directions and it ranks well, which is much of why the error is repeated so widely. Check the consolidated Ordinance and its footnotes.',
+    },
+    {
+      question: 'Does the Pakistan-UAE treaty protect me from Pakistani residency?',
+      answer:
+        'Possibly not, and the reason is unusual. Article 4(1) defines a resident as a person who operates an industrial or commercial establishment or is liable to tax in that State. A salaried employee in the UAE may satisfy neither limb, since there is no personal income tax and no establishment, in which case the tie-breaker never engages. We have found nothing authoritative resolving this.',
     },
     {
       question: 'Is my foreign company resident in Pakistan?',
@@ -663,7 +721,7 @@ const MONEY_FROM_ABROAD: Guide = {
       kind: 'note',
       tone: 'warning',
       heading: 'There is a five million rupee ceiling, and it is recent',
-      body: 'Section 111(4) applies to foreign exchange remitted through normal banking channels "not exceeding five million Rupees in a tax year". A great many pages describe the protection as unlimited, and they are not making it up: the sub-section as substituted by the Finance Act 2004 carried no cap at all, and it stayed that way for roughly seventeen years. The ceiling arrived with the text substituted by the Finance Act 2021. So the unlimited version was real law for most of the time the internet has existed, and the pages describing it are stale rather than inventive. Check the date on anything that tells you there is no limit.',
+      body: 'Section 111(4) applies to foreign exchange remitted through normal banking channels "not exceeding five million Rupees in a tax year". A great many pages describe the protection as unlimited, and they are not making it up: there was no upper limit at all until 2018. The Finance Act 2018 introduced a Rs 10 million cap, the Finance Act 2019 cut it to Rs 5 million, and the Finance Act 2021 restructured the sub-section while carrying that figure forward unchanged. So the unlimited version was real law for most of the time the internet has existed, and the pages describing it are stale rather than inventive. The Finance Act 2026 did not touch it, so Rs 5 million stands for tax year 2027.',
     },
 
     {
@@ -693,6 +751,13 @@ const MONEY_FROM_ABROAD: Guide = {
         'The section requires the foreign exchange to be encashed into rupees by a scheduled bank, with a certificate produced. Money that arrives and sits in a foreign currency account has not been encashed, so the condition on its face is not met.',
         'The certificate is the other half. It is not enough that the encashment happened; the statute says a certificate from the bank is produced to that effect. Ask for it at the time. Reconstructing a certificate for a transaction three years old, from a bank that has since reorganised its branches, is a great deal harder than requesting one when the money lands.',
       ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'What to actually ask your bank for',
+      body: 'The Ordinance says "a certificate" and never names one, which is why searching FBR for a prescribed form gets you nowhere: section 111(5) gives the Board power to prescribe it and the power was never exercised. The State Bank filled the vacuum. What banks issue is the Proceeds Realization Certificate, written into Chapter 10 of the Foreign Exchange Manual, and the practical request is the e-PRC for the specific credit plus the statement of PRCs for the tax year, since section 111(4) tests an annual aggregate rather than a single transfer. Note also that a PRC is not an export-only document: an Export PRC is one species of it, and the general form covers inward remittances.',
     },
 
     {
@@ -744,7 +809,7 @@ const MONEY_FROM_ABROAD: Guide = {
     {
       question: 'What is the limit for foreign remittance in Pakistan?',
       answer:
-        'Five million rupees in a tax year for the section 111(4) protection. Pages describing it as unlimited are describing the pre-2021 text, which genuinely had no cap from 2004 until the Finance Act 2021 substituted the sub-section.',
+        'Five million rupees in a tax year for the section 111(4) protection. Pages describing it as unlimited are describing law that expired: there was no cap until the Finance Act 2018 set one at Rs 10 million, and the Finance Act 2019 reduced it to Rs 5 million, where it remains.',
     },
     {
       question: 'Does section 111(4) cover Payoneer and Wise?',
@@ -754,7 +819,7 @@ const MONEY_FROM_ABROAD: Guide = {
     {
       question: 'What certificate do I need for a foreign remittance?',
       answer:
-        'Section 111(4) requires that a scheduled bank encashes the foreign exchange into rupees and that a certificate from the bank to that effect is produced. Ask the bank for it at the time of encashment rather than years later.',
+        'The Ordinance requires a bank certificate of encashment but never prescribes a form, because the power in section 111(5) was never exercised. In practice it is the State Bank\'s Proceeds Realization Certificate. Ask for the e-PRC for the specific credit and the statement of PRCs for the tax year, since the five million rupee test works on the year\'s aggregate.',
     },
     {
       question: 'What happens if my remittances exceed five million rupees?',

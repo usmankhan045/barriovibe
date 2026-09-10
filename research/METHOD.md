@@ -35,6 +35,25 @@ And do not assume the newest edition is the one your search returned. FBR was
 serving three consolidations in September 2026: two stale, one current. The
 current one, amended to 30 June 2026, was three pages deep in results.
 
+### The nested-footnote trap, which caught us
+
+A consolidation's footnote often reproduces the text an amendment replaced.
+**Text quoted inside a footnote is the OLD version**, and it carries its own
+nested footnotes recording how it got that way.
+
+We read a footnote saying "sub-section (4) substituted by the Finance Act 2021"
+and attributed everything in the reproduced text to that Act, concluding that
+the Rs 5 million cap in s.111(4) was created in 2021 and that the shield had
+been unlimited from 2004 until then. The reproduced text already contained the
+five million figure, with its own nested footnotes. The real history is no cap
+until 2018, Rs 10 million by the Finance Act 2018, Rs 5 million by the Finance
+Act 2019, restructured without change in 2021. A guide had already published
+the wrong version and had to be corrected.
+
+The rule: before attributing any wording to a substituting Act, check whether
+the wording appears in the text being quoted as replaced, and read the nested
+footnotes. Recorded as `s111-4-cap-was-added-CORRECTED`.
+
 ### The corollary that saved a guide
 
 When two sources conflict, **check whether one of them contradicts itself**.
@@ -200,6 +219,15 @@ always the second.
 ---
 
 ## 9. What is still missing
+
+**Searching the wrong instrument.** The Ordinance is not the only source of
+Pakistani income tax law, and twice this cost us. We searched the whole
+Ordinance for a day-counting rule for s.82, found nothing, and were ready to
+publish "the statute is silent" as an open question. It is rule 14 of the
+**Income Tax Rules 2002**, which applies expressly for the purposes of s.82 and
+sets out part-days, arrival, departure, leave, strikes and transit in detail.
+Before publishing any negative finding about tax law, search the Rules as well
+as the Ordinance, and the SROs as well as the Rules.
 
 **No keyword volume data.** Every ordering rests on inference from SERP
 composition plus autocomplete prominence. Google Keyword Planner with geo set

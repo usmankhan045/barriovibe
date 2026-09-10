@@ -120,3 +120,58 @@ barriovibe.com, or a DataForSEO key, would replace inference with measurement
 and could reorder the slate materially. This is the highest-value input the
 strategy is missing, and it costs nothing if Search Console is already
 connected.
+
+## Open after the residency and remittance research (10 September 2026)
+
+Blockers, and unresolved questions worth publishing as such.
+
+### Publish as open questions
+
+1. **Does the Pakistan-UAE treaty tie-breaker engage for a salaried employee?**
+   Article 4(1) defines a resident as a person who "operates an industrial or
+   commercial establishment, or is liable to tax therein". A salaried employee
+   in a state with no personal income tax may satisfy neither limb, in which
+   case Article 4(2) never engages. Unresolved at tier 1 and tier 2. Two
+   independent research streams reached this separately. Highest-value open
+   question in guide A.
+
+2. **How are days in a third country to be counted for clause 82(d)?**
+   Rule 14 counts only days present in Pakistan. Nothing counts days elsewhere,
+   and no evidential standard is prescribed.
+
+3. **Is the "or" in clause 82(d) truly disjunctive?** Read literally it makes
+   almost every non-resident Pakistani a resident. FBR reproduced the "or"
+   without comment in Circular 15 of 2022-23.
+
+4. **What does FBR accept as proof of foreign residency?** Nothing is
+   prescribed. Rule 19A runs only in the outbound direction.
+
+5. **Does the s.111(4) Explanation reach every modern channel?** The Finance
+   Act 2022 wording covers money service bureaus, exchange companies and money
+   transfer operators, and is expressly scoped to "this sub-section". Whether a
+   given fintech route qualifies has no FBR guidance behind it.
+
+### Verify before publishing
+
+- **Income Tax Rules vintage.** The negative finding that no rule prescribes the
+  s.111(4) encashment certificate rests on consolidations to 2015 and
+  24.11.2023, the newest FBR publishes. Re-run before stating it flatly.
+- **SRO 1638(I)/2024**, final version of the rule 81B amendment, not retrieved.
+  Do not quote rule 81B verbatim.
+- **FBR Circular 01 of 2024-25** is a scanned image with no text layer. Recorded
+  as unchecked, not as a negative, in the sweep for clause (d) guidance.
+- **SBP Annexure V-148**, the e-PRC standard format, not read. Do not publish an
+  exact field list for the certificate.
+- **Foreign Currency Accounts (Protection) Ordinance 2001** text came from a
+  law-site mirror. Confirm against the Pakistan Code PDF before quoting at
+  length. Note s.5(1) names the Income Tax Ordinance **1979**.
+
+### Closed by this research
+
+- s.82 unchanged by the Finance Act 2026. The apparent hit was Customs Act s.82.
+- s.111(4) unchanged by the Finance Act 2026. Rs 5 million stands.
+- Day counting: rule 14 found, after we wrongly concluded the law was silent
+  from searching the Ordinance alone.
+- The cap history discrepancy between FBR Circular 05 and the Ordinance
+  footnotes: resolved in the circular's favour. Rs 10m in 2018, Rs 5m in 2019,
+  restructured but unchanged in 2021.
