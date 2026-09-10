@@ -422,4 +422,178 @@ const CHOOSING_A_STRUCTURE: Guide = {
   },
 };
 
-export const COMPANY_GUIDES: Guide[] = [SECP_REGISTRATION, CHOOSING_A_STRUCTURE];
+
+/**
+ * Guide 17: partnerships and the twenty-person cap.
+ *
+ * Owns a question the SECP guides cannot answer, because the answer is that
+ * SECP is the wrong building. Partnership registration is with the Registrar
+ * of Firms under the Partnership Act 1932, and the whole field writes about
+ * "business registration in Pakistan" as though SECP were the only door.
+ *
+ * The section that earns it its place is s.9 of the Companies Act: more than
+ * twenty partners and the firm must incorporate, with personal liability for
+ * everything if it does not. Nobody covers it.
+ */
+
+const PARTNERSHIP: Guide = {
+  slug: 'registering-a-partnership-firm',
+  cluster: 'company',
+  title: 'Registering a Partnership Firm in Pakistan',
+  navLabel: 'Partnership firms',
+  card: 'Why SECP is the wrong office, what the Registrar of Firms actually wants, and the twenty-partner ceiling that forces incorporation.',
+
+  answer:
+    'A partnership is registered with the Registrar of Firms under section 58 of the Partnership Act 1932, not with SECP. In Islamabad Capital Territory that means Form No. 1 signed by every partner before a qualified witness, a partnership deed on Rs 1,000 stamp paper, a Rs 1,000 fee, and about ten days. Registration is provincial, so the fee and the counter change with the province. Above twenty partners the law stops allowing a partnership at all.',
+
+  sections: [
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'SECP does not register partnerships',
+      body: 'This is the single most common wrong turn, and it is encouraged by pages that write about "business registration in Pakistan" as though there were one office. SECP registers companies and limited liability partnerships under the Companies Act 2017 and the LLP Act 2017. An ordinary partnership firm is a creature of the Partnership Act 1932 and is registered with the Registrar of Firms, which is a provincial office. Going to SECP for a partnership wastes a trip; more expensively, assuming that not being on SECP means you are unregistered leads people to incorporate when they did not need to.',
+    },
+
+    {
+      kind: 'steps',
+      heading: 'What registration involves in Islamabad Capital Territory',
+      intro:
+        'These are the ICT Administration\'s own requirements. Registration is province-specific: Punjab, Sindh and KP run their own registries and their own fees, so confirm locally before budgeting.',
+      steps: [
+        {
+          title: 'Draw up the partnership deed',
+          body: 'On Rs 1,000 stamp paper. This is the document that decides profit shares, authority, admission and retirement of partners, and what happens on a dispute. It is worth more attention than the registration itself.',
+        },
+        {
+          title: 'Complete Form No. 1',
+          body: 'The statutory application under section 58. It must be signed by all the partners before a witness who is a Gazetted Officer, an Advocate, an Attorney, a Pleader or an Honorary Magistrate. An ordinary witness will not do.',
+        },
+        {
+          title: 'Prepare the affidavit and identity documents',
+          body: 'An affidavit on Rs 5 stamp paper, plus CNICs of all partners and of the witnesses, all notarised.',
+        },
+        {
+          title: 'Pay the fee',
+          body: 'Rs 1,000 to National Bank under head C-03545 for ICT. Note the preprinted Form No. 1 still reads "Filing Fee Rs.100/-": the form is stale and the challan is what counts.',
+        },
+        {
+          title: 'Attend in person',
+          body: 'Partners appear before the Registrar. This is not a portal process in the way SECP incorporation now is.',
+        },
+        {
+          title: 'Collect the certificate',
+          body: 'About ten days in ICT on the Administration\'s own account.',
+        },
+      ],
+    },
+
+    {
+      kind: 'note',
+      tone: 'warning',
+      heading: 'More than twenty partners and you must incorporate',
+      body: 'Section 9(1) of the Companies Act 2017 prohibits any association or partnership of more than twenty persons being formed for gain unless it is registered as a company. Section 9(2) is the part with teeth: every person in violation is personally liable for all liabilities incurred in the business. Section 9(3)(d) carves out partnerships of lawyers, accountants and other professions where practice as a limited liability company is not permitted, which is why large law and accountancy firms remain partnerships. For everyone else, twenty is a statutory ceiling rather than a guideline, and crossing it does not produce a warning letter, it produces unlimited personal exposure.',
+    },
+
+    {
+      kind: 'prose',
+      heading: 'Registration is optional, and mostly not optional in practice',
+      body: [
+        'The Partnership Act does not compel registration. A partnership exists in law from the moment people agree to share the profits of a business carried on by all or any of them acting for all, whether or not anything is filed.',
+        'What registration buys is the ability to sue. An unregistered firm is severely restricted in enforcing contractual rights through the courts, and a partner in one is restricted in suing the firm or the other partners. Banks and larger customers also generally want the certificate before opening an account or onboarding a vendor. So it is voluntary in the way that having a lock on your door is voluntary.',
+      ],
+    },
+
+    {
+      kind: 'table',
+      heading: 'Partnership, single member company, or sole proprietorship',
+      intro:
+        'The three routes people actually choose between, and the questions that separate them. Liability is the one that decides most cases and is the one most often left out of the comparison.',
+      columns: ['', 'Partnership firm', 'Single member company', 'Sole proprietorship'],
+      rows: [
+        ['Registered with', 'Registrar of Firms', 'SECP', 'Nobody'],
+        ['Minimum people', 'Two', 'One', 'One'],
+        ['Liability', 'Unlimited, personal', 'Limited to the company', 'Unlimited, personal'],
+        ['Separate legal person', 'No', 'Yes', 'No'],
+        ['Annual filing with the registrar', 'No', 'Yes', 'No'],
+      ],
+    },
+
+    {
+      kind: 'prose',
+      heading: 'How a partnership is taxed',
+      body: [
+        'A partnership firm is an association of persons for income tax, taxed on the non-salaried rate table in its own right. The firm pays, and the share a partner receives from a taxed association is not taxed again in the partner\'s hands.',
+        'That last point matters more than it sounds, because it is the structural difference from a company. A company pays corporate tax and then a distribution to shareholders can attract tax on dividends. An association is taxed once. Whether that makes an association cheaper depends entirely on the numbers, and the top of the non-salaried table is higher than the corporate rate, so it is genuinely a calculation rather than a rule of thumb.',
+      ],
+    },
+
+    {
+      kind: 'calculator',
+      toolSlug: 'business-tax',
+      heading: 'What the firm would pay on its income',
+      body: 'The non-salaried table is what an association of persons is taxed on. Enter the firm\'s taxable income to see the figure and the marginal rate it lands in.',
+    },
+
+    {
+      kind: 'note',
+      tone: 'info',
+      heading: 'The firm still needs an NTN, and so do the partners',
+      body: 'Registration with the Registrar of Firms is not tax registration. The firm obtains its own NTN from FBR, and once it has one, section 114(1)(b)(vii) requires a return from it every year regardless of what it earned. The partners file their own returns separately. Registering the firm and stopping there is a common and expensive omission.',
+    },
+  ],
+
+  faqs: [
+    {
+      question: 'Where do I register a partnership firm in Pakistan?',
+      answer:
+        'With the Registrar of Firms under section 58 of the Partnership Act 1932, which is a provincial office, not with SECP. SECP registers companies and limited liability partnerships only.',
+    },
+    {
+      question: 'How much does it cost to register a partnership in Pakistan?',
+      answer:
+        'In Islamabad Capital Territory the fee is Rs 1,000 paid to National Bank under head C-03545, plus a partnership deed on Rs 1,000 stamp paper and an affidavit on Rs 5 stamp paper. Other provinces set their own fees. Note that the preprinted Form No. 1 still shows Rs 100, which is out of date.',
+    },
+    {
+      question: 'How long does partnership registration take?',
+      answer:
+        'About ten days in Islamabad Capital Territory on the Administration\'s own account, once Form No. 1, the deed, the affidavit and the notarised CNICs are in and the partners have appeared in person.',
+    },
+    {
+      question: 'Is partnership registration compulsory in Pakistan?',
+      answer:
+        'No. A partnership exists in law from the agreement itself. But an unregistered firm is severely restricted in enforcing its contracts through the courts, and banks and larger customers usually ask for the certificate, so unregistered is a weak position rather than a free one.',
+    },
+    {
+      question: 'How many partners can a partnership have in Pakistan?',
+      answer:
+        'Twenty. Section 9(1) of the Companies Act 2017 prohibits an association or partnership of more than twenty persons formed for gain unless it registers as a company, and section 9(2) makes everyone in violation personally liable for all the business\'s liabilities. Partnerships of lawyers, accountants and similar professions are carved out by section 9(3)(d).',
+    },
+    {
+      question: 'Who can witness Form No. 1?',
+      answer:
+        'A Gazetted Officer, an Advocate, an Attorney, a Pleader or an Honorary Magistrate. All partners must sign before that witness, which is why the form cannot simply be signed and posted.',
+    },
+    {
+      question: 'Is a partnership taxed separately from the partners?',
+      answer:
+        'Yes. The firm is an association of persons and is taxed in its own right on the non-salaried rate table. A partner\'s share from an association that has been taxed is not taxed again in the partner\'s hands.',
+    },
+    {
+      question: 'Does a registered partnership need an NTN?',
+      answer:
+        'Yes, and it is separate from registration with the Registrar of Firms. Once the firm holds an NTN, section 114(1)(b)(vii) requires a return every year whatever the firm earned. Partners file their own returns as well.',
+    },
+  ],
+
+  publishedAt: '2026-09-26',
+  related: ['smc-vs-private-limited-vs-sole-proprietor', 'how-to-get-an-ntn'],
+
+  seo: {
+    title: 'Registering a Partnership Firm in Pakistan',
+    description:
+      'Why partnerships go to the Registrar of Firms rather than SECP, what ICT requires and charges, the twenty-partner ceiling in section 9, and how a firm is taxed.',
+  },
+};
+
+export const COMPANY_GUIDES: Guide[] = [SECP_REGISTRATION, CHOOSING_A_STRUCTURE, PARTNERSHIP];
+

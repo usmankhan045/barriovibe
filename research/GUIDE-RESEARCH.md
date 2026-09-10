@@ -362,3 +362,47 @@ against unexplained-income treatment. It is not an exemption from tax.
   domestic company is withheld at 4 percent as IT services or 15 percent as an
   independent software engineer. Both entries are verbatim; the resolution is
   not. Publish as a tension rather than an answer.
+
+---
+
+## A scope correction found while planning guides 16 to 25
+
+**The first fifteen guides absorbed most of the planned spokes.**
+
+`POSTS.md` allocates 54 guides across seven clusters on a hub-and-spoke model:
+one hub owning the head term, six to eight spokes each owning one long-tail
+question. That allocation was made before any guide was written.
+
+Measured against what actually shipped, it over-counts. The guides came out as
+dense hubs of ten to fifteen sections that answer their spokes inline:
+
+| Planned spoke | Where it already lives |
+| --- | --- |
+| 4.2 SECP fees, itemised | Hub carries the full Seventh Schedule table and the escalator |
+| 4.4 Name reservation | Hub: the sixty-day clock, prohibited words, the same-day SLA |
+| 4.7 / 4.8 Form A, Form 29, the exemption | Hub: deadlines table plus the s.130(5) structure |
+| 5.3 Searching before you file | Trademark hub: free search versus the official one |
+| 5.5 Renewal at PKR 15,000 | Trademark hub: the renewal timetable and removal versus expiry |
+| 3.x NTN spokes | Split across the two NTN guides |
+
+Writing those as separate guides would produce exactly what `POSTS.md` forbids:
+two pages satisfying the same searcher, which the rule says are one page.
+
+**What this changes.** The remaining slate is smaller and differently shaped
+than 54 minus 15. The genuine gaps are whole clusters nobody has touched, not
+finer slices of clusters already covered:
+
+- **Cluster 7, cross-border, is entirely unwritten** and is the strongest wedge
+  in the strategy. Offshore-LLC vendors have no reason to mention Pakistani
+  exposure and Pakistani tax firms do not sell foreign company formation.
+- **Business structures other than a company**: partnerships go to the
+  Registrar of Firms rather than SECP, which the whole field writes around.
+
+Guides 16 and 17 came from that reading: capital gains on property, which the
+property hub deliberately left to a separate page because the acquisition-date
+split needs its own table, and partnership registration, which no existing
+guide could answer because the answer is that SECP is the wrong building.
+
+**The general lesson for the next planning pass.** Count spokes against what
+the hubs actually say, not against the plan that predates them. A spoke is only
+a guide if a reader who has read the hub still has an unanswered question.
