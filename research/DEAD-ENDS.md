@@ -173,3 +173,28 @@ would turn on one date and one threshold from a single secondary source. Under
 the store's own rule that is not enough to publish, so the guide waits until
 the Federal Tax Authority's own decision can be read, or a second independent
 source confirms both figures.
+
+## Large PDFs: fetch.py times out at 30s, curl does not
+
+`research/fetch.py` failed three attempts on the Finance Act 2022 at
+`fbr.gov.pk/Budget2022-23/FinanceAct/Finance-Act-2022.pdf`, each time getting
+about 7.5MB of an 8.4MB file before hitting a 30-second curl timeout inside
+scrapling.
+
+Plain `curl` with `--max-time 180`, a browser User-Agent and an `fbr.gov.pk`
+referer downloaded it completely on the first try. This is the workaround
+METHOD.md section 2 already recommends for the Finance Act gazette, and it
+generalises: **anything over a few megabytes should go straight to curl.** The
+transfer is not being blocked, it is simply slower than the fetcher's timeout.
+
+## KPMG serves HTML from a .pdf URL
+
+`assets.kpmg.com/.../A-Brief-on-Finance-Act-2023.pdf` returns HTTP 200 and an
+HTML document. `pdftotext` then emits several hundred "Illegal character in hex
+string" errors and produces nothing, which is at least a loud failure rather
+than a quiet one.
+
+Fourth instance this session of a 200 carrying the wrong content, after WIPO
+Lex, an FBR page and an SBP URL. The rule stands: **grep the fetched bytes for
+something the document must contain before recording it as a source.** For a
+PDF, checking that the file starts with `%PDF` costs nothing and catches this.

@@ -54,6 +54,26 @@ The rule: before attributing any wording to a substituting Act, check whether
 the wording appears in the text being quoted as replaced, and read the nested
 footnotes. Recorded as `s111-4-cap-was-added-CORRECTED`.
 
+### The same trap in its other form: a footnote names the word REPLACED
+
+FBR's consolidations write an amendment as, for example, `5[ ] 6[person]` with
+footnote 6 reading *"The word 'company' substituted by the Finance Act, 2021"*.
+
+Read quickly, that looks like the Finance Act 2021 put **company** into the
+text. It means the opposite: **the quoted word is the one that was replaced**,
+so company came out and person went in.
+
+This nearly inverted a guide. s.15A allows a landlord to deduct provincial
+property tax against rental income, and reading the marker order the wrong way
+made every s.15A deduction available only to companies, which would have made
+the deduction useless to exactly the reader the guide is for. The tell is that
+the footnote numbering runs in source order, not in chronological order of what
+the text now says.
+
+**Do not infer from marker position. Read the footnote text, and confirm
+against a section nearby that uses the same word without amendment**, in this
+case s.15(1) charging "a person". Recorded as `s15a-person-not-company`.
+
 ### The corollary that saved a guide
 
 When two sources conflict, **check whether one of them contradicts itself**.

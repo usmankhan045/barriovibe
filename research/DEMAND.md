@@ -266,3 +266,49 @@ Ranked by observed effectiveness:
 - **Primary-source citation as differentiation.** Most competitors cite Dawn and
   Tribune. Citing the Ordinance section-by-section is both an E-E-A-T win and
   matches the standard `check:tax` already enforces.
+
+---
+
+## Gap analysis for guides 23 to 32 (10 September 2026)
+
+Run against the 2,233 harvested Pakistani queries and the 35 queries with live
+SERP data, filtering out everything the 22 shipped guides already own.
+
+| Theme | Queries | Status |
+| --- | ---: | --- |
+| Tax calculators | 146 | Owned by `/tools`, not a guide gap |
+| IRIS login and password | 47 | Mostly navigational, see below |
+| E-payment, PSID and challan | 11 | **Real gap** |
+| ATL and filer verification | 9 | Covered by `check-your-atl-status` |
+| Provincial property tax | 6 | **Real gap**, and a structural one |
+| AOP registration | 4 | Partly covered by the partnership guide |
+| Pensioner returns | 3 | Thin, but a distinct filer type |
+
+### The IRIS number is mostly not addressable
+
+310 queries mention IRIS, which is the single largest uncovered theme by raw
+count, and most of it is navigational: "iris fbr gov pk login" is a person
+looking for the login page, and the login page will always outrank us for it.
+Stripping the navigational half leaves roughly 47 login and password queries
+that describe an actual procedural problem, and those are worth answering inside
+a guide about access and recovery rather than as a page competing with
+iris.fbr.gov.pk itself.
+
+**This is the noise-stripping rule from METHOD.md section 4 applied again.** RAG
+looked like 508 queries and was 57. IRIS looks like 310 and is closer to 47.
+Raw counts flatter a topic until you read the queries.
+
+### The structural gap: property tax is provincial and we only cover federal
+
+`property tax punjab online check pakistan` is the one query in the SERP set
+that no shipped guide addresses, and it exposes a real hole. Our two property
+guides cover sections 236C, 236K and 37, which are federal advance tax and
+capital gains under the Income Tax Ordinance. They say nothing about the annual
+**provincial** property tax levied by each province's Excise and Taxation
+department, which is what most people mean by "property tax" and what the
+challan and online-check queries are about.
+
+A reader searching "property tax Punjab" wants the Urban Immovable Property Tax
+under the Punjab Urban Immovable Property Tax Act 1958, not section 236K. Those
+are different taxes, different authorities, and different money, and conflating
+them is the kind of error that sends someone to the wrong office.
