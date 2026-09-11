@@ -42,6 +42,29 @@ Duplicate charges from re-executed tools, guardrails bypassed in streaming
 paths, agents reporting success they never achieved. That mismatch runs through
 half this catalogue.
 
+## How far the evidence stretches, and where it stops
+
+The catalogue was expanded from 26 unwritten posts to 34 by splitting where the
+evidence supports two complete posts rather than one padded one. The split test
+is in the next section. What is worth recording is where splitting was
+REFUSED, because that is the part that keeps the rule honest:
+
+- **No app-store split.** The rules evidence is rich, covering Apple 4.2.6,
+  Play's testing gate, account deletion and trader status, and `app store
+  review`, `app rejected` and `google play` return essentially nothing in the
+  harvest. Rich evidence with no demand is one post, not four.
+- **No US-entity split.** Same shape: eleven verified findings on Form 5472, BOI,
+  EIN, ITIN and state obligations, and no harvested demand for any of the
+  sub-questions. It stays one post.
+- **No checkout, local-search or loyalty posts**, despite good Baymard and
+  Google evidence, because all three return zero harvested queries.
+- **No offshore-rates, CRM or WooCommerce splits.** Demand in low single digits.
+
+The reverse case also appeared: **733 queries on what a website or app costs to
+build, and the catalogue had nothing**. That was the largest gap found, and it
+is now two posts, because the estimation literature genuinely supports both a
+pre-quote and a post-quote piece.
+
 ## A rule that produced most of the good entries
 
 **Split a question by the reader, not by the keyword.** "What does an AI agent
@@ -117,6 +140,31 @@ nobody has read.
   business considerations." Pairs exactly with the official statistics showing
   near-zero measured employment effect.
 
+### 1.4a Why pilots do not become production systems
+
+- **Demand**: `ai proof of concept` 25, `stop running so many ai pilots` 14,
+  `why agentic ai projects fail from proof of concept to production systems` 11,
+  `what is ai pilot` 13
+- **Evidence**: `nanda-95pc-says-organizations-not-pilots` (the 60/20/5 funnel),
+  `agent-failures-are-silent-not-loud`, `productivity-j-curve-intangibles`
+- **Angle**: Splits from 1.1 by reader: 1.1 corrects a statistic for someone
+  citing it, this is for someone whose own pilot is stuck. The funnel in the
+  NANDA report is the useful part rather than its headline, and what stops a
+  pilot is usually that it was never scoped to survive contact with real data,
+  exceptions and someone owning it afterwards.
+
+### 1.4b Should your business have an AI policy, and what goes in it
+
+- **Demand**: `should my business have an ai policy` 24, `ai guardrails and
+  governance` 16, `security considerations in ai adoption` 20,
+  `barriers to ai adoption` 21
+- **Evidence**: `ai-training-tier-not-vendor`, `gemini-free-tier-human-review`,
+  `ai-training-exceptions-feedback-and-zdr`
+- **Angle**: Most published AI policies are legal boilerplate about acceptable
+  use. The version that matters is operational and short: which tier and billing
+  status each tool runs on, what happens to feedback buttons, and which data may
+  reach a free tier. The Gemini free-tier trap is the worked example.
+
 ### 1.5 Who is liable when the chatbot is wrong
 
 - **Demand**: adjacent rather than direct; `ai guardrails and governance` 16
@@ -140,6 +188,33 @@ date we read the prices. Two posts already shipped on this.
 ### 2.1 What an AI agent costs to run  *(SHIPPED 11 Sep 2026)*
 ### 2.2 n8n vs Zapier vs Make, priced at real volume  *(SHIPPED 11 Sep 2026)*
 ### 2.3 What a WhatsApp chatbot costs in Pakistan  *(SCHEDULED 8 Oct 2026)*
+
+### 2.3a What a website actually costs, by scope decision
+
+- **Demand**: `how much should a website cost` 28, `how much should a website
+  cost to build` 24, `custom shopify website cost comparison` 26,
+  `how much does a typical website cost` 15, `website cost in india` 16
+- **Evidence**: `estimation-overrun-30-40pc`, `cone-of-uncertainty-does-not-narrow`,
+  `flyvbjerg-it-black-swans`
+- **Angle**: 733 queries and the largest single gap in the catalogue. Published
+  answers quote a range with no explanation of what moves a project between
+  tiers. Organise by scope DECISION instead, and state the thing no quote
+  admits: reviewed surveys find 60-80% of projects exceed effort estimates by
+  30-40%, so a quote is a forecast rather than a price.
+
+### 2.3b Why software estimates are wrong, and what to do about it
+
+- **Demand**: `app development cost calculator` 21, `app development cost
+  average` 18, `software development cost estimation` 21,
+  `software development cost estimation examples` 15
+- **Evidence**: `cone-of-uncertainty-does-not-narrow`, `estimation-overrun-30-40pc`,
+  `flyvbjerg-it-black-swans`, `chaos-report-is-not-citable`
+- **Angle**: Splits from 2.3a by reader: that one is pre-quote, this is for
+  someone holding a quote they do not trust. The finding that carries it is
+  counterintuitive and peer-reviewed: across 570 real projects the "cone of
+  uncertainty" does NOT narrow as a project proceeds, which is the opposite of
+  what every estimation methodology assumes. Flyvbjerg's 1,471 projects add the
+  fat tail: one in six runs 200% over.
 
 ### 2.4 Why your AI bill exceeded the estimate
 
@@ -219,6 +294,19 @@ it, and the honest answer is genuinely contrarian.
   someone whose manual process broke this week. The task criteria from the BPM
   literature give them a real test, and Hammer gives the warning: automating a
   bad process entrenches it.
+
+### 3.4a What to automate first, and how to tell
+
+- **Demand**: `what can be automated in a business` (seeded), `should i automate
+  this` 20, `guide to business process automation` 20, `what are types of
+  automated business` 20
+- **Evidence**: `automation-task-criteria-documented-not-validated`,
+  `so-so-automation-acemoglu`
+- **Angle**: Splits from 3.1 by reader: 3.1 answers whether to automate at all,
+  this answers which thing first for someone who has decided. Two independent
+  academic groups converge on five testable properties: volume, rule-clarity,
+  exception rate, stability and structured data. It is a checklist with research
+  behind it rather than a vendor's readiness quiz.
 
 ### 3.5 What automates badly, and why it is not the technology's fault
 
@@ -368,6 +456,39 @@ replies, into a query space saturated with observability vendors.
 - **Evidence**: `rag-failure-is-retrieval-or-generation`, `ragas-faithfulness-definition`
 - **Angle**: Splits from 5.1 by reader: 5.1 is "how do I know", this is "I know,
   now what". Four separately measurable failures with four different fixes.
+
+### 5.6a How to stop an AI making things up, by mechanism
+
+- **Demand**: `how to limit ai hallucination` 27, `how to stop ai
+  hallucinations` (seeded), `ai agent hallucination` 2
+- **Evidence**: `ragas-faithfulness-definition`, `rag-failure-is-retrieval-or-generation`,
+  `jagged-frontier-invisible-boundary`
+- **Angle**: Splits from 5.1 and 5.6 by intent: those diagnose, this is someone
+  searching for the fix directly. Honest answer: you cannot stop it, you can
+  make it detectable and make abstention the default. The jagged-frontier result
+  is the warning, since AI made wrong answers MORE persuasive and coherent.
+
+### 5.7 What an AI guardrail actually is, and what it does not stop
+
+- **Demand**: `ai guardrails examples` 16, `ai guardrails meaning` 13,
+  `ai guardrails framework` 12, `ai guardrails tools` 12, `what are ai risks` 20
+- **Evidence**: `agent-duplicate-side-effects` (the streaming-path bypass),
+  `agent-failures-are-silent-not-loud`
+- **Angle**: "Guardrails" is used to mean four different things and sold as one.
+  The concrete finding worth publishing: a documented case where a PII filter
+  set to block still streamed the data in full before the exception fired. A
+  guardrail in the wrong place in the pipeline is decoration.
+
+### 5.8 The security questions to ask before an agent touches production
+
+- **Demand**: `agentic ai security risks` 27, `security considerations in ai
+  adoption` 20, `ai agent security` 2, `ai agent deletes database` 2
+- **Evidence**: `documented-ai-replacement-reversals` (the production-deletion
+  incidents), `agent-duplicate-side-effects`
+- **Angle**: Two production databases deleted nine months apart, and in one the
+  agent then falsely claimed rollback was impossible. The useful content is
+  scoping: read-only credentials, tool-wrapped queries, capability limits. The
+  best published answer to this today is a buried forum comment.
 
 ---
 
