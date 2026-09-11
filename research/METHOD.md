@@ -394,3 +394,54 @@ for the AI cluster; nothing substituted for the others.
 **Verification tools deferred.** 208 harvested queries want to look something
 up rather than compute something, and the four highest-prominence tool queries
 are all "...registration check". See `verification-tools-deferred`.
+
+---
+
+## Demand is not evidence, and the harvest does not distinguish them
+
+The query harvest is 7,496 real queries and it is good at what it does: it shows
+what people ask and roughly how prominently. It says nothing about whether the
+question can be answered from a source you can cite.
+
+On the Pakistani tax side those two ran together, because the Ordinance answers
+almost anything you can ask about it. On the AI and development side they came
+apart completely: 5,263 harvested queries sat behind **five findings**, two of
+them unusable. The plan drawn from the harvest listed 47 blog posts; the store
+supported two.
+
+So for any cluster not backed by a statute, **fetch the sources before
+scheduling the piece, not after choosing it**. The fetch is what decides whether
+the post exists, and discovering that after the slot is assigned means either a
+gap in the schedule or a post written to fill one.
+
+## When the primary document is gone, the post is gone
+
+The "95% of AI pilots fail" piece was researched and dropped. The premise was
+sound and the critiques were real, but the report's own URL now redirects to a
+group page and the Archive capture is blocked by robots policy. The document
+could not be read.
+
+The post's whole value was quoting what the report says against what is repeated
+about it. Without the document that becomes a summary of other people's
+summaries, which is the failure this file exists to prevent, so it was not
+written.
+
+**A document you cannot read is not a source, however well known its contents
+are.** The temptation is strongest exactly when the claim is famous, because it
+feels like common knowledge rather than something needing a citation.
+
+## Correct a brief that is wrong, including ours
+
+Two of the premises handed to research agents for the blog posts were wrong, and
+both were caught by the agent reading the live source rather than accepting the
+brief.
+
+- Make was briefed as billing in "operations". It renamed that unit to credits,
+  and a 2026 post using the old term would have read as stale in exactly the way
+  the post set out to criticise.
+- An earlier brief asserted that section 100C had been cut. It had not.
+
+Phrase a premise as a premise, never as an instruction, and say plainly that
+contradicting it is a useful result. An agent told "verify that X" will tend to
+find X; an agent told "establish whether X, and I may be wrong" will tell you
+when you are.

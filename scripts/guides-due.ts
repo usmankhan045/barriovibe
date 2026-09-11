@@ -1,10 +1,21 @@
 #!/usr/bin/env tsx
 /**
- * Is a guide due to appear right now?
+ * Is anything due to appear right now?
  *
  * The publishing workflow asks this before doing anything, so a deploy hook
- * fires only when a guide is genuinely waiting rather than on every scheduled
+ * fires only when a page is genuinely waiting rather than on every scheduled
  * run forever.
+ *
+ * ## Guides AND posts
+ *
+ * This began as a guides-only check, and when the blog arrived with the same
+ * `publishedAt` gate it would have silently failed: a scheduled post would sit
+ * in the repo forever, because nothing would ever ask Vercel to rebuild for it.
+ * The guide would publish, the post beside it would not, and the run log would
+ * say "nothing due" while being wrong.
+ *
+ * So it reports over both content types. They share the gate, they share the
+ * slots, and they must share the thing that fires the build.
  *
  * ## What "due" means, and why it is not "equals now"
  *
@@ -36,6 +47,39 @@
  */
 
 import { ALL_GUIDES, clusterHref, guideHref } from '../content/guides';
+import { ALL_POSTS, postClusterHref, postHref } from '../content/posts';
+
+/**
+ * Guides and posts, reduced to the three things this script needs: when it goes
+ * live, where it lives, and which hub listing changes when it appears.
+ *
+ * Flattening them here rather than branching throughout is what keeps the
+ * window arithmetic below identical for both. There is one definition of "due".
+ */
+type Scheduled = {
+  publishedAt: string;
+  title: string;
+  href: string;
+  hubHref: string;
+  kind: 'guide' | 'post';
+};
+
+const SCHEDULED: Scheduled[] = [
+  ...ALL_GUIDES.map((g) => ({
+    publishedAt: g.publishedAt,
+    title: g.title,
+    href: guideHref(g),
+    hubHref: clusterHref(g.cluster),
+    kind: 'guide' as const,
+  })),
+  ...ALL_POSTS.map((p) => ({
+    publishedAt: p.publishedAt,
+    title: p.title,
+    href: postHref(p),
+    hubHref: postClusterHref(p.cluster),
+    kind: 'post' as const,
+  })),
+];
 
 /**
  * The publishing slots, as UTC hours. Must match the crons in
@@ -118,11 +162,11 @@ const nowMs = now.getTime();
 const sinceMs = windowStart().getTime();
 const at = (g: { publishedAt: string }) => Date.parse(g.publishedAt);
 
-const live = ALL_GUIDES.filter((g) => at(g) <= nowMs);
+const live = SCHEDULED.filter((g) => at(g) <= nowMs);
 // Inclusive of the window's own boundary: if the 03:00 run was missed, the
-// 07:00 run must report BOTH guides, including the one stamped exactly 03:00.
+// 07:00 run must report BOTH items, including the one stamped exactly 03:00.
 const dueNow = live.filter((g) => at(g) >= sinceMs);
-const upcoming = ALL_GUIDES.filter((g) => at(g) > nowMs).sort((a, b) => at(a) - at(b));
+const upcoming = SCHEDULED.filter((g) => at(g) > nowMs).sort((a, b) => at(a) - at(b));
 
 // stdout: consumed by the workflow via $GITHUB_OUTPUT. Nothing else goes here.
 console.log(`due=${dueNow.length > 0}`);
@@ -136,7 +180,7 @@ console.log(`count=${dueNow.length}`);
  * guide because its listing changes when a guide appears beneath it.
  */
 console.log(
-  `paths=${[...new Set(dueNow.flatMap((g) => [guideHref(g), clusterHref(g.cluster)]))].join(' ')}`,
+  `paths=${[...new Set(dueNow.flatMap((g) => [g.href, g.hubHref]))].join(' ')}`,
 );
 
 // stderr: the run log.
@@ -144,13 +188,13 @@ const log = (s: string) => console.error(s);
 
 log(`Now:   ${nowIso}`);
 log(`Since: ${since}`);
-log(`Guides live after this build: ${live.length} of ${ALL_GUIDES.length}`);
+log(`Live after this build: ${live.length} of ${SCHEDULED.length} (guides and posts)`);
 
 if (dueNow.length > 0) {
   log('');
   log('Publishing at this slot:');
   for (const g of dueNow) {
-    log(`  ${g.publishedAt}  ${guideHref(g)}`);
+    log(`  ${g.publishedAt}  [${g.kind}] ${g.href}`);
     log(`    ${g.title}`);
   }
 } else {
@@ -161,9 +205,9 @@ if (dueNow.length > 0) {
 if (upcoming.length > 0) {
   const next = upcoming[0]!;
   log('');
-  log(`Next: ${next.publishedAt}, ${guideHref(next)}`);
-  log(`${upcoming.length} guide(s) still scheduled.`);
+  log(`Next: ${next.publishedAt}, [${next.kind}] ${next.href}`);
+  log(`${upcoming.length} item(s) still scheduled.`);
 } else {
   log('');
-  log('No guides remain scheduled. Add more, or the scheduled runs have nothing left to do.');
+  log('Nothing remains scheduled. Add more, or the scheduled runs have nothing left to do.');
 }

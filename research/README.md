@@ -9,9 +9,9 @@ session that produced it.
 | --- | --- |
 | `METHOD.md` | **How to research for this site.** The traps, the source order, the fetch workarounds, and how to publish an open question. Read before commissioning an agent. |
 | `STRATEGY.md` | The conclusions. Why the intersection of tech and compliance is the wedge, what international buyers actually do, the four phases, and what not to build. |
-| `POSTS.md` | The post plan: 108 pieces in fourteen clusters, built from the query harvest and SERP data. |
+| `POSTS.md` | The post plan: 108 pieces in fourteen clusters, built from the query harvest and SERP data. Now also records what the first three blog posts changed about it, including why demand data is not evidence. |
 | `GUIDE-RESEARCH.md` | Per-guide notes: what each is built on, what it corrects, what still blocks it. |
-| `EXECUTION.md` | **How a guide gets built, and what has already gone wrong.** URL shape, content model, anatomy, schema with the reasoning behind each block, writing for AI citation, and a definition of done that now includes the checks the first forty-seven guides failed. Read before writing one. |
+| `EXECUTION.md` | **How a guide or post gets built, and what has already gone wrong.** URL shape, content model, anatomy, schema with the reasoning behind each block, writing for AI citation, how posts differ from guides and why that difference is enforced by a check, and a definition of done that includes the gates the first forty-seven guides failed. Read before writing one. |
 | `ARTICLES.md` | Superseded by POSTS.md. Kept for its per-title status tags and finding ids. |
 | `DEMAND.md` | The raw observations: search demand by cluster, seasonality, who ranks today and why they are beatable. |
 | `OPEN-ITEMS.md` | Verification items that block specific articles, each with what to fetch. Live count is in findings.jsonl: 22 contested or unverified. |
@@ -29,7 +29,7 @@ which numbers are **not** safe to publish, are exactly the things that must
 outlive a chat window. A claim nobody can trace back to a fetch gets quietly
 restated as fact six months later.
 
-Nineteen of the 403 findings are recorded specifically so they are never used
+Nineteen of the 415 findings are recorded specifically so they are never used
 again. Two examples show the range: a "63% of enterprises cite IP protection
 (Forrester 2024)" statistic that traces to a vendor blog and has no Forrester
 source behind it, and a "USD 100,000" remittance threshold that was a Finance
@@ -97,3 +97,11 @@ correct fix. See `keywords/README.md`.
 **Reddit was blocked for all six agents.** Each said so rather than inventing
 practitioner discourse. The n8n community forum substituted for the AI cluster;
 nothing substituted for the others.
+
+**A plain fetch reports a pricing page's default state and misses the rest.**
+Three figures came back "unverifiable" from a WebFetch pass and all three were
+behind JavaScript controls: a monthly/annual toggle and a tier slider. Driving
+the same pages with `fetch.py --stealth` recovered every one. For anything
+priced, drive the controls rather than reading the page as served, and record
+the currency: n8n's pricing page is geo-priced and served two different
+currencies to two requests minutes apart.

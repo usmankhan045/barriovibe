@@ -196,6 +196,90 @@ Two things worth carrying forward from that:
   unannounced is a smaller problem than a red workflow, and the sitemap still
   covers it.
 
+## Posts are not guides, and the difference is enforced
+
+The blog shipped on 11 September 2026. Posts reuse most of the guide machinery
+and differ in three places, each for a reason worth keeping.
+
+### The test for which one you are writing
+
+A guide is reference content, updated in place, carrying a review date because
+it is not news. A post is an argument with a shelf life.
+
+The practical test: **if the right response to the facts changing is to REWRITE
+the page, it is a guide. If the right response is to write a new piece and leave
+this one standing as a record of what was true then, it is a post.**
+
+"Income Tax Slabs 2026-27" is a guide, because next year's slabs replace this
+year's at the same URL and keep the links it earned. "You probably do not need
+an agent" is a post, because it is a position held on a date.
+
+### What posts inherit
+
+The section union, the renderer, the date gate, the publishing workflow, the
+IndexNow ping and the FAQ and HowTo schema. `GuideSection` was NOT duplicated
+into a post-shaped copy: the renderer moved to
+`components/sections/ContentBlock.tsx` and both page types import it. A copy
+would have had the same failure mode as the duplicated table this file already
+records, with a wider blast radius, because a spacing or anchor change would
+land on guides and silently not on posts.
+
+### What posts needed of their own
+
+**`sources`, required and non-empty.** A guide cites one instrument, named once
+in `content/provenance.ts`, and every guide inherits it. That works only because
+every guide rests on the same statute. A post about n8n's pricing page has no
+relation to the Income Tax Ordinance, and `guideSchema` hardcodes it as
+`citation`, so reusing it would have emitted a false claim in machine-readable
+form. `postSchema` is therefore separate and builds citations from the post's
+own array, which is the same array that renders visibly at the foot of the page.
+One array, two consumers, no drift.
+
+Each source carries the date it was read. That is the blog's form of the
+no-figures rule: guides may not type a rate because `lib/tax/` holds it, and
+posts have nothing to interpolate from, so the date is what makes a price
+claim checkable instead of assertable.
+
+**`limits`, an explicit statement of what the post does not cover.** A field
+rather than a paragraph, because the honest limitation is the first thing cut
+when prose is tightened and the thing that makes the rest credible.
+
+**`pnpm check:posts`.** The guides are backstopped by `check:tax`, which
+reconciles every rate against the First Schedule, so a guide cannot state a
+figure its calculator disagrees with. Vendor prices have no equivalent and
+cannot have one. The check enforces traceability instead: every source has an
+absolute URL and a read date, no source claims to have been read after the post
+published, and no post claims review before publication.
+
+It caught a real error on its first run: a post dated 12 September carrying a
+`reviewedOn` of the 11th, which would have claimed its sources were checked
+before it was written. Same family as the false `datePublished` that shipped on
+all forty-seven guides.
+
+### The scheduling trap, which nearly shipped
+
+`scripts/guides-due.ts` reported guides only. Posts share the `publishedAt`
+gate, so a scheduled post would have sat in the repo indefinitely: nothing would
+have asked Vercel to rebuild for it, the guide beside it would have gone live,
+and the run log would have read "nothing due" while being wrong.
+
+**Anything that gains a date gate must also be added to the thing that fires the
+build.** A gate without a trigger is scheduling in name only, and it fails
+silently, which is the worst way for a publishing system to fail.
+
+### Pricing sources need a browser, not a fetch
+
+Every figure in a priced comparison sits behind a control: a monthly/annual
+toggle, a tier slider, a currency selector. A plain fetch reads the default
+state and reports the rest as unavailable, which is how three figures came back
+"unverifiable" before `fetch.py --stealth` drove the controls and recovered all
+of them.
+
+Two consequences for any post quoting a price. **Drive the controls**, and
+**name the currency**: n8n's pricing page served euros to one request and
+dollars to another minutes apart, with Business priced differently between them
+rather than converted.
+
 ## Definition of done
 
 A guide ships when all of these hold:

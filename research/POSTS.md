@@ -7,6 +7,16 @@ Supersedes the flat list in `ARTICLES.md`, which was 41 titles chosen by
 category. This is built the other way round: from the query mass that actually
 exists, so every post owns a distinct angle rather than a slice of one.
 
+> **Status, 11 September 2026.** The blog half has started: **3 posts shipped**
+> of the 47 planned, in clusters 10, 8 and 12. The selection was NOT made from
+> this plan's ordering. It was made from what could be verified, which turned
+> out to be a much harder constraint on the blog side than on the guide side:
+> of 403 findings in the store when the blog work began, **five touched the AI
+> and development clusters at all** and two of those were unusable. The query
+> harvest that produced this plan evidences demand, not answerable questions,
+> and the gap between those two is what decides whether a post can be written.
+> See "What the first three posts changed" at the foot of this file.
+>
 > **Status, 10 September 2026.** The guide half of this plan is delivered and
 > its shape changed in the delivering. **47 guides shipped**, not 54, because
 > the hub-and-spoke allocation below was drawn up before any guide existed and
@@ -449,3 +459,100 @@ Non-negotiable, and the reason this list is 71 posts rather than 200:
 - **No em dashes**, per `CLAUDE.md`. Applies to copy, metadata and JSON-LD.
 - **No formulaic phrasing.** The existing 44 service pages contain exactly one
   instance of "leverage" and no other AI-tell vocabulary. That is the bar.
+
+---
+
+## What the first three posts changed
+
+Written 11 September 2026, after shipping the first three. The plan above was
+built from 7,496 harvested queries and it is a good map of demand. It is not a
+map of what can be written, and the difference cost a post.
+
+### The evidence was not there, and the harvest hid that
+
+The guide side had 403 findings behind it, nearly all from primary statute. When
+the blog side began, a keyword sweep of the same store found **five records
+touching clusters 8 to 13**, and one was a rejected vendor statistic while
+another was a contested one. Effectively two usable findings for 47 planned
+posts.
+
+That is not a failure of the research. It is what the research was for: the
+harvest measured demand, and demand is not evidence. The lesson for the
+remaining 44 is that **a blog post needs its sources fetched before it is
+scheduled**, not after it is chosen, because the fetch is what decides whether
+the piece exists.
+
+### Three shipped, one dropped, and the dropped one is the instructive case
+
+**8.10, "The 95% Failure Stat Is Disputed"**, was researched and abandoned. The
+premise held up: the MIT Media Lab Project NANDA figure is genuinely disputed.
+But the report's own URL now 302-redirects to a group overview page, and the
+Wayback capture is excluded from replay by robots policy. The primary document
+could not be read.
+
+The post's entire value was quoting what the report actually says against what
+is repeated about it. Writing it from critiques of a document we could not read
+would have meant characterising a source second-hand, which is the specific
+failure `METHOD.md` is about. Recorded as `mit-nanda-report-url-now-redirects`
+and left unwritten.
+
+The finding itself is worth keeping: the most-cited AI statistic of 2025 traces
+to a URL that no longer serves it.
+
+### WebFetch was not enough, and this is a tooling lesson
+
+The first research pass used WebFetch and returned three "UNVERIFIABLE" items:
+n8n's monthly prices, Make's entire tier ladder, and Make's 50,000-credit price.
+All three sat behind JavaScript controls.
+
+Driving the same pages with `scrapling`'s browser recovered every one: click the
+billing toggle, drive the slider through all 19 positions, read the prices off
+each. **The pricing content nobody has written is behind a toggle**, which is a
+plausible reason nobody has written it.
+
+The rule for the remaining posts: **for anything priced, use `research/fetch.py`
+with `--stealth`, and drive the controls.** A static fetch of a pricing page
+reports the default state and silently misses the rest.
+
+### Two errors caught, both in our own premises
+
+Worth recording because both were in the brief rather than in a source.
+
+1. **Make no longer bills in "operations"**, it bills in credits. The research
+   agent corrected the brief from the vendor's own docs. A 2026 comparison using
+   "operations" reads as stale, which is precisely the defect the post exists to
+   correct, and we nearly shipped it.
+2. **n8n's pricing page is geo-priced.** One fetch returned 20€/50€/667€ and
+   another returned $20/$50/$800 for the same plans. Starter and Pro carry the
+   same number in both currencies and Business does not. Any comparison that
+   does not name a currency is incomplete, and one that converts between the two
+   is wrong.
+
+### What the posts inherited, and what they needed new
+
+Posts reuse the guides' section renderer, date gate, publishing workflow and
+IndexNow ping. They needed three things of their own:
+
+- **`sources`, required and non-empty.** Guides cite one statute named once in
+  `content/provenance.ts`. A post about n8n pricing has no relation to the
+  Income Tax Ordinance, and emitting it as a citation would be a false machine-
+  readable claim, so `postSchema` is separate from `guideSchema` and builds its
+  citations from the post's own array.
+- **`limits`, an explicit statement of what the post does not cover.** The
+  honest limitation is the first thing cut when prose is tightened and the thing
+  that makes the rest credible.
+- **`pnpm check:posts`.** The guides are backstopped by `check:tax`, which
+  reconciles every rate against the First Schedule. Vendor prices have no such
+  backstop and cannot have one, so the check enforces traceability instead:
+  every source has a URL and a read date, and no post claims review before
+  publication. It caught exactly that error on its first run.
+
+### The scheduling bug this nearly shipped
+
+`scripts/guides-due.ts` reported only guides. Posts share the `publishedAt`
+gate, so a scheduled post would have sat in the repo forever: nothing would have
+asked Vercel to rebuild for it, the guide beside it would have published, and
+the run log would have said "nothing due" while being wrong.
+
+Generalised to both. **Anything that gains a date gate must also be added to the
+thing that fires the build**, or it is scheduled in name only.

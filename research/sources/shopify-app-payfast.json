@@ -1,0 +1,9 @@
+{
+  "id": "shopify-app-payfast",
+  "url": "https://apps.shopify.com/search?q=payfast",
+  "status": 200,
+  "fetched_at": "2026-09-11T10:02:18.692278+00:00",
+  "sha256": "9ddc148541df0dc3",
+  "chars": 9343,
+  "stealth": true
+}

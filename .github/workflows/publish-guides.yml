@@ -1,11 +1,12 @@
-name: Publish scheduled guides
+name: Publish scheduled guides and posts
 
 # ── What this does, and why it is a deploy hook rather than a commit ──
 #
-# Guides carry a `publishedAt` timestamp and content/guides/index.ts filters on
-# the build time, so a guide appears when the site is next built at or after its
-# slot. Nothing in the repository needs to change for a guide to go live: the
-# scheduling is entirely a property of when the build runs.
+# Guides and blog posts both carry a `publishedAt` timestamp, and both
+# content/guides/index.ts and content/posts/index.ts filter on the build time,
+# so a page appears when the site is next built at or after its slot. Nothing in
+# the repository needs to change for it to go live: the scheduling is entirely a
+# property of when the build runs.
 #
 # Vercel builds on push. With no push, it does not rebuild, so a guide scheduled
 # for tomorrow would sit unpublished until the next unrelated commit. This
@@ -18,13 +19,13 @@ name: Publish scheduled guides
 #
 # ── Why 03:00 and 07:00 UTC ──
 #
-# 08:00 and 12:00 in Pakistan (UTC+5): two guides a day, four hours apart. The
+# 08:00 and 12:00 in Pakistan (UTC+5): two pages a day, four hours apart. The
 # first lands before the working day starts and the second around midday.
 #
 # `publishedAt` is a full timestamp and the gate compares timestamps, so a slot
 # only goes live once a build runs after it. That is why there are two crons
-# rather than one: a single morning run would publish both of the day's guides
-# at once and the four-hour gap would be fiction.
+# rather than one: a single morning run would publish both of the day's pages at
+# once and the four-hour gap would be fiction.
 #
 # Both runs are well clear of midnight in every timezone the runner might see,
 # so there is no ambiguity about which day it thinks it is.
@@ -65,22 +66,24 @@ jobs:
 
       # ── Is anything actually due? ──
       #
-      # Asking first means a deploy hook only fires when a guide is genuinely
+      # Asking first means a deploy hook only fires when a page is genuinely
       # waiting, rather than rebuilding twice a day forever. It also gives the
       # run log a plain statement of what went live, which is the record you
       # want when someone asks why a page appeared.
       #
       # "Due" means scheduled at or before now and not yet published, so this
-      # correctly picks up a slot that a missed run left behind.
-      - name: Check for guides due now
+      # correctly picks up a slot that a missed run left behind. The script
+      # reports guides AND posts: they share the gate and the slots, so they
+      # must share the thing that fires the build.
+      - name: Check for guides or posts due now
         id: due
         run: pnpm tsx scripts/guides-due.ts >> "$GITHUB_OUTPUT"
 
       # ── Verify before deploying ──
       #
       # The full suite, including the tax reconciliation and the no-em-dash
-      # check on rendered output. A guide that has sat in the repo for a week
-      # is still unverified against today's build until today's build runs, and
+      # check on rendered output. A page that has sat in the repo for a week is
+      # still unverified against today's build until today's build runs, and
       # publishing a broken page automatically is worse than publishing late.
       - name: Verify
         if: steps.due.outputs.due == 'true'
@@ -103,7 +106,7 @@ jobs:
           HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
         run: |
           if [ -z "$HOOK" ]; then
-            echo "::error::VERCEL_DEPLOY_HOOK is not set. Guides due at this slot will not publish."
+            echo "::error::VERCEL_DEPLOY_HOOK is not set. Pages due at this slot will not publish."
             echo "Create a deploy hook in Vercel (Settings > Git > Deploy Hooks)"
             echo "and add it as a repository secret named VERCEL_DEPLOY_HOOK."
             exit 1
@@ -121,14 +124,14 @@ jobs:
       # ── Tell the search engines that support being told ──
       #
       # scripts/indexnow.ts has existed and worked for some time, and nothing
-      # called it, so every scheduled guide relied on an organic recrawl of the
+      # called it, so every scheduled page relied on an organic recrawl of the
       # sitemap. That is the doorbell nobody presses.
       #
       # It runs after the deploy hook rather than before, because submitting a
       # URL that is not yet built invites a crawl of a 404. It is also
-      # deliberately not allowed to fail the run: a guide that went live but
-      # was not announced is a smaller problem than a red workflow, and the
-      # sitemap still covers it.
+      # deliberately not allowed to fail the run: a page that went live but was
+      # not announced is a smaller problem than a red workflow, and the sitemap
+      # still covers it.
       - name: Ping IndexNow
         if: steps.due.outputs.due == 'true'
         continue-on-error: true
@@ -136,4 +139,4 @@ jobs:
 
       - name: Nothing due
         if: steps.due.outputs.due != 'true'
-        run: echo "No guide is due at this slot. Vercel was not asked to rebuild."
+        run: echo "Nothing is due at this slot. Vercel was not asked to rebuild."

@@ -1,0 +1,9 @@
+{
+  "id": "zapier-pricing",
+  "url": "https://zapier.com/pricing",
+  "status": 200,
+  "fetched_at": "2026-09-11T09:52:26.810251+00:00",
+  "sha256": "a8e69da76d65709a",
+  "chars": 26512,
+  "stealth": true
+}

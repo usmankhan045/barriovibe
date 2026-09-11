@@ -106,9 +106,10 @@ export const TOOLS_MENU_COLUMNS = TOOL_GROUPS.map((group) => ({
  *
  * Home and Blog bracket the pill on the client's instruction: Home leftmost,
  * Blog rightmost, with the existing Contact/About order kept between them.
- * Blog links to `/blog`, which currently renders an honest "nothing published
- * yet" state, see app/blog/page.tsx, rather than being left unlinked or
- * pointed at a page that does not exist.
+ * Blog links to `/blog`, which lists the published posts by cluster. It keeps
+ * the honest "nothing published yet" state it used to render unconditionally,
+ * now triggered by the date gate actually having published nothing rather than
+ * by a hand-flipped flag. See app/blog/page.tsx.
  *
  * ── Tools ──
  *

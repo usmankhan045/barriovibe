@@ -3,6 +3,12 @@ import { SERVICES, serviceHref, PRACTICE_PAGES } from '@/content/services';
 import { PILLARS } from '@/content/pillars';
 import { TOOLS, toolHref } from '@/content/tools';
 import { PUBLISHED_GUIDES, activeClusters, clusterHref, guideHref } from '@/content/guides';
+import {
+  PUBLISHED_POSTS,
+  activePostClusters,
+  postClusterHref,
+  postHref,
+} from '@/content/posts';
 import { absoluteUrl } from '@/lib/seo';
 import { newestLastModified } from '@/lib/lastmod';
 
@@ -57,7 +63,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/services', priority: 0.9, changeFrequency: 'monthly', sources: ['app/services/page.tsx', 'content/services/index.ts'] },
     { path: '/about', priority: 0.6, changeFrequency: 'yearly', sources: ['app/about/page.tsx'] },
     { path: '/work', priority: 0.6, changeFrequency: 'yearly', sources: ['app/work/page.tsx', 'content/cases.ts'] },
-    { path: '/blog', priority: 0.5, changeFrequency: 'yearly', sources: ['app/blog/page.tsx'] },
+    { path: '/blog', priority: 0.7, changeFrequency: 'weekly', sources: ['app/blog/page.tsx', 'content/posts/index.ts'] },
     { path: '/contact', priority: 0.7, changeFrequency: 'yearly', sources: ['app/contact/page.tsx'] },
     { path: '/tools', priority: 0.7, changeFrequency: 'monthly', sources: ['app/tools/page.tsx', 'content/tools.ts'] },
     { path: '/guides', priority: 0.8, changeFrequency: 'monthly', sources: ['app/guides/page.tsx', 'content/guides/index.ts'] },
@@ -112,6 +118,30 @@ export default function sitemap(): MetadataRoute.Sitemap {
         `content/guides/${g.cluster}.ts`,
         'content/provenance.ts',
         'components/sections/GuidePage.tsx',
+      ),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    })),
+    /* Post clusters, then the posts. Same gate as the guides: PUBLISHED_POSTS
+       filters on the build instant, so a scheduled post is absent from the
+       sitemap until the build that publishes it.
+
+       A post's date covers its cluster file and the shared template. Unlike a
+       guide it does NOT depend on content/provenance.ts, because a post's
+       figures are vendor prices rather than tax rates and a statutory review
+       has nothing to say about them. */
+    ...activePostClusters().map((c) => ({
+      url: absoluteUrl(postClusterHref(c.slug)),
+      lastModified: modified('content/posts/index.ts', 'app/blog/[cluster]/page.tsx'),
+      changeFrequency: 'weekly' as const,
+      priority: 0.6,
+    })),
+    ...PUBLISHED_POSTS.map((p) => ({
+      url: absoluteUrl(postHref(p)),
+      lastModified: modified(
+        `content/posts/${p.cluster}.ts`,
+        'components/sections/PostPage.tsx',
+        'components/sections/ContentBlock.tsx',
       ),
       changeFrequency: 'monthly' as const,
       priority: 0.7,

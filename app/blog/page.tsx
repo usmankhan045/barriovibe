@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import {
   Container,
   Section,
@@ -9,13 +10,20 @@ import {
 import { Icon } from '@/components/icons';
 import { Reveal } from '@/components/ui/Reveal';
 import { Button } from '@/components/ui/Button';
-import { JsonLd, breadcrumbSchema } from '@/lib/jsonld';
+import { JsonLd, breadcrumbSchema, itemListSchema, organizationRef } from '@/lib/jsonld';
 import { pageMetadata } from '@/lib/seo';
+import {
+  BLOG_HUB,
+  PUBLISHED_POSTS,
+  activePostClusters,
+  postClusterHref,
+  postHref,
+  postsInCluster,
+} from '@/content/posts';
 
 export const metadata = pageMetadata({
-  title: 'Blog',
-  description:
-    'Notes on software, AI, marketing and the corporate work behind them. Published when there is something worth saying, not on a schedule.',
+  title: BLOG_HUB.seo.title,
+  description: BLOG_HUB.seo.description,
   path: '/blog',
 });
 
@@ -25,19 +33,32 @@ const CRUMBS = [
 ];
 
 /**
- * The blog. Empty for now, deliberately: publishing the same three filler
- * "5 tips for X" posts every agency site launches with would say less about
- * the firm than saying nothing does. See app/work/page.tsx for the same
- * pattern applied to case studies.
+ * The blog index.
  *
- * Flip this on the day the first post is ready to ship, not before.
+ * ## The empty state is kept, not deleted
+ *
+ * This page used to carry a hand-written "nothing here yet" state behind a
+ * `POSTS_ENABLED = false` flag, arguing that an empty blog is better than a
+ * stocked-looking one full of filler. That argument was right and it still is,
+ * so the state survives as the real empty branch rather than being removed once
+ * the first posts shipped.
+ *
+ * It now triggers on the actual condition instead of a hand-flipped constant:
+ * if the date gate has published nothing, the honest page is the one that says
+ * so. That also makes it the correct thing to render if every post were ever
+ * withdrawn, which a boolean would have quietly got wrong.
  */
-const POSTS_ENABLED = false;
-
 export default function BlogPage() {
+  const clusters = activePostClusters();
+  const hasPosts = PUBLISHED_POSTS.length > 0;
+
   return (
     <main id="main" tabIndex={-1}>
       <JsonLd data={breadcrumbSchema(CRUMBS)} />
+      <JsonLd data={organizationRef()} />
+      {hasPosts && (
+        <JsonLd data={itemListSchema('Blog', PUBLISHED_POSTS.map(postHref))} />
+      )}
 
       <Section tight>
         <Container>
@@ -48,13 +69,13 @@ export default function BlogPage() {
               <SectionHeading
                 level={1}
                 eyebrow="Blog"
-                lines={['Nothing to', 'read']}
-                accent="here yet"
+                lines={hasPosts ? ['Numbers with', 'a date'] : ['Nothing to', 'read']}
+                accent={hasPosts ? 'on them' : 'here yet'}
               />
               <Lead className="mt-7 max-w-[54ch]">
-                We would rather this page was empty than full of posts nobody on the
-                team could stand behind. When it opens, every post will come from
-                work we actually did.
+                {hasPosts
+                  ? BLOG_HUB.intro
+                  : 'We would rather this page was empty than full of posts nobody on the team could stand behind. When it opens, every post will come from work we actually did.'}
               </Lead>
             </div>
 
@@ -65,7 +86,107 @@ export default function BlogPage() {
         </Container>
       </Section>
 
-      {POSTS_ENABLED ? null : (
+      {hasPosts ? (
+        <>
+          {clusters.map((cluster) => {
+            const posts = postsInCluster(cluster.slug);
+            return (
+              <Section key={cluster.slug} tight>
+                <Container>
+                  <Reveal>
+                    <div className="flex flex-wrap items-end justify-between gap-4">
+                      <div className="max-w-[58ch]">
+                        <h2 className="font-display text-h2 text-ink">
+                          {cluster.title}
+                        </h2>
+                        <p className="mt-3 text-[15.5px] leading-[1.65] text-ink-body">
+                          {cluster.card}
+                        </p>
+                      </div>
+                      <Link
+                        href={postClusterHref(cluster.slug)}
+                        className="u-arrow-link text-caption"
+                      >
+                        All {posts.length === 1 ? 'in this topic' : `${posts.length} posts`}
+                        <Icon name="arrow-right" size={15} className="u-arrow-link__icon" />
+                      </Link>
+                    </div>
+                  </Reveal>
+
+                  <ul className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+                    {posts.map((post, i) => (
+                      <Reveal key={post.slug} as="li" index={i} className="h-full">
+                        <Link
+                          href={postHref(post)}
+                          className="u-tile u-tile-interactive group flex h-full flex-col p-7"
+                        >
+                          <div className="flex items-start justify-between gap-4">
+                            <h3 className="font-display text-h3 text-ink transition-colors group-hover:text-blue-600">
+                              {post.navLabel}
+                            </h3>
+                            <Icon
+                              name="arrow-up-right"
+                              size={18}
+                              className="mt-1 flex-none text-ink-body transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-blue-600"
+                            />
+                          </div>
+                          <p className="mt-3 flex-1 text-[15px] leading-[1.6] text-ink-body">
+                            {post.card}
+                          </p>
+                          <time
+                            dateTime={post.publishedAt.slice(0, 10)}
+                            className="mt-4 text-caption text-ink-body"
+                          >
+                            {new Date(post.publishedAt).toLocaleDateString('en-GB', {
+                              day: 'numeric',
+                              month: 'long',
+                              year: 'numeric',
+                              timeZone: 'UTC',
+                            })}
+                          </time>
+                        </Link>
+                      </Reveal>
+                    ))}
+                  </ul>
+                </Container>
+              </Section>
+            );
+          })}
+
+          {/* The standing promise, kept visible now that there is content to
+              hold against it. These were the three conditions the empty state
+              said every post would meet. */}
+          <Section band tight>
+            <Container>
+              <Reveal>
+                <div className="u-tile mx-auto max-w-3xl p-8 md:p-10">
+                  <h2 className="font-display text-h3 text-ink">
+                    What every post here has to do
+                  </h2>
+                  <ul className="mt-6 flex flex-col gap-3.5">
+                    {[
+                      'State where each figure came from and the day it was read, because a price with no date behind it is a guess.',
+                      'Say what it does not cover, in its own words, rather than implying it covered everything.',
+                      'Get corrected or taken down when it goes out of date, not left to rank.',
+                    ].map((item) => (
+                      <li key={item} className="flex items-start gap-3">
+                        <Icon
+                          name="check"
+                          size={17}
+                          className="mt-0.5 flex-none text-blue-600"
+                        />
+                        <span className="text-[15px] leading-[1.6] text-ink-strong">
+                          {item}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Reveal>
+            </Container>
+          </Section>
+        </>
+      ) : (
         /* ── Honest empty state ─────────────────────────────────────── */
         <Section tight>
           <Container>

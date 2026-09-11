@@ -1,0 +1,9 @@
+{
+  "id": "anthropic-pricing",
+  "url": "https://www.anthropic.com/pricing",
+  "status": 200,
+  "fetched_at": "2026-09-11T10:05:30.242010+00:00",
+  "sha256": "dac8c27328450952",
+  "chars": 20871,
+  "stealth": true
+}

@@ -2,6 +2,12 @@ import { BRAND, TAGLINE, CONTACT } from '@/content/site';
 import { PRACTICE_GROUPS, SERVICES, serviceHref, practiceHref } from '@/content/services';
 import { TOOL_GROUPS, toolHref } from '@/content/tools';
 import { PUBLISHED_GUIDES, activeClusters, clusterHref, guideHref } from '@/content/guides';
+import {
+  PUBLISHED_POSTS,
+  activePostClusters,
+  postClusterHref,
+  postHref,
+} from '@/content/posts';
 import { RATES_REVIEWED } from '@/content/provenance';
 import { absoluteUrl } from '@/lib/seo';
 
@@ -87,6 +93,32 @@ export function GET() {
     }
     for (const guide of PUBLISHED_GUIDES) {
       lines.push(`- [${guide.title}](${absoluteUrl(guideHref(guide))}): ${guide.card}`);
+    }
+    lines.push('');
+  }
+
+  /* Posts, listed individually for the same reason the guides are. The
+     sourcing sentence is different on purpose: guides rest on one statute named
+     once, posts rest on their own sources, and the honest summary for a crawler
+     is that each post carries its own citations with the date they were read. */
+  if (PUBLISHED_POSTS.length > 0) {
+    lines.push('## Blog');
+    lines.push('');
+    lines.push(
+      `- [Blog](${absoluteUrl('/blog')}): dated arguments about what software and automation cost, and where they break.`,
+    );
+    lines.push(
+      '- Every figure in these posts is sourced to the page it came from and the date it was read, listed at the foot of each post and emitted as schema citations. Prices are quoted in a named currency with the billing period stated. Each post also carries an explicit statement of what it does not cover. Where a primary document could not be retrieved, the post is not written rather than sourced second-hand.',
+    );
+    for (const cluster of activePostClusters()) {
+      lines.push(
+        `- [${cluster.title}](${absoluteUrl(postClusterHref(cluster.slug))}): ${cluster.card}`,
+      );
+    }
+    for (const post of PUBLISHED_POSTS) {
+      lines.push(
+        `- [${post.title}](${absoluteUrl(postHref(post))}), ${post.publishedAt.slice(0, 10)}: ${post.card}`,
+      );
     }
     lines.push('');
   }

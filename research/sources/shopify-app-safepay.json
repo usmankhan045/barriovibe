@@ -1,0 +1,9 @@
+{
+  "id": "shopify-app-safepay",
+  "url": "https://apps.shopify.com/search?q=safepay",
+  "status": 200,
+  "fetched_at": "2026-09-11T10:02:06.488212+00:00",
+  "sha256": "2461feb011cb906c",
+  "chars": 5248,
+  "stealth": true
+}

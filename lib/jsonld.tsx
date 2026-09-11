@@ -400,3 +400,74 @@ export function guideSchema({
     },
   };
 }
+
+/**
+ * A blog post, as Article.
+ *
+ * ## Why this is not `guideSchema`
+ *
+ * They look similar enough to merge and must not be. `guideSchema` hardcodes
+ * `citation: RATES_BASIS`, the Income Tax Ordinance, because every guide is
+ * sourced from it, and it pins `dateModified` to `RATES_REVIEWED`, the date a
+ * person last reconciled the rates against the statute.
+ *
+ * Neither is true of a post. A post about n8n's pricing page has no connection
+ * to the Ordinance, and emitting one as its citation would be a false statement
+ * in machine-readable form, which is worse than omitting the property. Its
+ * review date is likewise its own: the day someone re-read the vendor pages,
+ * which has nothing to do with when Pakistani tax rates were last checked.
+ *
+ * So posts carry their own citations, built from the `sources` array that also
+ * renders visibly at the foot of the page. One array, two consumers, no drift.
+ *
+ * `dateModified` falls back to `datePublished` rather than to a build date,
+ * because "checked when written" is the honest claim when nobody has revisited
+ * it, and a date that advances on its own is a claim about work nobody did.
+ */
+export function postSchema({
+  title,
+  description,
+  path,
+  cluster,
+  publishedAt,
+  reviewedOn,
+  sources,
+}: {
+  title: string;
+  description: string;
+  path: string;
+  cluster: string;
+  publishedAt: string;
+  reviewedOn?: string;
+  sources: { label: string; url: string; readOn: string }[];
+}) {
+  const published = publishedAt.slice(0, 10);
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    url: absoluteUrl(path),
+    mainEntityOfPage: { '@type': 'WebPage', '@id': absoluteUrl(path) },
+    articleSection: cluster,
+    inLanguage: 'en-PK',
+    datePublished: publishedAt,
+    dateModified: reviewedOn && reviewedOn > published ? reviewedOn : published,
+    author: { '@id': `${SITE_URL}/#organization` },
+    publisher: { '@id': `${SITE_URL}/#organization` },
+    /*
+     * The post's own sources, as citations. A reader and a crawler get the
+     * same list, from the same array that renders on the page.
+     */
+    citation: sources.map((s) => ({
+      '@type': 'CreativeWork',
+      name: s.label,
+      url: s.url,
+    })),
+    isAccessibleForFree: true,
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['#post-answer'],
+    },
+  };
+}
