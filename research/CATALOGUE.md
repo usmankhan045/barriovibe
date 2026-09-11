@@ -1,0 +1,438 @@
+# The post catalogue
+
+Every post here carries two things: **evidence that someone searches for it**,
+and **evidence we can answer it**. A post missing either does not get written.
+
+That is the whole method, and it exists because the first blog plan did not have
+it. `POSTS.md` allocated 47 posts from a query harvest, and when the writing
+started, five of 403 findings touched those clusters. Demand was measured and
+answerability was assumed.
+
+## How to read an entry
+
+| Field | What it means |
+| --- | --- |
+| **Demand** | Harvested queries matching the topic, with the prominence of the strongest. Run `python3 research/keywords/demand.py "<pattern>"` to reproduce. |
+| **Evidence** | The `findings.jsonl` records the post rests on. If this is empty, the post is not writable yet. |
+| **Angle** | What this post says that the existing page-one results do not. |
+
+Prominence is the `hits` field from `harvest.py`: how many times a query surfaced
+across seed expansions. **It is not search volume**, and nothing here pretends it
+is. See `keywords/README.md` for why volume is structurally unavailable.
+
+## The evidence base
+
+14,522 unique queries across six harvests, and 523 findings of which 464 are
+verified. The harvests:
+
+| File | Queries | Seeded on |
+| --- | ---: | --- |
+| `ai-dev.jsonl` | 5,263 | AI, automation, development, offshore |
+| `ops.jsonl` | 2,467 | evaluating, monitoring and securing agents |
+| `pk-tax.jsonl` | 2,233 | Pakistani tax and corporate (guides, not posts) |
+| `fit.jsonl` | 2,105 | do I need an app, a website, an agent |
+| `buy.jsonl` | 1,452 | vetting an agency, contracts, ownership |
+| `rescue.jsonl` | 1,199 | AI failure, RAG accuracy, chatbot problems |
+
+## The wedge, in one sentence
+
+**Published AI guidance answers 2023's question, which was hallucinated text,
+while businesses are hitting 2026's problem, which is silent failure.**
+Duplicate charges from re-executed tools, guardrails bypassed in streaming
+paths, agents reporting success they never achieved. That mismatch runs through
+half this catalogue.
+
+## A rule that produced most of the good entries
+
+**Split a question by the reader, not by the keyword.** "What does an AI agent
+cost" and "why did my AI bill exceed the estimate" match similar queries and are
+different posts for different people: one is deciding, one is already committed
+and surprised. Splitting that way multiplies the catalogue without thinning it,
+because each post answers its own question completely.
+
+The opposite, splitting one answer across three posts so that none of them is
+complete, is what `POSTS.md` calls thin content and it is banned here.
+
+---
+
+# Category 1: Why AI projects fail
+
+**Demand: 1,199 queries.** `why ai implementations fail` at 93 is the
+single most prominent query in the entire harvest. `why ai projects fail` 91,
+`mit why ai projects fail` 82, `what % of ai projects fail` 79.
+
+**The intent is not what it looks like.** These are not people whose project
+failed. MIT is named in 24 queries, McKinsey and Gartner in 8: this is someone
+**building a case for a board**, looking for research to cite. That changes the
+post from a diagnostic into a briefing.
+
+**Why we can win it.** We read the primary document that everyone cites and
+nobody has read.
+
+### 1.1 The statistic everyone cites does not say what they think
+
+- **Demand**: `mit why ai projects fail` 82, `what % of ai projects fail` 79,
+  `what percentage of ai project fail` 47, `percent of ai projects that fail` 45
+- **Evidence**: `nanda-95pc-says-organizations-not-pilots`,
+  `nanda-report-contradicts-own-headline`,
+  `nanda-methodology-n52-conference-sample`,
+  `nanda-prescribes-its-authors-protocol`
+- **Angle**: The report says 95% of ORGANIZATIONS get zero return, not that 95%
+  of pilots fail. Its own funnel reads 60% evaluated, 20% piloted, 5% reached
+  production, so roughly a quarter of actual pilots reached production. Two
+  lines after its "95% failure rate" sentence it reports generic chatbots at
+  "high pilot-to-implementation rates (~83%)". Sample is 52 interviews plus 153
+  surveys collected at four industry conferences. The conclusion prescribes the
+  authors' own protocol. Nobody searching this is being told any of it.
+
+### 1.2 What the official statistics actually measured
+
+- **Demand**: `what is ai adoption` 34, `trend in ai adoption` 25,
+  `challenges of implementing ai` 25, plus the research-seeking mass above
+- **Evidence**: `ons-ai-no-headcount-change`, `census-btos-ai-size-gradient`,
+  `ai-productivity-gain-unconfirmed`
+- **Angle**: National statistics offices measure this and nobody quotes them.
+  ONS: "around half of businesses reported that AI had no impact on headcount."
+  Census: 19.8% of US businesses, 37% at 250+ employees, under 20% at four or
+  fewer. The job-loss story is not in the official data, and the productivity
+  gain is not confirmed either.
+
+### 1.3 Why AI failures are silent rather than loud
+
+- **Demand**: `chatbot gives wrong answers` 28, `error generating response
+  chatbot` 35, `why is chatbot not working` 32, `ai agent hallucination` 2
+- **Evidence**: `agent-failures-are-silent-not-loud`, `agent-duplicate-side-effects`
+- **Angle**: The 2026 failure mode is not a wrong answer, it is a confident
+  report of success that did not happen. Practitioner-sourced and specific:
+  "Agents rarely fail catastrophically, they fail subtly... This is worse than
+  obvious failures because you trust the output."
+
+### 1.4 The AI redundancy that was reversed
+
+- **Demand**: `companies replacing employees with ai` 24, `company replaces
+  workers with ai` 22, `how does ai replace workers` 27
+- **Evidence**: `documented-ai-replacement-reversals`, `ons-ai-no-headcount-change`
+- **Angle**: Commonwealth Bank cut 45 roles citing AI-reduced call volumes, then
+  admitted volumes had risen: "We did not adequately consider all relevant
+  business considerations." Pairs exactly with the official statistics showing
+  near-zero measured employment effect.
+
+### 1.5 Who is liable when the chatbot is wrong
+
+- **Demand**: adjacent rather than direct; `ai guardrails and governance` 16
+- **Evidence**: `documented-ai-replacement-reversals` (the OLG Hamm ruling)
+- **Angle**: A German court held in May 2026 that "the chatbot is not to be
+  regarded as a third party... its statements are attributed to the operator",
+  and that "even correct programming does not preclude liability". Barely
+  covered in English, where coverage stops at Moffatt v Air Canada (2024).
+
+---
+
+# Category 2: What it costs
+
+**Demand: 1,153 queries.** The largest commercial cluster. `ai agent cost per
+month` 29, `how much does an ai agent cost` 27, `cost of ai agents` 27,
+`ai agent development cost` 25.
+
+**Why we can win it.** Competitors quote ranges. We show arithmetic and name the
+date we read the prices. Two posts already shipped on this.
+
+### 2.1 What an AI agent costs to run  *(SHIPPED 11 Sep 2026)*
+### 2.2 n8n vs Zapier vs Make, priced at real volume  *(SHIPPED 11 Sep 2026)*
+### 2.3 What a WhatsApp chatbot costs in Pakistan  *(SCHEDULED 8 Oct 2026)*
+
+### 2.4 Why your AI bill exceeded the estimate
+
+- **Demand**: `microsoft ai agent costs` 25, plus the cost mass above
+- **Evidence**: `agent-duplicate-side-effects` (the $6,531 incident and the
+  mechanism), `prompt-caching-is-the-agent-cost-lever`
+- **Angle**: A different reader from 2.1: already committed, already surprised.
+  The drivers are retries, duplicate execution and context regrowth, not the
+  per-token price. Includes a verified incident: $6,531.30 in 24 hours from an
+  agent repeatedly redeploying the same template.
+
+### 2.5 What a chatbot costs, by what you actually want it to do
+
+- **Demand**: `chatbot for website free` 27, `chatbot for my website` 27,
+  `chatbot for business website` 21
+- **Evidence**: `whatsapp-pakistan-rates-sep2026`, `llm-api-pricing-sep2026`,
+  `whatsapp-bsp-markup-distinct-from-meta`
+- **Angle**: The free-tier query is the tell: people expect this to be free and
+  it is, until it is not. Separates the channel cost from the model cost from
+  the build cost, which nobody does.
+
+---
+
+# Category 3: Automate or hire
+
+**Demand: 1,116 queries on automation**, plus 41 on spreadsheet pain. `how to
+automate a business` 45, `automate your business process` 37, and crucially
+`why is automation bad` 26 and `bad things about automation` 24, which is
+scepticism demand nobody serves.
+
+**Why we can win it.** This is the category with peer-reviewed economics behind
+it, and the honest answer is genuinely contrarian.
+
+### 3.1 When automation actually pays, and when it quietly loses money
+
+- **Demand**: `should i automate this` 20, `why is automation bad` 26,
+  `bad things about automation` 24
+- **Evidence**: `so-so-automation-acemoglu`, `bainbridge-ironies-of-automation`,
+  `automation-helps-when-help-least-needed`
+- **Angle**: Acemoglu's so-so technology result, which is peer-reviewed and
+  points the opposite way from every vendor: automating a task your staff do
+  well and cheaply with a mediocre tool is the textbook loss case. The
+  wage-scarcity corollary is the non-obvious half: the same tool is a good buy
+  for a firm short of labour and a bad buy for one with cheap labour available.
+
+### 3.2 Nobody can tell you how often automation projects fail
+
+- **Demand**: `automation failed due to system error` 26, `how to end automation
+  error` 23, plus the failure mass in category 1
+- **Evidence**: `no-credible-automation-failure-rate`,
+  `rpa-literature-only-documents-successes`, `ey-30-50-rpa-fail-traced`,
+  `ey-rpa-citation-loop`
+- **Angle**: The forensic post. "30-50% of RPA projects fail" traces to a 2016 EY
+  marketing brochure whose stated basis is "our practical experience", then
+  through a vendor blog and trade press into a peer-reviewed Springer paper.
+  Peer review relocated the number rather than validating it. And a systematic
+  review of 63 papers states outright that "the literature covers only
+  successful RPA projects".
+
+### 3.3 AI helps your newest staff most, which changes what you buy it for
+
+- **Demand**: `how does ai replace workers` 27, `replacing workers with ai` 27,
+  `ai and job replacement` 25, `will ai replace hr jobs` 14
+- **Evidence**: `ai-returns-concentrate-on-novices`, `ons-ai-no-headcount-change`
+- **Angle**: The strongest study available found +34% for novices and near zero
+  for experts. So the evidence says AI is an onboarding and training technology,
+  not a headcount one. That reframes the purchase and matches what the official
+  employment statistics show.
+
+### 3.4 When your spreadsheet becomes a system
+
+- **Demand**: `excel too many sheets` 27, `spreadsheet has too many rows` 27,
+  `excel spreadsheet too big` 26, `excel spreadsheet has too many columns` 25
+- **Evidence**: `automation-task-criteria-documented-not-validated`,
+  `dont-automate-obliterate-hammer`
+- **Angle**: Small cluster, sharpest buying moment in the entire harvest: this is
+  someone whose manual process broke this week. The task criteria from the BPM
+  literature give them a real test, and Hammer gives the warning: automating a
+  bad process entrenches it.
+
+### 3.5 What automates badly, and why it is not the technology's fault
+
+- **Demand**: `why is automation bad` 26, `bad things about automation` 24,
+  `list 2 disadvantages of using spreadsheets` 12
+- **Evidence**: `bainbridge-ironies-of-automation`, `ironies-persist-into-ai-endsley`,
+  `automation-helps-when-help-least-needed`
+- **Angle**: A 1983 paper describes modern AI deployment exactly. The automation
+  takes the easy cases and leaves the human the hard ones, the human's skill at
+  those decays because they no longer practise, and the moment they are needed
+  is the moment more skill is required. Endsley's 2023 revisit concludes the
+  ironies transferred to AI and got worse.
+
+---
+
+# Category 4: Do I actually need this?
+
+**Demand: 146 queries on the app/website decision**, plus 81 on CRM choice and
+19 on build-versus-buy. Small, and the purest decision intent in the harvest.
+
+**Why we can win it.** Every answer online is written by someone selling the
+thing. Sometimes the honest answer is "you do not need this", and saying so is
+the entire trust play.
+
+### 4.1 Do you need an app, or is your website enough?
+
+- **Demand**: `do you need app` 42, `does small business need a mobile app` 23,
+  `do i need a website` 19, `do i need a website for my business` 13
+- **Evidence**: `baymard-app-vs-mobile-web-guidelines`,
+  `baymard-app-benchmark-none-good`, `ios-missing-hardware-apis-bcd`,
+  `ios-webpush-homescreen-only`, `appsflyer-uninstall-46pc`, `nra-app-ranks-9th`
+- **Angle**: The decision reduces to a checkable test, which nobody publishes:
+  does it need hardware over Bluetooth, NFC, USB or serial, or must it keep
+  running while closed? If neither, no documented capability requires native.
+  Baymard found "342 of 348 guidelines in our mobile website catalog were
+  verified to apply equally to native mobile apps", and its 2026 app benchmark
+  rated NO app "good" out of 30 leading brands. Apple's own guideline 4.2 makes
+  the same argument against you if the app is a repackaged website.
+
+### 4.1a Everything you have read about iOS PWAs is out of date
+
+- **Demand**: shares the 4.1 cluster; distinct reader, already building
+- **Evidence**: `ios-webpush-homescreen-only`, `ios-seven-day-storage-eviction`,
+  `webkit-opposes-web-bluetooth`, `ios-missing-hardware-apis-bcd`
+- **Angle**: "iOS does not support web push" is now FALSE: WebKit shipped it in
+  16.4, February 2023, for Home Screen web apps. The seven-day storage eviction
+  has an exemption for installed web apps that nobody mentions. And the real
+  gaps are narrower and more political than people think: Apple formally
+  opposes Web Bluetooth as failing "the web platform's device-independence
+  bar", and Chrome Android ships every API iOS lacks, so "the web cannot"
+  usually means "Apple will not".
+
+### 4.2 Agent, chatbot, or a form?
+
+- **Demand**: `chatbot vs agentic ai` 25, `difference between chatbot and
+  agentic ai` 25, `ai agent vs chatbot vs llm` 15, `rule based chatbot vs ai
+  chatbot` 13, `when to use an ai agent` 27, `do ai agents work` 40
+- **Evidence**: `so-so-automation-acemoglu`, `agent-failures-are-silent-not-loud`
+- **Angle**: Nobody writes the three-way comparison, and every two-way one is
+  written by someone selling agents. A decision tree that can end in "use a
+  form" is the differentiator.
+
+### 4.3 Is your business ready for an AI agent?
+
+- **Demand**: `are we ready for ai` 27, `do ai agents work` 40, `why do i need an
+  ai agent` 6, `getting data ready for ai` 1
+- **Evidence**: `automation-task-criteria-documented-not-validated`,
+  `productivity-j-curve-intangibles`, `census-btos-ai-size-gradient`
+- **Angle**: The J-curve reframes the question from "will this pay for itself" to
+  "do I have the management slack to make the complementary investment". A small
+  firm with no spare capacity is structurally worse placed, which is a
+  defensible reason for caution rather than a failure of nerve.
+
+### 4.4 What a restaurant actually needs, and what it does not
+
+- **Demand**: `app for small business` 25, `do i need an app for my restaurant`
+  (seeded), `build a app for business` 25
+- **Evidence**: `nra-app-ranks-9th`, `nra-delivery-prefer-direct-gap`,
+  `nra-tech-profit-gap`, `doordash-commission-tiers`,
+  `doordash-storefront-zero-commission`, `nra-42pc-unprofitable-2026`,
+  `nra-median-three-restaurant-apps`, `restaurant-discovery-no-good-data`
+- **Angle**: The most evidenced business-type post available. 68% of operators
+  used third-party delivery but 61% would rather take orders direct; DoorDash
+  prices its own-site product at 0% commission against 15-30% on the
+  marketplace; 42% of operators were unprofitable last year; and the median
+  customer keeps three restaurant apps, which belong to chains and marketplaces.
+  Includes an honest negative: there is no methodologically sound data on how
+  customers discover restaurants.
+
+### 4.5 What a clinic actually needs, and the 30-point swing nobody buys
+
+- **Demand**: shares the 4.1 app cluster
+- **Evidence**: `clinic-app-no-evidence`, `google-local-ranking-three-factors`
+- **Angle**: A clean negative and a better answer. No evidence exists that
+  patients want a clinic-specific app, and patients overwhelmingly use their
+  EHR vendor's portal instead. Meanwhile 87% of patients accessed their portal
+  when staff encouraged them against 57% when not: a 30-point swing from front
+  desk behaviour, on software the clinic already owns.
+
+---
+
+# Category 5: Making it trustworthy
+
+**Demand: 508 RAG queries plus 2,467 operations queries.** `why does rag fail`
+52, `how to monitor ai agents` 50, `how to evaluate ai agents` 45, `how to
+improve rag retrieval accuracy` 28.
+
+**Why we can win it.** This is the service we sell, and the questions are asked
+into a void: repeated Ask HN threads on monitoring and evaluation get zero
+replies, into a query space saturated with observability vendors.
+
+### 5.1 How to tell if your RAG system is making things up  *(SCHEDULED 5 Oct)*
+### 5.2 Does your data train the model?  *(SCHEDULED 4 Oct)*
+
+### 5.3 How to evaluate an agent before you trust it
+
+- **Demand**: `how to evaluate ai agents` 45, `how to evaluate ai` 13,
+  `llm evaluation metrics` 12, `llm evaluation harness` 11
+- **Evidence**: `agent-eval-asked-into-a-void`, `ragas-faithfulness-definition`,
+  `rag-failure-is-retrieval-or-generation`
+- **Angle**: The strongest asked-but-unanswered signal in the dataset, and the
+  evidence of demand and of no answer are the same artifact: a question with
+  zero replies.
+
+### 5.4 What to monitor once an agent is live
+
+- **Demand**: `how to monitor ai agents` 50, `what is ai monitoring` 40,
+  `ai agent monitoring tools` 29
+- **Evidence**: `agent-failures-are-silent-not-loud`, `agent-duplicate-side-effects`
+- **Angle**: Distinct reader from 5.3: already deployed. The things worth
+  alerting on are not the things vendors instrument.
+
+### 5.5 Stopping an agent from burning money in a loop
+
+- **Demand**: `ai agent test loop` 27, `agentic ai agent test loop` 26,
+  plus the cost cluster
+- **Evidence**: `agent-duplicate-side-effects`
+- **Angle**: Framework maintainers have no correct answer today. One issue
+  demonstrates that even the strongest durability setting leaves exactly-once
+  semantics "decided by the OS thread scheduler". The practical answer is
+  external idempotency keys, which nobody is selling.
+
+### 5.6 Why your RAG returns wrong answers, by failure type
+
+- **Demand**: `why does rag fail` 52, `rag does not work for enterprises` 31,
+  `how to improve rag retrieval accuracy` 28, `how to improve rag` 26
+- **Evidence**: `rag-failure-is-retrieval-or-generation`, `ragas-faithfulness-definition`
+- **Angle**: Splits from 5.1 by reader: 5.1 is "how do I know", this is "I know,
+  now what". Four separately measurable failures with four different fixes.
+
+---
+
+# Category 6: Choosing who builds it
+
+**Demand: 960 queries.** `how to hire a software developer online` 25,
+`hiring a software developer tips` 27, `build vs buy software` 29,
+`fixed price vs time and materials contract` 27, `who owns the code generated
+by ai` 29.
+
+**Why we can win it.** The entire information space is written by sellers. We
+are a seller writing against our own interest, which is the only credible
+position available.
+
+### 6.1 Who owns the code, and who owns AI-generated code
+
+- **Demand**: `who owns the code generated by ai` 29, `github copilot who owns
+  the code` 3, `who owns the code that claude writes` 2
+- **Evidence**: pending the agency-vetting research
+- **Angle**: Two questions that look like one. The contractor-IP default
+  surprises buyers, and the AI-generated-code question is genuinely unsettled.
+
+### 6.2 Fixed price or time and materials
+
+- **Demand**: `fixed fee vs time and materials` 28, `fixed price vs time and
+  materials contract` 27, `fixed cost vs time and materials` 27
+- **Evidence**: pending
+- **Angle**: Very high demand, uniform phrasing, and the honest answer depends on
+  estimation accuracy, which has a real research literature behind it.
+
+### 6.3 Agent washing: auditing a vendor's AI claim
+
+- **Demand**: `ai vendor evaluation` (seeded), `how to vet an ai company`
+  (seeded)
+- **Evidence**: `reject-ai-failure-statistics` (the Gartner agent-washing item)
+- **Angle**: Gartner estimates roughly 130 of thousands of agentic vendors are
+  real. Buyers have nowhere neutral to turn.
+
+### 6.4 Build or buy
+
+- **Demand**: `build vs buy software` 29, `build or buy software` 12,
+  `how to choose a crm` 26, `what does a good crm look like` 24,
+  `you don't need a crm` 22
+- **Evidence**: `productivity-j-curve-intangibles`
+- **Angle**: `you don't need a crm` at 22 is the tell: there is appetite for the
+  contrarian answer and nobody serving it.
+
+---
+
+# What is deliberately NOT in this catalogue
+
+**"Questions to ask a software agency."** One matching query in 14,522. It is a
+post I would have written on instinct and the data says not to. Recorded because
+the instinct will recur.
+
+**Seven more n8n posts.** `POSTS.md` cluster 10 allocates eight. One shipped and
+its arithmetic is real; the rest were sized by query volume rather than by
+commercial value.
+
+**Anything resting on a failure statistic.** Four are recorded as rejected:
+"74% of chatbots pulled offline" (paid sponsored content), "70-80% of enterprise
+RAG deployments fail" (a blog-to-blog citation loop), an unverifiable Taco Bell
+quote, and the Klarna "lower quality" line (an inaccessible interview).
+
+**The Pakistani AI market.** All 269 tech-flavoured queries in the Pakistani
+harvest are government portals: "ntn registration online", "iris fbr app". There
+is no local demand for AI buying advice. The guides own the local half and the
+posts go global, which is what the user asked for and what the data supports.

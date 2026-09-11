@@ -9,7 +9,8 @@ session that produced it.
 | --- | --- |
 | `METHOD.md` | **How to research for this site.** The traps, the source order, the fetch workarounds, and how to publish an open question. Read before commissioning an agent. |
 | `STRATEGY.md` | The conclusions. Why the intersection of tech and compliance is the wedge, what international buyers actually do, the four phases, and what not to build. |
-| `POSTS.md` | The post plan: 108 pieces in fourteen clusters, built from the query harvest and SERP data. Now also records what the first three blog posts changed about it, including why demand data is not evidence. |
+| `POSTS.md` | The original post plan: 108 pieces in fourteen clusters, built from the query harvest and SERP data. Records what the first three blog posts changed about it, including why demand data is not evidence. **Superseded for the blog half by `CATALOGUE.md`.** |
+| `CATALOGUE.md` | **The post catalogue.** Every entry carries its harvested demand AND the findings it rests on, because a post missing either does not get written. Six categories, 31 posts, and a list of what was deliberately excluded. |
 | `GUIDE-RESEARCH.md` | Per-guide notes: what each is built on, what it corrects, what still blocks it. |
 | `EXECUTION.md` | **How a guide or post gets built, and what has already gone wrong.** URL shape, content model, anatomy, schema with the reasoning behind each block, writing for AI citation, how posts differ from guides and why that difference is enforced by a check, and a definition of done that includes the gates the first forty-seven guides failed. Read before writing one. |
 | `ARTICLES.md` | Superseded by POSTS.md. Kept for its per-title status tags and finding ids. |
@@ -97,6 +98,14 @@ correct fix. See `keywords/README.md`.
 **Reddit was blocked for all six agents.** Each said so rather than inventing
 practitioner discourse. The n8n community forum substituted for the AI cluster;
 nothing substituted for the others.
+
+**A harvest only finds what its seeds look for.** Midway through the catalogue
+research I concluded that AI-failure content had no demand, on the basis that
+the existing harvest held about ten such queries against 1,153 on cost. That was
+an artefact of the seed list, which contained no failure seeds: I had measured
+their absence and called it absence of demand. Seeded properly the cluster is
+1,199 queries and contains the single most prominent query in the whole dataset.
+Absence in a harvest is not evidence of absence in the world.
 
 **A plain fetch reports a pricing page's default state and misses the rest.**
 Three figures came back "unverifiable" from a WebFetch pass and all three were

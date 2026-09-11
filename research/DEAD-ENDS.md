@@ -333,3 +333,35 @@ Two lessons worth keeping:
   artifact that a newer file will fix: the Rules are simply unamended. Where
   the Ordinance and the Rules disagree, the Ordinance governs, and FBR's own
   explanatory circular is the cleanest corroboration to cite.
+
+## App-versus-website research, September 2026
+
+- **adjust.com returns HTTP 429 to every automated fetch.** Six URLs were tried
+  (`/blog/what-makes-a-good-retention-rate/`, `/resources/ebooks/mobile-app-trends-2026/`,
+  `/blog/mobile-app-trends-2026/`, `/glossary/retention-rate/`,
+  `/resources/guides/user-retention/`, and the bare domain). The site blocks
+  automated clients. Adjust's retention benchmarks are therefore recorded as
+  `unverified` and are not publishable. A human opening the page is the only
+  known fix.
+- **merchants.doordash.com returns HTTP 403** to WebFetch, so DoorDash's current
+  commission card could not be confirmed from the primary source. The 15/25/30
+  plus 6% pickup tiers trace to DoorDash's own April 2021 announcement as
+  reported by Restaurant Dive and Nation's Restaurant News.
+- **webkit.org/status/ has been retired.** The page now says so and points
+  elsewhere. Apple's stance on a web API is now citable from the
+  `WebKit/standards-positions` GitHub repo, which is fetchable through the
+  GitHub API and carries verbatim rationale, not merely a support flag.
+- **MDN browser-compat-data is fetchable as JSON** at
+  `https://bcd.developer.mozilla.org/bcd/api/v0/current/<path>.json`, which is
+  far more reliable than reading a rendered MDN compatibility table. TRAP: a
+  naive recursive search for the first `__compat` node returns a SUB-FEATURE,
+  not the API. Querying `api.MediaDevices.getUserMedia` that way returned
+  `safari_ios=false`, which is wrong: the match was the `resizeMode` constraint.
+  Always confirm the node is the API itself.
+- **healthit.gov data-brief HTML pages return 403**, but the underlying PDF
+  under `/wp-content/uploads/` fetches cleanly with a browser user-agent and
+  yields full methodology via `pdftotext -layout`.
+- **restaurant.org full reports are paywalled** at shop.restaurant.org. The
+  press releases carry headline figures but no technology adoption percentages,
+  and the NRA publishes no sample sizes or fieldwork dates for its consumer
+  surveys.
