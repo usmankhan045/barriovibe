@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
 import { leadSchema } from '@/lib/leads.server';
 import { LEAD_RULES, type LeadResult } from '@/lib/leads';
 import { SERVICES } from '@/content/services';
@@ -8,18 +7,32 @@ import { sendMail, isMailConfigured, MAIL_TARGETS } from '@/lib/email/mailer';
 
 /**
  * The only server surface on the site. Every page is static HTML; this one
- * route handler exists so the Supabase service-role key never reaches a
- * browser and so validation cannot be bypassed by editing the DOM.
+ * route handler exists so credentials never reach a browser and so validation
+ * cannot be bypassed by editing the DOM.
  *
- * Runs on Node rather than the edge because the Supabase service-role client
- * and the crypto hashing below are both simpler there, and this endpoint is
- * called a handful of times a day — edge latency is irrelevant.
+ * ── Email is the system of record ──
+ *
+ * Gmail SMTP is the only backend this route requires. A submission is captured
+ * when the notification email is accepted by Gmail, and that is what the
+ * visitor's success message means.
+ *
+ * Supabase is OPTIONAL. When SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are
+ * set, the lead is also written to a table, which buys a searchable archive
+ * that survives a mailbox being cleared. When they are unset the route skips
+ * the write and nothing else changes. Adding it later means filling in two
+ * environment variables, not editing code.
+ *
+ * Runs on Node rather than the edge because nodemailer needs a TCP socket,
+ * which the edge runtime does not provide.
  */
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+/** Supabase is an optional archive. See the note at the top of this file. */
+const archiveEnabled = Boolean(SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY);
 
 /** Minimum time a human plausibly takes to fill the form. */
 const MIN_ELAPSED_MS = LEAD_RULES.minElapsedMs;
@@ -77,10 +90,10 @@ function fail(message: string, status: number, fieldErrors?: Record<string, stri
 }
 
 export async function POST(request: Request) {
-  if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-    // Misconfiguration is our problem, not the visitor's — tell them a way to
-    // reach us that does not depend on this endpoint.
-    console.error('[contact] Supabase environment variables are not set.');
+  if (!isMailConfigured()) {
+    // Misconfiguration is our problem, not the visitor's, so give them a way
+    // to reach us that does not depend on this endpoint.
+    console.error('[contact] SMTP is not configured; cannot accept enquiries.');
     return fail(
       'Our contact form is temporarily unavailable. Please email us directly and we will reply the same day.',
       503,
@@ -132,47 +145,81 @@ export async function POST(request: Request) {
     );
   }
 
-  // ── Insert ───────────────────────────────────────────────────────────────
-  const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
-    auth: { persistSession: false, autoRefreshToken: false },
+  // ── Archive, if one is configured ────────────────────────────────────────
+  //
+  // Best effort on purpose. The email below is the record that matters, so a
+  // database that is unreachable, misconfigured or simply absent must not cost
+  // us a lead that Gmail would have delivered perfectly well.
+  await archiveLead(lead, {
+    ipHash: await hashIp(ip),
+    userAgent: request.headers.get('user-agent')?.slice(0, 300) ?? null,
   });
-
-  const { error } = await supabase.from('leads').insert({
-    name: lead.name,
-    email: lead.email,
-    phone: lead.phone || null,
-    company: lead.company || null,
-    service_slug: lead.service || null,
-    // budget_band is left unwritten — the form no longer asks. The column stays
-    // in the schema so previously collected bands are not destroyed.
-    message: lead.message,
-    source_path: lead.sourcePath || null,
-    ip_hash: await hashIp(ip),
-    user_agent: request.headers.get('user-agent')?.slice(0, 300) ?? null,
-  });
-
-  if (error) {
-    console.error('[contact] insert failed:', error.message);
-    return fail(
-      'We could not save your enquiry. Please email us directly and we will pick it up.',
-      500,
-    );
-  }
 
   // ── Notify, and acknowledge ──────────────────────────────────────────────
   //
-  // Deliberately AFTER the insert and deliberately not allowed to fail the
-  // request. The database row is the durable record of the enquiry; email is
-  // how we find out about it quickly. If SMTP is down, the lead is still
-  // captured and still visible in Supabase, and telling the visitor their
-  // enquiry failed would be a lie that costs us the lead.
-  //
-  // The two sends run concurrently because neither depends on the other, and
-  // a visitor waiting on a spinner should not pay for two sequential SMTP
-  // round trips.
-  await sendLeadEmails(lead);
+  // This send IS the capture. With no database in front of it there is no
+  // second copy of the enquiry, so unlike the archive above it is allowed to
+  // fail the request: telling someone we have their message when it never
+  // reached an inbox loses them silently, and they never learn to try again.
+  const delivered = await sendLeadEmails(lead);
+
+  if (!delivered) {
+    return fail(
+      'We could not send your enquiry just now. Please email or WhatsApp us directly and we will pick it up.',
+      502,
+    );
+  }
 
   return NextResponse.json<LeadResult>({ ok: true });
+}
+
+/**
+ * Write the lead to Supabase when it is configured. Never throws.
+ *
+ * The import is dynamic so `@supabase/supabase-js` is only pulled into the
+ * serverless bundle when it is actually going to be used.
+ */
+async function archiveLead(
+  lead: {
+    name: string;
+    email: string;
+    phone?: string;
+    company?: string;
+    service?: string;
+    message: string;
+    sourcePath?: string;
+  },
+  meta: { ipHash: string; userAgent: string | null },
+): Promise<void> {
+  if (!archiveEnabled) return;
+
+  try {
+    const { createClient } = await import('@supabase/supabase-js');
+    const supabase = createClient(SUPABASE_URL!, SUPABASE_SERVICE_ROLE_KEY!, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+
+    const { error } = await supabase.from('leads').insert({
+      name: lead.name,
+      email: lead.email,
+      phone: lead.phone || null,
+      company: lead.company || null,
+      service_slug: lead.service || null,
+      // budget_band is left unwritten. The form no longer asks; the column
+      // stays so previously collected bands are not destroyed.
+      message: lead.message,
+      source_path: lead.sourcePath || null,
+      ip_hash: meta.ipHash,
+      user_agent: meta.userAgent,
+    });
+
+    if (error) console.error('[contact] archive insert failed:', error.message);
+  } catch (error) {
+    console.error(
+      '[contact] archive unavailable:',
+      error instanceof Error ? error.message : String(error),
+    );
+  }
 }
 
 /** Resolve the stored slug to the title a human recognises. */
@@ -182,6 +229,14 @@ function serviceTitle(slug: string | undefined): string | undefined {
   return SERVICES.find((s) => s.slug === slug)?.title;
 }
 
+/**
+ * Send the notification and the auto-reply.
+ *
+ * Resolves to whether the NOTIFICATION reached Gmail, because that is the one
+ * that decides whether we learn about the enquiry at all. A failed auto-reply
+ * is a worse experience for the enquirer but costs us nothing: we still have
+ * their message and can answer it by hand.
+ */
 async function sendLeadEmails(lead: {
   name: string;
   email: string;
@@ -190,12 +245,12 @@ async function sendLeadEmails(lead: {
   service?: string;
   message: string;
   sourcePath?: string;
-}): Promise<void> {
+}): Promise<boolean> {
   if (!isMailConfigured()) {
-    // Loud, because in production this means enquiries are arriving and
-    // nobody is being told. The lead is safe in the database either way.
-    console.warn('[contact] SMTP not configured: lead saved, no email sent.');
-    return;
+    // Unreachable: POST returns 503 before reaching here. Kept so the function
+    // stays correct if it is ever called from somewhere else.
+    console.warn('[contact] SMTP not configured; no email sent.');
+    return false;
   }
 
   const fields = {
@@ -211,33 +266,39 @@ async function sendLeadEmails(lead: {
   const notify = notificationEmail(fields, { submittedAt: new Date() });
   const reply = autoReplyEmail(fields);
 
-  const [notified, replied] = await Promise.all([
-    sendMail({
-      to: MAIL_TARGETS.notifyTo,
-      subject: notify.subject,
-      html: notify.html,
-      text: notify.text,
-      // So that hitting reply in Gmail writes to the enquirer, not to
-      // ourselves. This is the single most useful line in this function.
-      replyTo: `${lead.name} <${lead.email}>`,
-    }),
-    sendMail({
-      to: `${lead.name} <${lead.email}>`,
-      subject: reply.subject,
-      html: reply.html,
-      text: reply.text,
-      headers: {
-        // Marks this as machine-generated so that an out-of-office or another
-        // autoresponder on their side does not reply to it and start a loop.
-        // Auto-Submitted is the RFC 3834 header; the X- ones are what
-        // Microsoft and older systems actually honour.
-        'Auto-Submitted': 'auto-replied',
-        'X-Auto-Response-Suppress': 'All',
-        Precedence: 'auto_reply',
-      },
-    }),
-  ]);
+  // Sequential, not Promise.all. The pooled transporter opens a second
+  // connection for a concurrent pair, so a provider that throttles connections
+  // fails the auto-reply on a greeting timeout while the notification
+  // succeeds. Two sends over one warm connection cost roughly 170ms together,
+  // which is not worth a whole class of flakiness.
+  const notified = await sendMail({
+    to: MAIL_TARGETS.notifyTo,
+    subject: notify.subject,
+    html: notify.html,
+    text: notify.text,
+    // So that hitting reply in Gmail writes to the enquirer, not to ourselves.
+    // This is the single most useful line in this function.
+    replyTo: `${lead.name} <${lead.email}>`,
+  });
+
+  const replied = await sendMail({
+    to: `${lead.name} <${lead.email}>`,
+    subject: reply.subject,
+    html: reply.html,
+    text: reply.text,
+    headers: {
+      // Marks this as machine-generated so an out-of-office or another
+      // autoresponder on their side does not reply to it and start a loop.
+      // Auto-Submitted is the RFC 3834 header; the X- ones are what Microsoft
+      // and older systems actually honour.
+      'Auto-Submitted': 'auto-replied',
+      'X-Auto-Response-Suppress': 'All',
+      Precedence: 'auto_reply',
+    },
+  });
 
   if (!notified) console.error('[contact] notification email failed for', lead.email);
   if (!replied) console.error('[contact] auto-reply failed for', lead.email);
+
+  return notified;
 }
