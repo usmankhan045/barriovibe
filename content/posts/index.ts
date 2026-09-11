@@ -2,6 +2,9 @@ import type { Post, PostCluster, PostClusterSlug } from './types';
 import { AUTOMATION_POSTS } from './automation';
 import { AGENT_COST_POSTS } from './agent-cost';
 import { ECOMMERCE_POSTS } from './ecommerce';
+import { AI_DATA_POSTS } from './ai-data';
+import { SHIPPING_POSTS } from './shipping';
+import { US_ENTITY_POSTS } from './us-entity';
 
 export type { Post, PostCluster, PostClusterSlug, PostSource } from './types';
 
@@ -40,6 +43,30 @@ export const POST_CLUSTERS: PostCluster[] = [
     icon: 'sparkles',
   },
   {
+    slug: 'ai-data',
+    title: 'AI, data and trust',
+    card: 'What actually happens to your data when you build on someone else’s model, and how to tell whether the answers can be trusted.',
+    intro:
+      'The two questions every buyer asks before approving an AI build are whether their data trains someone else’s model and how they would know if the system started making things up. Both have precise answers, in vendor contracts and in published evaluation methods, and both are usually answered with reassurance instead.',
+    icon: 'shield',
+  },
+  {
+    slug: 'shipping',
+    title: 'Shipping software',
+    card: 'The rules, gates and review queues between a finished build and a customer actually using it.',
+    intro:
+      'Most of what delays a launch is not engineering. It is a store guideline, a verification requirement or a testing gate that nobody read until it blocked them. These are written from the platforms’ own current policies, with the dates they were read.',
+    icon: 'phone',
+  },
+  {
+    slug: 'us-entity',
+    title: 'Running a US company from Pakistan',
+    card: 'What a US LLC actually obliges you to do once it exists, sourced to the IRS and the states rather than to formation vendors.',
+    intro:
+      'Forming the company is the easy part and the part everyone sells. What follows is a filing calendar with real penalties attached, and an information space dominated by vendors with a reason to understate it. Everything here comes from the IRS, FinCEN or the state itself.',
+    icon: 'globe-arrows',
+  },
+  {
     slug: 'ecommerce',
     title: 'E-commerce in Pakistan',
     card: 'Selling online from Pakistan: the payment constraints that are structural, and what actually works around them.',
@@ -54,6 +81,9 @@ export const ALL_POSTS: Post[] = [
   ...AUTOMATION_POSTS,
   ...AGENT_COST_POSTS,
   ...ECOMMERCE_POSTS,
+  ...AI_DATA_POSTS,
+  ...SHIPPING_POSTS,
+  ...US_ENTITY_POSTS,
 ];
 
 /**

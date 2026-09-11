@@ -445,3 +445,28 @@ Phrase a premise as a premise, never as an instruction, and say plainly that
 contradicting it is a useful result. An agent told "verify that X" will tend to
 find X; an agent told "establish whether X, and I may be wrong" will tell you
 when you are.
+
+## The brief is the least reliable document in the room
+
+Across two batches of blog research, **every single topic came back with a
+correction to the premise I handed the agent.** Not to the sources: to the
+brief.
+
+- Make bills in credits, not operations. It renamed the unit.
+- WhatsApp has three template categories, not four. Service is not a category.
+- Google Play's testing gate is 12 testers, not 20. It was reduced.
+- BOI reporting rests on a final rule of August 2026, not the March 2025 interim
+  rule I cited.
+- Section 100C had not been cut, contrary to what I told an earlier agent.
+
+The pattern is that a brief is written from memory, and memory is a stale cache
+with no invalidation. The source is current by definition; the brief never is.
+
+So write the premise as a premise, and say explicitly that contradicting it is a
+useful result. "Verify that X" produces agents that find X. "Establish whether
+X, and note that I may be out of date" produces agents that tell you when you
+are, which is the entire value of commissioning the work.
+
+Where a brief carries a figure, mark it as the thing to check rather than the
+thing to build on. The five corrections above would each have shipped as a
+confident wrong sentence.

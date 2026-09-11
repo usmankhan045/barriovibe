@@ -7,6 +7,13 @@ Supersedes the flat list in `ARTICLES.md`, which was 41 titles chosen by
 category. This is built the other way round: from the query mass that actually
 exists, so every post owns a distinct angle rather than a slice of one.
 
+> **Status, 11 September 2026 (second batch).** **8 posts now written**, the
+> five newest scheduled one per day from **4 to 8 October**, after the last
+> guide on 3 October. The second batch was NOT selected from the clusters
+> below, and the reason is recorded in "Selection moved to the service list"
+> at the foot of this file: the plan's blog clusters were drawn from a query
+> harvest, and they do not match what the agency actually sells.
+>
 > **Status, 11 September 2026.** The blog half has started: **3 posts shipped**
 > of the 47 planned, in clusters 10, 8 and 12. The selection was NOT made from
 > this plan's ordering. It was made from what could be verified, which turned
@@ -556,3 +563,97 @@ the run log would have said "nothing due" while being wrong.
 
 Generalised to both. **Anything that gains a date gate must also be added to the
 thing that fires the build**, or it is scheduled in name only.
+
+---
+
+## Selection moved to the service list
+
+Written 11 September 2026, after the second batch of five.
+
+### What changed
+
+The blog clusters in this document (8 to 13) were built from the AI and
+development query harvest: agent cost, agent failure, automation platforms,
+software cost, Shopify, buying development work. That is a map of search
+demand, and it is a reasonable one.
+
+It is not a map of **what this agency sells**. `content/services/` lists 44
+services across six pillars, and the software half of it is agentic AI, RAG
+systems, digital FTEs, chatbots and prompt engineering, while a third of the
+whole business is international expansion: US, UK and Saudi company formation,
+filings and bookkeeping. The blog plan served almost none of that.
+
+So selection for the second batch came from the **service pages' own FAQs**,
+which turned out to be the best content brief in the repository. Each answers a
+real buyer question in two sentences, which is right for a service page and far
+too short for the question. Three of the five posts are a single service-page
+FAQ, properly answered:
+
+| Service page FAQ | Became |
+| --- | --- |
+| "Will our data be used to train models?" | Does your data train the model |
+| "How do I know it is not making things up?" | How to tell if your RAG system is making things up |
+| "What if Apple rejects the app?" | What actually gets your app rejected |
+| "What does WhatsApp actually cost to run?" | What a WhatsApp chatbot costs in Pakistan |
+
+The fifth, on US LLC filings, comes from the international expansion practice,
+which this plan never covered at all.
+
+### The rule this suggests for the remaining posts
+
+**A post earns its place by answering a question a buyer asks before paying us,
+not by matching a keyword cluster.** The query harvest is still useful for
+phrasing and for confirming demand exists. It is the wrong thing to select on,
+because it cannot see the business.
+
+The service-page FAQs are the shortlist. There are roughly 40 of them and most
+are worth a post.
+
+### n8n is deprioritised
+
+Cluster 10 allocates 8 posts to n8n, Zapier and Make. One shipped and it is a
+good post, because the pricing arithmetic is real and nobody else has done it.
+The remaining seven are not scheduled: the platform does not warrant that share
+of the slate, and the cluster was sized by query volume rather than by
+commercial value. Workflow automation remains a service; the platform-specific
+content around it does not need eight pages.
+
+### What the research found this time
+
+Five topics, five verified, none dropped. Every one corrected something in the
+brief I gave the research, which is becoming the pattern worth noticing:
+
+1. **BOI reporting is permanently over for US-formed entities.** I briefed the
+   March 2025 interim rule; a FINAL rule published 14 August 2026 supersedes it.
+   A Pakistani founder's Wyoming or Delaware LLC files nothing, and the test is
+   where the entity was formed rather than who owns it.
+2. **WhatsApp has no "service" template category.** I listed four; Meta has
+   three, plus a separate authentication-international rate. Service means
+   free-form replies inside the 24-hour window, and those are free.
+3. **Google Play's closed-testing gate is 12 testers, not 20.** The count was
+   reduced. Most published guidance still says 20.
+4. **The Gemini free tier is the real data trap**, not consumer chat apps. Same
+   endpoint, same SDK: billing status alone decides whether human reviewers may
+   read your inputs. Sharper than the consumer-versus-business framing the post
+   was originally built on.
+5. **There IS a US-Pakistan tax treaty**, TIAS 4232, in force since 1960. The
+   widespread "no treaty" claim probably originates in Treasury's treaty page,
+   which lists only post-1996 signings.
+
+### One finding that is a business risk, not just content
+
+Apple guideline 4.2.6: "Apps created from a commercialized template or app
+generation service will be rejected unless they are submitted directly by the
+provider of the app's content. These services should not submit apps on behalf
+of their clients."
+
+An agency submitting client apps from its own developer account is in scope.
+The post says so plainly and recommends the client hold the account, which is
+also where the listing and reviews belong. Worth knowing internally regardless
+of the post.
+
+### Orphans, again
+
+Three of the five new posts had nothing linking to them, which is the exact
+defect `EXECUTION.md` records from the guides. Fixed, and `check:posts` now
+warns on it so the next batch cannot repeat it.

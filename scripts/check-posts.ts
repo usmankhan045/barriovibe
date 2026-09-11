@@ -123,6 +123,24 @@ for (const post of ALL_POSTS) {
   }
 }
 
+/*
+ * Nothing links to it.
+ *
+ * research/EXECUTION.md records this as a defect that shipped on the guides:
+ * twenty of them had nothing pointing at them, found only by looking. A post
+ * reachable solely from its cluster listing is a post nobody arrives at from
+ * another post, which is the traffic that actually compounds.
+ *
+ * A warning rather than a failure, because the FIRST post in a new cluster is
+ * legitimately unlinked until its sibling exists.
+ */
+const linkedTo = new Set(ALL_POSTS.flatMap((p) => p.related ?? []));
+for (const post of ALL_POSTS) {
+  if (!linkedTo.has(post.slug)) {
+    warn(`${post.cluster}/${post.slug}: nothing links to it. Add it to another post's related list, unless it is the first in a new cluster.`);
+  }
+}
+
 // ── An empty cluster renders nothing, which is a content bug not a design one ──
 for (const cluster of POST_CLUSTERS) {
   if (!ALL_POSTS.some((p) => p.cluster === cluster.slug)) {

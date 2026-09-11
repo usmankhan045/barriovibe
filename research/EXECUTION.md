@@ -267,6 +267,23 @@ and the run log would have read "nothing due" while being wrong.
 build.** A gate without a trigger is scheduling in name only, and it fails
 silently, which is the worst way for a publishing system to fail.
 
+### Select from the service pages, not the keyword clusters
+
+The second batch of posts was chosen from `content/services/` FAQs rather than
+from the blog clusters in `research/POSTS.md`, and it should have been from the
+start. The clusters were drawn from a query harvest, which measures demand and
+cannot see the business: they allocate eight posts to automation platforms and
+none to RAG, digital FTEs, or the international expansion practice that is a
+third of what the firm does.
+
+Each service-page FAQ answers a real buyer question in two sentences. That is
+correct for a service page and far too short for the question, which makes the
+FAQ list the best content brief in the repository: roughly forty questions,
+already known to be asked, already known to matter commercially.
+
+**A post earns its place by answering a question a buyer asks before paying,
+not by matching a keyword cluster.**
+
 ### Pricing sources need a browser, not a fetch
 
 Every figure in a priced comparison sits behind a control: a monthly/annual
