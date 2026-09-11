@@ -156,6 +156,34 @@ export interface Faq {
   answer: string;
 }
 
+/**
+ * One platform a service works on, and what the work on it actually is.
+ *
+ * The `name` is matched against the brand marks in `components/icons/brands.tsx`
+ * (lower-cased) to draw the logo. A platform with no mark there still renders,
+ * as its name in type, exactly as the revenue cards handle the same gap, so
+ * adding one here can never produce a blank tile.
+ *
+ * `note` is the reason this list exists. A row of ten logos says nothing a
+ * visitor could not guess and reads as a badge wall; what they cannot guess is
+ * that Reddit is answered under subreddit rules rather than posted to, or that
+ * a YouTube Short is cut separately from a Reel rather than reposted with the
+ * watermark on. So every entry carries one sentence of scope, and
+ * `pnpm check:content` fails on an empty one.
+ *
+ * `format` is the content the platform actually takes, shown as a small label
+ * over the note. It keeps the notes from all having to open by restating the
+ * medium.
+ */
+export interface Platform {
+  /** As displayed, e.g. "LinkedIn". Lower-cased to find the brand mark. */
+  name: string;
+  /** The medium, 2-4 words: "Short-form video", "Feed, carousel, stories". */
+  format: string;
+  /** One sentence on what we do here, specific to this platform. */
+  note: string;
+}
+
 export interface Service {
   slug: string;
   pillar: PillarSlug;
@@ -213,6 +241,16 @@ export interface Service {
    * publishes no figures at all, so the fields are gone rather than blanked —
    * an empty string in a required field is an invitation to fill it back in.
    * Neither figure is public now; see the timing note above. */
+
+  /**
+   * The platforms this service runs on, each with its own scope note.
+   *
+   * Optional, and omitted by every service where a platform list would be
+   * noise: a company incorporation does not happen "on" anything. The service
+   * page renders the section only when it is present, the same way it omits
+   * `documents` rather than showing an empty card.
+   */
+  platforms?: Platform[];
 
   /** Slugs of 3 related services. At least one should cross pillars. */
   related: string[];

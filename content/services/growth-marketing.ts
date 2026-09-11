@@ -80,6 +80,58 @@ export const GROWTH_SERVICES: Service[] = [
       'Monthly performance report with commentary and next actions',
     ],
     documents: [],
+    platforms: [
+      {
+        name: 'Instagram',
+        format: 'Reels, carousels, stories',
+        note: 'Reels cut vertically and natively, carousels built to be swiped to the last card, and stories used for the things a feed post would flatten: polls, questions and behind-the-desk footage.',
+      },
+      {
+        name: 'Facebook',
+        format: 'Feed, groups, events',
+        note: 'Still where the widest Pakistani audience is, and still the platform most brands treat as an Instagram mirror. We write it separately, because longer captions and links work here and die on Instagram.',
+      },
+      {
+        name: 'LinkedIn',
+        format: 'Text posts, documents, articles',
+        note: 'Posted from the founder as well as the company page, because a person outreaches a logo on this platform every time. Documents and text posts over links, since an off-platform link costs reach.',
+      },
+      {
+        name: 'X',
+        format: 'Posts, threads, replies',
+        note: 'Short posts and the occasional thread, plus replies in the conversations your market is already having. This is a listening and positioning channel more than a broadcast one.',
+      },
+      {
+        name: 'TikTok',
+        format: 'Short-form video',
+        note: 'Shot and edited for the platform: hook in the first second, on-screen captions, trending audio only when it fits. Never a Reel with the watermark on it, which the algorithm demotes.',
+      },
+      {
+        name: 'YouTube',
+        format: 'Shorts and long-form',
+        note: 'Shorts cut from the same shoot as your Reels but re-edited for a different feed, and long-form set up properly: titles, thumbnails, chapters and descriptions written to be searched.',
+      },
+      {
+        name: 'Threads',
+        format: 'Short text, replies',
+        note: 'Cheap to run because it is text and it shares an identity with Instagram, and it is one of the few feeds still handing meaningful reach to accounts under 10,000 followers.',
+      },
+      {
+        name: 'Pinterest',
+        format: 'Idea pins, boards',
+        note: 'A search engine wearing a feed, and a real referral channel for retail, food, interiors, fashion and weddings. Pins are keyworded and boards structured so they keep working months later.',
+      },
+      {
+        name: 'Reddit',
+        format: 'Answers, AMAs',
+        note: 'Answers inside the subreddits your buyers already read, from a disclosed account, under each subreddit\u2019s own rules. A campaign posted here gets the account banned and sometimes the domain blocked.',
+      },
+      {
+        name: 'Quora',
+        format: 'Answers',
+        note: 'Written against the questions that already rank in Google for your category, so one answer keeps earning traffic long after it is posted. Slow, cumulative, and frequently ahead of your own site.',
+      },
+    ],
     related: ['social-presence-management', 'performance-marketing', 'chatbot-development'],
     faqs: [
       {
@@ -167,6 +219,62 @@ export const GROWTH_SERVICES: Service[] = [
       'A monthly cross-platform report with commentary and next actions',
     ],
     documents: [],
+    /* Same ten platforms as the management service, written from the other
+       side of the line: custody rather than cadence. If these notes ever start
+       reading like that service's, the two pages have stopped being
+       distinguishable and the boundary in the file header has been lost. */
+    platforms: [
+      {
+        name: 'Instagram',
+        format: 'Reels, carousels, stories',
+        note: 'Handle, bio and link structure fixed first, duplicate and abandoned accounts closed or merged, then run to the calendar with the inbox answered daily.',
+      },
+      {
+        name: 'Facebook',
+        format: 'Page, groups, reviews',
+        note: 'The page recovered where access is lost, unofficial and duplicate pages reported and merged, recommendations answered, and any group you run moderated rather than left open.',
+      },
+      {
+        name: 'LinkedIn',
+        format: 'Company page, founder profile',
+        note: 'The company page and the founder profile run as one presence, employee profiles pointed at the right page, and the fake or stale pages carrying your name taken down.',
+      },
+      {
+        name: 'X',
+        format: 'Posts, replies, listening',
+        note: 'Handle secured and squatted variants pursued, mentions monitored, and complaints answered here first, because this is where an unanswered one travels fastest.',
+      },
+      {
+        name: 'TikTok',
+        format: 'Short-form video',
+        note: 'Usually the account tried once and abandoned. Either revived properly with content cut for it, or closed and pointed elsewhere, which is a decision the audit makes on evidence.',
+      },
+      {
+        name: 'YouTube',
+        format: 'Shorts, long-form, channel SEO',
+        note: 'Channel art, handle and descriptions brought in line, old uploads retitled and chaptered so they surface in search, and the comments moderated instead of ignored.',
+      },
+      {
+        name: 'Threads',
+        format: 'Short text, replies',
+        note: 'Claimed early with the handle you actually want, tied to the Instagram identity, and run as a low-cost text feed rather than another surface to leave empty.',
+      },
+      {
+        name: 'Pinterest',
+        format: 'Idea pins, boards',
+        note: 'A business account claimed and your site verified, so pins others have already made of your products count toward you and boards can be keyworded to rank.',
+      },
+      {
+        name: 'Reddit',
+        format: 'Answers, moderation, monitoring',
+        note: 'The threads deciding your reputation with people who have not reached your site are found, monitored and answered under subreddit rules, from an account with a history.',
+      },
+      {
+        name: 'Quora',
+        format: 'Answers',
+        note: 'The questions already outranking your own pages are identified and answered properly, which is often the fastest way to stop a competitor owning your category query.',
+      },
+    ],
     related: ['social-media-management', 'performance-marketing', 'web-development'],
     faqs: [
       {

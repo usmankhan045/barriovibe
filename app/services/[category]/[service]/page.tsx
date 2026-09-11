@@ -13,6 +13,7 @@ import {
   IconWatermark,
 } from '@/components/primitives';
 import { Icon } from '@/components/icons';
+import { BrandMark, hasBrandMark } from '@/components/icons/brands';
 import { Reveal } from '@/components/ui/Reveal';
 import { Button } from '@/components/ui/Button';
 import { FaqAccordion } from '@/components/sections/FaqList';
@@ -226,7 +227,59 @@ export default async function ServicePage({ params }: { params: Params }) {
         </Container>
       </Section>
 
-      {/* ── 4. How it works ───────────────────────────────────────────── */}
+      {/* ── 4. Platforms ─────────────────────────────────────────────── */}
+      {/* Only the services that name platforms, which is currently the two
+          social ones. Omitted entirely elsewhere rather than rendered empty,
+          the same rule the documents card follows. */}
+      {service.platforms && service.platforms.length > 0 && (
+        <Section>
+          <Container>
+            <Reveal>
+              <SectionHeading
+                eyebrow="Platforms"
+                lines={['Where this']}
+                accent="actually happens"
+              />
+              <p className="mt-6 max-w-[62ch] text-[15px] leading-[1.65] text-ink-body">
+                Every platform below is written for separately. Which of them you should
+                be on is a decision we make with you in the audit, and for most businesses
+                the honest answer is fewer than this list.
+              </p>
+            </Reveal>
+
+            <ul className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+              {service.platforms.map((platform, i) => (
+                <Reveal key={platform.name} as="li" index={i} className="h-full">
+                  <div className="u-tile flex h-full flex-col p-6">
+                    <div className="flex items-center gap-3">
+                      {/* The mark is decorative and the name sits beside it in
+                          real text, so the accessible reading of this card is
+                          the platform's name either way. A platform with no
+                          mark drops the glyph and keeps everything else. */}
+                      {hasBrandMark(platform.name) && (
+                        <span className="grid size-9 flex-none place-items-center rounded-pill bg-blue-50 text-blue-600">
+                          <BrandMark platform={platform.name} size={18} />
+                        </span>
+                      )}
+                      <div className="min-w-0">
+                        <h3 className="font-display text-[17px] font-bold text-ink">
+                          {platform.name}
+                        </h3>
+                        <p className="u-eyebrow mt-0.5">{platform.format}</p>
+                      </div>
+                    </div>
+                    <p className="mt-4 text-[14.5px] leading-[1.6] text-ink-body">
+                      {platform.note}
+                    </p>
+                  </div>
+                </Reveal>
+              ))}
+            </ul>
+          </Container>
+        </Section>
+      )}
+
+      {/* ── 5. How it works ───────────────────────────────────────────── */}
       <Section>
         <Container>
           <Reveal>
@@ -261,7 +314,7 @@ export default async function ServicePage({ params }: { params: Params }) {
         </Container>
       </Section>
 
-      {/* ── 5. Deliverables + 6. Documents ────────────────────────────── */}
+      {/* ── 6. Deliverables + 7. Documents ────────────────────────────── */}
       <Section band>
         <Container>
           {/*
@@ -328,7 +381,7 @@ export default async function ServicePage({ params }: { params: Params }) {
         </Container>
       </Section>
 
-      {/* ── 7. Next step ──────────────────────────────────────────────── */}
+      {/* ── 8. Next step ──────────────────────────────────────────────── */}
       {/* This block has now lost both of its original halves. It began as
           "Timeline & pricing", a turnaround figure beside a "Starting from"
           price; the price went when the site stopped publishing figures, and
@@ -361,7 +414,7 @@ export default async function ServicePage({ params }: { params: Params }) {
         </Container>
       </Section>
 
-      {/* ── 8. FAQ ────────────────────────────────────────────────────── */}
+      {/* ── 9. FAQ ────────────────────────────────────────────────────── */}
       <Section band>
         <Container>
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
@@ -375,7 +428,7 @@ export default async function ServicePage({ params }: { params: Params }) {
         </Container>
       </Section>
 
-      {/* ── 9. Related services ───────────────────────────────────────── */}
+      {/* ── 10. Related services ───────────────────────────────────────── */}
       <Section tight>
         <Container>
           <Reveal>

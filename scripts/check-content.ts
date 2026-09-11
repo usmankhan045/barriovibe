@@ -113,6 +113,31 @@ for (const service of SERVICES) {
       warn(`${id}: FAQ "${faq.question.slice(0, 40)}…" does not end in a question mark.`);
     }
   }
+
+  /* The platform list is the section that would fail silently. A blank note
+     still renders a card, so the visitor gets a logo with nothing under it,
+     which is the badge wall the field exists to avoid. */
+  if (service.platforms) {
+    if (service.platforms.length === 0) {
+      fail(`${id}: "platforms" is present but empty. Omit the field instead.`);
+    }
+    const seen = new Set<string>();
+    for (const platform of service.platforms) {
+      if (!platform.name.trim() || !platform.format.trim() || !platform.note.trim()) {
+        fail(`${id}: platform "${platform.name || '(unnamed)'}" is missing a name, format or note.`);
+      }
+      const key = platform.name.toLowerCase();
+      if (seen.has(key)) {
+        fail(`${id}: platform "${platform.name}" is listed twice.`);
+      }
+      seen.add(key);
+
+      // A note that just restates the name tells the visitor nothing.
+      if (platform.note.trim().length < 40) {
+        warn(`${id}: platform "${platform.name}" has a note under 40 chars — say what the work is.`);
+      }
+    }
+  }
 }
 
 // ── Related-service links must resolve, and should cross pillars ────────────
