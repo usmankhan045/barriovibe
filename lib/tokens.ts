@@ -51,8 +51,6 @@ export const TOKENS = {
   blue200: '#aabff9',
   /** --color-blue-400: the gradient's top stop, and the accent rule. */
   blue400: '#0f40c7',
-  /** --color-blue-700: the pressed-button stop, used for the CTA's depth. */
-  blue700: '#092572',
   /** --color-silver-300: dividers between rows in the detail table. */
   silver300: '#dbdde1',
   /** --color-silver-600: the eyebrow and other quiet labels. */

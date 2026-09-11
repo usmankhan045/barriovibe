@@ -18,7 +18,8 @@
     "check:layout": "node scripts/check-layout.mjs",
     "art:steps": "node scripts/fetch-step-art.mjs",
     "indexnow": "tsx scripts/indexnow.ts",
-    "build:pdfs": "tsx scripts/build-pdfs.ts"
+    "build:pdfs": "tsx scripts/build-pdfs.ts",
+    "reply": "tsx --conditions react-server scripts/reply.mts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.1",
