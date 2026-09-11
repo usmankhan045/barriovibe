@@ -407,23 +407,50 @@ position available.
 - **Demand**: `fixed fee vs time and materials` 28, `fixed price vs time and
   materials contract` 27, `fixed cost vs time and materials` 27,
   `fixed price project vs time material` 27
-- **Evidence**: `chaos-report-is-not-citable`, `truck-factor-primary-figures`
-- **Angle**: Very high demand and uniform phrasing. The honest answer turns on
-  estimation accuracy, and the most-cited evidence on software project failure,
-  the Standish CHAOS report, is refuted in peer-reviewed work as "misleading,
-  one-sided" on 5,457 forecasts of 1,211 real projects. So the post has to
-  reason from the structure of the contract rather than from a failure rate,
-  which is what makes it different from every competitor.
+- **Evidence**: `chaos-report-is-not-citable`, `banerjee-duflo-overrun-sharing`,
+  `18f-contract-type-guidance`, `flyvbjerg-it-black-swans`
+- **Angle**: Very high demand, uniform phrasing, and the honest answer is
+  subtler than "time and materials protects you". Banerjee and Duflo, on 230
+  projects, found fixed-price contracts nominally put 100% of overrun on the
+  vendor while vendors actually bore 66%, and on time and materials they still
+  absorbed 26%. Two governments openly disagree: 18F says fixed-price "are not
+  appropriate for custom Agile development" while the UK Cabinet Office warns
+  time and materials "can drive the wrong behaviours". Publishing that
+  disagreement is more useful than inventing a consensus. The most-cited
+  evidence, Standish CHAOS, is refuted in peer-reviewed work as "misleading,
+  one-sided", so the post reasons from contract structure rather than from a
+  failure rate.
 
 ### 6.3 Agent washing: auditing a vendor's AI claim
 
 - **Demand**: `ai vendor evaluation` and `how to vet an ai company` (seeded),
   `agentic ai security risks` 27
-- **Evidence**: `gartner-130-agentic-vendors`, `gartner-buyer-regret-verified`
-- **Angle**: Gartner names the practice: vendors "engaging in agent washing, the
-  rebranding of existing products". Paired with its own finding that 56% of
-  organisations reported "a high degree of purchase regret over their largest
-  tech-related purchase", with the methodology disclosed.
+- **Evidence**: `gartner-130-agentic-vendors`, `gartner-buyer-regret-verified`,
+  plus the SEC and FTC enforcement records
+- **Angle**: Lead with the regulators rather than the analyst, because they are
+  named, dated and penalised. The SEC has charged firms for overstating AI: one
+  order records that "the vast majority of drive-thru orders... required human
+  intervention", another that a company raised $42m while relying "in large part
+  on contract employees to manually input orders". Gartner supplies the term,
+  "agent washing, the rebranding of existing products... without substantial
+  agentic capabilities", though its estimate that only about 130 of thousands of
+  vendors are real carries NO published methodology and must be presented as an
+  estimate rather than a measurement.
+
+### 6.4a Why offshore comparisons have no evidence behind them
+
+- **Demand**: `hire developers in india` 18, `offshore software development
+  security` 10, plus the 960-query hiring cluster
+- **Evidence**: `herbsleb-distributed-delay-with-caveat`, and the verified
+  absence of citable figures
+- **Angle**: A post that argues against the genre it sits in, including against
+  our own interest as an offshore supplier. Every circulating percentage failed
+  verification, including a "59% dissatisfaction (Deloitte 2024)" figure that
+  does not appear in Deloitte's report. Even the famous 2.5x delay finding
+  dissolves under control: the authors state that "given all other factors,
+  distributed MRs do not have significantly longer intervals". Citing 2.5x
+  without that caveat misrepresents the source, which is what nearly everyone
+  does.
 
 ### 6.5 What happens when the agency disappears
 
