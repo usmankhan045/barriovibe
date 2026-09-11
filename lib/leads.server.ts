@@ -52,8 +52,16 @@ export const leadSchema = z.object({
 
   sourcePath: z.string().max(300).optional(),
 
-  /** Honeypot. Must be empty — a real user never sees this field. */
-  website: z.string().max(0, 'Rejected.').optional(),
+  /**
+   * Honeypot. A real user never sees this field, so anything in it is a bot.
+   *
+   * Deliberately NOT rejected here. Failing it in the schema returns a 422
+   * naming `website` as the problem, which tells a bot exactly which field
+   * caught it and what to leave alone next time. The route inspects this
+   * value instead and answers with a plain success, so a bot cannot tell a
+   * swallowed submission from a delivered one.
+   */
+  website: z.string().max(200).optional(),
 
   /** Milliseconds from form mount to submit. */
   elapsedMs: z.number().int().nonnegative().optional(),

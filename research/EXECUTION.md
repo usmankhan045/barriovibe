@@ -267,6 +267,53 @@ and the run log would have read "nothing due" while being wrong.
 build.** A gate without a trigger is scheduling in name only, and it fails
 silently, which is the worst way for a publishing system to fail.
 
+### Two gates, not one: demand AND answerability
+
+`research/CATALOGUE.md` is the post slate, and every entry in it carries two
+things: the harvested queries that evidence someone searches for it, and the
+`findings.jsonl` records it rests on. **A post missing either is not written.**
+
+That rule is the correction to a specific failure. `POSTS.md` allocated 47 blog
+posts from a query harvest, and when the writing started, five of 403 findings
+touched those clusters and two were unusable. Demand had been measured and
+answerability had been assumed, which is how a plan can be evidence-based and
+still unbuildable.
+
+Reproduce any catalogue demand figure with:
+
+    python3 research/keywords/demand.py "<pattern>"
+
+The number it prints is the `hits` field from the harvest, meaning how many
+times a query surfaced across seed expansions. It is **not search volume**, and
+the catalogue says so rather than implying otherwise.
+
+### Split by the reader, not by the keyword
+
+This is what multiplies a catalogue without thinning it, and it is worth stating
+precisely because the wrong version of it is exactly what thin content is.
+
+"What does an AI agent cost" and "why did my AI bill exceed the estimate" match
+overlapping queries and are two posts, because they are two people: one is
+deciding whether to build, one has already built and been surprised. Each post
+answers its own question completely, and neither is a fragment of the other.
+
+The banned version is splitting one answer across three posts so that none of
+them is complete. `POSTS.md` states the test and it still holds: thin content is
+not short content, it is content that does not fully answer the question it
+claims to.
+
+### A harvest only finds what its seeds look for
+
+Midway through building the catalogue I concluded that AI-failure content had no
+demand, because the existing harvest held about ten such queries against 1,153
+on cost. That was an artefact of the seed list, which contained no failure
+seeds. I had measured their absence and reported it as absence of demand.
+
+Seeded properly, the cluster is 1,199 queries and contains `why ai
+implementations fail` at 93 hits, the single most prominent query in the entire
+dataset. **Absence in a harvest is not evidence of absence in the world**, and
+the fix is to seed the angle explicitly before concluding anything about it.
+
 ### Select from the service pages, not the keyword clusters
 
 The second batch of posts was chosen from `content/services/` FAQs rather than

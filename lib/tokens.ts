@@ -47,6 +47,18 @@ export const TOKENS = {
   blue50: '#ecf1fe',
   /** --color-blue-100: masthead sub-line on the gradient. */
   blue100: '#d4dffc',
+  /** --color-blue-200: hairlines and rules drawn ON a blue surface. */
+  blue200: '#aabff9',
+  /** --color-blue-400: the gradient's top stop, and the accent rule. */
+  blue400: '#0f40c7',
+  /** --color-blue-700: the pressed-button stop, used for the CTA's depth. */
+  blue700: '#092572',
+  /** --color-silver-300: dividers between rows in the detail table. */
+  silver300: '#dbdde1',
+  /** --color-silver-600: the eyebrow and other quiet labels. */
+  silver600: '#8f97a3',
+  /** --color-canvas: the page ground the message sits on. */
+  canvasGround: '#fefefe',
 } as const;
 
 /** The CTA band gradient, for OG image backgrounds. */
