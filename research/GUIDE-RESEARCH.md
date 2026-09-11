@@ -358,7 +358,8 @@ against unexplained-income treatment. It is not an exemption from tax.
   sourced item in the project: kpra.gov.pk returns 403 and only tier-4 summaries
   exist. Download the Act in a browser.
 - `s154b-rules-not-notified`. Recheck FBR SROs issued after 1 July 2026.
-- `s153-it-vs-professional-fork`. Whether a freelance developer billing a
+- The s.153 IT-versus-professional fork (open, no finding id recorded). Whether
+  a freelance developer billing a
   domestic company is withheld at 4 percent as IT services or 15 percent as an
   independent software engineer. Both entries are verbatim; the resolution is
   not. Publish as a tension rather than an answer.
@@ -743,7 +744,7 @@ The held slot at 32 was released and used.
 | 33 | Tax on selling online | salestax | `s6a-ecommerce-rates-verified`, `s6a-export-proceeds-carve-out`, `s6a-adjustable-above-200m` |
 | 34 | Tax on gifts and inherited property | property | `s79-non-recognition-gift-inheritance`, `s79-family-settlement-explanation-2026`, `s85-5-relative-live-definition` |
 | 35 | Capital gains on shares and mutual funds | property | `lib/tax/investments.ts`, interpolated |
-| 36 | Filing a monthly sales tax return | salestax | agent brief, `sta-30jun2026`, `str2006`, `sta-footnote-convention-inconsistent` |
+| 36 | Filing a monthly sales tax return | salestax | agent brief, the Sales Tax Act consolidation to 30 June 2026, `str2006`, `sta-footnote-convention-inconsistent` |
 | 37 | Exemption and lower rate certificates | pseb | s.159 provisos read verbatim, `s159-no-timeline-for-noncompanies` |
 | 38 | Withholding statements under s.165 | filing | s.165(2) and its provisos, FBR Circular 3 of 2020 |
 | 39 | Appealing an FBR order | filing | `s127-appeal-thirty-days-and-fee`, `s126a-pecuniary-split-omitted-2025` |

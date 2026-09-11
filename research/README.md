@@ -10,16 +10,17 @@ session that produced it.
 | `METHOD.md` | **How to research for this site.** The traps, the source order, the fetch workarounds, and how to publish an open question. Read before commissioning an agent. |
 | `STRATEGY.md` | The conclusions. Why the intersection of tech and compliance is the wedge, what international buyers actually do, the four phases, and what not to build. |
 | `POSTS.md` | The original post plan: 108 pieces in fourteen clusters, built from the query harvest and SERP data. Records what the first three blog posts changed about it, including why demand data is not evidence. **Superseded for the blog half by `CATALOGUE.md`.** |
-| `CATALOGUE.md` | **The post catalogue.** Every entry carries its harvested demand AND the findings it rests on, because a post missing either does not get written. Six categories, 31 posts, and a list of what was deliberately excluded. |
+| `CATALOGUE.md` | **The post catalogue, and what to write next.** Every entry carries its harvested demand AND the findings it rests on, because a post missing either does not get written. Six categories, 42 posts, plus a record of where splitting a post was refused and why. |
 | `GUIDE-RESEARCH.md` | Per-guide notes: what each is built on, what it corrects, what still blocks it. |
 | `EXECUTION.md` | **How a guide or post gets built, and what has already gone wrong.** URL shape, content model, anatomy, schema with the reasoning behind each block, writing for AI citation, how posts differ from guides and why that difference is enforced by a check, and a definition of done that includes the gates the first forty-seven guides failed. Read before writing one. |
 | `ARTICLES.md` | Superseded by POSTS.md. Kept for its per-title status tags and finding ids. |
 | `DEMAND.md` | The raw observations: search demand by cluster, seasonality, who ranks today and why they are beatable. |
-| `OPEN-ITEMS.md` | Verification items that block specific articles, each with what to fetch. Live count is in findings.jsonl: 22 contested or unverified. |
+| `OPEN-ITEMS.md` | Verification items that block specific articles, each with what to fetch. Live count is in findings.jsonl: 29 contested or unverified. |
 | `DEAD-ENDS.md` | Fetch routes that do not work, so they are not walked twice. |
 | `findings.jsonl` | One record per claim, append-only, with a status that gates publication. |
 | `sources/` | Fetch metadata per URL: status, timestamp, hash. |
 | `raw/` | Fetched text and PDFs. Gitignored, reproducible via `fetch.py`. |
+| `keywords/` | The query harvests and the tools over them. `demand.py` finds the evidence behind a proposed post; `harvest.py` gathers more. |
 | `reports/` | The agent reports verbatim, caveats included. |
 
 ## Why this exists
@@ -30,7 +31,7 @@ which numbers are **not** safe to publish, are exactly the things that must
 outlive a chat window. A claim nobody can trace back to a fetch gets quietly
 restated as fact six months later.
 
-Nineteen of the 415 findings are recorded specifically so they are never used
+Thirty-five of the 562 findings are recorded specifically so they are never used
 again. Two examples show the range: a "63% of enterprises cite IP protection
 (Forrester 2024)" statistic that traces to a vendor blog and has no Forrester
 source behind it, and a "USD 100,000" remittance threshold that was a Finance
@@ -90,7 +91,7 @@ use `pdftotext -layout` instead. See `DEAD-ENDS.md`.
 **No keyword volume data, and this is structural.** Per-keyword volume is the
 paywalled core of Ahrefs and Semrush, and nobody publishes it free for a
 Pakistan-geo tax keyword set. Google Trends returns 429 here. What exists
-instead is 7,496 real queries harvested from Google and Bing autocomplete, in
+instead is 14,522 real queries harvested from Google and Bing autocomplete, in
 `keywords/`, which evidences phrasing and relative prominence but is NOT volume.
 Google Keyword Planner with geo=PK, free with an Ads account, remains the
 correct fix. See `keywords/README.md`.

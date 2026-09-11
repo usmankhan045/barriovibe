@@ -7,6 +7,14 @@ Supersedes the flat list in `ARTICLES.md`, which was 41 titles chosen by
 category. This is built the other way round: from the query mass that actually
 exists, so every post owns a distinct angle rather than a slice of one.
 
+> **SUPERSEDED for the blog half, 11 September 2026.** `CATALOGUE.md` is now the
+> post slate: 42 posts across six categories, each carrying its harvested demand
+> AND the findings it rests on. This file remains useful for the guide half, for
+> the cluster reasoning, and as the record of why the blog plan had to be
+> rebuilt: it allocated 47 blog posts from a query harvest, and when writing
+> began, five of 403 findings touched those clusters. Demand had been measured
+> and answerability assumed.
+>
 > **Status, 11 September 2026 (second batch).** **8 posts now written**, the
 > five newest scheduled one per day from **4 to 8 October**, after the last
 > guide on 3 October. The second batch was NOT selected from the clusters

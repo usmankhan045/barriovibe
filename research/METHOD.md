@@ -414,21 +414,36 @@ scheduling the piece, not after choosing it**. The fetch is what decides whether
 the post exists, and discovering that after the slot is assigned means either a
 gap in the schedule or a post written to fill one.
 
-## When the primary document is gone, the post is gone
+## When the primary document is gone, look harder before dropping the post
 
-The "95% of AI pilots fail" piece was researched and dropped. The premise was
-sound and the critiques were real, but the report's own URL now redirects to a
-group page and the Archive capture is blocked by robots policy. The document
-could not be read.
+**This section has been corrected, and the correction is the lesson.**
 
-The post's whole value was quoting what the report says against what is repeated
-about it. Without the document that becomes a summary of other people's
-summaries, which is the failure this file exists to prevent, so it was not
-written.
+The "95% of AI pilots fail" piece was researched and dropped. The report's own
+URL redirects to a group overview page, and the Wayback capture of the PDF is
+blocked by robots policy. The document could not be read, so the post was not
+written, on the principle that a document you cannot read is not a source
+however well known its contents are.
 
-**A document you cannot read is not a source, however well known its contents
-are.** The temptation is strongest exactly when the claim is famous, because it
-feels like common knowledge rather than something needing a citation.
+That principle stands. The conclusion drawn from it was wrong, because the
+document was retrievable after all: mirrors of the PDF exist on third-party
+sites, and one served the complete 26-page original. It was verified by page
+count, byte size, and locating both occurrences of "95%" plus the methodology
+page and the conclusion.
+
+Reading it changed the post from impossible to the strongest in the catalogue.
+The report says 95% of ORGANIZATIONS get zero return, not that 95% of pilots
+fail, and its own funnel implies roughly a quarter of actual pilots reached
+production. Two lines after its "95% failure rate" sentence it reports generic
+chatbots at "high pilot-to-implementation rates (~83%)".
+
+**So the rule has two halves, and the second was missing.** A document you
+cannot read is not a source. But "the canonical URL is dead" is not the same as
+"the document is gone", and a widely circulated report has usually been mirrored
+by someone. Search for the filename rather than the title, check consultancy and
+vendor uploads, and verify any mirror by size and page count before quoting it.
+
+That a market-moving statistic survives only on a cloud consultancy's uploads
+folder is itself worth publishing.
 
 ## Correct a brief that is wrong, including ours
 
@@ -470,3 +485,70 @@ are, which is the entire value of commissioning the work.
 Where a brief carries a figure, mark it as the thing to check rather than the
 thing to build on. The five corrections above would each have shipped as a
 confident wrong sentence.
+
+---
+
+## Tracing a statistic is often the whole story
+
+Several catalogue posts exist because a number everyone repeats does not survive
+being traced. The pattern recurs often enough to be a method rather than a
+series of accidents.
+
+**The shape is always the same.** A consultancy or vendor publishes an estimate
+with no methodology. A trade article repeats it. A peer-reviewed paper cites the
+trade article. Now the number has a journal citation, and anyone checking the
+citation finds a real paper rather than the brochure underneath it.
+
+Two worked examples from this project:
+
+- **"30-50% of RPA projects fail"** traces to a 2016 EY marketing brochure whose
+  stated basis is "our practical experience", with no sample and no definition of
+  failure. It reached a Springer paper by 2022. Peer review relocated the number
+  rather than validating it.
+- **"13% of government software projects succeed"** looks impeccably sourced
+  because it sits inside an official US government guide. It traces back to the
+  Standish CHAOS report, which two peer-reviewed papers demolish: one shows a
+  mirror-image bias flipping a company from 6% to 94% success, and Standish's own
+  chairman called the data "Standish opinion", a disclaimer never printed in the
+  reports themselves.
+
+**How to run the trace.** Follow every citation back one more hop than feels
+necessary, and stop only at a document that states its own sample and method. If
+the chain ends at a page that says "based on our experience", the number is an
+impression with a citation attached.
+
+**When the trace ends nowhere, that is publishable.** The strongest version of
+this is the finding that a systematic review of 63 RPA papers states in print
+that "the literature covers only successful RPA projects". No failure rate can
+be produced from a literature that does not study failures, which retires every
+such statistic at once rather than one at a time.
+
+## An agent writing to the store can collide with you
+
+Two research agents wrote records to `findings.jsonl` under ids that already
+existed, because both were running while the main session was also appending.
+The duplicates were invisible until `query.py` grouped on id.
+
+The fix applied was to merge, keeping the better-evidenced record and preserving
+the other's claim inside the note, so nothing was lost. The lesson for future
+parallel work: **run the duplicate check after any session where agents wrote to
+the store**, not only after your own writes.
+
+    python3 -c "import json;from collections import Counter;\
+    r=[json.loads(l) for l in open('research/findings.jsonl') if l.strip()];\
+    print([k for k,v in Counter(x['id'] for x in r).items() if v>1])"
+
+## Rich evidence is not a reason to write
+
+The catalogue refused four splits that the evidence would easily have supported:
+app store rules, US entity obligations, checkout and local search. Each has
+between eight and thirteen verified findings behind it, and each returns almost
+nothing in the harvest.
+
+This is worth naming because the pull is strong in the opposite direction. Once
+the research exists, it feels wasteful not to use all of it, and a catalogue
+that uses all of it looks more impressive. It would also produce pages nobody
+searches for, which is the definition of work that cannot pay off.
+
+**Evidence decides whether a post can be written. Demand decides whether it
+should be.** Both gates, every time.

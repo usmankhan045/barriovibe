@@ -424,45 +424,69 @@ it is a business decision, not a code change.
 public register, and a fabricated one turns the strongest asset on the site into
 its largest liability.
 
-## The first post, and why
+## Order of work, as it now stands
 
-**1.1, the filer hub.** Not the flagship, deliberately.
+The guide half is delivered: 47 guides shipped, the last publishing 3 October.
+The blog half is eight posts written, and `CATALOGUE.md` holds 34 more that are
+researched and ready to draft.
 
-The SERP data shows SlideShare and a LinkedIn post ranking page one for
-"difference between filer and non filer": a commercial query being won by a
-slide deck. Thirteen shipped calculators expose a filer/non-filer toggle, so
-every claim in it links to a tool that proves the number on the reader's own
-figures. It is the clearest demonstration of what this site can do that
-competitors cannot, and it is the head of the cluster with the most spokes ready
-to follow.
+    1. /guides infrastructure, the template, the hub, schema     DONE
+    2. 47 guides across 11 clusters                              DONE
+    3. /blog content model, routes, check:posts                  DONE
+    4. 8 posts, scheduled through 8 October                      DONE
+    5. Harvest demand and verify evidence for the rest           DONE
+    6. Write the remaining 34, in catalogue order
 
-The cross-border flagship (7.1) is the more distinctive piece and stays in the
-plan, but it benefits from a ranked cluster linking into it.
+Step 6 is where this doc's Definition of done applies to each one. The order
+inside it is a commercial decision rather than a technical one, and the
+catalogue records the demand behind each category so it can be made on evidence.
 
-## Order of work
+**The historical note worth keeping.** The original plan here said to write one
+guide end to end and review it before writing the rest, because "the shape it
+settles is the shape the rest inherit". That was correct and it is why 47 guides
+share one renderer and one section union. The same discipline produced
+`ContentBlock.tsx` when posts arrived: the shape was already settled, so posts
+inherited it instead of growing a parallel copy.
 
-    1. /guides infrastructure: content/guides/, the template, the hub, schema
-    2. Post 1.1, the filer hub, end to end
-    3. Review it together before writing the rest
-    4. Wave 1: 1.2, 2.1, 3.1, 5.2, 7.1
-    5. Wave 2: complete guide clusters 1 and 2
-    6. /blog post model, then Wave 3: cluster 8
+## What a writing session actually looks like now
 
-The blog needs its own model and template. A guide is typed data updated in
-place with a "last reviewed" date; a post is dated, opinionated and stays where
-it is. Do not try to serve both from one component: the shared parts are the
-layout primitives, which they already share.
+Because the research is done, drafting a catalogue post is a narrower job than
+the earlier waves were. In order:
 
-Step 3 is the point. One finished guide is worth more than six drafts, because
-the shape it settles is the shape the rest inherit.
+1. **Read the catalogue entry.** It names the demand, the finding ids and the
+   angle. If the angle no longer looks right, change the entry rather than
+   writing against it silently.
+2. **Read the findings it cites**, in full, from `findings.jsonl`. Not the
+   summary in the catalogue: the record, including its `note`, which is where
+   the caveats live. Several records exist specifically to stop a figure being
+   published without its qualification.
+3. **Check nothing has moved.** Anything with a price, a rate or a policy in it
+   gets re-fetched. `sources/` records when each was last read.
+4. **Write it against the Definition of done below**, including the answer-first
+   discipline and the no-orphans rule.
+5. **Run `pnpm verify`**, which now includes `check:posts`.
 
-## Open items that gate specific posts
+The step people skip is 2, and it is the one that produces wrong sentences.
 
-`OPEN-ITEMS.md` lists six. None blocks 1.1 or Wave 1. They gate:
+## Open items, and what they still gate
 
-    2.5   PSEB renewal terms
-    7.5   Stripe and EIN timing
-    7.6   Form 5472 penalty detail
-    14.2  Pakistan's domestic data-protection position
+`findings.jsonl` holds 29 records at `contested` or `unverified`. None of them
+blocks a catalogue post, because the catalogue's second gate is answerability:
+an entry only exists where verified evidence already supports it.
 
-Close them with `research/fetch.py` before those posts, not before starting.
+Two items listed here previously are now closed. **Form 5472 penalty detail** was
+verified from the IRS instructions, including the e-filing prohibition, and is
+published. **Pakistan's domestic data-protection position** is no longer load
+bearing for the blog, since the posts went global.
+
+What remains open is recorded in `OPEN-ITEMS.md` with what to fetch. The rule is
+unchanged: close one with `research/fetch.py` before the post that needs it, not
+before starting work.
+
+**The failure mode to avoid here is the opposite of the obvious one.** The risk
+is not writing while something is unverified, which the gates prevent. It is
+treating a verified record as permanently true. Anything with a price, a rate,
+a policy or a platform capability in it decays, and several catalogue posts rest
+entirely on that kind of fact. `sources/` records when each URL was last read,
+and a post whose figures were read months ago needs them re-read rather than
+re-used.

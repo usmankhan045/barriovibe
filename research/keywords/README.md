@@ -18,12 +18,22 @@ Webmaster's keyword API requires authentication.
 
 ## What was obtained instead
 
-7,496 unique real queries harvested from Google and Bing autocomplete.
+14,522 unique real queries harvested from Google and Bing autocomplete, across
+six seed sets.
 
-| File | Queries | Geo | Seeds |
-| --- | ---: | --- | --- |
-| `pk-tax.jsonl` | 2,233 | Pakistan | 15 tax, corporate, IP, freelancer |
-| `ai-dev.jsonl` | 5,263 | US | 15 AI, automation, web, offshore |
+| File | Queries | Seeded on |
+| --- | ---: | --- |
+| `ai-dev.jsonl` | 5,263 | AI, automation, web, offshore, cost of build |
+| `ops.jsonl` | 2,467 | evaluating, monitoring and securing agents |
+| `pk-tax.jsonl` | 2,233 | Pakistani tax, corporate, IP, freelancer |
+| `fit.jsonl` | 2,105 | do I need an app, a website, an agent |
+| `buy.jsonl` | 1,452 | vetting an agency, contracts, code ownership |
+| `rescue.jsonl` | 1,199 | AI failure, RAG accuracy, chatbot problems |
+
+The last four were added while building `CATALOGUE.md`, and the reason is a
+lesson rather than an expansion. The first two harvests could not answer
+questions their seeds never asked, and a conclusion was briefly drawn from that
+silence. See "A harvest only finds what its seeds look for" below.
 
 **Autocomplete is not volume, and nothing here pretends it is.** What it is:
 Google's own ranked list of what people actually type after a prefix. That makes
@@ -80,6 +90,19 @@ sizing available for free.
 ## Reproducing and extending
 
     scrapling-py research/keywords/harvest.py <seeds.txt> <out.jsonl> --gl pk
+
+### Finding the demand behind a proposed post
+
+    python3 research/keywords/demand.py "<regex>"
+    python3 research/keywords/demand.py "<regex>" --top 30
+
+Searches every harvest at once and ranks matches by prominence. This is what
+makes the first gate in `CATALOGUE.md` enforceable rather than rhetorical: an
+entry in that file quotes the numbers this prints, so any claim about demand in
+the catalogue can be reproduced in one command.
+
+It is also the fastest way to kill a bad idea. "Questions to ask a software
+agency" felt like an obvious post and returns ONE matching query out of 14,522.
     python3 research/keywords/analyse.py <out.jsonl> [top-n]
 
 `harvest.py` expands each seed with a-z suffixes across both engines, which is
@@ -184,3 +207,34 @@ confident-looking empty result, so this failure mode cannot recur silently.
 - Weakness is a composition heuristic, not a difficulty score. It says what
   *kind* of page ranks, which for an unranked site is the more actionable
   signal.
+
+## A harvest only finds what its seeds look for
+
+Recorded because it produced a wrong conclusion that survived several hours and
+reached the user before being caught.
+
+While building the catalogue, the AI-failure cluster appeared to have almost no
+demand: about ten matching queries against 1,153 on cost. The inference drawn
+was that failure content was not worth writing.
+
+That was an artefact of the seed list. `ai-dev.jsonl` was seeded on products and
+costs and contained no failure seeds at all, so the harvest had never looked for
+those queries. Seeded properly, `rescue.jsonl` returned 1,199 of them, including
+`why ai implementations fail` at 93 hits, which is the single most prominent
+query in the entire corpus.
+
+**Absence in a harvest is evidence about the seeds, not about the world.** Before
+concluding that a topic has no demand, check whether anything was ever asked
+that could have found it, and seed the angle explicitly if not.
+
+## What the numbers in the catalogue mean
+
+`CATALOGUE.md` quotes a figure beside each query, for example
+`why ai implementations fail` 93. That is the `hits` field: how many times the
+query surfaced across seed expansions and engines.
+
+It is a prominence signal, not a volume. A query with 93 hits is one Google and
+Bing both consider a common continuation from many different prefixes. It does
+not mean 93 of anything, and it cannot be compared against a volume figure from
+a paid tool. Every use of these numbers in the catalogue is comparative: this
+cluster is larger than that one, this phrasing beats that phrasing.
