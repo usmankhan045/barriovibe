@@ -19,7 +19,8 @@
     "art:steps": "node scripts/fetch-step-art.mjs",
     "indexnow": "tsx scripts/indexnow.ts",
     "build:pdfs": "tsx scripts/build-pdfs.ts",
-    "reply": "tsx --conditions react-server scripts/reply.mts"
+    "reply": "tsx --conditions react-server scripts/reply.mts",
+    "signature": "tsx scripts/gen-signature.mts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.1",
