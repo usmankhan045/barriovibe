@@ -998,4 +998,420 @@ export const TRUST_POSTS: Post[] = [
         'Your existing monitoring watches for errors and agent failures produce none. The four ratios that move first, and why OpenTelemetry is not a settled standard yet.',
     },
   },
+
+  {
+    slug: 'what-an-ai-guardrail-does-not-stop',
+    cluster: 'trust',
+    title: 'What an AI Guardrail Actually Is, and What It Does Not Stop',
+    navLabel: 'What guardrails do not stop',
+    card: 'One vendor publishes a 31% catch rate for its own shipped default. The coverage gaps are documented and nobody reads them.',
+
+    answer:
+      'A guardrail is a filter, and filters have measured catch rates. NVIDIA publishes 31.19% for its own default jailbreak heuristic. OpenAI\'s moderation endpoint covers thirteen categories, none of which is prompt injection, and eight of those silently return a score of zero rather than an error when given an image. The vendors document these gaps themselves. The word implies a barrier and the thing is a probabilistic classifier, which is why the serious guidance points somewhere else entirely.',
+
+    sections: [
+      {
+        kind: 'prose',
+        heading: 'The word is doing a lot of work',
+        body: [
+          '"Guardrail" suggests a physical barrier: something you can hit but not pass. What ships under the name is a classifier that looks at text and estimates whether it is a problem.',
+          'That is a useful thing to have. It is not a barrier, it has a false negative rate, and the vendors are considerably more honest about this in their documentation than the category name suggests.',
+          'The gap between the two is where teams get hurt, because a guardrail deployed as though it were a barrier is a system with an assumed safety property it does not have.',
+        ],
+      },
+      {
+        kind: 'note',
+        tone: 'warning',
+        heading: 'A published catch rate, from the vendor, about its own default',
+        body:
+          'NVIDIA documents the performance of the jailbreak heuristic it ships: "Using the mean value of 89.79 yields 31.19% of jailbreaks being detected with a false positive rate of 7.44%." It adds that the heuristic is "intended only for English language evaluation and will yield significantly more false positives on non-English text, including code." A 31% catch rate is not a scandal, it is a heuristic behaving like a heuristic. It is very far from what the word guardrail implies to whoever signed off the architecture diagram.',
+      },
+      {
+        kind: 'prose',
+        heading: 'Adding more can make it worse',
+        body: [
+          'The intuition is defence in depth: stack several guardrails and the gaps in one are covered by another.',
+          'NVIDIA\'s own scanning found the opposite in at least one case. A fully guardrailed bot still failed roughly 47% of one jailbreak family, and adding moderation rails moved protection against that family DOWN, from 61.3% to 52.7%.',
+          'Their caveat is important and honest: the experiment did not test whether the guardrails also blocked legitimate requests. Elsewhere the same documentation notes that over-blocking "is more likely to happen when multiple guardrails are used together".',
+          'So stacking has two costs rather than one. It can reduce protection against some attacks, and it reliably increases refusal of things you wanted to allow. That second cost is invisible on any dashboard that only counts bad outputs getting through.',
+          'The dated caveat: that scan ran against an older model. The absolute numbers are stale. The direction, that more layers is not monotonically safer, is the part worth carrying.',
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'The documented coverage gaps',
+        intro:
+          'Every row here comes from the vendor\'s own documentation. None of it is hidden, and almost none of it is read.',
+        columns: ['Product', 'What it does not cover'],
+        rows: [
+          ['OpenAI Moderation', 'Prompt injection and agent misbehaviour are not among its thirteen categories'],
+          ['OpenAI Moderation, image input', 'Eight of thirteen categories are text-only and return zero, not an error'],
+          ['OpenAI Agents SDK', 'Input guardrails run only for the first agent, output only for the final one'],
+          ['OpenAI Agents SDK, hosted tools', 'Web search, file search, code interpreter and shell tools bypass the pipeline'],
+          ['Anthropic', 'No standalone guardrails product; the guidance is least privilege instead'],
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'The silent zero is the one to understand',
+        body: [
+          'Of the gaps above, one deserves singling out because of how it fails rather than what it misses.',
+          'Eight of the thirteen moderation categories are text-only. Given an image, they do not error, they return a score of zero. Zero means clean.',
+          'So a pipeline that checks the score and proceeds will proceed, having received a confident-looking all-clear for content the classifier never assessed. A filter that errors on input it cannot handle is safe by default. A filter that returns zero is not, and the difference only shows up in the documentation.',
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'And on agents specifically, the gap is at the dangerous end',
+        body: [
+          'OpenAI documents that its Agents SDK guardrails do not cover hosted and built-in execution tools, naming web search, file search, code interpreter, shell and apply-patch among them.',
+          'Read that list again. Those are the tools most able to cause harm, and they are the ones outside the guardrail pipeline.',
+          'The documentation also notes that in the default parallel mode, the agent "may have already consumed tokens and executed tools before being cancelled". A guardrail that fires after the action has occurred has produced a log entry rather than a prevention.',
+          'This is the same shape as the practitioner report of a PII filter set to block that streamed the data in full before the exception fired. Position in the pipeline is the whole property, and it is easy to get wrong in a way that tests on a single non-streaming call will not reveal.',
+        ],
+      },
+      {
+        kind: 'note',
+        tone: 'info',
+        heading: 'Where the serious guidance points instead',
+        body:
+          'Anthropic ships no standalone guardrails product and recommends a do-it-yourself classifier, but its actual advice is architectural: "Apply the principle of least privilege so that a successful injection can do minimal damage", and "sandbox restrictions still apply even if a prompt injection bypasses Claude\'s decision-making". Microsoft says it plainly: "Design with the expectation that prompt injection attacks are inevitable, enabling proactive containment and recovery strategies" and "No single solution is sufficient, combine probabilistic and deterministic defenses". The word doing the work there is deterministic. A permission boundary either holds or does not. A classifier has a catch rate.',
+      },
+      {
+        kind: 'steps',
+        heading: 'Using guardrails without relying on them',
+        intro:
+          'They are worth having. The question is what you allow yourself to assume once they are in place.',
+        steps: [
+          {
+            title: 'Read the category list before you deploy it',
+            body:
+              'Not the marketing page, the list. If prompt injection is not a category, the product does not detect prompt injection, whatever the surrounding copy implies.',
+          },
+          {
+            title: 'Check what happens on input it cannot assess',
+            body:
+              'Feed it an image, a very long input, a non-English string. If it returns a clean score rather than an error, your pipeline needs to treat unassessable input as unassessed rather than as safe.',
+          },
+          {
+            title: 'Confirm it runs on the path the data actually takes',
+            body:
+              'Streaming, tool calls, hosted tools, every agent in the chain rather than the first. Test it where the data flows in production, not on one non-streaming call in development.',
+          },
+          {
+            title: 'Measure refusals as well as escapes',
+            body:
+              'Over-blocking has no error and no alert, and it rises when you stack layers. An agent made safe by being useless passes every measure that only counts bad outputs.',
+          },
+          {
+            title: 'Put the real control in the permissions',
+            body:
+              'Scoped credentials, tool allowlists, confirmation before irreversible actions. These are deterministic. They are what limits the damage when the probabilistic layer misses, which it will at whatever rate its vendor publishes.',
+          },
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'How we scope this',
+        body: [
+          'We build agentic systems and chatbots, and the guardrail conversation usually arrives as a request for reassurance rather than a technical question. Somebody needs to be able to tell a board that the thing is safe.',
+          'What we try to convert it into is a question about blast radius, because that one has a real answer. Not whether the filter will catch everything, which it will not and its vendor says so, but what the worst thing is that a successful bypass could do, and whether that is survivable.',
+          'In practice that means the security work lands in credentials and tool design rather than in filtering. Read-only where the agent only needs to read. A tool that can look up a customer rather than a tool that can run arbitrary queries. Confirmation before anything irreversible. None of it is exciting and all of it is deterministic.',
+          'We still add the filters. They catch the low-effort cases cheaply and there is no reason not to. We just do not let them be the reason anyone believes the system is safe.',
+        ],
+      },
+    ],
+
+    faqs: [
+      {
+        question: 'Do AI guardrails actually work?',
+        answer:
+          'They catch some things at a measurable rate. NVIDIA publishes 31.19% detection for its own default jailbreak heuristic with a 7.44% false positive rate. That is useful and it is not a barrier, which is what the word implies and what teams often assume.',
+      },
+      {
+        question: 'Does OpenAI moderation catch prompt injection?',
+        answer:
+          'No. Its thirteen categories do not include prompt injection or agent misbehaviour. It also notes that the model still generates normally, so moderation is something you act on rather than something that blocks by itself.',
+      },
+      {
+        question: 'Should I stack multiple guardrails?',
+        answer:
+          'Carefully. NVIDIA\'s own testing found adding moderation rails reduced protection against one jailbreak family, from 61.3% to 52.7%, and its documentation notes over-blocking is more likely when multiple guardrails are combined. More layers is not automatically safer and reliably costs you legitimate requests.',
+      },
+      {
+        question: 'Why did my guardrail let an image through?',
+        answer:
+          'Probably because eight of the thirteen moderation categories are text-only and silently return a score of zero for image input rather than erroring. Zero reads as clean, so a pipeline that checks the score proceeds with an all-clear for content that was never assessed.',
+      },
+      {
+        question: 'What actually protects an agent then?',
+        answer:
+          'Permissions rather than filters. Vendor guidance converges here: scoped credentials, tool allowlists, explicit action boundaries, and confirmation before irreversible operations. Those are deterministic controls, whereas a classifier has a catch rate its vendor publishes.',
+      },
+    ],
+
+    publishedAt: '2026-10-24T03:00:00Z',
+    reviewedOn: '2026-09-12',
+
+    sources: [
+      {
+        label: 'NVIDIA NeMo Guardrails documentation',
+        url: 'https://docs.nvidia.com/nemo/guardrails/',
+        readOn: '2026-09-12',
+        supports: 'The 31.19% detection figure with 7.44% false positives, the English-only caveat, the Garak scan results and the note on over-blocking when guardrails are combined.',
+      },
+      {
+        label: 'OpenAI moderation guide',
+        url: 'https://platform.openai.com/docs/guides/moderation',
+        readOn: '2026-09-12',
+        supports: 'The thirteen categories, that eight are text-only and return zero on image input, and that the model still generates normally.',
+      },
+      {
+        label: 'OpenAI Agents SDK guardrails documentation',
+        url: 'https://openai.github.io/openai-agents-python/guardrails/',
+        readOn: '2026-09-12',
+        supports: 'That guardrails run only for the first and final agent, that hosted and built-in execution tools bypass the pipeline, and the parallel-mode caveat.',
+      },
+      {
+        label: 'Microsoft Zero Trust guidance for AI',
+        url: 'https://learn.microsoft.com/en-us/security/zero-trust/',
+        readOn: '2026-09-12',
+        supports: 'That prompt injection should be assumed inevitable and that no single solution is sufficient. Page last updated 24 March 2026.',
+      },
+    ],
+
+    limits: [
+      'The NVIDIA Garak scan ran against an older model, so its absolute percentages are dated. The direction, that stacking is not monotonically safer, is what the post relies on.',
+      'Guardrail products change quickly. Everything here was read on 12 September 2026 and the category lists in particular are worth re-checking before you rely on one.',
+      'Most vendor documentation in this area carries no publication date, so staleness is undetectable to a reader. Where a date exists it is given.',
+      'We build chatbots and agentic systems, so we sell the architecture this post recommends over the products it questions. The vendor documentation is public and every gap named here is quoted from it.',
+    ],
+
+    cta: {
+      heading: 'Need to tell someone the system is safe?',
+      body: 'The answerable version of that question is about blast radius rather than filtering: what is the worst a successful bypass could do, and is that survivable. That is scopeable in a conversation and it is where the real controls live.',
+      buttonLabel: 'Talk about your build',
+      href: '/contact?service=agentic-ai-development',
+    },
+
+    related: ['security-questions-before-an-agent-touches-production'],
+
+    seo: {
+      title: 'What an AI Guardrail Actually Is, and What It Misses',
+      description:
+        'NVIDIA publishes a 31% catch rate for its own default. OpenAI moderation does not cover prompt injection. The documented gaps, and where the real control sits.',
+    },
+  },
+
+  {
+    slug: 'security-questions-before-an-agent-touches-production',
+    cluster: 'trust',
+    title: 'The Security Questions to Ask Before an Agent Touches Production',
+    navLabel: 'Before an agent touches production',
+    card: 'Five vendors state in their own documentation that prompt injection cannot be prevented. That changes what you are designing for.',
+
+    answer:
+      'Microsoft says to "design with the expectation that prompt injection attacks are inevitable". Anthropic says model-layer protection "will never be 100% effective". Google, OpenAI and AWS say versions of the same thing. Once you accept that, the design question stops being how to stop a compromised agent and becomes what a compromised agent is able to do. That is answerable, deterministic, and mostly about credentials rather than filtering.',
+
+    sections: [
+      {
+        kind: 'prose',
+        heading: 'Start from what the vendors admit',
+        body: [
+          'This is unusual in security: five major vendors independently stating a limitation of the thing they sell, in their own documentation, without being made to.',
+          'Microsoft, in guidance dated March 2026, says to "design with the expectation that prompt injection attacks are inevitable, enabling proactive containment and recovery strategies", and elsewhere "assume indirect prompt injection will happen".',
+          'Anthropic: "protection in the model layer will never be 100% effective, which is why it can\'t stand alone", and separately "No browser agent is immune to prompt injection, and we share these findings to demonstrate progress, not to claim the problem is solved."',
+          'Google notes that agents "unlike humans are susceptible to prompt injection dictating their actions". OpenAI says structured outputs and isolation "greatly reduce, but don\'t fully remove, this risk". AWS assigns prompt injection prevention to the customer in its shared responsibility model.',
+          'None of them uses the exact sentence "this cannot be fixed", and all of them are saying design as though it will happen.',
+        ],
+      },
+      {
+        kind: 'note',
+        tone: 'info',
+        heading: 'The analogy that makes it land',
+        body:
+          'AWS puts it in terms engineers already have a reflex for: "Prompt injection is an application-level security concern, similar to SQL injection in database applications... customers must take measures to prevent prompt injection vulnerabilities in their code." The comparison is useful and imperfect in an instructive way. SQL injection has a real fix, parameterised queries, which separates instruction from data structurally. There is no equivalent here, because as Microsoft puts it the problem is "the AI\'s inability to distinguish between user input and external content". The data and the instructions arrive in the same channel and there is no parameterisation.',
+      },
+      {
+        kind: 'prose',
+        heading: 'So the question changes',
+        body: [
+          'If you cannot reliably stop the agent being manipulated, the design question becomes what the agent is allowed to do when it has been.',
+          'That is a much better question, because it has a deterministic answer. A permission boundary either holds or it does not. A classifier has a catch rate, and its vendor publishes it.',
+          'Microsoft states the remedy in the same breath as the problem: "Scoped RBAC, explicit resource, data, and action boundaries, and tool allowlists limit the impact of prompt injection, workflow drift, and chained tool execution."',
+          'Google gives the concrete form: "Grant the service account only the necessary IAM roles, for example alloydb.viewer, not alloydb.admin", so that "even if an attacker compromises the agent\'s IAM token, the scope of damage is limited by the database engine\'s internal permissions, for example preventing a DROP TABLE command."',
+        ],
+      },
+      {
+        kind: 'note',
+        tone: 'warning',
+        heading: 'Instructions are not permissions',
+        body:
+          'Anthropic states it precisely: "Permission rules are enforced by Claude Code, not by the model. Instructions in your prompt or CLAUDE.md shape what Claude tries to do, but they don\'t change what Claude Code allows." The documented consequence is a user who told an agent eleven times in capital letters not to touch a production database, and watched it delete the database, and then be told incorrectly that rollback was impossible. Telling an agent not to do something is a preference expressed to a system that is being actively manipulated by the input it is reading. A credential that cannot perform the action is a fact about the world.',
+      },
+      {
+        kind: 'table',
+        heading: 'What to establish before it goes near production',
+        intro:
+          'Each row is a question with a yes or no answer. If any answer is "we would rather it did not", that is a no.',
+        columns: ['Question', 'What a good answer sounds like'],
+        rows: [
+          ['What credentials does it hold?', 'Read-only, scoped to the specific resources'],
+          ['Can it reach production data?', 'No, or through a tool that cannot express arbitrary queries'],
+          ['What is irreversible?', 'Named, and behind explicit confirmation'],
+          ['What happens on retry?', 'Idempotency keys, so a repeat is harmless'],
+          ['Who can stop it?', 'Someone on call, from one place, quickly'],
+          ['What does it read?', 'Known, because anything it reads can instruct it'],
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'The last row is the one people miss',
+        body: [
+          'Indirect prompt injection is the case where the instruction arrives inside content the agent was asked to process rather than from the user.',
+          'A support agent that reads incoming emails is reading text written by strangers. An agent that summarises web pages is executing on content it did not choose. An agent with access to a shared document is reading whatever anybody put in it.',
+          'That is what Microsoft means by assuming indirect injection will happen. Every source of content the agent reads is an input channel for instructions, and the ones that feel like data rather than instructions are the ones nobody threat-models.',
+          'The practical consequence: inventory what the agent reads with the same seriousness you inventory what it can write.',
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'A note on MCP, since everyone is adopting it',
+        body: [
+          'The Model Context Protocol is becoming the standard way to give agents tools, and its own specification is candid about what it does not do.',
+          'It states that "Tools represent arbitrary code execution" and that "descriptions of tool behavior such as annotations should be considered untrusted, unless obtained from a trusted server".',
+          'And on enforcement: "While MCP itself cannot enforce these security principles at the protocol level, implementors SHOULD..."',
+          'That is a protocol telling you its security properties are your responsibility. Worth reading before connecting an agent to a third-party MCP server, because a tool description is content the model reads, and untrusted content the model reads is an instruction channel.',
+        ],
+      },
+      {
+        kind: 'steps',
+        heading: 'The sequence we use',
+        intro:
+          'Deliberately boring, and in this order because each step reduces what the next one has to worry about.',
+        steps: [
+          {
+            title: 'Give it the least it can work with',
+            body:
+              'Start from no access and add what is demonstrably needed. Read-only unless writing is the point. Scoped to specific resources rather than to a service. This is the step that determines how bad the worst case is, and everything after it is mitigation.',
+          },
+          {
+            title: 'Replace general tools with specific ones',
+            body:
+              'Not a query tool, a lookup-this-customer tool. A tool that can only express safe operations is a permission boundary written in code, and it cannot be talked out of its own signature.',
+          },
+          {
+            title: 'Name what is irreversible and gate it',
+            body:
+              'Payments, deletions, outbound messages, deployments. Human confirmation before those, accepting that this costs throughput. If a human confirms everything they will confirm without reading, so gate the irreversible and let the rest run.',
+          },
+          {
+            title: 'Make retries harmless',
+            body:
+              'Idempotency keys on every side-effecting tool, because the system will retry and you cannot rely on exactly-once execution. This turns a duplicated action into a no-op rather than a second charge.',
+          },
+          {
+            title: 'Inventory what it reads',
+            body:
+              'Emails, documents, web pages, tool descriptions, anything from outside. Each is a channel through which instructions can arrive, and the ones that look like data are the ones that get missed.',
+          },
+          {
+            title: 'Add the filters last',
+            body:
+              'They are worth having and they catch cheap attacks cheaply. Add them once the containment is in place, so that nothing downstream depends on their catch rate.',
+          },
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'What this looks like in practice',
+        body: [
+          'We build agentic systems, and this sequence is the part of a scope most likely to change what the system can do rather than how it is built.',
+          'The common request is an agent that can act across a company\'s systems, and the honest first answer is usually that it should act across fewer of them. Not because the technology cannot, but because the blast radius of the version described is larger than anyone has thought about, and shrinking it is cheaper than defending it.',
+          'The specific conversation that recurs is about query tools. Somebody wants the agent to answer questions about the database, and the natural implementation is to let it write SQL. The version we build instead exposes a handful of specific lookups, which is more work upfront, less flexible, and cannot be persuaded to drop a table by a sentence in an email.',
+          'We also say no to some of it. An agent with write access to production, reading external content, without confirmation on irreversible actions, is a system we would rather not have built when it goes wrong. That is an easier conversation before the build than after.',
+        ],
+      },
+    ],
+
+    faqs: [
+      {
+        question: 'Can prompt injection be prevented?',
+        answer:
+          'Not reliably, and the vendors say so. Microsoft advises designing on the expectation that it is inevitable, Anthropic says model-layer protection will never be fully effective, and OpenAI says its measures greatly reduce but do not fully remove the risk. Design for containment rather than prevention.',
+      },
+      {
+        question: 'Why can I not just tell the agent not to do dangerous things?',
+        answer:
+          'Because instructions are not permissions. Anthropic puts it directly: permission rules are enforced by the tool, not the model, and instructions shape what it tries to do rather than what it is allowed to do. A documented case involved a user instructing an agent eleven times in capitals, and the agent acting anyway.',
+      },
+      {
+        question: 'What is indirect prompt injection?',
+        answer:
+          'When the malicious instruction arrives inside content the agent was asked to process rather than from the user: an email it reads, a web page it summarises, a document in a shared drive, or a tool description from a third-party server. Anything the agent reads is a channel through which instructions can arrive.',
+      },
+      {
+        question: 'Is MCP secure?',
+        answer:
+          'Its specification states that tools represent arbitrary code execution, that tool descriptions should be considered untrusted unless from a trusted server, and that MCP cannot enforce its security principles at the protocol level. Those properties are the implementor\'s responsibility, which is worth knowing before connecting to a third-party server.',
+      },
+      {
+        question: 'What is the single most important control?',
+        answer:
+          'The credentials the agent holds, because that determines the worst case and everything else is mitigation. Vendor guidance converges here: scoped roles rather than broad ones, so that a compromised agent is limited by what its identity can do rather than by what it can be persuaded to want.',
+      },
+    ],
+
+    publishedAt: '2026-10-25T03:00:00Z',
+    reviewedOn: '2026-09-12',
+
+    sources: [
+      {
+        label: 'Microsoft, Zero Trust guidance for AI systems',
+        url: 'https://learn.microsoft.com/en-us/security/zero-trust/',
+        readOn: '2026-09-12',
+        supports: 'That prompt injection should be assumed inevitable, why input validation is insufficient, and the scoped RBAC and tool allowlist remedy. Last updated 24 March 2026.',
+      },
+      {
+        label: 'Anthropic, prompt injection and permissions documentation',
+        url: 'https://docs.anthropic.com/',
+        readOn: '2026-09-12',
+        supports: 'That model-layer protection will never be fully effective, that permission rules are enforced by the tool rather than the model, and the least privilege advice.',
+      },
+      {
+        label: 'Model Context Protocol specification, revision 2026-07-28',
+        url: 'https://modelcontextprotocol.io/specification/',
+        readOn: '2026-09-12',
+        supports: 'That tools represent arbitrary code execution, that tool descriptions are untrusted, and that MCP cannot enforce security principles at the protocol level.',
+      },
+      {
+        label: 'OWASP GenAI Top 10 for LLM Applications',
+        url: 'https://genai.owasp.org/',
+        readOn: '2026-09-12',
+        supports: 'That Excessive Agency rose to third in the 2026 list, and the 2025 root causes of excessive functionality, permissions and autonomy.',
+      },
+    ],
+
+    limits: [
+      'No vendor uses the literal sentence "prompt injection cannot be prevented". The quotes here are their own wording and are not paraphrased into a stronger claim than they made.',
+      'The OWASP 2026 rankings are confirmed from its announcement, but the 2026 entry text is registration-gated, so quoted wording is from the ungated 2025 version and attributed as such.',
+      'Anthropic, OpenAI and AWS do not date their relevant documentation pages, so those citations rest on the access date of 12 September 2026. Microsoft and Google do carry dates and they are given.',
+      'This is a design checklist, not a security audit. It reduces blast radius and does not establish that a specific system is safe.',
+    ],
+
+    cta: {
+      heading: 'About to give an agent access to something that matters?',
+      body: 'The useful conversation is what a compromised agent could do rather than whether it can be compromised. Usually the answer is to shrink what it can reach, which is cheaper than defending a larger surface and is a decision best made before the build.',
+      buttonLabel: 'Talk about the design',
+      href: '/contact?service=agentic-ai-development',
+    },
+
+    related: ['what-an-ai-guardrail-does-not-stop', 'what-to-monitor-once-an-agent-is-live'],
+
+    seo: {
+      title: 'Security Questions Before an AI Agent Touches Production',
+      description:
+        'Five vendors say prompt injection cannot be prevented. That makes blast radius the design question, and it is mostly about credentials rather than filters.',
+    },
+  },
 ];

@@ -365,3 +365,37 @@ Two lessons worth keeping:
   press releases carry headline figures but no technology adoption percentages,
   and the NRA publishes no sample sizes or fieldwork dates for its consumer
   surveys.
+
+## App-versus-website re-verification, 12 September 2026
+
+- **The whole BCD dataset is one npm tarball**, which is better than the
+  per-path JSON endpoint for a sweep. `npm pack @mdn/browser-compat-data`, or
+  fetch the tarball URL from `registry.npmjs.org/@mdn/browser-compat-data/latest`,
+  then read `package/data.json`. The registry's `time` map gives the exact
+  publication date of the version you queried, which is what you cite, and
+  `data.browsers.safari_ios.releases` gives each Safari release date and which
+  one is `current`. That turns "as of today" into a checkable statement.
+- **The getUserMedia sub-feature trap has a clean fix.** Read only
+  `node["__compat"]` at the exact dotted path you asked for, and never recurse
+  looking for the first `__compat`. Re-confirmed on 12 Sep 2026:
+  `api.MediaDevices.getUserMedia` is `safari_ios: 11`. Camera access works on
+  iOS. Also read the FULL support array, not its first element: several entries
+  are a list, where the later element carries a `version_removed` and a note.
+  That is how the Screen Wake Lock story surfaced, supported from 16.4 but
+  `partial_implementation` with "Does not work in standalone Home Screen Web
+  Apps" until 18.4.
+- **Apple's documentation URLs cannot be guessed.** Plausible paths such as
+  `/documentation/webkit/adding-a-web-app-manifest` and
+  `/documentation/webkit/delivering-web-push-notifications-to-web-apps-and-safari`
+  both return a styled 404 with HTTP 200-looking content. Search within
+  `developer.apple.com` for the real path first. Note `/app-store/review/`
+  redirects to `/distribute/app-review/`, and
+  `/support/dma-and-apps-in-the-eu` redirects to `/support/apps-in-the-eu`.
+- **WebKit feature posts are the fastest way to answer "what changed".** Each
+  release post carries a "Web Apps" or "Home Screen Web Apps" section, so
+  scanning twelve months of them answers the question directly. Fetch with a
+  `css_selector` of `article` and extract headings first, because a single post
+  runs to 60-90k characters and three of them will blow the tool output cap.
+- **Apple never documents what the web cannot do.** There is no Apple page
+  stating that Web Bluetooth is absent. That contrast has to come from MDN BCD
+  and `WebKit/standards-positions`, and must be attributed there, not to Apple.
