@@ -3022,6 +3022,51 @@
     box-shadow: var(--shadow-btn-chrome-hover);
   }
 
+  /* WHY THE HOVER SPRITES ARE WARMED, AND WHY IT IS DONE LIKE THIS.
+
+     The hover rules above swap border-image-source to a second PNG. A browser
+     does not fetch an image referenced only inside a :hover rule until that
+     rule first matches, so the request started under the cursor: for the one
+     frame before the 34KB sprite decoded, the button had no border-image, and
+     .u-btn--blue/--chrome set border-color:transparent and background-image:
+     none, so the pill vanished and the canvas showed through it. It read as a
+     white flash on the first hover of every page load, once per sprite.
+
+     Warming them needs an element that genuinely paints, since a display:none
+     subtree is not fetched at all, and content-visibility or a zero opacity on
+     the real button would fight the gloss. So this is a 1px decoy: it paints,
+     which is what triggers the fetch, and it is clipped, transparent, inert and
+     out of the a11y tree, so it cannot be seen, hit, scrolled to or read out.
+     By the time a cursor reaches a button both sprites are in cache and the
+     swap is instant.
+
+     Keep the two urls below in sync with the :hover rules above. */
+  .u-btn-sprite-warm {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    opacity: 0.01;
+    pointer-events: none;
+    z-index: -1;
+    border-style: solid;
+    border-width: 0;
+    border-image-slice: 0 64 fill;
+    border-image-source: url("/art/btn-blue-hover.png");
+  }
+
+  .u-btn-sprite-warm::after {
+    content: "";
+    display: block;
+    width: 1px;
+    height: 1px;
+    border-style: solid;
+    border-width: 0;
+    border-image-slice: 0 62 fill;
+    border-image-source: url("/art/btn-chrome-hover.png");
+  }
+
   .u-btn--sm {
     height: 2.625rem; /* 42 */
     --btn-cap: 21px;

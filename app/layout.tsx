@@ -59,6 +59,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           stays a Server Component. See components/ui/Reveal.tsx.
         */}
         <RevealObserver />
+        {/*
+          Warms the two button hover sprites. They are referenced only from
+          :hover rules, so without this the first hover on a page fetches a
+          34KB PNG with the cursor already on the button and the pill flashes
+          empty for a frame. See .u-btn-sprite-warm in app/globals.css.
+        */}
+        <div className="u-btn-sprite-warm" aria-hidden="true" />
       </body>
     </html>
   );
