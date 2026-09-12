@@ -7,6 +7,7 @@ import { SHIPPING_POSTS } from './shipping';
 import { US_ENTITY_POSTS } from './us-entity';
 import { AI_FAILURE_POSTS } from './ai-failure';
 import { AUTOMATE_OR_HIRE_POSTS } from './automate-or-hire';
+import { TRUST_POSTS } from './trust';
 
 export type { Post, PostCluster, PostClusterSlug, PostSource } from './types';
 
@@ -43,6 +44,14 @@ export const POST_CLUSTERS: PostCluster[] = [
     intro:
       'Cost is the most commercially serious question asked about AI agents and the worst answered, because almost every published figure is an estimate with no method behind it. These posts show the calculation and name the prices it uses.',
     icon: 'sparkles',
+  },
+  {
+    slug: 'trust',
+    title: 'Making AI trustworthy',
+    card: 'How to tell whether a system is working, what to watch once it is live, and what a guardrail does not stop.',
+    intro:
+      'These are the questions people ask into a void: repeated public threads about evaluating and monitoring agents get almost no replies, into a space full of vendors selling observability. The answers exist, they are mostly unglamorous, and they are what separates a system you can trust from one you merely like.',
+    icon: 'shield',
   },
   {
     slug: 'automate-or-hire',
@@ -104,6 +113,7 @@ export const ALL_POSTS: Post[] = [
   ...US_ENTITY_POSTS,
   ...AI_FAILURE_POSTS,
   ...AUTOMATE_OR_HIRE_POSTS,
+  ...TRUST_POSTS,
 ];
 
 /**

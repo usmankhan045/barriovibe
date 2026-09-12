@@ -59,7 +59,8 @@ export type PostClusterSlug =
   | 'shipping'
   | 'us-entity'
   | 'ai-failure'
-  | 'automate-or-hire';
+  | 'automate-or-hire'
+  | 'trust';
 
 export interface PostCluster {
   slug: PostClusterSlug;
