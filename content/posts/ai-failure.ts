@@ -482,6 +482,15 @@ export const AI_FAILURE_POSTS: Post[] = [
       },
       {
         kind: 'prose',
+        heading: 'What we build differently because of this',
+        body: [
+          'We build agentic systems, and the gates above are not a checklist we recite, they are the parts of the build that clients most often ask to cut.',
+          'The request is reasonable on its face: the evaluation set is unglamorous, the idempotency work touches systems the agent was supposed to simplify, and none of it demonstrates well. It is all cost with nothing to show at the demo.',
+          'What we have learned to say is that those parts are the difference between a system you can trust and a system you merely like. An agent without them works exactly as well right up to the moment it does not, and the moment it does not is silent by definition. We would rather scope them in and have the conversation about price than leave them out and have the other conversation later.',
+        ],
+      },
+      {
+        kind: 'prose',
         heading: 'The honest limit of this post',
         body: [
           'These are practitioner reports rather than a measured study. They establish that the complaint recurs, independently, across different teams and frameworks, and in strikingly similar language. They do not establish how often it happens, and anyone offering you a percentage for that has invented it.',
@@ -850,6 +859,15 @@ export const AI_FAILURE_POSTS: Post[] = [
             body:
               'Tokens per completed task at realistic volume, plus the failure cases, which are the expensive ones. A per-run budget is what stops a loop while it is still cheap.',
           },
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'The question we ask first',
+        body: [
+          'We build agentic AI and retrieval systems, and the first question we ask about a stalled pilot is not about the model. It is who owns this in March.',
+          'It sounds like a procedural question and it is a diagnostic one. If there is a name, the other problems are usually solvable, because someone is motivated to solve them. If there is no name, the exception handling never gets built, the evaluation set never gets written, and the system degrades quietly until somebody quietly stops using it.',
+          'The second question is the exception rate on unchosen inputs, because it tells us what we are actually being asked to build. A high rate does not mean no project. It means the project is a human-in-the-loop workflow with a queue, a rota and an interface for the human, which is a fine thing to build and a different thing to price.',
         ],
       },
       {

@@ -85,6 +85,16 @@ export const AUTOMATE_OR_HIRE_POSTS: Post[] = [
         ],
       },
       {
+        kind: 'prose',
+        heading: 'What this looks like in the work',
+        body: [
+          'We build workflow automation, so we see which proposals arrive already in the losing quadrant, and there is a pattern to it.',
+          'The task is almost always chosen because it is visible rather than because it is expensive. Somebody watches a colleague copy data between two systems and thinks that should be automated, which it probably should. But the copying takes four minutes a day and the integration takes three weeks, and nobody multiplied before deciding.',
+          'The tasks that actually pay are usually duller and less visible: the reconciliation nobody mentions because it happens at month end, the report that takes a morning because the data comes from four places. Those have volume, they are error-prone under time pressure, and they are exactly what the mechanism above predicts.',
+          'This is why the first thing we ask for is not a description of the process but a number: how long it takes and how often it happens. It settles more of these conversations than anything either side could argue.',
+        ],
+      },
+      {
         kind: 'steps',
         heading: 'Applying this to a real decision',
         intro:
@@ -399,6 +409,16 @@ export const AUTOMATE_OR_HIRE_POSTS: Post[] = [
       },
       {
         kind: 'prose',
+        heading: 'Where we see this land',
+        body: [
+          'We build agentic AI and retrieval systems, and the pattern in this research matches what the successful deployments have in common.',
+          'The ones that work are usually built on a corpus of the organisation\'s own resolved work: past tickets, previous advice, the documents that record how things were actually decided here. That is the same mechanism the study identifies, which is why it helps new people most. The system is not being clever, it is making institutional knowledge reachable.',
+          'The ones that disappoint are usually built on generic capability for an experienced team, where the honest answer was always that they already knew this. We have said so before building, and it is a better conversation than the one that happens six months later.',
+          'It also changes what we ask for at the start. If the corpus of past work does not exist, or is scattered across inboxes, that is the project before the project, and pretending otherwise produces a system with nothing to retrieve.',
+        ],
+      },
+      {
+        kind: 'prose',
         heading: 'What the evidence does not cover',
         body: [
           'Both studies are about assistive tools used by a person doing a task, not about agents acting autonomously. The economics of the second are different and much less well measured.',
@@ -589,6 +609,16 @@ export const AUTOMATE_OR_HIRE_POSTS: Post[] = [
             body:
               'If the steps only make sense historically, automating them makes the history permanent. This is the point of Hammer\'s argument and it is the step under the most time pressure to skip.',
           },
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'What we usually find',
+        body: [
+          'We build workflow automation, and spreadsheet rescues are a recurring request. The most common outcome is not the one the client expected when they got in touch.',
+          'Frequently the file is holding two or three unrelated processes that grew into one workbook because that is where the data already was. Separating them is most of the fix, and it is a smaller job than automating the whole thing would have been.',
+          'The second most common finding is that the manual work everyone complains about is not in the spreadsheet at all. It is upstream, in how the data arrives: a form that permits free text where it should offer four options, an export that has to be reshaped every time. Fixing the input removes the work rather than automating it, which is cheaper and does not leave anything to maintain.',
+          'Both of those are worse business for us than building an automation would be. They are also what we would want told to us, which is the standard we try to hold.',
         ],
       },
       {
@@ -784,6 +814,16 @@ export const AUTOMATE_OR_HIRE_POSTS: Post[] = [
             body:
               'Wiener\'s finding is that it relocates. Plan for where it lands, which is usually onto fewer people at more difficult moments, and staff for that rather than for the average.',
           },
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'How this changes a build',
+        body: [
+          'We build workflow automation, and the residue is the part of the scope that gets negotiated hardest, because it is the part that looks like it should be free.',
+          'The automation itself is legible: these steps, that system, this trigger. The residue is a question about people, and it usually arrives as an assumption rather than a requirement. The exceptions will just go to the team, and the team will cope.',
+          'They will, for a while. What Bainbridge describes is what happens next, and it is slow enough that nobody attributes it to the automation: the team gets less practised at the cases that now only reach them when something has gone wrong.',
+          'So the questions we push on are unglamorous ones. Who sees the exceptions, what do they see when they do, how will they still be good at handling them in a year, and what does the system tell them about what it already tried. A handover with no state is the single most common way a well-built automation becomes a burden.',
         ],
       },
       {

@@ -167,7 +167,7 @@ export const ECOMMERCE_POSTS: Post[] = [
       heading: 'Building or fixing a Pakistani store?',
       body: 'We build Shopify and WooCommerce stores from Pakistan and deal with this payment stack routinely. If you are choosing a platform, or already launched and found the fees, that is a short conversation worth having before the next build.',
       buttonLabel: 'Talk about your store',
-      href: '/contact?service=shopify',
+      href: '/contact?service=shopify-store-development',
     },
 
     seo: {
@@ -264,6 +264,16 @@ export const ECOMMERCE_POSTS: Post[] = [
           'Use click-to-WhatsApp ads where you would otherwise send a marketing template. You are paying Meta for the ad either way, and the resulting conversation is free for 72 hours rather than $0.0473 a message.',
           'Categorise templates honestly, and check how Meta categorised them. Utility is a fifth of the marketing rate, and an order update genuinely is a utility message. But categories are Meta\'s call, not yours, and a promotional message dressed as a receipt will be recategorised.',
           'Watch the authentication-international rate. At $0.0750 it is the most expensive thing on the card, and it is easy to trigger without meaning to if you are verifying users outside your own market.',
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'The question we ask before building one',
+        body: [
+          'We build WhatsApp chatbots, and the first question decides almost everything about the cost: is this bot answering people, or contacting them?',
+          'An answering bot lives inside the 24-hour window, where replies are free. Its Meta bill for the conversation is nothing, however much it says, and the cost of the project is the build rather than the running. That is the bot most businesses actually want when they describe what they need.',
+          'A contacting bot pays per template, at the Pakistan marketing rate, on every message it initiates. It can still be worth it, but it is a marketing budget with a different shape rather than a support tool, and the two get conflated in the brief surprisingly often.',
+          'So before quoting anything we separate the two, because a business that thinks it is buying support automation and receives a marketing channel will be unhappy with the invoice and right to be.',
         ],
       },
       {

@@ -118,6 +118,15 @@ export const AGENT_COST_POSTS: Post[] = [
       },
       {
         kind: 'prose',
+        heading: 'What we look at first on a real build',
+        body: [
+          'We build agentic AI systems, and the running-cost conversation almost never starts in the right place.',
+          'It starts with which model, because that is the visible decision and the one with opinions attached to it. The three things that actually move the bill are the size of the fixed prefix, whether it is cached, and how verbose the tools are, and none of those is a procurement question. They are architecture.',
+          'The tool verbosity one is the most commonly missed. A tool that returns a whole record when the agent needed one field does not cost you once, it costs you on every subsequent turn, because that output stays in the context for the rest of the run. Trimming what tools return is usually the second-largest saving available after caching, and it takes an afternoon.',
+        ],
+      },
+      {
+        kind: 'prose',
         heading: 'What this post is not costing',
         body: [
           'Three things, all of which are frequently larger than the API bill.',
@@ -185,7 +194,7 @@ export const AGENT_COST_POSTS: Post[] = [
       heading: 'Want the arithmetic run on your agent?',
       body: 'Tell us what the agent does, roughly how many tools it has and how often it runs. We will do the calculation above against your case and say plainly whether the running cost is the thing you should be worried about.',
       buttonLabel: 'Get the numbers',
-      href: '/contact?service=ai-agents',
+      href: '/contact?service=agentic-ai-development',
     },
 
     related: ['n8n-zapier-make-real-cost'],

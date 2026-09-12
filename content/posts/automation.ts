@@ -205,7 +205,7 @@ export const AUTOMATION_POSTS: Post[] = [
       heading: 'Want this costed against your actual workflows?',
       body: 'Send us the workflow you are running or planning and the volume you expect. We will price it on all three platforms with the same arithmetic used above, and tell you if the one you are on is already the right answer.',
       buttonLabel: 'Get it costed',
-      href: '/contact?service=automation',
+      href: '/contact?service=workflow-automation',
     },
 
     related: ['what-an-ai-agent-costs-to-run'],

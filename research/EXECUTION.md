@@ -331,6 +331,49 @@ already known to be asked, already known to matter commercially.
 **A post earns its place by answering a question a buyer asks before paying,
 not by matching a keyword cluster.**
 
+### Every post connects to the work, and the CTA has to actually work
+
+Two separate requirements, both now enforced by `pnpm check:posts`.
+
+**The service parameter must name a real service.** `ContactForm` preselects its
+dropdown from `?service=<slug>`, matching on the service slug. Four posts
+shipped with invented slugs (`automation`, `ai-agents`, `shopify`, and a guessed
+US tax filing slug). Nothing surfaced it, because from the type system's point
+of view they are all perfectly good strings: the link works, the page loads, and
+the dropdown is simply empty. The one thing a bespoke CTA exists to do silently
+did not happen. The check now fails on a slug that matches no service.
+
+**The body has to say who wrote it.** This is an honesty requirement rather than
+a sales one. These posts are written by people who do the work, and a post that
+never says so reads as though it came from nowhere, which is the anonymous
+profile `content/provenance.ts` exists to avoid on the guides.
+
+It also does something a disclaimer cannot. Several of these posts argue against
+our own commercial interest: that your spreadsheet may be fine, that automating
+a task your team does well loses money, that nobody including us has a
+defensible failure rate. **A stated interest can be weighed by the reader. An
+unstated one cannot**, so naming it is what makes the limitation credible rather
+than performative.
+
+The check warns rather than fails, because the right number of references is a
+judgement and one good sentence beats five weak ones.
+
+**What a good connection looks like.** Not "we can help with this". The useful
+version is what the work has taught that the research alone does not show:
+
+- the automation proposals that arrive already in the losing quadrant, and why
+  (the task was chosen because it was visible, not because it was expensive)
+- that the request most often cut from an agent build is the evaluation set and
+  the idempotency work, because neither demonstrates well
+- that the first diagnostic question about a stalled pilot is who owns it in
+  March, not which model it uses
+- that most spreadsheet rescues turn out to be two processes in one workbook, or
+  a bad input form upstream, both of which are worse business for us
+
+Each of those is a claim only somebody doing the work could make, which is the
+test. If the paragraph would be equally true written by a competitor, it is
+marketing rather than provenance.
+
 ### Pricing sources need a browser, not a fetch
 
 Every figure in a priced comparison sits behind a control: a monthly/annual

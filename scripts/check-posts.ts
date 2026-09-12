@@ -24,6 +24,7 @@
  */
 
 import { ALL_POSTS, POST_CLUSTERS } from '../content/posts';
+import { SERVICES } from '../content/services';
 
 const failures: string[] = [];
 const warnings: string[] = [];
@@ -93,6 +94,43 @@ for (const post of ALL_POSTS) {
     } else if (source.readOn > post.publishedAt.slice(0, 10)) {
       fail(`${id}: source "${source.label}" claims to have been read on ${source.readOn}, after the post publishes (${post.publishedAt.slice(0, 10)}). A reader judges staleness from this date, so it cannot be in the post's own future.`);
     }
+  }
+
+  /*
+   * The CTA's service parameter must name a real service.
+   *
+   * ContactForm reads `?service=` and preselects the dropdown from it, matching
+   * on the service SLUG. A parameter that names no service fails silently: the
+   * link works, the page loads, and the dropdown is simply empty, so the one
+   * thing the bespoke CTA existed to do does not happen.
+   *
+   * Four posts shipped with invented slugs (`automation`, `ai-agents`,
+   * `shopify`, and a guessed US tax filing slug) before this check existed.
+   * Nothing surfaced it because nothing was wrong from the type system's point
+   * of view: they are all valid strings.
+   */
+  const serviceParam = post.cta?.href?.match(/[?&]service=([a-z0-9-]+)/)?.[1];
+  if (serviceParam && !SERVICES.some((s) => s.slug === serviceParam)) {
+    fail(`${id}: cta.href names service "${serviceParam}", which is not a service slug. The contact form would silently fail to preselect it.`);
+  }
+
+  /*
+   * A post should connect to what we actually do.
+   *
+   * Not as a sales requirement: as an honesty one. These posts are written by
+   * people who do this work, and a post that never says so reads as though it
+   * came from nowhere, which is exactly the anonymous content the guides'
+   * provenance block exists to avoid. Saying "we build these" is also what
+   * makes a limitation credible, because a stated interest is weighable and an
+   * unstated one is not.
+   *
+   * A warning rather than a failure, because the right number of references is
+   * a judgement and one good sentence beats five weak ones.
+   */
+  const bodyText = JSON.stringify(post.sections) + JSON.stringify(post.faqs);
+  const firstPerson = (bodyText.match(/\b(we|our|us)\b/gi) ?? []).length;
+  if (firstPerson === 0) {
+    warn(`${id}: the body never refers to us at all. A post with no stated connection to the work reads as though nobody wrote it, and an unstated interest cannot be weighed by the reader.`);
   }
 
   // ── Links ──
