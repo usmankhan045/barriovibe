@@ -58,15 +58,25 @@ for (const post of ALL_POSTS) {
   if (post.reviewedOn) {
     if (!ISO_DATE.test(post.reviewedOn)) {
       fail(`${id}: reviewedOn must be YYYY-MM-DD, got "${post.reviewedOn}".`);
-    } else if (post.reviewedOn < post.publishedAt.slice(0, 10)) {
-      /*
-       * A review date before publication is the same class of error as the one
-       * that put a false datePublished on all forty-seven guides: a date in
-       * schema is a claim, and this one would claim the sources were checked
-       * before the post existed.
-       */
-      fail(`${id}: reviewedOn (${post.reviewedOn}) is before publishedAt (${post.publishedAt.slice(0, 10)}). A post cannot have had its sources re-checked before it was written.`);
     }
+    /*
+     * There is deliberately no check that reviewedOn falls after publishedAt.
+     *
+     * The first version of this check failed that case, reasoning that a post
+     * cannot have been reviewed before it existed. That was wrong, and it
+     * rejected the correct workflow: posts are written and verified now, then
+     * DATE-GATED to publish weeks later. Sources checked on the day of writing
+     * are legitimately earlier than the publication slot.
+     *
+     * What the field means is "the day a person last read these sources". The
+     * honest value for a scheduled post is the day it was researched, and
+     * forcing it forward to the publication date would be the false claim the
+     * check was trying to prevent.
+     *
+     * The source-level check below still applies and is the one that matters:
+     * a source cannot be read after the post publishes, because that date is
+     * what a reader uses to judge whether a figure is stale.
+     */
   }
 
   // ── Sources, which are the whole point ──
@@ -81,7 +91,7 @@ for (const post of ALL_POSTS) {
     if (!ISO_DATE.test(source.readOn)) {
       fail(`${id}: source "${source.label}" has readOn "${source.readOn}", which is not YYYY-MM-DD. The date is what makes a price claim checkable.`);
     } else if (source.readOn > post.publishedAt.slice(0, 10)) {
-      fail(`${id}: source "${source.label}" claims to have been read on ${source.readOn}, after the post was published (${post.publishedAt.slice(0, 10)}).`);
+      fail(`${id}: source "${source.label}" claims to have been read on ${source.readOn}, after the post publishes (${post.publishedAt.slice(0, 10)}). A reader judges staleness from this date, so it cannot be in the post's own future.`);
     }
   }
 

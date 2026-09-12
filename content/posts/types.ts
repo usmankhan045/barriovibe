@@ -57,7 +57,8 @@ export type PostClusterSlug =
   | 'buying-dev'
   | 'ai-data'
   | 'shipping'
-  | 'us-entity';
+  | 'us-entity'
+  | 'ai-failure';
 
 export interface PostCluster {
   slug: PostClusterSlug;

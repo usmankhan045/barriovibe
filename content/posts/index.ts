@@ -5,6 +5,7 @@ import { ECOMMERCE_POSTS } from './ecommerce';
 import { AI_DATA_POSTS } from './ai-data';
 import { SHIPPING_POSTS } from './shipping';
 import { US_ENTITY_POSTS } from './us-entity';
+import { AI_FAILURE_POSTS } from './ai-failure';
 
 export type { Post, PostCluster, PostClusterSlug, PostSource } from './types';
 
@@ -41,6 +42,14 @@ export const POST_CLUSTERS: PostCluster[] = [
     intro:
       'Cost is the most commercially serious question asked about AI agents and the worst answered, because almost every published figure is an estimate with no method behind it. These posts show the calculation and name the prices it uses.',
     icon: 'sparkles',
+  },
+  {
+    slug: 'ai-failure',
+    title: 'Why AI projects fail',
+    card: 'What the research everyone cites actually says, what the official statistics measured, and how AI fails in production.',
+    intro:
+      'The most quoted evidence in this field is quoted wrongly, and the statistics agencies that actually measure AI adoption are almost never cited at all. These posts go to the primary documents, including the ones whose original links no longer work, and say what they contain.',
+    icon: 'audit',
   },
   {
     slug: 'ai-data',
@@ -84,6 +93,7 @@ export const ALL_POSTS: Post[] = [
   ...AI_DATA_POSTS,
   ...SHIPPING_POSTS,
   ...US_ENTITY_POSTS,
+  ...AI_FAILURE_POSTS,
 ];
 
 /**
