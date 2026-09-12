@@ -604,4 +604,398 @@ export const TRUST_POSTS: Post[] = [
         'Every technique sold as a hallucination fix is really detection or containment. What each actually does, what none of them does, and what to build instead.',
     },
   },
+
+  {
+    slug: 'stopping-an-agent-burning-money',
+    cluster: 'trust',
+    title: 'Stopping an Agent From Burning Money in a Loop',
+    navLabel: 'Agents burning money',
+    card: 'A documented case ran up $6,531 in 24 hours. Every individual action succeeded, which is why nothing stopped it.',
+
+    answer:
+      'An agent that loops does not error. Each action succeeds, the logs stay clean, and the bill grows until somebody notices. The framework-level defences are weaker than they look: one practitioner describes a max-iteration limit as "a blind budget" because it detects time rather than redundancy. What actually works is a spend ceiling per run, tracking tokens per completed task rather than in total, and idempotency keys so that repeated work is at least harmless.',
+
+    sections: [
+      {
+        kind: 'prose',
+        heading: 'The shape of the problem',
+        body: [
+          'A looping agent is not a crash. It is a system doing what it was told, repeatedly, with each step returning success.',
+          'The documented case worth remembering is an agent that ran up 6,531 dollars in 24 hours by repeatedly deploying the same infrastructure template. Nothing errored. No alert fired, because alerts watch for failure and there was none. The system was working exactly as instructed, and the instruction was wrong in a way nothing was watching for.',
+          'A practitioner running agents in production describes the general case: loops that "run indefinitely, burning thousands of dollars in LLM API credits before the user manually kills the process".',
+        ],
+      },
+      {
+        kind: 'note',
+        tone: 'warning',
+        heading: 'Why the built-in limit does not save you',
+        body:
+          'Every agent framework has a maximum iteration setting, and it is the first thing people reach for. The same practitioner describes what it actually gives you: "A blind budget. It doesn\'t detect redundancy, it just detects time." Set it high and it does not stop the expensive case. Set it low and it kills legitimate long-running work. It is a timeout wearing the costume of a safety measure, and it cannot tell the difference between an agent making progress and an agent going round in circles.',
+      },
+      {
+        kind: 'prose',
+        heading: 'Three distinct ways money disappears',
+        body: [
+          'They need different defences, and treating them as one problem is why the usual response does not work.',
+          'The first is the repeat loop: the agent tries something, does not recognise it already tried it, and tries again. Cost grows linearly and the output never improves.',
+          'The second is context growth. Every turn re-sends the whole conversation, so a run that takes twenty turns pays for the early turns twenty times. A verbose tool result is not charged once, it is charged on every subsequent call for the rest of the run.',
+          'The third is duplicate execution, which is the one with real-world consequences beyond cost. A tool call that runs long can be re-dispatched while the original is still running, and both complete successfully. If the tool sends an email, the customer got two.',
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'What stops each one',
+        intro:
+          'The middle column is the signal that tells you it is happening, which matters because none of these produce an error.',
+        columns: ['The failure', 'The signal', 'The defence'],
+        rows: [
+          ['Repeat loop', 'Tokens per completed task rising', 'Per-run spend ceiling, not per month'],
+          ['Context growth', 'Cost per turn rising within a run', 'Terse tool output, prompt caching'],
+          ['Duplicate execution', 'Two successful runs of one action', 'Idempotency keys on side-effecting tools'],
+          ['Runaway overall', 'Spend with no matching output', 'Kill switch a human can reach'],
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'The metric that catches it early',
+        body: [
+          'Total spend is a lagging indicator and a monthly cap tells you afterwards. The number that moves first is tokens per completed task.',
+          'It works because it holds volume constant. If your agent handled two hundred tasks last week and two hundred this week, and the tokens per task doubled, something is looping whether or not anyone has noticed a slowdown. Total spend would have shown the same rise and you would have wondered whether you were just busier.',
+          'It also degrades gracefully as a definition of done. If you cannot cleanly define a completed task, tokens per user-visible outcome works nearly as well, and the discipline of having to name what completion means is useful in its own right.',
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'Caching is the largest saving and it is architecture',
+        body: [
+          'Before adding controls, it is worth removing the cost that should not be there.',
+          'An agent re-sends its system prompt and tool definitions on every turn, so that fixed prefix is the largest repeated charge in a run. Cached input is priced at a fraction of fresh input, so moving that prefix to cache is typically the single biggest reduction available, and it changes nothing about behaviour.',
+          'The cache write costs more than an ordinary read, so caching is a small loss on a prefix used once and a large win on one reused across turns. The break-even arrives around the third read, which is why this is an agent optimisation specifically. One-shot calls do not benefit.',
+          'The second largest is usually tool verbosity. A tool that returns a whole record when the agent needed one field costs you on every subsequent turn, because that output stays in the context for the rest of the run.',
+        ],
+      },
+      {
+        kind: 'steps',
+        heading: 'Controls worth having before an agent runs unattended',
+        intro:
+          'Roughly in order of effort. The first two take an afternoon and prevent the expensive cases.',
+        steps: [
+          {
+            title: 'Set a spend ceiling per run',
+            body:
+              'Not per month. A per-run budget stops a loop while it is still cheap, and it is the only control that acts within the window where the damage happens. Decide what a normal run costs, set the ceiling at a generous multiple, and have it halt rather than warn.',
+          },
+          {
+            title: 'Put idempotency keys on every side-effecting tool',
+            body:
+              'Payments, emails, tickets, deployments, writes. This does not stop the loop, it makes the loop harmless, which is a different and in some ways more valuable property. It is also the only defence against duplicate execution, because the framework cannot reliably provide exactly-once semantics.',
+          },
+          {
+            title: 'Track tokens per completed task',
+            body:
+              'The leading indicator. Alert on the ratio rather than the total, because the total moves with volume and the ratio does not.',
+          },
+          {
+            title: 'Cache the fixed prefix and trim tool output',
+            body:
+              'The two largest cost reductions available, both architectural, both invisible to the user. Do these before deciding the model is too expensive.',
+          },
+          {
+            title: 'Give someone a kill switch they can actually reach',
+            body:
+              'In the documented case, the process ran until a human killed it manually. That is the last line of defence and it should not require finding the right terminal. Somebody on call should be able to stop every agent from one place.',
+          },
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'What we build in by default',
+        body: [
+          'We build agentic systems, and the per-run budget and the idempotency work are in every scope we write, usually as the two line items clients ask about.',
+          'The question is fair: neither produces a visible feature, and at the point of scoping the agent appears to work. What we say is that both are cheap now and neither is retrofittable under pressure. Adding idempotency after a duplicate charge means doing it while somebody is refunding customers.',
+          'The honest asymmetry is the argument. Idempotency keys on a handful of tools are an afternoon. The alternative is however many duplicate actions went out before someone noticed, plus the credibility cost of having to explain it.',
+          'We also set the per-run ceiling deliberately low at first and raise it once we know what a normal run costs. It is easier to relax a limit that fires than to explain a bill that did not.',
+        ],
+      },
+    ],
+
+    faqs: [
+      {
+        question: 'How do I stop an AI agent running up a huge bill?',
+        answer:
+          'Set a spend ceiling per run rather than per month, because only a per-run limit acts inside the window where the damage happens. Track tokens per completed task as the leading indicator, and make sure a human has a kill switch they can reach quickly.',
+      },
+      {
+        question: 'Does max iterations protect me?',
+        answer:
+          'Only partially. One practitioner calls it "a blind budget" because it detects time rather than redundancy: it cannot distinguish an agent making progress from an agent going in circles. Set high it misses the expensive case, set low it kills legitimate work.',
+      },
+      {
+        question: 'Why does my agent cost more than the model pricing suggests?',
+        answer:
+          'Usually context growth and retries. Every turn re-sends the whole conversation, so early turns are paid for repeatedly, and a verbose tool result is charged on every subsequent call. Caching the fixed prefix and trimming tool output are typically the two largest savings.',
+      },
+      {
+        question: 'What is the single biggest cost saving available?',
+        answer:
+          'Prompt caching on the fixed prefix, because an agent re-sends its system prompt and tool definitions every turn and cached input is priced at a fraction of fresh input. It changes nothing about behaviour and breaks even around the third read.',
+      },
+      {
+        question: 'How do I stop duplicate charges from a retrying agent?',
+        answer:
+          'Idempotency keys on the tool, not settings in the framework. A reproduction in a major framework shows that even the strongest durability setting leaves exactly-once behaviour dependent on thread scheduling, so the responsibility sits with the tool you write.',
+      },
+    ],
+
+    publishedAt: '2026-10-22T03:00:00Z',
+    reviewedOn: '2026-09-12',
+
+    sources: [
+      {
+        label: 'CrewAI issue: runaway loops and iteration limits',
+        url: 'https://github.com/crewAIInc/crewAI/issues',
+        readOn: '2026-09-11',
+        supports: 'The description of loops running indefinitely, and of max_iter as a blind budget that detects time rather than redundancy.',
+      },
+      {
+        label: 'LangGraph issue: durability and exactly-once semantics',
+        url: 'https://github.com/langchain-ai/langgraph/issues',
+        readOn: '2026-09-11',
+        supports: 'That exactly-once behaviour across a crash boundary depends on the OS thread scheduler.',
+      },
+      {
+        label: 'Anthropic pricing, including prompt caching read and write rates',
+        url: 'https://www.anthropic.com/pricing',
+        readOn: '2026-09-11',
+        supports: 'That cached input is priced well below fresh input, and that a cache write costs more than an ordinary read.',
+      },
+    ],
+
+    limits: [
+      'The cost incident and the loop reports are individual documented cases and practitioner accounts, not a measurement of how often this happens.',
+      'Framework behaviour changes. The issues cited were read on 11 September 2026 and specific mechanisms may be fixed; the idempotency and budgeting advice holds regardless.',
+      'Model prices change frequently. The caching argument is structural rather than dependent on a specific rate, but the arithmetic of any given saving is not.',
+      'This covers cost and duplicate execution. Correctness failures are a separate problem and are covered elsewhere.',
+    ],
+
+    cta: {
+      heading: 'About to let an agent run unattended?',
+      body: 'The per-run budget and the idempotency work are an afternoon each and neither is retrofittable under pressure. Adding idempotency after a duplicate charge means doing it while somebody is refunding customers.',
+      buttonLabel: 'Talk about your build',
+      href: '/contact?service=agentic-ai-development',
+    },
+
+    related: ['what-to-monitor-once-an-agent-is-live'],
+
+    seo: {
+      title: 'Stopping an AI Agent From Burning Money in a Loop',
+      description:
+        'A documented case ran up $6,531 in 24 hours with every action succeeding. Why max-iteration limits do not help, and the four controls that do.',
+    },
+  },
+
+  {
+    slug: 'what-to-monitor-once-an-agent-is-live',
+    cluster: 'trust',
+    title: 'What to Monitor Once an AI Agent Is Live',
+    navLabel: 'Monitoring a live agent',
+    card: 'Your existing monitoring watches for errors. The failures that matter here do not produce one.',
+
+    answer:
+      'Conventional monitoring watches for exceptions, latency and error rates, and an agent\'s worst failures produce none of those: it reports success it did not achieve, repeats a side effect, or quietly starts refusing things it should handle. What you need instead is tokens per completed task, tool call outcomes separate from tool call counts, refusal rate in both directions, and a sampled correctness check. OpenTelemetry now has GenAI conventions covering this, though they are still at Development status.',
+
+    sections: [
+      {
+        kind: 'prose',
+        heading: 'Why the existing dashboard will not tell you',
+        body: [
+          'If you already run services in production you have monitoring, and it is watching the wrong things for this.',
+          'Error rate, latency and uptime detect a system that has stopped working. An agent that has gone wrong usually has not stopped working. It is returning 200s, within normal latency, reporting task complete, and the thing it reported is not true.',
+          'An operator running eleven agents in production for six months puts it directly: "Agents rarely fail catastrophically, they fail subtly... This is worse than obvious failures because you trust the output." Nothing in a conventional dashboard distinguishes that from success.',
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'What to watch instead',
+        intro:
+          'Each row is a failure that produces no error. The signal column is what moves before anyone complains.',
+        columns: ['What goes wrong', 'The signal', 'Why the usual dashboard misses it'],
+        rows: [
+          ['Agent loops', 'Tokens per completed task rising', 'Each call succeeds; totals move with volume'],
+          ['Duplicate side effects', 'Tool successes exceeding tasks', 'Both executions return success'],
+          ['Quality drift after a change', 'Sampled correctness falling', 'Output is still well-formed'],
+          ['Over-refusal', 'Refusal rate rising', 'A refusal is a valid response'],
+          ['Cost creep', 'Cache hit rate falling', 'Bill rises slowly, blamed on growth'],
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'Tokens per completed task, not tokens',
+        body: [
+          'The single most useful number, and it is a ratio rather than a total for a specific reason.',
+          'Total spend moves with volume, so a rise is ambiguous: you were busier, or something is wrong. The ratio holds volume constant. Two hundred tasks last week, two hundred this week, and tokens per task doubled means something is looping whether or not anyone noticed a slowdown.',
+          'It requires you to define a completed task, which people resist because it is fuzzy at the edges. It is worth doing anyway, and the argument that usually lands is that if you cannot say what completion means, you cannot tell whether the agent is achieving it, which is a larger problem than the metric.',
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'Count tool outcomes, not tool calls',
+        body: [
+          'Most instrumentation counts how many times each tool was called. That number is nearly useless on its own, because the interesting failures show up as a mismatch between counts rather than in any single one.',
+          'The comparison that matters is tool successes against tasks completed. If one task should send one email and your email tool is firing 1.3 times per task, you have duplicate execution, and every one of those calls returned success. Nothing errored, so nothing alerted.',
+          'This is the case documented across agent frameworks: a tool call that runs long gets re-dispatched while the original is still running, and both complete successfully. Without the ratio it is invisible until a customer mentions receiving two of something.',
+        ],
+      },
+      {
+        kind: 'note',
+        tone: 'info',
+        heading: 'There is now a standard, and it is not finished',
+        body:
+          'OpenTelemetry has GenAI semantic conventions covering agent spans, tool execution and token usage, with attributes including gen_ai.operation.name, gen_ai.agent.id, gen_ai.conversation.id, gen_ai.usage.input_tokens and, usefully for cost work, gen_ai.usage.cache_read.input_tokens and gen_ai.usage.cache_write.input_tokens. Two things to know before adopting it. They MOVED out of the main semantic conventions repository into a dedicated one, so most published guidance now points at a page that says it is no longer maintained. And the agent spans carry Status: Development, with the schema URL still marked TODO. It is the right direction of travel and it is not a stable standard yet.',
+      },
+      {
+        kind: 'prose',
+        heading: 'Refusal rate, measured in both directions',
+        body: [
+          'An agent that starts refusing things it used to handle is broken, and it is the failure least likely to be reported, because a refusal looks like caution rather than a fault.',
+          'It drifts for ordinary reasons: a model version changes, someone tightens a prompt after an incident, a guardrail gets a new rule. Each is individually sensible and the cumulative effect is a system quietly doing less.',
+          'Worth measuring both ways. Evaluation frameworks handle this explicitly, penalising "queries that were refused and should have been answered" alongside the ones that should have been declined. A system that refuses everything scores perfectly on any measure that only counts bad outputs, which is why over-refusal has to be an alarm rather than a comfort.',
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'Sampled correctness is the only thing that catches quality drift',
+        body: [
+          'Everything above is structural: it catches loops, duplicates and behavioural change without knowing whether any answer was right.',
+          'For correctness there is no shortcut. Some proportion of live traffic has to be checked against known answers, which means running your evaluation set on a schedule rather than only before a release.',
+          'The reason it has to be scheduled rather than triggered is that nothing triggers it. An agent producing well-formed, confident, wrong answers looks healthy on every structural signal. The only thing that surfaces it is periodically asking questions you already know the answers to.',
+          'This is the control people cut first, because it costs tokens to run and produces no feature. It is also the only one that detects the failure mode the whole category is about.',
+        ],
+      },
+      {
+        kind: 'steps',
+        heading: 'A monitoring setup that is proportionate',
+        intro:
+          'In order. The first two take an afternoon and catch the expensive failures; the rest is a day.',
+        steps: [
+          {
+            title: 'Instrument spend per run with a hard ceiling',
+            body:
+              'Not a monthly alert. A per-run limit that halts, because only a per-run control acts inside the window where the damage happens.',
+          },
+          {
+            title: 'Emit tokens and tool outcomes per task',
+            body:
+              'Tag every span with a task identifier so the ratios are computable. This is the piece that has to be designed in, because retrofitting task identity onto existing traces is painful.',
+          },
+          {
+            title: 'Alert on ratios, not totals',
+            body:
+              'Tokens per completed task, tool successes per task, refusals per task. Totals move with volume and will train people to ignore the alert.',
+          },
+          {
+            title: 'Run the evaluation set on a schedule',
+            body:
+              'Weekly is usually enough, and after every model version change or corpus reindex without exception. Both of those change behaviour with no deployment.',
+          },
+          {
+            title: 'Follow the OpenTelemetry attribute names even while they move',
+            body:
+              'Naming your spans to match the emerging convention costs nothing now and means your traces are portable later. Just do not describe it internally as compliance with a standard, because it is not one yet.',
+          },
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'What we put in from the start',
+        body: [
+          'We build agentic systems, and the monitoring conversation is usually the one where a client and we are furthest apart at the beginning.',
+          'The gap is reasonable. From their side, they already have monitoring, it is good, and it has served every other system they run. What takes explaining is that it is watching for a category of failure this system will not produce.',
+          'The part that costs us arguments rather than money is task identity: tagging spans so that ratios are computable at all. It is trivial to design in and genuinely painful to add later, and it produces nothing visible on the day. We push on it anyway, because every useful signal in this post is a ratio and none of them can be computed without it.',
+          'We also hand over the evaluation set and the schedule that runs it. A system you can only evaluate while the builder is still around is a system you are renting, and the scheduled run is what tells you in March whether it still works.',
+        ],
+      },
+    ],
+
+    faqs: [
+      {
+        question: 'What should I monitor for an AI agent in production?',
+        answer:
+          'Tokens per completed task, tool successes compared with tasks completed, refusal rate in both directions, and a sampled correctness check against known answers. Error rate and latency matter too, but they will not catch the failures specific to agents, which produce no error.',
+      },
+      {
+        question: 'Why does my normal monitoring not catch agent failures?',
+        answer:
+          'Because it watches for things stopping. An agent that has gone wrong usually returns 200s at normal latency and reports success. The characteristic failure is a confident report of work that did not happen, which is indistinguishable from success in a conventional dashboard.',
+      },
+      {
+        question: 'Is there a standard for AI observability?',
+        answer:
+          'OpenTelemetry has GenAI semantic conventions covering agent spans, tool execution and token usage. Two caveats: they recently moved to a dedicated repository, so a lot of published guidance points at a page that is no longer maintained, and the agent spans are at Development status rather than stable.',
+      },
+      {
+        question: 'How do I detect duplicate tool execution?',
+        answer:
+          'Compare tool successes against tasks completed. If one task should send one email and the email tool fires more than once per task on average, you have duplicates. Counting tool calls alone will not show it, because every one of those calls succeeded.',
+      },
+      {
+        question: 'How often should I run evaluations against a live system?',
+        answer:
+          'On a schedule rather than on suspicion, because nothing triggers it: an agent producing confident wrong answers looks healthy on every structural signal. Weekly is usually enough, plus after every model version change or corpus reindex, both of which change behaviour without a deployment.',
+      },
+    ],
+
+    publishedAt: '2026-10-23T03:00:00Z',
+    reviewedOn: '2026-09-12',
+
+    sources: [
+      {
+        label: 'OpenTelemetry GenAI semantic conventions repository',
+        url: 'https://github.com/open-telemetry/semantic-conventions-genai',
+        readOn: '2026-09-12',
+        supports:
+          'The move out of the main repository, the Development status of agent spans, the operation names and the gen_ai attribute set including cache read and write token counts.',
+      },
+      {
+        label: 'OpenTelemetry, GenAI spans page (superseded)',
+        url: 'https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/',
+        readOn: '2026-09-12',
+        supports: 'That the conventions have moved and this page is no longer maintained.',
+      },
+      {
+        label: 'Ragas documentation, agentic metrics including topic adherence',
+        url: 'https://docs.ragas.io/en/stable/concepts/metrics/available_metrics/agents/',
+        readOn: '2026-09-12',
+        supports: 'That topic adherence penalises queries refused which should have been answered, which is the over-refusal signal.',
+      },
+      {
+        label: 'LangGraph issue: duplicate tool dispatch after timeout',
+        url: 'https://github.com/langchain-ai/langgraph/issues',
+        readOn: '2026-09-11',
+        supports: 'That a long-running tool call can be re-dispatched with both executions completing successfully.',
+      },
+    ],
+
+    limits: [
+      'The OpenTelemetry GenAI conventions are at Development status and actively changing, with commits during the week this was written. Treat the attribute names as a direction rather than a fixed target.',
+      'The practitioner accounts of silent failure evidence that the problem recurs and in what words. They are not a measurement of frequency.',
+      'No thresholds are given for any of these ratios, because the right value depends entirely on what your agent does. The signal is movement against your own baseline.',
+      'This covers what to watch. Diagnosing what a moved signal means is a separate and usually manual job.',
+    ],
+
+    cta: {
+      heading: 'Building something that will run unattended?',
+      body: 'Task identity is the piece to design in rather than retrofit: without it none of the ratios in this post can be computed, and adding it later means reworking traces across the whole system. It costs nothing on day one.',
+      buttonLabel: 'Talk about your build',
+      href: '/contact?service=agentic-ai-development',
+    },
+
+    related: ['stopping-an-agent-burning-money', 'how-to-evaluate-an-agent'],
+
+    seo: {
+      title: 'What to Monitor Once an AI Agent Is Live',
+      description:
+        'Your existing monitoring watches for errors and agent failures produce none. The four ratios that move first, and why OpenTelemetry is not a settled standard yet.',
+    },
+  },
 ];
