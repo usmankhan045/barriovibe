@@ -961,4 +961,424 @@ export const AI_FAILURE_POSTS: Post[] = [
         'The gap between a demo and a system people depend on is exceptions, evaluation, ownership and integration. What a pilot skips, and how to scope one that can ship.',
     },
   },
+
+  {
+    slug: 'should-your-business-have-an-ai-policy',
+    cluster: 'ai-failure',
+    title: 'Should Your Business Have an AI Policy, and What Goes In It',
+    navLabel: 'Writing an AI policy',
+    card: 'Most AI policies are legal boilerplate nobody reads. The version that matters is one page and answers four questions.',
+
+    answer:
+      'Yes, and it should be shorter than the ones being sold to you. The policies that circulate are acceptable-use documents that restate the obvious. The version worth having answers four operational questions: which tools are approved and on what billing tier, what data may never be pasted anywhere, what happens to feedback buttons, and who to ask when something is not covered. The reason to write it is that your staff have already decided in your absence.',
+
+    sections: [
+      {
+        kind: 'prose',
+        heading: 'The decision has already been made for you',
+        body: [
+          'The UK Office for National Statistics found that over half of employees, 55 percent, report using AI for work or education, against around 35 percent of businesses reporting use of any AI technology.',
+          'Employee adoption runs well ahead of organisational adoption. So the question is not whether AI is in your business, it is whether anybody has decided which tools and on what terms.',
+          'That framing matters, because a policy written to control adoption is fighting something that already happened. A policy written to make the existing use safe is doing something achievable.',
+        ],
+      },
+      {
+        kind: 'note',
+        tone: 'warning',
+        heading: 'The specific trap worth writing a policy about',
+        body:
+          'Google\'s Gemini API terms split the same API into two different data regimes by billing status alone. On the unpaid tier, Google states it "uses the content you submit to the Services and any generated responses to provide, improve, and develop Google products and services", and that "human reviewers may read, annotate, and process your API input and output". On the paid tier it commits the opposite way. Same endpoint, same SDK, same code. Nothing in the developer experience signals the boundary, so a prototype on a free key, or a project whose billing lapses, is quietly inside the human-review regime.',
+      },
+      {
+        kind: 'prose',
+        heading: 'What most policies get wrong',
+        body: [
+          'The common template is an acceptable-use document: do not use AI for anything unlawful, check the output, be professional. None of that is wrong and none of it changes a decision anybody makes on a Tuesday afternoon.',
+          'It also tends to be framed around a fear that turns out to be misdirected. The worry is usually that a vendor will train on company data, and for paid business tiers that is not what the terms say: Anthropic\'s commercial terms state it "may not train models on Customer Content from Services", and OpenAI states that since March 2023 API data is not used for training unless you opt in.',
+          'The real exposures are narrower and more specific: free tiers with different terms, feedback buttons that pull a whole conversation into training scope, and staff pasting things into consumer chat apps where the defaults genuinely do differ.',
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'The four questions a useful policy answers',
+        intro:
+          'If your policy answers these, the length does not matter. If it does not, the length definitely does not matter.',
+        columns: ['Question', 'Why it is the one that matters'],
+        rows: [
+          ['Which tools, on which tier?', 'Terms differ by tier more than by vendor'],
+          ['What must never be pasted anywhere?', 'The only rule people will actually remember'],
+          ['What happens to feedback buttons?', 'The documented exception to no-training defaults'],
+          ['Who decides the cases not covered?', 'Otherwise everyone decides individually'],
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'Question one, and the thing to get right',
+        body: [
+          'Name the approved tools and the tier. Not the vendor, the tier, because that is where the terms actually differ.',
+          'The same company can apply opposite defaults to two products. OpenAI\'s own documentation states both halves: for consumer products, "we may use your content to train our models", and for business, "by default, we do not train on any inputs or outputs from our products for business users, including ChatGPT Business, ChatGPT Enterprise, and the API".',
+          'So a policy that says the company uses a named vendor has not said anything useful. One that says staff use the business tier, on the company account, and that personal consumer accounts are not for company work, has said the thing that matters.',
+          'Extend it to development: production, staging and CI all on billed projects, because a free-tier key in a test pipeline is still processing whatever your test fixtures contain.',
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'Question two, which is the only rule anyone remembers',
+        body: [
+          'A list of things that never go into any AI tool regardless of tier. Keep it to a handful of categories, because a long list is not remembered and a remembered list is the only kind that works.',
+          'For most businesses that is customer personal data beyond what is needed, credentials of any kind, anything under a confidentiality obligation to a third party, and anything relating to an unannounced commercial matter.',
+          'Then give the reason in one line. People follow rules they understand and route around rules they think are arbitrary, and this one has a good reason: even where a vendor does not train on it, the data has left your environment and is retained for a period.',
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'Question three is the exception nobody documents',
+        body: [
+          'Both major vendors are explicit that feedback is treated differently from ordinary use. OpenAI states that "if you choose to provide feedback, the entire conversation associated with that feedback may be used to train our models", and Anthropic applies the same treatment to thumbs-up and thumbs-down.',
+          'So a developer clicking a rating button in a console is a genuine disclosure path, and it is not covered by any of the no-training defaults people rely on.',
+          'The policy line is short: do not use feedback controls in tools handling sensitive material, and if you build an application with a feedback button, decide deliberately what it sends.',
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'Question four, and why it is not a formality',
+        body: [
+          'Every policy meets a case it did not anticipate within a month. If there is no named person to ask, each employee resolves it privately and the policy becomes decorative.',
+          'A name, a channel, and a commitment to answer quickly. The last part is what determines whether people use it: a route that takes a week is a route people stop using after the first time.',
+          'It is also how the policy improves. The questions people ask are the gaps, and a policy that is revised twice in its first quarter is working rather than failing.',
+        ],
+      },
+      {
+        kind: 'steps',
+        heading: 'Writing it, in about an hour',
+        intro:
+          'Deliberately small. A one-page policy that people read beats a ten-page one that sits in a folder.',
+        steps: [
+          {
+            title: 'Find out what is already being used',
+            body:
+              'Ask, without consequences attached. You will get a longer list than expected, and it is the actual scope of your policy. Writing rules for tools nobody uses while missing the ones they do is the common failure.',
+          },
+          {
+            title: 'Pick the approved tools and name the tier',
+            body:
+              'Business or enterprise tier, on company accounts. Then check that development environments are billed too, because the free-tier trap is a developer problem more than a staff one.',
+          },
+          {
+            title: 'Write the never-paste list, and keep it short',
+            body:
+              'A handful of categories with a one-line reason. Long lists are not remembered and unremembered rules do not operate.',
+          },
+          {
+            title: 'Decide the feedback question',
+            body:
+              'For tools staff use, and for anything you build. This is the exception to the defaults and it is almost never in a template policy.',
+          },
+          {
+            title: 'Name the person to ask, and a channel',
+            body:
+              'With an undertaking to answer in a day. Then expect to revise the policy as the questions come in, which is the policy working.',
+          },
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'What we see in practice',
+        body: [
+          'We build AI systems for clients, so we end up reading a lot of client AI policies, usually because a project has to comply with one.',
+          'The pattern is that they are long, legal, and silent on the two things that actually matter: which tier, and what happens to data in development environments. We have been handed policies forbidding staff from using consumer chat tools while the company\'s own prototype ran on a free API key.',
+          'What we suggest instead is the one page above, plus a line in the policy saying that any system we build states which tier it runs on and what it retains. That makes the policy checkable rather than aspirational, which is the difference between a document and a control.',
+          'And we say plainly that the fear most policies are written around, that a vendor will train on your data, is mostly not what the paid terms say. Redirecting that concern towards free tiers, feedback buttons and retention is a better use of the same anxiety.',
+        ],
+      },
+    ],
+
+    faqs: [
+      {
+        question: 'Does my business need an AI policy?',
+        answer:
+          'Almost certainly, because your staff are already using these tools. ONS found 55 percent of employees reporting AI use for work against around 35 percent of businesses reporting any AI technology, so the decision has been made in your absence unless you make it deliberately.',
+      },
+      {
+        question: 'What should an AI policy actually say?',
+        answer:
+          'Four things: which tools on which billing tier, what data must never be pasted into any of them, what happens to feedback buttons, and who to ask about cases not covered. Anything beyond that is usually restating the obvious at length.',
+      },
+      {
+        question: 'Will the vendor train on our company data?',
+        answer:
+          'Not on paid business tiers, by their own terms. Anthropic states it may not train on customer content from its services, and OpenAI has not trained on API data since March 2023 absent opt-in. The exposure is narrower: free tiers, feedback submissions and consumer accounts.',
+      },
+      {
+        question: 'Why does the billing tier matter so much?',
+        answer:
+          'Because terms differ by tier more than by vendor. Google\'s unpaid Gemini tier permits product development and human review of your inputs on the same endpoint the paid tier protects, and nothing in the code signals the difference.',
+      },
+      {
+        question: 'What about feedback buttons?',
+        answer:
+          'They are the documented exception to the no-training defaults. OpenAI states that providing feedback may put the entire associated conversation into training scope, and Anthropic treats thumbs-up and thumbs-down the same way. Decide deliberately rather than inheriting the default.',
+      },
+    ],
+
+    publishedAt: '2026-11-08T03:00:00Z',
+    reviewedOn: '2026-09-12',
+
+    sources: [
+      {
+        label: 'Google Gemini API terms of service',
+        url: 'https://ai.google.dev/gemini-api/terms',
+        readOn: '2026-09-11',
+        supports: 'The different paid and unpaid tier data regimes, including product development and human review on the unpaid tier.',
+      },
+      {
+        label: 'Anthropic Commercial Terms of Service',
+        url: 'https://www.anthropic.com/legal/commercial-terms',
+        readOn: '2026-09-11',
+        supports: 'That Anthropic may not train models on customer content from its services.',
+      },
+      {
+        label: 'OpenAI, how your data is used to improve model performance',
+        url: 'https://help.openai.com/en/articles/5722486-how-your-data-is-used-to-improve-model-performance',
+        readOn: '2026-09-11',
+        supports: 'The consumer and business defaults, and that feedback may put the whole conversation into training scope.',
+      },
+      {
+        label: 'ONS, Artificial intelligence in UK businesses: 2023 to 2026',
+        url: 'https://www.ons.gov.uk/businessindustryandtrade/business/businessservices/articles/artificialintelligenceinukbusinesses/2023to2026',
+        readOn: '2026-09-12',
+        supports: 'That 55 percent of employees report using AI for work against about 35 percent of businesses reporting any AI technology.',
+      },
+    ],
+
+    limits: [
+      'This is an operational policy framework, not legal advice. Sector regulation, employment law and data protection obligations may require more than the four questions here.',
+      'Vendor terms change. Everything quoted was read in September 2026 and each document carries its own effective date.',
+      'It does not cover the separate question of what you must disclose to customers about AI use, which varies by jurisdiction and sector.',
+      'We build AI systems and therefore benefit from clients adopting AI. The policy recommended here is shorter and less restrictive than most, which is worth weighing.',
+    ],
+
+    cta: {
+      heading: 'Writing one and want it to be checkable?',
+      body: 'The test is whether a policy lets someone verify compliance rather than assert it. Naming tiers and retention makes it checkable; naming vendors does not. We are happy to look at a draft and say which parts do any work.',
+      buttonLabel: 'Have a draft reviewed',
+      href: '/contact?service=agentic-ai-development',
+    },
+
+    related: ['who-is-liable-when-the-chatbot-is-wrong'],
+
+    seo: {
+      title: 'Should Your Business Have an AI Policy, and What Goes In It',
+      description:
+        'Most are boilerplate nobody reads. The version that works is one page answering four questions, starting with which billing tier your tools run on.',
+    },
+  },
+
+  {
+    slug: 'who-is-liable-when-the-chatbot-is-wrong',
+    cluster: 'ai-failure',
+    title: 'Who Is Liable When Your Chatbot Is Wrong?',
+    navLabel: 'Chatbot liability',
+    card: 'A German court held an operator liable even though the training data was undisputedly correct. That judgment is now final.',
+
+    answer:
+      'Every court that has been asked has held the operator responsible. A German appellate court ruled in May 2026 that a chatbot "is not a third party" and that its statements are the operator\'s own commercial acts, and held the business liable even though its training data contained no false information. A Canadian tribunal called the separate-entity argument "a remarkable submission". Under UK law a statement made to a consumer by or on behalf of a trader becomes a contractual term, without any need to prove fault.',
+
+    sections: [
+      {
+        kind: 'prose',
+        heading: 'The defence that has never worked',
+        body: [
+          'When a chatbot says something untrue and a customer relies on it, businesses have tried arguing that the bot is somehow separate: that it acted autonomously, that its output is unpredictable, that the company cannot be held to something a machine generated.',
+          'No court in any jurisdiction we could find has accepted it. What follows is what they said instead, and one of the judgments is considerably stronger than the coverage suggests.',
+        ],
+      },
+      {
+        kind: 'note',
+        tone: 'warning',
+        heading: 'The ruling that matters most, and why',
+        body:
+          'In May 2026 the Oberlandesgericht Hamm held that a clinic was liable for its website chatbot stating that its directors held specialist medical titles they did not hold, two of which do not exist. The detail that makes this important: it was undisputed that the chatbot had been trained only on the company\'s own website and FAQs, which contained no false statements. Clean training data, and the operator was liable anyway. The court held that the chatbot "is not a third party" and that its statements were the defendant\'s own commercial acts.',
+      },
+      {
+        kind: 'prose',
+        heading: 'What the court actually reasoned',
+        body: [
+          'The judgment is worth reading for the reasoning rather than the outcome, because the reasoning is what transfers.',
+          'On attribution, the court held that the chatbot "constitutes (merely) a technical means which the defendant used to communicate with potential customers and over which it possessed sufficient power of control", and stated generally that deploying artificial intelligence constitutes "commercial acts of its operator, because the operator has sufficient influence over the system and sets it in motion". Our translations.',
+          'The black box argument, that nobody can see why a model produced a given output, was rejected explicitly. So was the argument that correct programming should exonerate: the court\'s own press release records that even if the chatbot had been programmed exclusively with correct data, the operator bears responsibility for the false statements.',
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'The evidential point that should worry operators',
+        body: [
+          'One element of the reasoning deserves separate attention because it inverts an instinct.',
+          'The court took the fact that the defendant fixed the problem easily after receiving a warning letter, by adding a prompt instruction and a keyword filter, as evidence that it had the power to prevent it in the first place.',
+          'So prompt remediation was not treated as mitigation. It was treated as proof of control, and therefore of responsibility. That is worth knowing before drafting a response to a complaint about your own bot.',
+        ],
+      },
+      {
+        kind: 'note',
+        tone: 'info',
+        heading: 'A correction to what you have probably read',
+        body:
+          'Nearly all coverage of this judgment from May and early June 2026 reports it as not yet final, and that was accurate when written. The court granted leave to appeal to the Bundesgerichtshof and the appeal was never lodged, so the revision deadline expired. The official judiciary database now records the judgment as rechtskraeftig, final, and the winning party\'s own case page confirms it. The honest qualification is different: an appellate court judgment binds the parties and does not bind other German courts, and there is still no supreme court authority on the question anywhere.',
+      },
+      {
+        kind: 'prose',
+        heading: 'The Canadian case, weighed properly',
+        body: [
+          'The case most cited in English is Moffatt v Air Canada, where an airline chatbot described a bereavement fare policy that did not exist.',
+          'The tribunal\'s response to the airline\'s argument is quotable: "In effect, Air Canada suggests the chatbot is a separate legal entity that is responsible for its own actions. This is a remarkable submission. While a chatbot has an interactive component, it is still just a part of Air Canada\'s website."',
+          'It also disposed of the defence that the correct information was available elsewhere on the site: "it does not explain why customers should have to double-check information found in one part of its website on another part of its website."',
+          'Two corrections to how this is usually reported. The award is commonly given as 650.88 Canadian dollars, and the ordered total is 812.02 once interest and fees are included. And this is a small claims tribunal decision, the lowest rung, binding on nobody but the parties. It is quoted as though it settled something and it did not.',
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'The UK position, which is stronger than people expect',
+        body: [
+          'There is no decided UK case on chatbots, so what follows is statutory reading rather than case law, and we say so plainly.',
+          'The most useful provision is section 50 of the Consumer Rights Act 2015, which treats a services contract as including as a term "anything that is said or written to the consumer, by or on behalf of the trader, about the trader or the service", where the consumer takes it into account in deciding to contract or in a later decision about the service.',
+          'That converts your bot\'s statement into a contractual term. A consumer relying on it sues for breach of contract and never has to prove negligence, intent or knowledge on your part. It is a considerably easier claim than the tort route that overseas cases have run.',
+          'One drafting consequence: under section 50(2), a qualification only counts if it was said to the consumer by the trader on the same occasion. A disclaimer in your website terms, not surfaced in the chat, is unlikely to qualify.',
+          'Separately, the Digital Markets, Competition and Consumers Act 2024 makes it a misleading action to provide false or misleading information, and provides that it is immaterial whether the trader acts personally or through another acting on its behalf. That is public enforcement with penalties up to ten percent of global turnover, and it reaches post-sale support as well as sales.',
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'Where it is genuinely unsettled',
+        body: [
+          'Being honest about the limits is more useful than overstating a trend.',
+          'There is no supreme court authority anywhere. No German federal court ruling, no CJEU decision, and no UK case at any level on chatbots.',
+          'The United States is actively contradictory at trial level. One court granted summary judgment for an AI provider and credited its disclaimers, reasoning that liability merely because a system is known to make mistakes "would impose a standard of strict liability, not negligence". Another, a year later, refused to credit disclaimers at the pleadings stage because they were not before the court, describing the area as "a new frontier for defamation law". Both are trial-level and one is interlocutory.',
+          'And the German court expressly left open whether the analysis changes when the user\'s question is tendentious or leading. In that case the questions were ordinary.',
+        ],
+      },
+      {
+        kind: 'steps',
+        heading: 'What to do about it',
+        intro:
+          'Five things, and the first is the one the German judgment makes unavoidable.',
+        steps: [
+          {
+            title: 'Decide what your bot must never state',
+            body:
+              'Qualifications, prices, policy entitlements, safety or medical claims, anything with a legal consequence. Constrain those at the tool level rather than by instruction, because an instruction is a preference and a constraint is a fact.',
+          },
+          {
+            title: 'Put the disclaimer in the conversation',
+            body:
+              'Not in the site terms. Under UK law a qualification only counts if made on the same occasion, so a notice the customer never saw during the chat is unlikely to help.',
+          },
+          {
+            title: 'Anticipate the obvious questions',
+            body:
+              'The German court held the operator could and should have anticipated that patients would ask about qualifications and that the bot might hallucinate an answer. Whatever your equivalent question is, test it.',
+          },
+          {
+            title: 'Log what the bot said',
+            body:
+              'You will need to know what was stated and to whom. Both cases turned on specific statements, and an operator who cannot reconstruct its own bot\'s output is in a weak position from the start.',
+          },
+          {
+            title: 'Honour it, then fix it',
+            body:
+              'Where a bot has promised something small, honouring it is usually cheaper than the dispute. The German judgment also means fixing it quickly does not read as mitigation, so fix it because it is right rather than because it helps.',
+          },
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'How this changes what we build',
+        body: [
+          'We build chatbots, so this line of cases is about our clients\' exposure and our design decisions.',
+          'The practical consequence is that anything with a legal consequence gets constrained rather than instructed. Prices, entitlements and qualifications come from a lookup that can only return true values, not from a model asked politely to be accurate. The German judgment is the clearest possible argument for that approach: the training data was clean and the model still generated a false claim.',
+          'We also push for the bot to be able to say it does not know, and for a handover that arrives before the customer is frustrated. A bot that declines to answer a question about entitlements is doing its job.',
+          'And where a client wants the bot to handle something we think carries real liability, we say so and suggest it routes to a person instead. That is less impressive as a demonstration and it is the version we would want if it were our business.',
+        ],
+      },
+    ],
+
+    faqs: [
+      {
+        question: 'Is my company liable for what its chatbot says?',
+        answer:
+          'On the authority so far, yes. A German appellate court held that a chatbot is not a third party and its statements are the operator\'s own commercial acts, and a Canadian tribunal called the separate-entity argument remarkable. No court in any jurisdiction we found has accepted that a business is not bound by its own bot.',
+      },
+      {
+        question: 'Does it help if the training data was correct?',
+        answer:
+          'It did not in the German case, which is what makes that judgment important. The training corpus was undisputedly free of the false claim and the operator was liable anyway, because liability attached to deployment and control rather than to data hygiene.',
+      },
+      {
+        question: 'Will a disclaimer protect me?',
+        answer:
+          'Possibly, and not if it is buried. Under UK law a qualification counts only if made to the consumer on the same occasion, so it needs to be in the conversation. Note also that one German court rejected the argument that consumers know AI is unreliable, and one US court declined to credit disclaimers at the pleadings stage.',
+      },
+      {
+        question: 'Is the German ruling final?',
+        answer:
+          'Yes. Leave to appeal to the federal court was granted and never used, and the official judiciary database records the judgment as final. Most coverage from May 2026 says otherwise because it was written before the deadline expired. It binds the parties and does not bind other courts.',
+      },
+      {
+        question: 'What is the exposure in the UK?',
+        answer:
+          'Two routes. A statement made to a consumer by or on behalf of a trader becomes a contractual term under section 50 of the Consumer Rights Act 2015, so a consumer sues for breach without proving fault. Separately, misleading information is a public enforcement matter under the DMCCA with penalties up to ten percent of global turnover.',
+      },
+    ],
+
+    publishedAt: '2026-11-11T03:00:00Z',
+    reviewedOn: '2026-09-12',
+
+    sources: [
+      {
+        label: 'OLG Hamm, judgment of 12 May 2026, 4 UKl 3/25',
+        url: 'https://nrwe.justiz.nrw.de/olgs/hamm/j2026/4_UKl_3_25_Urteil_20260512.html',
+        readOn: '2026-09-12',
+        supports: 'The attribution holding, that the chatbot is not a third party, the rejection of the black box and correct-programming defences, and the finality of the judgment.',
+      },
+      {
+        label: 'Moffatt v Air Canada, 2024 BCCRT 149',
+        url: 'https://www.canlii.org/en/bc/bccrt/doc/2024/2024bccrt149/2024bccrt149.html',
+        readOn: '2026-09-12',
+        supports: 'The separate-entity passage at paragraph 27, the elsewhere-on-the-site passage at 28, and the ordered total of CAD 812.02 at paragraph 44.',
+      },
+      {
+        label: 'Consumer Rights Act 2015, section 50',
+        url: 'https://www.legislation.gov.uk/ukpga/2015/15/section/50',
+        readOn: '2026-09-12',
+        supports: 'That a statement made to a consumer by or on behalf of a trader is treated as a term of the contract, and the same-occasion requirement for qualifications.',
+      },
+      {
+        label: 'Digital Markets, Competition and Consumers Act 2024, sections 225 and 226',
+        url: 'https://www.legislation.gov.uk/ukpga/2024/13/section/226',
+        readOn: '2026-09-12',
+        supports: 'That providing false or misleading information is a misleading action and that acting through another on the trader\'s behalf is immaterial.',
+      },
+    ],
+
+    limits: [
+      'This is general information about decided cases and statutory provisions, not legal advice. Liability turns on facts and jurisdiction.',
+      'German quotations are translated by us from the judgment and the court\'s press release. The German text is the authoritative version.',
+      'There is no supreme court authority anywhere, no CJEU ruling, and no decided UK case on chatbots. The UK section is statutory reading rather than case law and is labelled as such.',
+      'The Canadian decision is a small claims tribunal ruling that binds only the parties, despite how widely it is cited.',
+    ],
+
+    cta: {
+      heading: 'Deploying a bot that talks about prices or entitlements?',
+      body: 'The design answer is to constrain rather than instruct: anything with a legal consequence should come from a lookup that can only return true values. That is a short conversation and it is much cheaper than the alternative conversation.',
+      buttonLabel: 'Talk about the design',
+      href: '/contact?service=chatbot-development',
+    },
+
+    related: ['should-your-business-have-an-ai-policy', 'the-ai-redundancy-that-was-reversed'],
+
+    seo: {
+      title: 'Who Is Liable When Your Chatbot Is Wrong?',
+      description:
+        'A German court held an operator liable despite undisputedly clean training data, and that judgment is now final. What every court has said, and the UK position.',
+    },
+  },
 ];

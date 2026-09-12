@@ -910,4 +910,194 @@ export const AUTOMATE_OR_HIRE_POSTS: Post[] = [
         'A 1983 paper describes AI deployment exactly: automation takes the easy cases, skill at the hard ones decays, and people are needed when least practised.',
     },
   },
+
+  {
+    slug: 'what-to-automate-first',
+    cluster: 'automate-or-hire',
+    title: 'What to Automate First, and How to Tell',
+    navLabel: 'What to automate first',
+    card: 'Five documented properties predict whether a task automates well. The exception rate decides most cases.',
+
+    answer:
+      'You have decided to automate something. The research converges on five properties that predict whether a given task is a good candidate: volume, how clearly the rules can be stated, the exception rate, how stable the process is, and whether the data is structured. Two independent academic groups arrive at the same list. The exception rate decides most real cases, and it is measurable in a week.',
+
+    sections: [
+      {
+        kind: 'prose',
+        heading: 'The question after you have decided',
+        body: [
+          'This post assumes the prior question is settled and you are choosing between candidates. That is a different problem from whether to automate at all, and it has a more tractable answer.',
+          'The useful thing is that the criteria are documented rather than folkloric. Two academic groups working from different literatures arrive at substantially the same list, which is worth more than any vendor readiness assessment.',
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'The five properties',
+        intro:
+          'A candidate scoring badly on the third row is usually the wrong candidate, whatever it scores on the others.',
+        columns: ['Property', 'What it means', 'How to measure it this week'],
+        rows: [
+          ['Volume', 'Frequent enough to repay the effort', 'Count occurrences over a month'],
+          ['Rule clarity', 'Steps statable without judgement', 'Try writing them down'],
+          ['Exception rate', 'Cases needing a human decision', 'Count them over a real week'],
+          ['Stability', 'How often the process changes', 'How many times in the last year'],
+          ['Data structure', 'Readable without interpretation', 'Look at the actual inputs'],
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'Rule clarity, stated precisely',
+        body: [
+          'The research calls this determinism and is direct about its weight: "Determinism is one of the most distinctive criteria to assess the viability of RPA. Deterministic activities consist of logical execution steps without any form of cognitive assessment."',
+          'The test is practical rather than philosophical. Try to write the steps down such that somebody new could follow them without asking questions. Where you find yourself writing "use judgement" or "depending on the situation", you have found the part that does not automate.',
+          'That does not disqualify the task. It locates the boundary, and the boundary is where the human belongs.',
+        ],
+      },
+      {
+        kind: 'note',
+        tone: 'warning',
+        heading: 'The exception rate is the one that decides',
+        body:
+          'The same research states that candidate processes "show little or no amount of exceptions when tasks are being executed", and names the failure mechanism directly: "A high failure rate might correspond to poor standardization, maturity or determinism as the causes for exceptions." If a meaningful share of cases needs a human, you are not scoping automation. You are scoping a triage system with a queue, a rota and an interface for the person handling the residue, which is a larger project than the one usually approved.',
+      },
+      {
+        kind: 'prose',
+        heading: 'Stability, and the process that eats itself',
+        body: [
+          'The research defines maturity as how often the logical flow of the process changes, and requires that a candidate be "specified and predictable over a period in time".',
+          'This is where enthusiasm most often goes wrong. The process people most want to automate is frequently the newest one, because it is the one currently causing pain. A new process is also the one most likely to change next quarter, which means automating it now buys you the work of rebuilding it.',
+          'The better candidate is usually the boring one that has run unchanged for two years and that nobody mentions because it works, slowly, and costs somebody a morning a week.',
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'Data structure, which is where projects quietly die',
+        body: [
+          'The criterion is explicit: "Unstructured and hardly accessible data impedes RPA."',
+          'In practice this is the form that permits free text where four options would do, the supplier who sends the same information in a different shape each month, the spreadsheet where the date column contains four date formats.',
+          'The useful move is frequently upstream. Fixing the input form removes the work rather than automating it, which is cheaper and leaves nothing to maintain. If you can constrain the input, do that before automating the processing of unconstrained input.',
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'The honest limit of this list',
+        body: [
+          'These criteria are well documented and they are not validated predictors, and the distinction matters.',
+          'They were derived by aggregating what prior literature asserts and then demonstrating them on case studies, rather than by testing them against a population of projects that includes failures. The reason is structural, and a systematic review of 63 papers states it: the literature covers only successful projects.',
+          'So this is a checklist that catches obvious mistakes, not a score that predicts outcomes. The reviews also record a genuine disagreement between papers about whether unpredictable volume peaks suit automation, which is worth knowing rather than smoothing over.',
+        ],
+      },
+      {
+        kind: 'steps',
+        heading: 'Choosing between candidates',
+        intro:
+          'A week of counting beats a month of discussion, and the counting is the part that usually changes the answer.',
+        steps: [
+          {
+            title: 'List the candidates and count how often each happens',
+            body:
+              'Actual occurrences over a month. Frequency is the easiest property to establish and it eliminates candidates quickly, because a task that happens twice a month rarely repays the build.',
+          },
+          {
+            title: 'Time one instance properly',
+            body:
+              'Not the estimate somebody gives you. Watch it once. The gap between the remembered duration and the real one is usually large and runs in both directions.',
+          },
+          {
+            title: 'Count exceptions over a real week',
+            body:
+              'How many cases needed a decision, and what the decision was. This is the highest-value measurement on the list and it is the one people skip because it takes a week.',
+          },
+          {
+            title: 'Ask when the process last changed',
+            body:
+              'If the answer is within the last quarter, it will probably change again. Prefer the stable candidate even if it is less painful today.',
+          },
+          {
+            title: 'Look at the raw inputs before deciding',
+            body:
+              'Open the actual emails, forms and spreadsheets. If the input is unconstrained, consider fixing the input first, which frequently removes the need for the automation entirely.',
+          },
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'What we ask for before scoping',
+        body: [
+          'We build workflow automation, and the first thing we ask for is not a description of the process. It is two numbers: how often it happens, and how long it takes.',
+          'That settles more candidates than any discussion. A task taking four minutes a day is twenty minutes a week, and an integration costing three weeks of work will not repay it however irritating the four minutes feel.',
+          'The second thing we ask for is a week of exception counting, and clients resist it because it delays the start. It is the measurement that most often changes the shape of the project, usually from automation to a human-in-the-loop workflow that we would rather scope correctly than discover halfway through.',
+          'And the recommendation that costs us the most work is fixing the input. Where a process exists to reshape badly structured data, constraining the form upstream removes the work instead of automating it. It is a smaller job, it leaves nothing to maintain, and it is the right answer often enough that we ask about it every time.',
+        ],
+      },
+    ],
+
+    faqs: [
+      {
+        question: 'What should I automate first?',
+        answer:
+          'The candidate that scores well on five documented properties: high volume, rules statable without judgement, few exceptions, a stable process, and structured data. In practice the exception rate decides most cases, and it is measurable in a week.',
+      },
+      {
+        question: 'What exception rate is too high?',
+        answer:
+          'There is no published threshold worth quoting, and the research base cannot produce one because it studies only successful projects. What matters is measuring your own rate on real cases, because a high one means you are scoping a triage system rather than automation.',
+      },
+      {
+        question: 'Should I automate the process causing the most pain?',
+        answer:
+          'Often not, because the most painful process is frequently the newest, and new processes change. Automating something that will be redesigned next quarter buys you the work of rebuilding it. The stable, boring, slow process is usually the better candidate.',
+      },
+      {
+        question: 'What if the data is messy?',
+        answer:
+          'Look upstream first. Where a process exists to reshape badly structured input, constraining the input form removes the work rather than automating it, which is cheaper and leaves nothing to maintain. Unstructured data is explicitly identified as impeding automation.',
+      },
+      {
+        question: 'Are these criteria reliable?',
+        answer:
+          'They are documented consensus rather than validated predictors. Two independent academic groups converge on them, but they were derived from prior literature and demonstrated on case studies rather than tested against failures, because the literature covers only successful projects.',
+      },
+    ],
+
+    publishedAt: '2026-11-10T03:00:00Z',
+    reviewedOn: '2026-09-12',
+
+    sources: [
+      {
+        label: 'Wellmann et al., A framework to evaluate the viability of robotic process automation, BPM 2020',
+        url: 'https://arxiv.org/abs/2007.10900',
+        readOn: '2026-09-11',
+        supports: 'The five criteria, the determinism definition, the exception rate requirement and the statement that unstructured data impedes automation.',
+      },
+      {
+        label: 'Wewerka and Reichert, Robotic Process Automation: A Systematic Literature Review',
+        url: 'https://arxiv.org/abs/2012.11951',
+        readOn: '2026-09-11',
+        supports: 'The independent convergence on the same criteria, and that the literature covers only successful projects.',
+      },
+    ],
+
+    limits: [
+      'The criteria are documented consensus rather than validated predictors, for the survivorship reason the post explains.',
+      'No thresholds are given for any property, because the credible sources do not publish them and the circulating figures are vendor-produced.',
+      'The literature reviewed concerns robotic process automation specifically. The properties generalise well to other automation, and that generalisation is ours.',
+      'We sell automation, and the recommendation to fix the input upstream is the one that most often reduces the work we are paid for.',
+    ],
+
+    cta: {
+      heading: 'Have several candidates and no way to choose?',
+      body: 'Two numbers settle most of it: how often it happens and how long it takes. A week of counting exceptions settles the rest, and it frequently changes what the project should be before anyone has built anything.',
+      buttonLabel: 'Talk through the candidates',
+      href: '/contact?service=workflow-automation',
+    },
+
+    related: ['when-automation-actually-pays', 'when-your-spreadsheet-becomes-a-system'],
+
+    seo: {
+      title: 'What to Automate First, and How to Tell',
+      description:
+        'Five documented properties predict whether a task automates well: volume, rule clarity, exception rate, stability and data structure. The exception rate decides most cases.',
+    },
+  },
 ];

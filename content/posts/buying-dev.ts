@@ -1205,4 +1205,190 @@ export const BUYING_DEV_POSTS: Post[] = [
         'An offshore supplier explaining that every statistic in this market fails tracing, including the famous 2.5x finding that its own authors control away.',
     },
   },
+
+  {
+    slug: 'build-or-buy',
+    cluster: 'buying-dev',
+    title: 'Build or Buy, and the Third Option Nobody Offers',
+    navLabel: 'Build or buy',
+    card: 'The honest answer is usually buy. The interesting question is what to do about the twenty percent it does not cover.',
+
+    answer:
+      'Buy, unless the thing is what makes you different from competitors. Software you buy has already absorbed the edge cases you have not thought of, and the ongoing cost of custom software is the part consistently underestimated. The useful question is not build or buy but what to do about the fraction a bought product does not cover, and the answer there is usually a small piece of custom work around a bought core rather than replacing it.',
+
+    sections: [
+      {
+        kind: 'prose',
+        heading: 'The default, and when to depart from it',
+        body: [
+          'For most business functions, buying is right and the reasoning is not about price. A product sold to a thousand businesses has encountered edge cases you will meet in month seven and has already handled them, and that accumulated handling is most of what you are paying for.',
+          'The case for building is narrow: when the thing is the reason customers choose you. If your scheduling logic is what makes you better than competitors, buying generic scheduling removes your advantage to save money. If your scheduling is just scheduling, building it is paying to reinvent something available for a subscription.',
+          'That is the whole test, and most build-or-buy conversations would end in twenty minutes if it were applied first.',
+        ],
+      },
+      {
+        kind: 'note',
+        tone: 'warning',
+        heading: 'What building actually commits you to',
+        body:
+          'The build cost is the visible number and the smaller one. Custom software needs maintenance as dependencies update and platforms change, someone who understands it, and the accumulated cost of every edge case you meet, each of which a bought product met years ago and handled. The estimation research is relevant here too: most projects overrun, typically by 30 to 40 percent, and uncertainty does not reliably narrow as they proceed. A build decision is a commitment to an ongoing relationship with a codebase, not a purchase.',
+      },
+      {
+        kind: 'table',
+        heading: 'The comparison, honestly',
+        intro:
+          'The third row is the one that decides most cases and the one least often discussed.',
+        columns: ['', 'Buy', 'Build'],
+        rows: [
+          ['Edge cases', 'Already handled by someone else', 'You meet each one yourself'],
+          ['Ongoing cost', 'Subscription, predictable', 'Maintenance, less predictable'],
+          ['Fit', 'Roughly 80 percent, usually', 'Exactly what you specified'],
+          ['Key person risk', 'The vendor\'s problem', 'Yours, and see the truck factor'],
+          ['Changing your mind', 'Migration, painful but normal', 'You own it, and it owns you'],
+          ['Competitive advantage', 'None, everyone can buy it', 'Real, if the thing differentiates'],
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'The twenty percent problem, which is the real question',
+        body: [
+          'Nearly every buy decision ends the same way. The product does most of what you need and does not do one or two things that matter, and the meeting becomes a debate about whether to build the whole thing instead.',
+          'That is the wrong frame. Rejecting a product that covers eighty percent because of the twenty is how organisations end up building entire systems to solve a gap that a small piece of custom work would have closed.',
+          'The options for the gap, in order of cost: change your process to match the product, which is free and frequently correct because your process is often arbitrary rather than necessary; use the product\'s configuration, which most buyers underuse; build a small integration around the bought core; or, rarely, build the whole thing.',
+          'Most gaps close at step one or three, and step one is worth genuine consideration rather than dismissal. A process that exists because somebody set it up that way in 2019 is not a requirement.',
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'The hybrid that usually wins',
+        body: [
+          'The pattern that works most often is not on the menu when the question is posed as build or buy.',
+          'Buy the commodity parts: accounting, email, payments, storage, the record system. Build the thin layer that connects them in the way your business actually works, which is usually small, and which is where the differentiation genuinely sits.',
+          'It degrades well, too. If one bought component disappoints, you replace it without rebuilding everything, because the thing you built is the connective tissue rather than the whole organism.',
+          'What it requires is discipline about what goes in the custom layer. The temptation is to keep adding, and a connective layer that grows into a platform has quietly become a build decision nobody made.',
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'Questions that change the answer',
+        body: [
+          'Three considerations that people discover late.',
+          'Whose data is it, and how does it come out? A bought product holds your data on someone else\'s terms. Establishing the export format before committing is a small task that occasionally reverses the decision.',
+          'What happens if the vendor changes? Price rises, acquisitions and discontinuations are normal. A bought product is a dependency on another company\'s commercial decisions, which is a real risk and usually a smaller one than the maintenance burden of a build.',
+          'And who will own the custom part? If the answer is a supplier rather than anyone in your business, look at the truck factor research: across 133 popular open-source projects, 65 percent had a truck factor of two or fewer. Building means acquiring that risk along with the software.',
+        ],
+      },
+      {
+        kind: 'steps',
+        heading: 'Working through it',
+        intro:
+          'The first question resolves most cases and takes a minute.',
+        steps: [
+          {
+            title: 'Ask whether this is why customers choose you',
+            body:
+              'If yes, consider building. If no, start from buying. This single question settles the majority of build-or-buy debates and is frequently never asked.',
+          },
+          {
+            title: 'Try the products properly before concluding they do not fit',
+            body:
+              'Not a demo. A real trial with real data for a fortnight. Most conclusions that nothing fits are reached from feature lists rather than from use.',
+          },
+          {
+            title: 'Write down the gap specifically',
+            body:
+              'Not "it does not fit our process" but the three named things it cannot do. Vague gaps justify building; specific gaps usually turn out to be configurable, or to be process rather than software.',
+          },
+          {
+            title: 'Ask whether your process could change instead',
+            body:
+              'Free, immediate, and more often right than people expect. A process that exists because of how somebody configured something years ago is not a constraint worth funding a build to preserve.',
+          },
+          {
+            title: 'If building, price year three rather than the build',
+            body:
+              'Maintenance, the person who understands it, and the edge cases you have not met yet. The build price is the smallest number in the decision.',
+          },
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'What we recommend, and what that costs us',
+        body: [
+          'We build custom software, so recommending buying is recommending against our own product.',
+          'We do it frequently, because the twenty percent problem is the most common shape of enquiry we receive: somebody has evaluated products, found each covers most of what they need, and concluded they should build. The conversation that follows usually establishes that the gap is two named things and that both are configuration or a small integration.',
+          'The work we would rather do is the connective layer: buy the commodities, build the thin bespoke piece that makes them work the way the business does. It is smaller than a platform build and it is the part that actually differentiates, which makes it better value and better work.',
+          'The projects we decline are the ones replacing a bought product because it fits imperfectly, without anyone having tried it with real data. That is an expensive way to discover the product was fine.',
+        ],
+      },
+    ],
+
+    faqs: [
+      {
+        question: 'Should I build or buy software?',
+        answer:
+          'Buy, unless the thing is why customers choose you. A bought product has already absorbed the edge cases you will meet later, which is most of what you are paying for. Building is right when the capability differentiates you and wrong when it is ordinary business function.',
+      },
+      {
+        question: 'The product only does 80 percent of what we need. Should we build?',
+        answer:
+          'Usually not the whole thing. The options for the gap, cheapest first, are changing your process to match, using configuration you have not explored, building a small integration around the bought core, or building everything. Most gaps close at the first or third.',
+      },
+      {
+        question: 'What is the real cost of building?',
+        answer:
+          'Not the build. Maintenance as dependencies and platforms change, somebody who understands it, and every edge case you meet that a bought product met years ago. And the estimation research applies: most projects overrun by 30 to 40 percent.',
+      },
+      {
+        question: 'Is it risky to depend on a vendor?',
+        answer:
+          'Yes, and usually less risky than maintaining your own. Price rises, acquisitions and discontinuations happen. Establish how your data comes out before committing, because export format is the thing that determines whether leaving is difficult or impossible.',
+      },
+      {
+        question: 'What is the hybrid approach?',
+        answer:
+          'Buy the commodity parts and build the thin layer connecting them in the way your business works. It is smaller than a platform build, it is where differentiation actually sits, and it degrades well because a disappointing component can be replaced without rebuilding everything.',
+      },
+    ],
+
+    publishedAt: '2026-11-14T03:00:00Z',
+    reviewedOn: '2026-09-12',
+
+    sources: [
+      {
+        label: 'Molokken-Ostvold and Jorgensen, A Review of Surveys on Software Effort Estimation, ISESE 2003',
+        url: 'https://www.simula.no/publications/review-surveys-software-effort-estimation',
+        readOn: '2026-09-11',
+        supports: 'That most projects overrun, typically by 30 to 40 percent, which applies to the build side of the decision.',
+      },
+      {
+        label: 'Avelino, Passos, Hora and Valente, A Novel Approach for Estimating Truck Factors, ICPC 2016',
+        url: 'https://arxiv.org/abs/1604.06766',
+        readOn: '2026-09-11',
+        supports: 'That across 133 popular systems, 65 percent had a truck factor of two or fewer, which is the key person risk a build acquires.',
+      },
+    ],
+
+    limits: [
+      'This is a decision framework rather than a cost comparison. What either option costs depends entirely on what you are building or buying.',
+      'The truck factor research covers open-source projects where contribution is public and measurable. It is an indicator for commercial work rather than a measurement of it.',
+      'It does not cover regulated contexts where a bought product may not be certifiable for your use, which changes the analysis substantially.',
+      'We build custom software, so recommending buying is recommending against our own more expensive product, and the hybrid we prefer is work we would be paid for.',
+    ],
+
+    cta: {
+      heading: 'Stuck on the twenty percent a product does not cover?',
+      body: 'Naming the gap specifically usually resolves it, because vague gaps justify builds and specific ones turn out to be configuration or a small integration. That is a conversation rather than a project, and it occasionally saves one.',
+      buttonLabel: 'Name the gap with us',
+      href: '/contact?service=web-development',
+    },
+
+    related: ['fixed-price-or-time-and-materials', 'what-happens-when-the-agency-disappears'],
+
+    seo: {
+      title: 'Build or Buy, and the Third Option Nobody Offers',
+      description:
+        'Buy unless the thing is why customers choose you. The real question is what to do about the twenty percent a product does not cover, and it is rarely building everything.',
+    },
+  },
 ];

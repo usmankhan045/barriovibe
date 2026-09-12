@@ -8,6 +8,11 @@ it. `POSTS.md` allocated 47 posts from a query harvest, and when the writing
 started, five of 403 findings touched those clusters. Demand was measured and
 answerability was assumed.
 
+> **COMPLETE, 12 September 2026.** Every post in this catalogue is written. 45
+> posts across 12 clusters, scheduled one per day through 14 November 2026, with
+> 152 sources each carrying the date it was read. What follows is the record of
+> how each was chosen and what it rests on.
+
 ## How to read an entry
 
 | Field | What it means |
@@ -153,7 +158,7 @@ nobody has read.
   pilot is usually that it was never scoped to survive contact with real data,
   exceptions and someone owning it afterwards.
 
-### 1.4b Should your business have an AI policy, and what goes in it
+### 1.4b Should your business have an AI policy, and what goes in it  *(WRITTEN, 8 Nov)*
 
 - **Demand**: `should my business have an ai policy` 24, `ai guardrails and
   governance` 16, `security considerations in ai adoption` 20,
@@ -165,7 +170,7 @@ nobody has read.
   status each tool runs on, what happens to feedback buttons, and which data may
   reach a free tier. The Gemini free-tier trap is the worked example.
 
-### 1.5 Who is liable when the chatbot is wrong
+### 1.5 Who is liable when the chatbot is wrong  *(WRITTEN, 11 Nov)*
 
 - **Demand**: adjacent rather than direct; `ai guardrails and governance` 16
 - **Evidence**: `documented-ai-replacement-reversals` (the OLG Hamm ruling)
@@ -295,7 +300,7 @@ it, and the honest answer is genuinely contrarian.
   literature give them a real test, and Hammer gives the warning: automating a
   bad process entrenches it.
 
-### 3.4a What to automate first, and how to tell
+### 3.4a What to automate first, and how to tell  *(WRITTEN, 10 Nov)*
 
 - **Demand**: `what can be automated in a business` (seeded), `should i automate
   this` 20, `guide to business process automation` 20, `what are types of
@@ -369,7 +374,7 @@ the entire trust play.
   written by someone selling agents. A decision tree that can end in "use a
   form" is the differentiator.
 
-### 4.3 Is your business ready for an AI agent?
+### 4.3 Is your business ready for an AI agent?  *(WRITTEN, 9 Nov)*
 
 - **Demand**: `are we ready for ai` 27, `do ai agents work` 40, `why do i need an
   ai agent` 6, `getting data ready for ai` 1
@@ -380,7 +385,7 @@ the entire trust play.
   firm with no spare capacity is structurally worse placed, which is a
   defensible reason for caution rather than a failure of nerve.
 
-### 4.4 What a restaurant actually needs, and what it does not
+### 4.4 What a restaurant actually needs, and what it does not  *(WRITTEN, 12 Nov)*
 
 - **Demand**: `app for small business` 25, `do i need an app for my restaurant`
   (seeded), `build a app for business` 25
@@ -396,7 +401,7 @@ the entire trust play.
   Includes an honest negative: there is no methodologically sound data on how
   customers discover restaurants.
 
-### 4.5 What a clinic actually needs, and the 30-point swing nobody buys
+### 4.5 What a clinic actually needs, and the 30-point swing nobody buys  *(WRITTEN, 13 Nov)*
 
 - **Demand**: shares the 4.1 app cluster
 - **Evidence**: `clinic-app-no-evidence`, `google-local-ranking-three-factors`
@@ -583,7 +588,7 @@ position available.
   two or fewer, meaning two people leaving would orphan the project. That is a
   checkable question to ask before signing, not a feeling.
 
-### 6.4 Build or buy
+### 6.4 Build or buy  *(WRITTEN, 14 Nov)*
 
 - **Demand**: `build vs buy software` 29, `build or buy software` 12,
   `how to choose a crm` 26, `what does a good crm look like` 24,
