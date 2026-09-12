@@ -106,9 +106,14 @@ export function GuidePage({ guide }: { guide: Guide }) {
           has been served, which is the point of a reference page. */}
       <section className="pb-4 pt-10 md:pt-14">
         <Container>
-          <Breadcrumb items={crumbs} />
+          {/* Inside the measure too, so the trail starts on the same left
+              edge as the heading it introduces rather than at the container
+              edge, which would leave it hanging on its own. */}
+          <div className="u-measure">
+            <Breadcrumb items={crumbs} />
+          </div>
 
-          <div className="mt-8 max-w-[68ch]">
+          <div className="u-measure mt-8">
             <Eyebrow>{cluster.title}</Eyebrow>
             <h1 className="mt-3 font-display text-h1 text-ink">
               {guide.title}
@@ -125,7 +130,7 @@ export function GuidePage({ guide }: { guide: Guide }) {
           {/* Where the figures come from, in the same block the calculators
               carry. Guides are YMYL content and an undated, unsourced page
               about tax rates is the profile that rates worst. */}
-          <div className="max-w-[68ch]">
+          <div className="u-measure">
             <RateProvenance />
           </div>
         </Container>
@@ -133,10 +138,11 @@ export function GuidePage({ guide }: { guide: Guide }) {
 
       {/* ── 2. The body ───────────────────────────────────────────────────
           Measured at 68ch rather than the site's usual 62: these run long and
-          a reference page is scanned as much as read. */}
+          a reference page is scanned as much as read. Centred in the
+          container by u-measure, since nothing sits beside it. */}
       <Section tight>
         <Container>
-          <div className="max-w-[68ch]">
+          <div className="u-measure">
             {guide.sections.map((section, i) => (
               <ContentBlock key={i} section={section} />
             ))}

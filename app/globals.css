@@ -91,6 +91,20 @@
     padding-inline: var(--gutter);
   }
 
+  /* The reading column for guides and blog posts.
+
+     These pages are a single column of prose with nothing beside it, so the
+     measure is centred in the container rather than set flush to its left
+     edge. Left-aligning it is right where full-width content sits below it
+     and anchors the eye (ToolPage does exactly that, with the calculator
+     under the intro); on a page that is only the column, the same alignment
+     reads as the whole page having drifted off to one side on a wide
+     display. Width is unchanged: the measure is still 68ch. */
+  .u-measure {
+    max-width: 68ch;
+    margin-inline: auto;
+  }
+
   .u-section {
     padding-block: var(--section-y);
   }

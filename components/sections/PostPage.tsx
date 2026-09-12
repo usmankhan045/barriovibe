@@ -104,9 +104,14 @@ export function PostPage({ post }: { post: Post }) {
       {/* ── 1. The answer ───────────────────────────────────────────────── */}
       <section className="pb-4 pt-10 md:pt-14">
         <Container>
-          <Breadcrumb items={crumbs} />
+          {/* Inside the measure too, so the trail starts on the same left
+              edge as the heading it introduces rather than at the container
+              edge, which would leave it hanging on its own. */}
+          <div className="u-measure">
+            <Breadcrumb items={crumbs} />
+          </div>
 
-          <div className="mt-8 max-w-[68ch]">
+          <div className="u-measure mt-8">
             <Eyebrow>{cluster.title}</Eyebrow>
             <h1 className="mt-3 font-display text-h1 text-ink">{post.title}</h1>
 
@@ -136,7 +141,7 @@ export function PostPage({ post }: { post: Post }) {
       {/* ── 2. The body ─────────────────────────────────────────────────── */}
       <Section tight>
         <Container>
-          <div className="max-w-[68ch]">
+          <div className="u-measure">
             {post.sections.map((section, i) => (
               <ContentBlock key={i} section={section} />
             ))}
@@ -148,7 +153,7 @@ export function PostPage({ post }: { post: Post }) {
       {post.limits && post.limits.length > 0 && (
         <Section tight>
           <Container>
-            <div className="max-w-[68ch]">
+            <div className="u-measure">
               <div className="u-tile p-7 md:p-8">
                 <h2
                   id="limits"
@@ -181,7 +186,7 @@ export function PostPage({ post }: { post: Post }) {
           here, with the date it was read. */}
       <Section tight>
         <Container>
-          <div className="max-w-[68ch]">
+          <div className="u-measure">
             <h2 id="sources" className="font-display text-h3 text-ink">
               Sources
             </h2>
