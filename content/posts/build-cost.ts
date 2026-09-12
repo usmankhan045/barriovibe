@@ -368,4 +368,392 @@ export const BUILD_COST_POSTS: Post[] = [
         'Most projects overrun by 30 to 40 percent, and the cone of uncertainty does not narrow. What 570 projects showed, and why not to cite the CHAOS report.',
     },
   },
+
+  {
+    slug: 'why-your-ai-bill-exceeded-the-estimate',
+    cluster: 'build-cost',
+    title: 'Why Your AI Bill Came In Higher Than the Estimate',
+    navLabel: 'Why the AI bill overran',
+    card: 'It is rarely the per-token price. It is the context you pay for repeatedly, the retries, and the work that happened twice.',
+
+    answer:
+      'Per-token prices are published and easy to multiply, which is why estimates built on them look precise and come in low. The three things that actually move an AI bill are not in that arithmetic: context is re-sent and re-charged on every turn, failures and retries consume tokens without producing output, and duplicate execution does real work twice. The fix is architectural rather than a cheaper model.',
+
+    sections: [
+      {
+        kind: 'prose',
+        heading: 'The estimate was probably arithmetically correct',
+        body: [
+          'Somebody took the published price per million tokens, estimated a typical request and response, multiplied by expected volume, and got a number. That calculation is not wrong, it is incomplete, and the gap between it and the invoice is systematic rather than random.',
+          'It also explains why the overrun feels mysterious. Nothing failed, usage was roughly as predicted, and the bill is several times the estimate.',
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Where the difference comes from',
+        intro:
+          'Roughly in order of how much each contributes on a typical agentic workload.',
+        columns: ['Cause', 'Why the estimate missed it'],
+        rows: [
+          ['Context re-sent every turn', 'The estimate counted one request, not the conversation'],
+          ['Verbose tool output', 'A tool result is charged on every later turn too'],
+          ['Retries and failures', 'Failed attempts consume tokens and produce nothing'],
+          ['Duplicate execution', 'The same work billed twice, with no error logged'],
+          ['Output tokens', 'Priced at around five times input on most models'],
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'The one that dominates: you pay for the conversation, repeatedly',
+        body: [
+          'This is the structural fact that makes agent costs behave unlike API costs generally.',
+          'A model has no memory between calls. Every turn re-sends the whole conversation so far: the system prompt, the tool definitions, the earlier exchanges, and every tool result already returned.',
+          'So a twelve-turn agent run does not cost twelve times one turn. The fixed prefix at the front is paid for twelve times, and each tool result is paid for on every turn after it arrives.',
+          'An estimate built on one request and one response has counted a fraction of what the run will actually consume, and the ratio gets worse as the conversation gets longer.',
+        ],
+      },
+      {
+        kind: 'note',
+        tone: 'warning',
+        heading: 'The saving that is usually left on the table',
+        body:
+          'Because that fixed prefix repeats, caching it is the largest single reduction available. Cached input is priced far below fresh input across vendors: on Anthropic\'s models, cache reads run at a fraction of the input rate, and on OpenAI\'s models cached input is around a tenth of the standard rate. A cache write costs more than an ordinary read, so caching loses money on a prefix used once and wins substantially on one reused across turns. The break-even arrives at roughly the third read, which is why this is an agent optimisation specifically and does nothing for one-shot calls.',
+      },
+      {
+        kind: 'prose',
+        heading: 'Verbose tools cost more than they look',
+        body: [
+          'A tool that returns a whole record when the agent needed one field seems harmless. It is charged once on arrival and then on every subsequent turn for the rest of the run, because it stays in the context.',
+          'On a long run, a handful of chatty tools can contribute more than the model choice does. Trimming tool output to what the agent actually uses is usually the second largest saving after caching, and it typically takes an afternoon.',
+          'It is also the least likely thing to be in an estimate, because the estimate was made before anyone knew what the tools would return.',
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'Failures cost money and produce nothing',
+        body: [
+          'Estimates are built on the successful path. Production is not only the successful path.',
+          'A run that loops burns tokens without producing output, and it does not error while doing so. A tool call that times out and is re-dispatched can complete twice, both times successfully, with no error logged and twice the cost. Documented cases exist of this mechanism producing bills in the thousands within a day, with every individual action reporting success.',
+          'This is why a monthly cap is a poor control and a per-run budget is a good one: only a per-run limit acts inside the window where the damage happens.',
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'And output is priced higher than input',
+        body: [
+          'Worth checking against your own estimate, because it is easy to average the two by accident.',
+          'Across the major vendors, output tokens are typically priced at around five times input. A workload that generates long responses is therefore more expensive than the same token volume would suggest if you assumed one rate.',
+          'One promotional caveat to note: at least one vendor is currently running a temporary price on a flagship model with a published end date. Any estimate resting on a promotional rate has an expiry attached, which is worth knowing before you build a business case on it.',
+        ],
+      },
+      {
+        kind: 'steps',
+        heading: 'Estimating properly, before you build',
+        intro:
+          'Four steps. They take an hour and produce a number that survives contact with production.',
+        steps: [
+          {
+            title: 'Count the fixed prefix',
+            body:
+              'System prompt plus tool definitions, in tokens. This is re-sent every turn and it is usually larger than people expect once there are eight or ten tools defined with proper descriptions.',
+          },
+          {
+            title: 'Estimate turns per task, generously',
+            body:
+              'Not the happy path. A lookup agent may be two or three turns, a multi-step operational one ten to twenty, and a stuck one considerably more. The distribution matters more than the average.',
+          },
+          {
+            title: 'Add the accumulation, not just the prefix',
+            body:
+              'Each tool result persists in context for every later turn. Estimate what your tools return and multiply by the turns that follow, because that term is frequently larger than the prefix.',
+          },
+          {
+            title: 'Apply caching and then add a failure allowance',
+            body:
+              'Move the prefix to the cached rate with one write per run. Then add something for retries and loops, because the successful path is not the whole bill and the failure cases are the expensive ones.',
+          },
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'What we do differently now',
+        body: [
+          'We build agentic systems, and we have been on the wrong side of this: our early estimates were built on the successful path and the prefix, and they were low for exactly the reasons above.',
+          'What changed is that we now instrument tokens per completed task from the first day rather than total spend, because the ratio is what tells you something is wrong while it is still cheap. Total spend moves with volume and hides the problem inside growth.',
+          'We also design tool outputs deliberately, which sounds fussy and is where a surprising amount of the money is. A tool returning three fields instead of thirty changes the cost of every subsequent turn in the run.',
+          'And we quote running costs as a range with the failure allowance stated separately, rather than as a single number from the happy path. It makes our estimates look less precise than competitors who quote from the per-token price, and it makes them closer to the invoice.',
+        ],
+      },
+    ],
+
+    faqs: [
+      {
+        question: 'Why is my AI agent more expensive than the token price suggests?',
+        answer:
+          'Because the model has no memory between calls, so every turn re-sends the whole conversation. The fixed prefix is paid for on every turn, and each tool result is charged again on every turn after it arrives. An estimate built on one request and response counts a fraction of the run.',
+      },
+      {
+        question: 'What is the biggest saving available?',
+        answer:
+          'Prompt caching on the fixed prefix. Cached input is priced well below fresh input, and since the prefix repeats every turn the saving compounds across the run. A cache write costs more than an ordinary read, so it pays from roughly the third read onward.',
+      },
+      {
+        question: 'Does a cheaper model fix a cost overrun?',
+        answer:
+          'Usually not first. Model choice typically moves the bill by a factor of two to five; caching and context discipline move it by more, and a cheaper model that needs more turns can cost more overall while producing worse output.',
+      },
+      {
+        question: 'How do retries affect the bill?',
+        answer:
+          'They consume tokens and produce nothing, and they do not error while doing it. A tool that times out can be re-dispatched and complete twice, both successfully, with no error logged. Documented cases have produced bills in the thousands within a day this way.',
+      },
+      {
+        question: 'How should I budget for this?',
+        answer:
+          'Count the fixed prefix, estimate turns generously, add the accumulating tool output, apply caching, then add an explicit allowance for failures. And set a spend ceiling per run rather than per month, because only a per-run control acts while the overrun is still small.',
+      },
+    ],
+
+    publishedAt: '2026-11-02T03:00:00Z',
+    reviewedOn: '2026-09-12',
+
+    sources: [
+      {
+        label: 'Anthropic pricing, including prompt caching read and write rates',
+        url: 'https://www.anthropic.com/pricing',
+        readOn: '2026-09-12',
+        supports: 'That cached reads are priced well below input, that cache writes cost more than an ordinary read, and that output is priced above input.',
+      },
+      {
+        label: 'OpenAI API pricing',
+        url: 'https://openai.com/api/pricing/',
+        readOn: '2026-09-12',
+        supports: 'Cached input pricing relative to standard input, output pricing, and the promotional rate with a published end date.',
+      },
+      {
+        label: 'LangGraph issue: duplicate tool dispatch after timeout',
+        url: 'https://github.com/langchain-ai/langgraph/issues',
+        readOn: '2026-09-11',
+        supports: 'That a long-running tool call can be re-dispatched with both executions completing successfully and no error logged.',
+      },
+    ],
+
+    limits: [
+      'No absolute price figures appear in this post, because they change frequently. The structural relationships, that context repeats and cached input is cheaper, are stable; the rates are not.',
+      'At least one vendor is running promotional pricing with a published end date, so any business case resting on current rates should note which ones are temporary.',
+      'This covers running cost. Build cost, which usually dominates the first year, is a separate question.',
+      'We build agentic systems and our own early estimates were low for the reasons described here. The method is given so you can apply it to any supplier including us.',
+    ],
+
+    cta: {
+      heading: 'Want the running cost estimated before you commit?',
+      body: 'It takes about an hour: count the fixed prefix, estimate turns, add what the tools return, apply caching, then add a failure allowance. We will do it with you and tell you plainly if the running cost is not the thing to worry about.',
+      buttonLabel: 'Get it estimated',
+      href: '/contact?service=agentic-ai-development',
+    },
+
+    related: ['what-a-chatbot-costs-by-what-it-does'],
+
+    seo: {
+      title: 'Why Your AI Bill Came In Higher Than the Estimate',
+      description:
+        'Rarely the token price. Context is re-charged every turn, verbose tools compound, retries produce nothing, and duplicate execution bills twice with no error.',
+    },
+  },
+
+  {
+    slug: 'what-a-chatbot-costs-by-what-it-does',
+    cluster: 'build-cost',
+    title: 'What a Chatbot Costs, by What You Actually Want It to Do',
+    navLabel: 'What a chatbot costs',
+    card: 'The free tier is real and the ceiling is low. Three different products get called a chatbot and they cost very differently.',
+
+    answer:
+      'What people call a chatbot is three different products with three different cost shapes. A scripted bot answering fixed questions is nearly free to run. A bot answering from your documents costs per conversation and the cost is dominated by how much context it reads. A bot that takes actions is an agent, and it carries evaluation, monitoring and idempotency work that the other two do not. The channel adds its own cost, and on WhatsApp a bot that replies to customers is free while one that contacts them is not.',
+
+    sections: [
+      {
+        kind: 'prose',
+        heading: 'Three products, one word',
+        body: [
+          'The word chatbot covers a scripted menu, a question answering system over documents, and an agent that books appointments and issues refunds. They share an interface and almost nothing else, including cost.',
+          'Most confused quotes trace to this. A supplier quotes for one and the client is imagining another, and the gap is not a margin dispute, it is two different projects.',
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'The three, and where the money goes',
+        intro:
+          'Build cost dominates the first year in all three cases. Running cost is what diverges afterwards.',
+        columns: ['Type', 'Running cost driver', 'The operational surface'],
+        rows: [
+          ['Scripted', 'Channel fees only', 'Almost none'],
+          ['Answers from documents', 'Tokens per conversation', 'Evaluation set, corpus upkeep'],
+          ['Takes actions', 'Tokens plus retries', 'Evaluation, monitoring, idempotency, permissions'],
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'The scripted bot, which is underrated',
+        body: [
+          'A decision tree with buttons has no model behind it, so it has no token cost and no risk of inventing an answer. It handles the top few questions that make up most volume, and hands everything else to a person.',
+          'It is unfashionable and it is frequently the right answer. If your enquiries are dominated by opening hours, order status and how to book, a scripted bot resolves them at nearly zero marginal cost and cannot be wrong.',
+          'The honest limitation is that it fails ungracefully on anything unanticipated, so the escalation path matters more than the tree. A scripted bot with a good handover is a good product; one that traps people in a menu is the thing that gave chatbots their reputation.',
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'The document bot, where cost follows context',
+        body: [
+          'Once the bot answers from your own material, the cost per conversation is set by how much it reads rather than by how much it says.',
+          'Each question retrieves passages and sends them to the model along with the system prompt and the conversation so far. A system that retrieves generously, passing twenty chunks when three would do, costs several times one that retrieves precisely, and the answers are often worse because the relevant passage is competing with noise.',
+          'Which means retrieval quality and cost point the same way here, unusually. Better precision is cheaper and more accurate at once, and it is the first thing to look at if a bot is costing more than expected.',
+          'The other structural cost is the conversation itself: a multi-turn exchange re-sends everything said so far on each turn, so long conversations cost more per turn as they proceed.',
+        ],
+      },
+      {
+        kind: 'note',
+        tone: 'warning',
+        heading: 'The channel is a separate bill, and on WhatsApp it dominates',
+        body:
+          'Meta charges per delivered template message and prices by country. For a Pakistani recipient the marketing rate is several times the utility rate, and replies to a customer inside the 24-hour service window are free. So a support bot that answers people who messaged first has a Meta bill close to zero however much it says, and a marketing bot that initiates conversations pays on every message. That is the single biggest fork in a WhatsApp chatbot budget and it is decided by what the bot is for rather than by how it is built.',
+      },
+      {
+        kind: 'prose',
+        heading: 'Where the free tier ends',
+        body: [
+          'A common search is for a free chatbot for a website, and the free tiers are real rather than a trick. They are usually limited by conversations per month, by whether you can remove branding, and by whether you can connect your own documents.',
+          'The ceiling arrives in a predictable order. First you want your own content in it rather than a generic assistant. Then you want it on a channel the free tier does not cover. Then somebody asks for a report on what people are asking, which is the point at which the free product stops being the cheap option and starts being the one without data.',
+          'Nothing about that is dishonest. It is worth knowing the sequence so you can judge where you are on it, because the migration is the expensive part rather than the subscription.',
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'The costs that are not per message',
+        body: [
+          'For anything beyond scripted, three costs recur and none is in a per-message price.',
+          'The corpus. A document bot is only as good as what it can retrieve, so somebody has to assemble, clean and keep the material current. This is usually the largest hidden cost and it does not stop.',
+          'The evaluation set. Without one, nobody can tell whether a change improved things, and model versions change underneath you. For a bot answering customers this is the difference between knowing it works and hoping.',
+          'The escalation path. Every bot needs a route to a human, and that route needs staffing. A bot that resolves 60 percent of enquiries has not removed the other 40 percent, and the residue is usually the harder half.',
+        ],
+      },
+      {
+        kind: 'steps',
+        heading: 'Working out which one you need',
+        intro:
+          'In order. Most businesses stop at step two and are right to.',
+        steps: [
+          {
+            title: 'Look at what people actually ask',
+            body:
+              'Pull the last two hundred enquiries and count them. If the top five questions are most of the volume, a scripted bot handles your problem at almost no running cost.',
+          },
+          {
+            title: 'Check whether the answers exist in writing',
+            body:
+              'A document bot needs documents. If the answers live in people\'s heads or in a shared inbox, the project before the project is writing them down, and that is worth doing regardless of whether a bot follows.',
+          },
+          {
+            title: 'Decide whether it needs to do anything',
+            body:
+              'Answering is one product; booking, refunding and updating records is another. Taking actions brings evaluation, monitoring, idempotency and permissions, which is a different scope and a different budget.',
+          },
+          {
+            title: 'Price the channel separately from the brain',
+            body:
+              'They are independent. The same bot costs differently on your website, on WhatsApp answering inbound, and on WhatsApp sending outbound, and the third is where the numbers get large.',
+          },
+          {
+            title: 'Budget the corpus and the escalation, not just the build',
+            body:
+              'Keeping the material current and staffing the handover are ongoing, and they are what decides whether the thing still works in a year.',
+          },
+        ],
+      },
+      {
+        kind: 'prose',
+        heading: 'What we ask before quoting',
+        body: [
+          'We build chatbots, and the first question we ask is not technical. It is whether this bot is answering people or contacting them, because that decides most of the cost before anything is designed.',
+          'The second is whether the answers exist in writing. If they do not, we say so and usually suggest fixing that first, which is a smaller job for us and frequently reduces enquiry volume on its own. A business that publishes clear answers to its top ten questions sometimes discovers it no longer needs the bot.',
+          'The third is what happens when the bot cannot help. Teams underestimate this consistently: the bot takes the easy enquiries and leaves your staff a concentrated stream of the difficult ones, which is more demanding work than the mix they handled before. Planning for that is part of the project rather than an afterthought.',
+          'And we will quote a scripted bot when a scripted bot is the answer. It is less interesting work and it is cheaper to run, and a client who gets what they needed rather than what was fashionable comes back.',
+        ],
+      },
+    ],
+
+    faqs: [
+      {
+        question: 'How much does a chatbot cost to run?',
+        answer:
+          'It depends which of three products you mean. A scripted bot costs channel fees only. A bot answering from your documents costs per conversation, driven by how much context it reads. A bot that takes actions adds evaluation, monitoring and idempotency work that the others do not need.',
+      },
+      {
+        question: 'Are free website chatbots any good?',
+        answer:
+          'For a scripted bot handling common questions, often yes. The ceiling arrives when you want your own content in it, then a channel the free tier does not cover, then reporting on what people ask. Knowing that sequence helps you judge where you are on it.',
+      },
+      {
+        question: 'Why is my chatbot bill higher than expected?',
+        answer:
+          'Usually retrieval volume and conversation length. Passing twenty chunks when three would do costs several times more and often answers worse, and every turn re-sends the conversation so far. Retrieval precision is the rare change that is cheaper and more accurate at once.',
+      },
+      {
+        question: 'Does a WhatsApp bot cost more than a website bot?',
+        answer:
+          'It depends entirely on direction. Replies inside the 24-hour service window after a customer messages you are free, so an inbound support bot has a near-zero channel bill. Outbound template messages are charged per message and priced by country, which is where WhatsApp budgets get large.',
+      },
+      {
+        question: 'What gets forgotten in a chatbot budget?',
+        answer:
+          'The corpus, the evaluation set and the escalation path. Keeping source material current is ongoing and usually the largest hidden cost, and the enquiries the bot cannot handle are the harder ones, which makes the remaining human work more demanding rather than less.',
+      },
+    ],
+
+    publishedAt: '2026-11-04T03:00:00Z',
+    reviewedOn: '2026-09-12',
+
+    sources: [
+      {
+        label: 'Meta, WhatsApp Business Platform pricing',
+        url: 'https://developers.facebook.com/docs/whatsapp/pricing',
+        readOn: '2026-09-11',
+        supports: 'Per-message template pricing by country and category, and that replies inside the 24-hour customer service window are free.',
+      },
+      {
+        label: 'Anthropic pricing',
+        url: 'https://www.anthropic.com/pricing',
+        readOn: '2026-09-12',
+        supports: 'Input, output and cached input rates, which set the per-conversation cost of a document bot.',
+      },
+      {
+        label: 'Ragas documentation, agentic and tool use metrics',
+        url: 'https://docs.ragas.io/en/stable/concepts/metrics/available_metrics/agents/',
+        readOn: '2026-09-12',
+        supports: 'That evaluating an action-taking bot requires defining expected tool calls and outcomes, which is the operational surface a scripted bot avoids.',
+      },
+    ],
+
+    limits: [
+      'No total price is given, because the three products differ by more than an order of magnitude and the build usually dominates the first year.',
+      'Channel rates change and are country-specific. The WhatsApp figures referenced were read in September 2026 and Meta revises them.',
+      'This covers cost shape rather than vendor comparison. Which platform to build on is a separate question.',
+      'We build chatbots of all three kinds, including the scripted ones that are cheapest for us to deliver and cheapest for you to run.',
+    ],
+
+    cta: {
+      heading: 'Not sure which of the three you need?',
+      body: 'Pull your last two hundred enquiries and count them. If five questions are most of the volume, the answer is probably simpler and cheaper than what you were about to buy, and we would rather tell you that now.',
+      buttonLabel: 'Talk it through',
+      href: '/contact?service=chatbot-development',
+    },
+
+    related: ['why-your-ai-bill-exceeded-the-estimate'],
+
+    seo: {
+      title: 'What a Chatbot Costs, by What You Want It to Do',
+      description:
+        'Three products get called a chatbot and they cost very differently. Scripted is nearly free, document bots cost per conversation, and action-taking bots add real overhead.',
+    },
+  },
 ];
