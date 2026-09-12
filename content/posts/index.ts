@@ -6,6 +6,7 @@ import { AI_DATA_POSTS } from './ai-data';
 import { SHIPPING_POSTS } from './shipping';
 import { US_ENTITY_POSTS } from './us-entity';
 import { AI_FAILURE_POSTS } from './ai-failure';
+import { AUTOMATE_OR_HIRE_POSTS } from './automate-or-hire';
 
 export type { Post, PostCluster, PostClusterSlug, PostSource } from './types';
 
@@ -42,6 +43,14 @@ export const POST_CLUSTERS: PostCluster[] = [
     intro:
       'Cost is the most commercially serious question asked about AI agents and the worst answered, because almost every published figure is an estimate with no method behind it. These posts show the calculation and name the prices it uses.',
     icon: 'sparkles',
+  },
+  {
+    slug: 'automate-or-hire',
+    title: 'Automate or hire',
+    card: 'When automation pays, when it quietly loses money, and why nobody can tell you how often it fails.',
+    intro:
+      'This is the one category with peer-reviewed economics behind it, and the findings point the opposite way from the sales pitch. Automation pays in proportion to cost saved rather than to sophistication, the measured gains land on your newest staff rather than your most expensive, and the failure statistics everyone quotes do not survive being traced.',
+    icon: 'workflow',
   },
   {
     slug: 'ai-failure',
@@ -94,6 +103,7 @@ export const ALL_POSTS: Post[] = [
   ...SHIPPING_POSTS,
   ...US_ENTITY_POSTS,
   ...AI_FAILURE_POSTS,
+  ...AUTOMATE_OR_HIRE_POSTS,
 ];
 
 /**

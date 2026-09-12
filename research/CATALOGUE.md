@@ -92,7 +92,7 @@ post from a diagnostic into a briefing.
 **Why we can win it.** We read the primary document that everyone cites and
 nobody has read.
 
-### 1.1 The statistic everyone cites does not say what they think
+### 1.1 The statistic everyone cites does not say what they think  *(WRITTEN, 9 Oct)*
 
 - **Demand**: `mit why ai projects fail` 82, `what % of ai projects fail` 79,
   `what percentage of ai project fail` 47, `percent of ai projects that fail` 45
@@ -108,7 +108,7 @@ nobody has read.
   surveys collected at four industry conferences. The conclusion prescribes the
   authors' own protocol. Nobody searching this is being told any of it.
 
-### 1.2 What the official statistics actually measured
+### 1.2 What the official statistics actually measured  *(WRITTEN, 10 Oct)*
 
 - **Demand**: `what is ai adoption` 34, `trend in ai adoption` 25,
   `challenges of implementing ai` 25, plus the research-seeking mass above
@@ -120,7 +120,7 @@ nobody has read.
   fewer. The job-loss story is not in the official data, and the productivity
   gain is not confirmed either.
 
-### 1.3 Why AI failures are silent rather than loud
+### 1.3 Why AI failures are silent rather than loud  *(WRITTEN, 11 Oct)*
 
 - **Demand**: `chatbot gives wrong answers` 28, `error generating response
   chatbot` 35, `why is chatbot not working` 32, `ai agent hallucination` 2
@@ -130,7 +130,7 @@ nobody has read.
   "Agents rarely fail catastrophically, they fail subtly... This is worse than
   obvious failures because you trust the output."
 
-### 1.4 The AI redundancy that was reversed
+### 1.4 The AI redundancy that was reversed  *(WRITTEN, 12 Oct)*
 
 - **Demand**: `companies replacing employees with ai` 24, `company replaces
   workers with ai` 22, `how does ai replace workers` 27
@@ -140,7 +140,7 @@ nobody has read.
   business considerations." Pairs exactly with the official statistics showing
   near-zero measured employment effect.
 
-### 1.4a Why pilots do not become production systems
+### 1.4a Why pilots do not become production systems  *(WRITTEN, 13 Oct)*
 
 - **Demand**: `ai proof of concept` 25, `stop running so many ai pilots` 14,
   `why agentic ai projects fail from proof of concept to production systems` 11,
@@ -248,7 +248,7 @@ scepticism demand nobody serves.
 **Why we can win it.** This is the category with peer-reviewed economics behind
 it, and the honest answer is genuinely contrarian.
 
-### 3.1 When automation actually pays, and when it quietly loses money
+### 3.1 When automation actually pays, and when it quietly loses money  *(WRITTEN, 14 Oct)*
 
 - **Demand**: `should i automate this` 20, `why is automation bad` 26,
   `bad things about automation` 24
@@ -260,7 +260,7 @@ it, and the honest answer is genuinely contrarian.
   wage-scarcity corollary is the non-obvious half: the same tool is a good buy
   for a firm short of labour and a bad buy for one with cheap labour available.
 
-### 3.2 Nobody can tell you how often automation projects fail
+### 3.2 Nobody can tell you how often automation projects fail  *(WRITTEN, 15 Oct)*
 
 - **Demand**: `automation failed due to system error` 26, `how to end automation
   error` 23, plus the failure mass in category 1
@@ -274,7 +274,7 @@ it, and the honest answer is genuinely contrarian.
   review of 63 papers states outright that "the literature covers only
   successful RPA projects".
 
-### 3.3 AI helps your newest staff most, which changes what you buy it for
+### 3.3 AI helps your newest staff most, which changes what you buy it for  *(WRITTEN, 16 Oct)*
 
 - **Demand**: `how does ai replace workers` 27, `replacing workers with ai` 27,
   `ai and job replacement` 25, `will ai replace hr jobs` 14
@@ -284,7 +284,7 @@ it, and the honest answer is genuinely contrarian.
   not a headcount one. That reframes the purchase and matches what the official
   employment statistics show.
 
-### 3.4 When your spreadsheet becomes a system
+### 3.4 When your spreadsheet becomes a system  *(WRITTEN, 17 Oct)*
 
 - **Demand**: `excel too many sheets` 27, `spreadsheet has too many rows` 27,
   `excel spreadsheet too big` 26, `excel spreadsheet has too many columns` 25
@@ -308,7 +308,7 @@ it, and the honest answer is genuinely contrarian.
   exception rate, stability and structured data. It is a checklist with research
   behind it rather than a vendor's readiness quiz.
 
-### 3.5 What automates badly, and why it is not the technology's fault
+### 3.5 What automates badly, and why it is not the technology's fault  *(WRITTEN, 18 Oct)*
 
 - **Demand**: `why is automation bad` 26, `bad things about automation` 24,
   `list 2 disadvantages of using spreadsheets` 12
