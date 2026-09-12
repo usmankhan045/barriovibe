@@ -8,6 +8,7 @@ import { US_ENTITY_POSTS } from './us-entity';
 import { AI_FAILURE_POSTS } from './ai-failure';
 import { AUTOMATE_OR_HIRE_POSTS } from './automate-or-hire';
 import { TRUST_POSTS } from './trust';
+import { WHAT_YOU_NEED_POSTS } from './what-you-need';
 
 export type { Post, PostCluster, PostClusterSlug, PostSource } from './types';
 
@@ -44,6 +45,14 @@ export const POST_CLUSTERS: PostCluster[] = [
     intro:
       'Cost is the most commercially serious question asked about AI agents and the worst answered, because almost every published figure is an estimate with no method behind it. These posts show the calculation and name the prices it uses.',
     icon: 'sparkles',
+  },
+  {
+    slug: 'what-you-need',
+    title: 'Do you actually need this?',
+    card: 'Whether you need an app, an agent, or neither, answered from platform documentation rather than from whoever is selling one.',
+    intro:
+      'Every answer to these questions online is written by somebody selling the thing. These start from what the platforms document about their own capabilities, and sometimes conclude that the honest answer is no.',
+    icon: 'compass',
   },
   {
     slug: 'trust',
@@ -114,6 +123,7 @@ export const ALL_POSTS: Post[] = [
   ...AI_FAILURE_POSTS,
   ...AUTOMATE_OR_HIRE_POSTS,
   ...TRUST_POSTS,
+  ...WHAT_YOU_NEED_POSTS,
 ];
 
 /**

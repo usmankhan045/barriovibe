@@ -331,7 +331,7 @@ it, and the honest answer is genuinely contrarian.
 thing. Sometimes the honest answer is "you do not need this", and saying so is
 the entire trust play.
 
-### 4.1 Do you need an app, or is your website enough?
+### 4.1 Do you need an app, or is your website enough?  *(WRITTEN, 26 Oct)*
 
 - **Demand**: `do you need app` 42, `does small business need a mobile app` 23,
   `do i need a website` 19, `do i need a website for my business` 13
@@ -346,7 +346,7 @@ the entire trust play.
   rated NO app "good" out of 30 leading brands. Apple's own guideline 4.2 makes
   the same argument against you if the app is a repackaged website.
 
-### 4.1a Everything you have read about iOS PWAs is out of date
+### 4.1a Everything you have read about iOS PWAs is out of date  *(WRITTEN, 27 Oct)*
 
 - **Demand**: shares the 4.1 cluster; distinct reader, already building
 - **Evidence**: `ios-webpush-homescreen-only`, `ios-seven-day-storage-eviction`,
@@ -359,7 +359,7 @@ the entire trust play.
   bar", and Chrome Android ships every API iOS lacks, so "the web cannot"
   usually means "Apple will not".
 
-### 4.2 Agent, chatbot, or a form?
+### 4.2 Agent, chatbot, or a form?  *(WRITTEN, 28 Oct)*
 
 - **Demand**: `chatbot vs agentic ai` 25, `difference between chatbot and
   agentic ai` 25, `ai agent vs chatbot vs llm` 15, `rule based chatbot vs ai
@@ -421,7 +421,7 @@ replies, into a query space saturated with observability vendors.
 ### 5.1 How to tell if your RAG system is making things up  *(SCHEDULED 5 Oct)*
 ### 5.2 Does your data train the model?  *(SCHEDULED 4 Oct)*
 
-### 5.3 How to evaluate an agent before you trust it
+### 5.3 How to evaluate an agent before you trust it  *(WRITTEN, 20 Oct)*
 
 - **Demand**: `how to evaluate ai agents` 45, `how to evaluate ai` 13,
   `llm evaluation metrics` 12, `llm evaluation harness` 11
@@ -431,7 +431,7 @@ replies, into a query space saturated with observability vendors.
   evidence of demand and of no answer are the same artifact: a question with
   zero replies.
 
-### 5.4 What to monitor once an agent is live
+### 5.4 What to monitor once an agent is live  *(WRITTEN, 23 Oct)*
 
 - **Demand**: `how to monitor ai agents` 50, `what is ai monitoring` 40,
   `ai agent monitoring tools` 29
@@ -439,7 +439,7 @@ replies, into a query space saturated with observability vendors.
 - **Angle**: Distinct reader from 5.3: already deployed. The things worth
   alerting on are not the things vendors instrument.
 
-### 5.5 Stopping an agent from burning money in a loop
+### 5.5 Stopping an agent from burning money in a loop  *(WRITTEN, 22 Oct)*
 
 - **Demand**: `ai agent test loop` 27, `agentic ai agent test loop` 26,
   plus the cost cluster
@@ -449,7 +449,7 @@ replies, into a query space saturated with observability vendors.
   semantics "decided by the OS thread scheduler". The practical answer is
   external idempotency keys, which nobody is selling.
 
-### 5.6 Why your RAG returns wrong answers, by failure type
+### 5.6 Why your RAG returns wrong answers, by failure type  *(WRITTEN, 19 Oct)*
 
 - **Demand**: `why does rag fail` 52, `rag does not work for enterprises` 31,
   `how to improve rag retrieval accuracy` 28, `how to improve rag` 26
@@ -457,7 +457,7 @@ replies, into a query space saturated with observability vendors.
 - **Angle**: Splits from 5.1 by reader: 5.1 is "how do I know", this is "I know,
   now what". Four separately measurable failures with four different fixes.
 
-### 5.6a How to stop an AI making things up, by mechanism
+### 5.6a How to stop an AI making things up, by mechanism  *(WRITTEN, 21 Oct)*
 
 - **Demand**: `how to limit ai hallucination` 27, `how to stop ai
   hallucinations` (seeded), `ai agent hallucination` 2
@@ -468,7 +468,7 @@ replies, into a query space saturated with observability vendors.
   make it detectable and make abstention the default. The jagged-frontier result
   is the warning, since AI made wrong answers MORE persuasive and coherent.
 
-### 5.7 What an AI guardrail actually is, and what it does not stop
+### 5.7 What an AI guardrail actually is, and what it does not stop  *(WRITTEN, 24 Oct)*
 
 - **Demand**: `ai guardrails examples` 16, `ai guardrails meaning` 13,
   `ai guardrails framework` 12, `ai guardrails tools` 12, `what are ai risks` 20
@@ -479,7 +479,7 @@ replies, into a query space saturated with observability vendors.
   set to block still streamed the data in full before the exception fired. A
   guardrail in the wrong place in the pipeline is decoration.
 
-### 5.8 The security questions to ask before an agent touches production
+### 5.8 The security questions to ask before an agent touches production  *(WRITTEN, 25 Oct)*
 
 - **Demand**: `agentic ai security risks` 27, `security considerations in ai
   adoption` 20, `ai agent security` 2, `ai agent deletes database` 2
