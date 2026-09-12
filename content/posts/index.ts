@@ -9,6 +9,8 @@ import { AI_FAILURE_POSTS } from './ai-failure';
 import { AUTOMATE_OR_HIRE_POSTS } from './automate-or-hire';
 import { TRUST_POSTS } from './trust';
 import { WHAT_YOU_NEED_POSTS } from './what-you-need';
+import { BUILD_COST_POSTS } from './build-cost';
+import { BUYING_DEV_POSTS } from './buying-dev';
 
 export type { Post, PostCluster, PostClusterSlug, PostSource } from './types';
 
@@ -45,6 +47,22 @@ export const POST_CLUSTERS: PostCluster[] = [
     intro:
       'Cost is the most commercially serious question asked about AI agents and the worst answered, because almost every published figure is an estimate with no method behind it. These posts show the calculation and name the prices it uses.',
     icon: 'sparkles',
+  },
+  {
+    slug: 'build-cost',
+    title: 'What it costs to build',
+    card: 'Why quotes vary a hundredfold, what the estimation research actually says, and where the money goes.',
+    intro:
+      'Published answers to what software costs quote a range and explain nothing. These start from the research on estimation accuracy, which is unflattering to everyone including us, and organise the question by the decisions that actually move the number.',
+    icon: 'calculator',
+  },
+  {
+    slug: 'buying-dev',
+    title: 'Choosing who builds it',
+    card: 'Code ownership, contract structure and vendor claims, sourced to statute and research rather than to sellers.',
+    intro:
+      'This entire information space is written by sellers, ourselves included. What makes these posts worth reading is that the load-bearing facts come from statute, regulators and peer-reviewed work, and several of them are against our own commercial interest.',
+    icon: 'shield',
   },
   {
     slug: 'what-you-need',
@@ -124,6 +142,8 @@ export const ALL_POSTS: Post[] = [
   ...AUTOMATE_OR_HIRE_POSTS,
   ...TRUST_POSTS,
   ...WHAT_YOU_NEED_POSTS,
+  ...BUILD_COST_POSTS,
+  ...BUYING_DEV_POSTS,
 ];
 
 /**
