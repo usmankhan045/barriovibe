@@ -158,18 +158,29 @@ export const PRIMARY_NAV: NavLink[] = [
   { label: 'Tools', href: '/tools', mega: 'tools' },
   /* Guides sits beside Tools because the two work as a pair: a calculator
      answers "what is the number" and a guide answers "why is it that number",
-     and each links to the other. Placed before Contact so the reference
-     material reads as one group.
-
-     NOTE: this takes the header to seven items. Blog still points at a page
-     that says nothing is published yet, which is an honest empty state but a
-     weak signal on every page of the site. Moving Blog to the footer until it
-     has posts is worth considering; left in place because that is the owner's
-     call, not a technical one. */
+     and each links to the other. Guides and Blog then sit together as the two
+     reading items, so the pill reads in four groups: where you are, what we
+     sell and have built, what you can read, who we are. */
   { label: 'Guides', href: '/guides' },
-  { label: 'Contact', href: '/contact' },
-  { label: 'About', href: '/about' },
   { label: 'Blog', href: '/blog' },
+  /* About is LAST, and last is a position, not a leftover.
+
+     Every professional services site of any size puts the company link at the
+     far end of the bar: the visitor arrives asking what you do, not who you
+     are, and the ones who do want to know who you are look at the end of the
+     row because that is where the industry has trained them to look. It is
+     also the natural handoff into the CTA that follows it, since "who are
+     these people" is the last question before "talk to them".
+
+     CONTACT IS NOT IN THE PILL. It used to sit between Guides and About,
+     where it duplicated the "Start a project" button sitting a few pixels to
+     its right. Two controls for one action, adjacent, is a dilution of the
+     one that converts, and the weaker of the two was winning ties on
+     proximity to the menu. Contact keeps its page, its footer link in
+     COMPANY_LINKS, and the button, which is the loudest thing in the header.
+     Removing it from the pill is what buys About its place at the end
+     without taking the bar to eight items. */
+  { label: 'About', href: '/about' },
 ];
 
 /**

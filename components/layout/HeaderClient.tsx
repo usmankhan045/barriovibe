@@ -433,8 +433,9 @@ export function HeaderClient({ nav }: { nav: NavData }) {
          */}
         {/* THE PILL SHRINKS TO FIT AT lg. IT DOES NOT DISAPPEAR.
          *
-         * The pill now holds five short items (Home, Services, Contact, About,
-         * Blog) instead of the three long practice names it used to carry, so
+         * The pill holds seven short items (Home, Services, Work, Tools,
+         * Guides, Blog, About) instead of the three long practice names it
+         * used to carry, and none of them is a long word, so
          * it is narrower than the 755px that originally forced the px-2.5/xl
          * step-down below. The step-down is left in place regardless: it costs
          * nothing when there is headroom, and it is the thing that keeps this
@@ -471,7 +472,7 @@ export function HeaderClient({ nav }: { nav: NavData }) {
               leaving the pill (rather than leaving whichever item happens to
               be under the pointer) is what starts the close timer. That still
               matters with one mega trigger: it is what lets the pointer travel
-              sideways from Services onto Home/Contact/About/Blog without the
+              sideways from Services onto Home/Work/Guides/Blog/About without the
               panel's own close-on-leave racing the neighbouring item's
               close-on-enter. */}
           <ul
@@ -495,7 +496,7 @@ export function HeaderClient({ nav }: { nav: NavData }) {
                   {...(menu
                     ? { onMouseEnter: () => openMenu(menu) }
                     : // Entering a non-mega item still has to dismiss an open
-                      // panel. Without this, sliding from Services onto About
+                      // panel. Without this, sliding from Services onto Work
                       // leaves the panel up, because the pointer never left
                       // the pill's own region.
                       { onMouseEnter: closeMega })}
@@ -510,7 +511,7 @@ export function HeaderClient({ nav }: { nav: NavData }) {
                           onFocus: () => openMenu(menu),
                         }
                       : // Focus does what the pointer does. Tabbing from
-                        // Services onto About used to leave its panel hanging
+                        // Services onto Work used to leave its panel hanging
                         // open under an unrelated item, because focus was
                         // still inside the pill and nothing had told it to
                         // close.
