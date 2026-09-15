@@ -1546,6 +1546,78 @@
     overflow: hidden;
   }
 
+  /* ── THE RAKE CARRIES THE BUTTON'S SURFACE ──────────────────────────────
+     Same change as .u-surface-btn on /work, and the same reason: the pill is
+     the brand's one solid object, and a card carrying a hand-built imitation
+     of it next to the real thing does not match. The sprite is the mockup's
+     own pixels, 9-sliced (scripts/gen-card-sprite.py).
+
+     It REPLACES the glass on this element rather than sitting over it. The
+     glass rules paint a near-opaque blue with a rim, a specular and a caustic
+     on ::before/::after; all three are the sprite's job now, and leaving them
+     underneath would stack two materials and show the old rim through the new
+     edge.
+
+     WHY THIS IS CHEAP HERE, WHICH MATTERS MORE ON THIS COMPONENT THAN ON
+     /work. The long note below records that paint cost inside this
+     preserve-3d context is the thing that made the rake feel heavy, and that
+     what was cut was specifically the work that REPAINTS per frame: a conic
+     sweep, a tracking radial, a 56px shadow blur. A border-image is none of
+     those. It is one decoded bitmap drawn by the compositor, it does not
+     change while the card moves, and it replaces two gradient-painting
+     pseudo-elements per card. On a ten-cell track that is less paint work than
+     the glass it stands in for, not more. */
+  .u-cf-card {
+    border-radius: var(--radius-tile-lg);
+    background-color: var(--color-btn-blue-core);
+    background-image: none;
+    border-style: solid;
+    border-color: transparent;
+    border-width: 0;
+    border-image-source: url("/art/card-blue.png");
+    border-image-slice: 80 fill;
+    border-image-width: 40px;
+    border-image-repeat: stretch;
+  }
+
+  /* The glass rim, specular and caustic. The sprite carries its own, so these
+     would be a second edge drawn just inside the first.
+
+     ::before is then reused as the card's BACKING — see below. */
+  .u-cf-card::after {
+    display: none;
+  }
+
+  /* ── WHY A FADED CARD NEEDS SOMETHING BEHIND IT ─────────────────────────
+     The rake fades cards as they travel out (`fade = 0.07` per step, so the
+     outermost pair sit at 0.86) and that fade is a DEPTH cue: it is most of
+     what makes the ring read as a ring rather than five cards in a line.
+
+     But opacity applies to the whole cell, and this section stands on a white
+     page. Measured off the render, the sprite's deep core colour came out at
+     rgb(38,58,131) on the near pair and rgb(38,56,124) on the far pair: the
+     page showing straight through, which reads as a card losing its colour
+     rather than one moving away. The glass this replaced hid the problem by
+     accident, having its own near-opaque fill painted under the material.
+
+     So the sprite gets the same thing back, deliberately: a flat layer of the
+     pill's own core colour behind it, inside the card's radius. It costs one
+     solid fill with no gradient, it never changes while the rake moves, and it
+     means a faded card dims toward its own dark body instead of toward the
+     page. The depth cue survives; the wash does not. */
+  .u-cf-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background-color: var(--color-btn-blue-core);
+    /* The conic rim sweep lived on this element. It is gone with the glass, and
+       the rule further down that stops it animating on a non-centred card is
+       harmless now but kept, since it names the same selector. */
+    animation: none;
+  }
+
   /* ── THE MATERIAL'S HOVER BELONGS TO THE CENTRED CARD ONLY ───────────────
      This is the single biggest thing that was making the rake feel heavy, and
      it is not in the motion code at all.
@@ -1661,6 +1733,8 @@
      aria-label, and what makes the entire surface a real click target instead
      of a stretched overlay. */
   .u-cf-card-body {
+    position: relative;
+    isolation: isolate;
     display: flex;
     height: 100%;
     width: 100%;
@@ -2789,6 +2863,109 @@
     --glass-rim-band: 9px;
   }
 
+  /* ── The button's blue, as a card surface ───────────────────────────────
+     THE CARD IS THE BUTTON'S OWN PIXELS, 9-SLICED. NOT GRADIENTS.
+
+     This was a stack of four linear-gradients (--grad-btn-blue-bevel-top /
+     -bottom / -light / -body in tokens.css), measured and hand-tuned against
+     the pill. It was the closest a gradient stack gets. That is not close:
+     gen-button-sprites.py already established that fitting this surface to a
+     separable model, a function of y times a function of x, which is all a
+     stack of linear-gradients can express, leaves p99 error 33/255, and that
+     the residual is structure rather than noise. A card built from gradients
+     sitting on /work next to a button built from the render did not match it,
+     which is exactly what that error predicts.
+
+     So the card is the render too. scripts/gen-card-sprite.py cuts the same
+     mockup pill (assets/source/mockup-1-hero.png, the same crop box the button
+     uses) into a 9-slice: four corners held at 40px, the top and bottom edges
+     stretched horizontally, the sides vertically, the middle both ways.
+
+     WHY A SEPARATE SPRITE AND NOT btn-blue.png. That one is a 2-slice
+     (`border-image-slice: 0 64 fill`): it stretches horizontally only, and its
+     middle column is one row of pixels smeared vertically. Correct for a pill
+     whose height is locked (see .u-btn, where the height is explicit precisely
+     so the caps stay semicircular) and wrong for a card 300px tall, where it
+     would smear 64px of vertical structure over the whole box and flatten both
+     rims. The card sprite re-spaces those rows instead: the bevels keep their
+     true pixel height and only the interior is resampled. Same reasoning as
+     --btn-cap, one axis further.
+
+     WHAT CHANGED VISUALLY. The old gradient carried a bright specular band
+     across the middle at 46%, described at --grad-btn-blue-body as a real
+     feature of the pill. It is not one. Measured off the mockup with the label
+     pixels excluded, luminance falls monotonically from the top rim to a
+     trough at ~62% and rises again to the bottom rim: there is no middle peak.
+     The band in the button sprite sits exactly on the rows the label runs
+     through, i.e. it is the fit residual gen-button-sprites.py documents
+     ("what error remains sits on the rows the type ran through"), which the
+     button hides under its own label and a card would have shown across open
+     space.
+
+     border-image is not clipped by border-radius: the sprite's alpha is the
+     shape. border-radius stays anyway so box-shadow and the focus ring follow
+     the card, and it must equal the RADIUS the generator baked in.
+     ────────────────────────────────────────────────────────────────────── */
+  .u-surface-btn {
+    position: relative;
+    isolation: isolate;
+    border-radius: var(--radius-tile-lg);
+    /* Flat fallback under the sprite, so a card is never a white box if the
+       image fails to load. */
+    background-color: var(--color-btn-blue-core);
+    border-style: solid;
+    border-color: transparent;
+    border-width: 0;
+    border-image-source: url("/art/card-blue.png");
+    border-image-slice: 80 fill;
+    border-image-width: 40px;
+    border-image-repeat: stretch;
+    color: var(--color-white);
+    /* The pill's own shadow, deepened for the larger object. A card carrying
+       the button's face with a tile's flat shadow reads as a printed panel. */
+    box-shadow:
+      0 2px 4px rgb(6 26 81 / 0.22),
+      0 18px 44px -12px rgb(11 47 146 / 0.42);
+    transition:
+      box-shadow var(--duration-base) var(--ease-brand),
+      transform var(--duration-base) var(--ease-brand);
+  }
+
+  /* THE CARD LIFTS. It used only to brighten, which on a surface this dark is
+     a change you have to look for: the sprite swap moves the body a few values
+     in lightness and nothing about the card's relationship to the page changes.
+
+     Lifting is what reads. The card rises 3px and its cast shadow grows and
+     softens underneath it, so the object moves closer to the reader rather than
+     merely changing colour. The two have to happen together: a lift without a
+     deeper shadow looks like a nudge, and a deeper shadow without a lift looks
+     like a glow.
+
+     3px, not more. Twelve of these sit in a grid with 20px gutters, and a card
+     that jumps a long way at the edge of the pointer displaces the type on the
+     cards beside it in peripheral vision. */
+  @media (hover: hover) and (pointer: fine) {
+    .u-surface-btn:hover {
+      border-image-source: url("/art/card-blue-hover.png");
+      transform: translateY(-3px);
+      box-shadow:
+        0 5px 10px rgb(6 26 81 / 0.26),
+        0 30px 64px -12px rgb(11 47 146 / 0.55);
+    }
+  }
+
+  /* The lift is motion, and decorative: a reader who has asked for less of it
+     keeps the brightening and the deeper shadow, and loses only the movement. */
+  @media (prefers-reduced-motion: reduce) {
+    .u-surface-btn {
+      transition: box-shadow var(--duration-base) var(--ease-brand);
+    }
+
+    .u-surface-btn:hover {
+      transform: none;
+    }
+  }
+
   /* ── Tier 1: the one filled card ────────────────────────────────────── */
   .u-bento-feature {
     position: relative;
@@ -3040,7 +3217,11 @@
      By the time a cursor reaches a button both sprites are in cache and the
      swap is instant.
 
-     Keep the two urls below in sync with the :hover rules above. */
+     Keep the three urls below in sync with the :hover rules above. The card
+     sprite (.u-surface-btn, used by every tile on /work) is warmed here too and
+     for the same reason: it is a border-image swapped on :hover, so without
+     this the first card hovered on /work flashes its flat fallback colour while
+     the hover sprite is fetched. */
   .u-btn-sprite-warm {
     position: fixed;
     top: 0;
@@ -3065,6 +3246,17 @@
     border-width: 0;
     border-image-slice: 0 62 fill;
     border-image-source: url("/art/btn-chrome-hover.png");
+  }
+
+  .u-btn-sprite-warm::before {
+    content: "";
+    display: block;
+    width: 1px;
+    height: 1px;
+    border-style: solid;
+    border-width: 0;
+    border-image-slice: 80 fill;
+    border-image-source: url("/art/card-blue-hover.png");
   }
 
   .u-btn--sm {

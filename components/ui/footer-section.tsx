@@ -155,16 +155,16 @@ const SOCIAL_LINKS: FooterLink[] = SOCIALS.map((social) => ({
  * words. It was `justify-between` while a right-aligned arrow anchored the far
  * edge; with the arrow gone there is nothing to push apart. */
 /* `u-tap` takes these to 44px on a touch device and leaves the desktop seat
-   at its measured 34px. See the tap-target note in globals.css. */
+   at its measured 30px. See the tap-target note in globals.css. */
 const FOOTER_LINK =
-  'u-tap inline-flex items-center rounded-pill px-2.5 py-1.5' +
+  'u-tap inline-flex items-center rounded-pill px-2.5 py-1' +
   ' transition-colors duration-200 hover:bg-blue-50 hover:text-blue-600';
 
 /* The same seat with equal padding on all four sides, because what sits in it
  * is a square mark rather than a line of type. The pill's own radius makes it
  * a circle at this size, which is what a social mark's target should be. */
 const FOOTER_MARK_LINK =
-  'u-tap u-tap--square inline-flex items-center justify-center rounded-pill p-2' +
+  'u-tap u-tap--square inline-flex items-center justify-center rounded-pill p-1.5' +
   ' transition-colors duration-200 hover:bg-blue-50 hover:text-blue-600';
 
 export function Footer() {
@@ -203,10 +203,13 @@ export function Footer() {
      * rim, and unlike a `border-t` it follows the 40px radius around both
      * corners — which is the bug that hairline existed to work around.
      *
-     * `pt-20` rather than `pt-16` so the wordmark clears the overlap: nothing
-     * legible may sit in the 48px strip where the blue shows through.
+     * `pt-12` is the floor here, not a choice of taste: the sheet is pulled up
+     * 48px over the section above it by `-mt-12`, and nothing legible may sit
+     * in that strip where the blue shows through. These two cancel exactly, so
+     * the wordmark lands where it would with no overlap at all. Any less and
+     * it climbs into the blue.
      */
-    <footer className="u-glass u-glass--sheet relative -mt-12 w-full overflow-hidden rounded-t-[28px] pt-20 md:rounded-t-[40px] lg:pt-24">
+    <footer className="u-glass u-glass--sheet relative -mt-12 w-full overflow-hidden rounded-t-[28px] pt-12 md:rounded-t-[40px] lg:pt-14">
 
       {/* Full-bleed footer, container-width contents — the same split every
 			    other section on the site uses, so the wordmark lines up with the
@@ -217,7 +220,7 @@ export function Footer() {
 				    base template the browser creates one implicit auto column sized
 				    to max-content, which overflows on mobile — the exact bug
 				    `pnpm check:layout` fails the build on. See check-layout.mjs. */}
-        <div className="grid w-full grid-cols-1 gap-10 xl:grid-cols-[1fr_auto] xl:gap-8">
+        <div className="grid w-full grid-cols-1 gap-8 xl:grid-cols-[1fr_auto] xl:gap-8">
           <AnimatedContainer>
             <Wordmark />
             {/* The tagline, not the copyright line, now sits under the
@@ -225,7 +228,7 @@ export function Footer() {
                 bottom of the footer (see the close of this component), and
                 a one-line description of the firm is what a logo usually
                 introduces anyway. */}
-            <p className="mt-4 max-w-[34ch] text-[13.5px] leading-relaxed text-ink-body">
+            <p className="mt-3 max-w-[46ch] text-[13.5px] leading-snug text-ink-body">
               {SHORT_TAGLINE}
             </p>
 
@@ -233,7 +236,7 @@ export function Footer() {
                 here, with the brand block, instead of filed as a link column.
                 `-ml-2` matches the seat's own padding so the marks line up
                 under the logo the way the tagline above does. */}
-            <ul className="-ml-2 mt-5 flex flex-wrap items-center gap-0.5 text-ink-body">
+            <ul className="-ml-2 mt-3 flex flex-wrap items-center gap-0.5 text-ink-body">
               {SOCIAL_LINKS.map((link) => (
                 <li key={link.title}>
                   <a
@@ -260,13 +263,13 @@ export function Footer() {
 				    `repeat(4,auto)` rather than `grid-cols-4`, for the same reason:
 				    equal fractions make every column as wide as the widest one — the
 				    email address — which would leave "Legal" trailing dead space. */}
-          <div className="grid grid-cols-2 gap-x-10 gap-y-10 sm:grid-cols-[repeat(4,auto)] lg:gap-x-14">
+          <div className="grid grid-cols-2 gap-x-10 gap-y-8 sm:grid-cols-[repeat(4,auto)] lg:gap-x-14">
             {footerLinks.map((section, index) => (
               <AnimatedContainer key={section.label} delay={0.1 + index * 0.1}>
                 <h3 className="font-display text-[11px] font-bold tracking-[0.14em] text-ink-strong uppercase">
                   {section.label}
                 </h3>
-                <ul className="-ml-2.5 mt-4 space-y-0.5 text-[13.5px] text-ink-body">
+                <ul className="-ml-2.5 mt-3 space-y-0 text-[13.5px] text-ink-body">
                   {section.links.map((link) => (
                     <li key={link.title}>
                       {/* Only in-app routes go through next/link. mailto:, wa.me and
@@ -309,7 +312,7 @@ export function Footer() {
             its own bottom padding, or put it back on the <footer>. */}
         <AnimatedContainer
           delay={0.1 + footerLinks.length * 0.1}
-          className="mt-12 border-t border-line py-6 text-center lg:mt-16"
+          className="mt-6 border-t border-line py-4 text-center lg:mt-8"
         >
           <p className="text-[13px] text-ink-body">
             © {new Date().getFullYear()} {BRAND.legalName}. All rights reserved.

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { SERVICES, serviceHref, PRACTICE_PAGES } from '@/content/services';
 import { PILLARS } from '@/content/pillars';
+import { BUILD_PAGES, buildHref } from '@/content/builds';
 import { TOOLS, toolHref } from '@/content/tools';
 import { PUBLISHED_GUIDES, activeClusters, clusterHref, guideHref } from '@/content/guides';
 import {
@@ -48,10 +49,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
    * changeFrequency is a hint Google has said for years that it ignores, so
    * these are set to be *true* rather than to be persuasive. The calculators
    * say monthly because Finance Act amendments and SRO revisions genuinely land
-   * through the year. /blog and /work say yearly because they are empty states
-   * today: claiming monthly on a page that has not changed since launch is the
-   * same false-freshness signal the lastmod fix above exists to remove, and
-   * doing it deliberately here would undo that.
+   * through the year. /work says yearly because a build is added to it a
+   * handful of times a year at most: claiming monthly on a page that rarely
+   * changes is the same false-freshness signal the lastmod fix above exists to
+   * remove, and doing it deliberately here would undo that.
    */
   const staticRoutes: {
     path: string;
@@ -62,7 +63,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/', priority: 1, changeFrequency: 'monthly', sources: ['app/page.tsx'] },
     { path: '/services', priority: 0.9, changeFrequency: 'monthly', sources: ['app/services/page.tsx', 'content/services/index.ts'] },
     { path: '/about', priority: 0.6, changeFrequency: 'yearly', sources: ['app/about/page.tsx'] },
-    { path: '/work', priority: 0.6, changeFrequency: 'yearly', sources: ['app/work/page.tsx', 'content/cases.ts'] },
+    { path: '/work', priority: 0.7, changeFrequency: 'yearly', sources: ['app/work/page.tsx', 'content/cases.ts', 'content/builds.ts'] },
     { path: '/blog', priority: 0.7, changeFrequency: 'weekly', sources: ['app/blog/page.tsx', 'content/posts/index.ts'] },
     { path: '/contact', priority: 0.7, changeFrequency: 'yearly', sources: ['app/contact/page.tsx'] },
     { path: '/tools', priority: 0.7, changeFrequency: 'monthly', sources: ['app/tools/page.tsx', 'content/tools.ts'] },
@@ -77,6 +78,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: modified(...sources),
       changeFrequency,
       priority,
+    })),
+    /* A build's own page. Ranked with the practice pages rather than below
+       them: it is the only page on the site that shows work we actually
+       shipped, which is what a prospective client looks for first. */
+    ...BUILD_PAGES.map((build) => ({
+      url: absoluteUrl(buildHref(build.slug)),
+      lastModified: modified('content/builds.ts', 'app/work/[build]/page.tsx'),
+      changeFrequency: 'yearly' as const,
+      priority: 0.8,
     })),
     // Practice pages rank above the disciplines under them: they are what the
     // navbar leads with, and each one covers a whole practice.

@@ -129,15 +129,32 @@ export const TOOLS_MENU_COLUMNS = TOOL_GROUPS.map((group) => ({
  * site, not an afterword, and the two hub items reading together keeps the
  * pill's ordering honest about what the site is.
  *
- * ── What is NOT in the pill ──
+ * ── Work ──
  *
- * Work. It is still a page and still linked from the footer through
- * COMPANY_LINKS; it is out of the top nav because it is the one a visitor is
- * least likely to be hunting for by name.
+ * Work was deliberately absent from the pill for most of this site's life, on
+ * the reasoning that it was the item a visitor was least likely to hunt for by
+ * name. That reasoning held only while the page was an empty state: an item
+ * promising work and delivering an apology is worth less than no item.
+ *
+ * It now holds shipped systems with their source public, which makes it the
+ * page that answers "can they actually build things", and that is the question
+ * a prospective client arrives with. So it is in the pill.
+ *
+ * A PLAIN LINK, not a panel. It had one briefly: a mega-menu listing every
+ * build, built to match Services and Tools. Those two earn their panels by
+ * holding forty-four services and twenty-two calculators, which genuinely
+ * cannot be chosen from a page. Work holds two products. A panel that opens
+ * to reveal two links is a door in front of a door, and it made a portfolio
+ * of two things look like a filing system.
+ *
+ * Placed directly after Services: the two read as a pair, one naming what we
+ * sell and the next showing what we have built, which is the order the
+ * question actually gets asked in. It stays in COMPANY_LINKS in the footer.
  */
 export const PRIMARY_NAV: NavLink[] = [
   { label: 'Home', href: '/' },
   { label: 'Services', href: '/services', mega: 'services' },
+  { label: 'Work', href: '/work' },
   { label: 'Tools', href: '/tools', mega: 'tools' },
   /* Guides sits beside Tools because the two work as a pair: a calculator
      answers "what is the number" and a guide answers "why is it that number",

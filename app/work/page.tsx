@@ -1,26 +1,23 @@
-import Link from 'next/link';
 import {
   Container,
   Section,
   SectionHeading,
   Lead,
-  Eyebrow,
   Breadcrumb,
   ChessArt,
+  IconWatermark,
 } from '@/components/primitives';
-import { Icon } from '@/components/icons';
 import { Reveal } from '@/components/ui/Reveal';
 import { Button } from '@/components/ui/Button';
+import { WorkFilter } from '@/components/ui/WorkFilter';
 import { JsonLd, breadcrumbSchema } from '@/lib/jsonld';
-import { CASE_STUDIES, CASES_ENABLED } from '@/content/cases';
-import { PILLAR_BY_SLUG } from '@/content/pillars';
-import { SERVICE_GROUPS, serviceHref } from '@/content/services';
+import { BUILDS, BUILDS_ENABLED, BUILD_GROUPS, CATEGORY_BY_SLUG, buildHref } from '@/content/builds';
 import { pageMetadata } from '@/lib/seo';
 
 export const metadata = pageMetadata({
   title: 'Work',
   description:
-    'Case studies and published results. We publish work only once a client has agreed and the numbers can be evidenced.',
+    'Projects across software and AI, marketing and e-commerce, and corporate and advisory. What each one was, how it was built, and what it runs on.',
   path: '/work',
 });
 
@@ -32,14 +29,48 @@ const CRUMBS = [
 /**
  * The work page.
  *
- * With CASES_ENABLED false this renders an honest empty state rather than
- * padding the page with stock imagery or invented projects. It says plainly
- * why there is nothing here, states the standard we will publish to, and then
- * gives the visitor somewhere useful to go — which is more persuasive than a
- * fabricated portfolio and considerably safer.
+ * ── A PORTFOLIO THAT GROWS, not a page with two things on it ──
+ *
+ * Everything here is built to survive the fiftieth project as well as the
+ * second, because the previous version could not:
+ *
+ * 1. CATEGORIES, not one list. Work spans three practices, and a visitor who
+ *    came about a Shopify build should not scroll past an AI agent to find it.
+ *    The groups derive from each project's existing `pillar`, so adding a
+ *    project files itself.
+ *
+ * 2. A FILTER, not stacked sections. Three grids stacked means the page grows
+ *    with every project. Tabs swap the grid in place, so it stays one screen
+ *    of chrome however long the list gets.
+ *
+ * 3. SMALL CARDS, three across. The two-card version gave each project a
+ *    half-width tile with a stat row and an icon badge, which stops working at
+ *    three projects and is absurd at twelve. A card carries a name, a line and
+ *    a category now; the detail is on the project's own page, where someone
+ *    who is actually interested will read it.
+ *
+ * ── The heading ──
+ *
+ * It said "Software we built and run ourselves", which was wrong twice over:
+ * the work is not all software, and "run ourselves" describes our own products
+ * rather than a project delivered for a client. It also told the visitor what
+ * WE do instead of what is on the page. "Things we have built" is what a
+ * portfolio is, and it stays true whatever lands here next.
  */
 export default function WorkPage() {
-  const hasCases = CASES_ENABLED && CASE_STUDIES.length > 0;
+  const hasBuilds = BUILDS_ENABLED && BUILDS.length > 0;
+
+  /* Reduced to the strings a card renders before it crosses into the client
+     component. Every project's body copy, capabilities, limits and page block
+     stay on the server. */
+  const toCard = (build: (typeof BUILDS)[number]) => ({
+    slug: build.slug,
+    name: build.name,
+    tagline: build.tagline,
+    category: CATEGORY_BY_SLUG[build.category].cardLabel,
+    href: buildHref(build.slug),
+    repo: build.repo,
+  });
 
   return (
     <main id="main" tabIndex={-1}>
@@ -49,158 +80,75 @@ export default function WorkPage() {
         <Container>
           <Breadcrumb items={CRUMBS} />
 
-          <div className="mt-8 grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.15fr_0.85fr]">
+          {/* The site's hero pattern: copy left, chess art right.
+
+              The art was dropped when this page was rewritten, on the
+              reasoning that a portfolio's own work should fill that space.
+              That was wrong: every hero on the site carries one, and a single
+              page without it reads as unfinished rather than as restraint.
+              `victory` is the piece /work has always used, and the one the
+              subject actually fits.
+
+              The heading is two lines, not three. It used to read "Things we /
+              have / built." stacked down the left, which put the accent word
+              alone on its own line. */}
+          <div className="mt-8 grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
             <div>
               <SectionHeading
                 level={1}
                 eyebrow="Our work"
-                lines={['Results that', 'speak for']}
-                accent="themselves"
+                lines={['Things we']}
+                accent="have built"
               />
-              <Lead className="mt-7 max-w-[54ch]">
-                {hasCases
-                  ? 'Every number below is one we can evidence. Ask us for the working and we will show you.'
-                  : 'We publish a project only when the client has agreed to it and every number in it can be evidenced. That means this page is empty right now.'}
+              <Lead className="mt-7 max-w-[52ch]">
+                Products we own, systems we run and work delivered for clients. Every
+                one has a page: what it was for, how it was built, and what it does
+                not do.
               </Lead>
             </div>
 
-            <div className="hidden lg:block">
-              <ChessArt name="victory" sizes="45vw" className="mx-auto max-w-[420px]" />
+            <div className="relative hidden lg:block">
+              <IconWatermark />
+              <ChessArt name="victory" sizes="45vw" className="relative" />
             </div>
           </div>
         </Container>
       </Section>
 
-      {hasCases ? (
-        <Section tight>
-          <Container>
-            <ul className="grid grid-cols-1 gap-5 md:grid-cols-2">
-              {CASE_STUDIES.map((study, i) => (
-                <Reveal key={study.slug} as="li" index={i} className="h-full">
-                  <article className="u-tile flex h-full flex-col p-8">
-                    <Eyebrow as="span">{PILLAR_BY_SLUG[study.pillar].title}</Eyebrow>
-                    <h2 className="mt-3 font-display text-h3 text-ink">{study.title}</h2>
-                    <p className="mt-1.5 text-caption text-ink-body">{study.client}</p>
-                    <p className="mt-4 flex-1 text-[15px] leading-[1.65] text-ink-body">
-                      {study.summary}
-                    </p>
-                    <dl className="mt-7 grid grid-cols-2 gap-4 border-t border-line pt-6">
-                      {study.metrics.map((metric) => (
-                        <div key={metric.label}>
-                          <dd className="font-display text-[28px] font-extrabold tabular text-blue-600">
-                            {metric.value}
-                          </dd>
-                          <dt className="mt-1 text-[13px] text-ink-body">{metric.label}</dt>
-                        </div>
-                      ))}
-                    </dl>
-                  </article>
-                </Reveal>
-              ))}
-            </ul>
-          </Container>
-        </Section>
-      ) : (
-        /* ── Honest empty state ─────────────────────────────────────── */
-        <Section tight>
+      {hasBuilds && (
+        <Section tight className="pt-0">
           <Container>
             <Reveal>
-              <div className="u-tile mx-auto max-w-3xl p-8 md:p-12">
-                <span className="u-badge u-badge--chrome grid size-14 place-items-center">
-                  <Icon name="award" size={24} />
-                </span>
+              <WorkFilter
+                all={BUILDS.map(toCard)}
+                groups={BUILD_GROUPS.map((group) => ({
+                  slug: group.category.slug,
+                  label: group.category.label,
+                  projects: group.builds.map(toCard),
+                }))}
+              />
+            </Reveal>
 
-                <h2 className="mt-6 font-display text-h3 text-ink">
-                  Nothing published yet, deliberately
-                </h2>
-
-                <div className="mt-5 flex flex-col gap-4 text-[15px] leading-[1.7] text-ink-body">
-                  <p>
-                    It would take an afternoon to fill this page with plausible-looking
-                    projects and impressive percentages. Plenty of agencies do. We would
-                    rather you could trust everything else on this site.
-                  </p>
-                  <p>When work appears here, it will meet three conditions:</p>
-                </div>
-
-                <ul className="mt-6 flex flex-col gap-3.5">
-                  {[
-                    'The client has agreed by name, or agreed to be described anonymously.',
-                    'Every figure can be evidenced from an account we actually ran.',
-                    'The brief and the constraints are stated, not just the outcome.',
-                  ].map((item) => (
-                    <li key={item} className="flex items-start gap-3">
-                      <Icon name="check" size={17} className="mt-0.5 flex-none text-blue-600" />
-                      <span className="text-[15px] leading-[1.6] text-ink-strong">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <p className="mt-7 border-t border-line pt-6 text-[15px] leading-[1.65] text-ink-body">
-                  In the meantime, the service pages are the honest substitute: each one
-                  states exactly what is included, what you receive, how long it takes and
-                  what we need from you. That is checkable before you spend anything.
+            {/* The client-work note. One line, because it describes something
+                that is NOT on the page, and an absence does not get a card. */}
+            <Reveal>
+              <div className="mt-14 flex flex-col gap-5 border-t border-line pt-8 md:flex-row md:items-center md:justify-between">
+                <p className="max-w-[74ch] text-[14px] leading-[1.65] text-ink-body">
+                  <span className="font-semibold text-ink-strong">
+                    Client work is published only with permission.
+                  </span>{' '}
+                  Where a project was delivered under NDA it is described without naming
+                  the client, and every figure we quote can be evidenced from an account
+                  we actually ran. We will put you in touch with references on request.
                 </p>
-
-                <div className="mt-8 flex flex-wrap gap-3">
-                  <Button href="/services">Browse the services</Button>
-                  <Button href="/contact" variant="chrome">
-                    Ask for references
-                  </Button>
-                </div>
+                <Button href="/contact" variant="chrome" className="flex-none">
+                  Ask for references
+                </Button>
               </div>
             </Reveal>
           </Container>
         </Section>
       )}
-
-      {/* ── What we could do for you ──────────────────────────────────── */}
-      <Section band>
-        <Container>
-          <Reveal>
-            <SectionHeading
-              eyebrow="In the meantime"
-              lines={['What we would', 'actually']}
-              accent="do for you"
-            />
-          </Reveal>
-
-          <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {SERVICE_GROUPS.map(({ pillar, services }, i) => (
-              <Reveal key={pillar.slug} index={i}>
-                <div className="u-tile flex h-full flex-col p-7">
-                  <Eyebrow>{services.length} services</Eyebrow>
-                  <h3 className="mt-2 font-display text-h3 text-ink">{pillar.title}</h3>
-                  <ul className="mt-5 flex flex-1 flex-col gap-2">
-                    {services.map((service) => (
-                      <li key={service.slug}>
-                        <Link
-                          href={serviceHref(service)}
-                          /* `u-tap` for the touch floor; these rows measured
-                             31px. Its `display: inline-flex` is overridden by
-                             `flex` here, which lands in the utilities layer and
-                             therefore wins, so the row keeps its full-width
-                             `justify-between` and only the min-height applies.
-                             See the tap-target note in globals.css. */
-                          className="u-tap group flex items-center justify-between gap-3 py-1 text-[14px] text-ink-body transition-colors hover:text-blue-600"
-                        >
-                          {service.title}
-                          <Icon
-                            name="arrow-right"
-                            size={14}
-                            className="flex-none text-transparent transition-colors group-hover:text-blue-600"
-                          />
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </Container>
-      </Section>
-
     </main>
   );
 }

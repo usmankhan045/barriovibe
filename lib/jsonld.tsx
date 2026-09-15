@@ -199,6 +199,48 @@ export function itemListSchema(name: string, urls: string[]) {
 }
 
 /**
+ * A mobile app we built, for a product page under /work.
+ *
+ * `MobileApplication` rather than the `WebApplication` below, because the two
+ * describe different things: that one runs in the page it is declared on, this
+ * one is installed from a store and the page is only where it is written about.
+ * Getting that wrong asserts the app runs in the browser, which is the kind of
+ * claim a rich result will happily repeat.
+ *
+ * NO `aggregateRating` and NO `offers`. A rating needs ratings, and this app
+ * has no public reviews to aggregate yet; inventing one is both a lie and a
+ * structured data violation Google issues manual actions for. The price is left
+ * unstated rather than declared zero, because the app carries a subscription
+ * and "0" would be the wrong number rather than a missing one.
+ *
+ * `installUrl` is deliberately absent too. It is added the day the listings go
+ * public, alongside `store.live` in content/products.ts.
+ */
+export function mobileAppSchema({
+  name,
+  description,
+  path,
+  platforms,
+}: {
+  name: string;
+  description: string;
+  path: string;
+  platforms: readonly string[];
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'MobileApplication',
+    name,
+    description,
+    url: absoluteUrl(path),
+    applicationCategory: 'HealthApplication',
+    operatingSystem: platforms.join(', '),
+    author: { '@id': `${SITE_URL}/#organization` },
+    publisher: { '@id': `${SITE_URL}/#organization` },
+  };
+}
+
+/**
  * A free browser-side tool, described as an application rather than as a page.
  *
  * `WebApplication` is what earns a tool the rich result that names it and its

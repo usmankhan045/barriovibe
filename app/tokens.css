@@ -673,6 +673,144 @@
   /* Full-bleed CTA band */
   --grad-cta: linear-gradient(135deg, #0b2f92 0%, #061a51 58%, #041134 100%);
 
+  /* ── The button's own blue, sampled from public/art/btn-blue.png ─────────
+     ┌────────────────────────────────────────────────────────────────────────┐
+     │  STOPS READ OUT OF THE PNG the "Start a project" pill is 9-sliced      │
+     │  from, down the column at x=192 (mid-pill, clear of the caps).         │
+     └────────────────────────────────────────────────────────────────────────┘
+
+     --grad-cta above is NOT this colour and never was: it is a flat 135deg
+     ramp, and the button is a vertical one with a structure. Anything meant to
+     read as "the same blue as the button" has to reproduce that structure, so
+     this token exists rather than another approximation of it.
+
+     What the pixels actually say, top to bottom:
+
+       5%   #1d4fcc   bright top rim, where the light hits the bevel
+       25%  #011973   falls away fast into the body
+       40%  #041869   the deep part of the upper half
+       50%  #133276   a specular lift across the waist, subtle but there
+       64%  #021668   deep again below it
+       74%  #001567   the darkest point, just past two thirds
+       94%  #032da8   climbing to the bottom rim
+       100% #2454c4   the bounce: light coming back up off the surface below
+
+     The two rim stops are the reason a flat ramp never matched. They read as
+     a lit edge on a solid object, and without them the same mid-blues look
+     like a printed rectangle. */
+  /* ── The button's blue, dissected from public/art/btn-blue.png ──────────
+     ┌────────────────────────────────────────────────────────────────────────┐
+     │  SUPERSEDED. The four --grad-btn-blue-* tokens below are no longer     │
+     │  referenced by anything: .u-surface-btn now 9-slices the mockup's own  │
+     │  pixels out of /art/card-blue.png (scripts/gen-card-sprite.py) rather  │
+     │  than rebuilding the surface from gradients. They are kept, unused, as │
+     │  the written record of what was measured off the pill, because the     │
+     │  measurements are still true and the sprite generator relies on them.  │
+     │                                                                        │
+     │  One correction, found when the sprite was cut. Point 3 below and      │
+     │  --grad-btn-blue-body describe a bright specular WAIST across the      │
+     │  middle at 46%. There is no such feature. With the label pixels        │
+     │  excluded, luminance falls monotonically from the top rim to a trough  │
+     │  at ~62% and rises again to the bottom rim. The "waist" sits exactly   │
+     │  on the rows the button's own label runs through: it is the fit        │
+     │  residual that gen-button-sprites.py documents, not the surface.       │
+     │  Do not reintroduce it.                                                │
+     └────────────────────────────────────────────────────────────────────────┘
+
+     ┌────────────────────────────────────────────────────────────────────────┐
+     │  THREE THINGS MAKE THE PILL LOOK SOLID. A colour ramp is only one.     │
+     └────────────────────────────────────────────────────────────────────────┘
+
+     Read out of the PNG the "Start a project" button is 9-sliced from, at
+     x=192 (mid-pill, clear of the caps) and across y=64 (the waist):
+
+     1. A SHARP BEVEL, not a gradient. The top edge peaks at #4f79e1 three
+        pixels in and is back to #082c98 by twelve. The bottom spikes harder
+        and narrower still, #71a9ff at two pixels from the edge. Spread either
+        one over a hundred pixels and it stops reading as an edge at all,
+        which is exactly what made the first version of this card look flat.
+
+     2. A DIAGONAL LIGHT SOURCE. Sampling left, middle and right at the same
+        height: #0e2e8c / #041869 / #01115b. The pill is lit from the upper
+        left and falls away to the lower right. A purely vertical ramp cannot
+        say that, and without it the surface has no direction.
+
+     3. A DEEP BODY between them, #011973 down to #001567.
+
+     --grad-cta, which this replaces on the work cards, is a flat 135deg ramp
+     with none of the three. */
+
+  /* The deepest point of the pill, at 74% down. Still live: it is the flat
+     fallback under .u-surface-btn's sprite, so a card is never a white box if
+     the image fails to load. */
+  --color-btn-blue-core: #001567;
+
+  /* (3) The body. Vertical, no rims: those are separate layers so they stay
+     edges rather than scaling with the box.
+
+     THE WAIST IS A REAL BAND, not a single stop. Luminance down the fill has
+     two peaks, not one: the rim at 4-7%, and a broad specular across the
+     middle that peaks at 46% (#133176) and spans roughly 38-56%. An earlier
+     version had that as one stop pinched between two dark ones, which
+     averaged it away and left the card's whole middle flat and dark next to
+     the button. The band is what puts light back into the upper half. */
+  --grad-btn-blue-body: linear-gradient(
+    180deg,
+    #0a2c93 0%,
+    #042288 7%,
+    #011b77 15%,
+    #011971 24%,
+    #03176a 33%,
+    #0c216c 40%,
+    #133176 46%,
+    #0e2c71 53%,
+    #071f6b 60%,
+    #031567 68%,
+    #011568 75%,
+    #01196f 82%,
+    #021d7e 88%,
+    #052b9e 95%,
+    #0c34ad 100%
+  );
+
+  /* (2) The diagonal. Measured left-to-right at the same height the pill runs
+     #0e2e8c / #041869 / #01115b, so it is lit from the upper left.
+
+     Deliberately gentle. An earlier version carried a heavy dark stop on the
+     lower right which fought the specular band in the body above and pulled
+     the card's middle back down to flat. It only has to tilt the light, not
+     repaint it. */
+  --grad-btn-blue-light: linear-gradient(
+    138deg,
+    rgb(96 138 240 / 0.2) 0%,
+    rgb(40 80 190 / 0.08) 30%,
+    transparent 56%,
+    rgb(0 8 40 / 0.1) 86%,
+    rgb(0 6 32 / 0.18) 100%
+  );
+
+  /* (1) The bevel, top and bottom, at the width the pill actually has it.
+     Both are painted at a fixed pixel height so they stay sharp on a card of
+     any size. */
+  --grad-btn-blue-bevel-top: linear-gradient(
+    180deg,
+    rgb(14 48 161 / 0.9) 0px,
+    rgb(79 121 225 / 0.95) 3px,
+    rgb(46 97 218 / 0.8) 6px,
+    rgb(22 69 192 / 0.5) 9px,
+    rgb(8 44 152 / 0.2) 13px,
+    transparent 18px
+  );
+  --grad-btn-blue-bevel-bottom: linear-gradient(
+    0deg,
+    rgb(36 84 196 / 0.9) 0px,
+    rgb(113 169 255 / 0.85) 2px,
+    rgb(77 130 245 / 0.7) 4px,
+    rgb(14 59 191 / 0.45) 7px,
+    rgb(4 47 175 / 0.2) 11px,
+    transparent 16px
+  );
+
   /* ── The coverflow card, sampled from the chess piece ────────────────────
      ┌────────────────────────────────────────────────────────────────────────┐
      │  STOPS SAMPLED FROM public/art/chess-hero.webp — the blue queen.       │
