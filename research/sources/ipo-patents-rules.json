@@ -1,0 +1,9 @@
+{
+  "id": "ipo-patents-rules",
+  "url": "https://ipo.gov.pk/system/files/Patents_Rules_2003.pdf",
+  "status": 200,
+  "fetched_at": "2026-09-27T09:16:44.351279+00:00",
+  "sha256": "2e391045dab7ec4f",
+  "chars": 530654,
+  "stealth": true
+}

@@ -254,7 +254,7 @@ export const IP_SERVICES: Service[] = [
       {
         question: 'Why does examination take so long?',
         answer:
-          'Formality examination is quick, usually a couple of months, but substantive examination tests novelty and inventive step against everything already known, and the queue at IPO Pakistan is long. Responding to objections quickly is the one part of the timeline you control, and slow responses are the most common reason a filing drags past two years.',
+          'Because substantive examination tests novelty and inventive step against everything already known. IPO Pakistan publishes eighteen months as its average time to the first examination report, and under section 16 of the Patents Ordinance an application not accepted within eighteen months of filing is treated as refused, subject to an extension of up to three months. Replying to objections quickly and completely is the one part of that window you control.',
       },
       {
         question: 'What can and cannot be patented in Pakistan?',

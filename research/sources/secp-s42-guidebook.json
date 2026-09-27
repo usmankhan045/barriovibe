@@ -1,0 +1,9 @@
+{
+  "id": "secp-s42-guidebook",
+  "url": "https://www.secp.gov.pk/document/section-42-guidebook-english-and-urdu/?wpdmdl=56758",
+  "status": 200,
+  "fetched_at": "2026-09-27T09:28:02.605026+00:00",
+  "sha256": "5e2bcf7feaedd934",
+  "bytes": 1116499,
+  "method": "StealthyFetcher page + in-page fetch(credentials:include)"
+}

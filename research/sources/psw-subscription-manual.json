@@ -1,0 +1,9 @@
+{
+  "id": "psw-subscription-manual",
+  "url": "https://www.psw.gov.pk/media//Manuals/PSW-Subscription%20User%20Manual.pdf",
+  "status": 200,
+  "fetched_at": "2026-09-27T09:28:02.605026+00:00",
+  "sha256": "a8c89b8f351a1491",
+  "bytes": 4297204,
+  "method": "StealthyFetcher page + in-page fetch(credentials:include)"
+}

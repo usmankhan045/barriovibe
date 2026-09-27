@@ -1,0 +1,9 @@
+{
+  "id": "secp-s42-checklist",
+  "url": "https://www.secp.gov.pk/wp-content/uploads/2026/02/Checklist-for-License-Under-Section-42.pdf",
+  "status": 200,
+  "fetched_at": "2026-09-27T09:28:02.605026+00:00",
+  "sha256": "fd616b7a48116f9b",
+  "bytes": 136505,
+  "method": "StealthyFetcher page + in-page fetch(credentials:include)"
+}

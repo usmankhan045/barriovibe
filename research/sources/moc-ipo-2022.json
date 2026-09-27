@@ -1,0 +1,9 @@
+{
+  "id": "moc-ipo-2022",
+  "url": "https://www.commerce.gov.pk/wp-content/uploads/2022/04/IPO-2022-SRO-No.-545I-2022-dt.-22.4-2022.pdf",
+  "status": 200,
+  "fetched_at": "2026-09-27T09:28:02.605026+00:00",
+  "sha256": "9c3ba5d7ffc881a5",
+  "bytes": 58671357,
+  "method": "StealthyFetcher page + in-page fetch(credentials:include)"
+}

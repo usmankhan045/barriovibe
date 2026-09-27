@@ -1,0 +1,9 @@
+{
+  "id": "secp-companies-regulations-2024",
+  "url": "https://www.secp.gov.pk/document/the-companies-regulations-2024/?wpdmdl=50574",
+  "status": 200,
+  "fetched_at": "2026-09-27T09:28:02.605026+00:00",
+  "sha256": "0f6dadf61cf80c06",
+  "bytes": 4074883,
+  "method": "StealthyFetcher page + in-page fetch(credentials:include)"
+}

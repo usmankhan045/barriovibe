@@ -1,0 +1,9 @@
+{
+  "id": "psw-subscription",
+  "url": "https://www.psw.gov.pk/subscription",
+  "status": 200,
+  "fetched_at": "2026-09-27T09:28:02.605026+00:00",
+  "sha256": "dacecd2d7b005014",
+  "bytes": 22963,
+  "method": "scrapling stealthy_fetch"
+}

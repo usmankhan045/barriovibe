@@ -38,7 +38,7 @@ export const CORPORATE_SERVICES: Service[] = [
       'Structure advice across private limited, single member company, LLP, and partnership or AOP',
       'Name availability search and reservation through SECP eServices',
       'Memorandum and Articles of Association drafted around your actual business objects',
-      'Digital signature issuance for every subscriber and director',
+      'SECP eServices accounts and PIN authentication set up for every subscriber and director',
       'Incorporation filing and Certificate of Incorporation',
       'Post-registration setup: company NTN, corporate bank account and the opening statutory registers',
     ],
@@ -56,7 +56,7 @@ export const CORPORATE_SERVICES: Service[] = [
       {
         title: 'Name and documents',
         description:
-          'Name searched and reserved, constitutional documents drafted to your objects, and digital signatures issued to every subscriber.',
+          'Name searched and reserved, constitutional documents drafted to your objects, and every subscriber set up to sign on SECP\'s portal.',
       },
       {
         title: 'Incorporation',
@@ -72,7 +72,7 @@ export const CORPORATE_SERVICES: Service[] = [
     deliverables: [
       'Certificate of Incorporation, or the registered partnership deed',
       'Memorandum and Articles of Association',
-      'Digital signatures for all subscribers and directors',
+      'SECP portal access for all subscribers and directors',
       'Company NTN certificate and an opened corporate bank account',
       'Statutory registers: members, directors and charges',
     ],
@@ -105,11 +105,31 @@ export const CORPORATE_SERVICES: Service[] = [
         answer:
           'You need a registered office address in Pakistan where official correspondence can be served. It does not have to be commercial premises, and a residential address is acceptable, but it must be real and you must actually receive post there.',
       },
+      {
+        question: 'Is there a minimum capital to register a company in Pakistan?',
+        answer:
+          'No. SECP states there is no minimum requirement of authorised capital. The Rs 100,000 figure quoted on many pages is the lowest fee slab, not a capital you have to put in, so the capital should be set by what the business needs.',
+      },
+      {
+        question: 'How many directors does a private limited company need?',
+        answer:
+          'Not less than two under section 154(1) of the Companies Act 2017, against at least one for a single member company. Only a natural person can be a director, and section 153 disqualifies anyone who does not hold a National Tax Number, so every proposed director needs an NTN before the filing.',
+      },
+      {
+        question: 'Do I need to register for an NTN separately after incorporating?',
+        answer:
+          'No. Under the SECP and FBR one-window facility, registering through the SECP portal causes the company’s National Tax Number to be issued automatically to the company email address. SECP states that its eZfile system is integrated with FBR, EOBI and the provincial departments.',
+      },
+      {
+        question: 'What has to be done in the first weeks after incorporation?',
+        answer:
+          'The subscription money for the shares must be paid within 30 days under section 17(2), or the shares are deemed cancelled and the subscriber is removed from the register of members. Its receipt must then be reported to the registrar within 45 days, with a certificate from a practising chartered accountant or cost and management accountant. It is easy to miss, and missing it changes who owns the company.',
+      },
     ],
     seo: {
       title: 'Company Registration in Pakistan (SECP)',
       description:
-        'SECP incorporation for private limited, single member, LLP and partnership structures, with name reservation, digital signatures, NTN and bank account setup.',
+        'SECP incorporation for private limited, single member, LLP and partnership structures, with name reservation, SECP portal setup, NTN and bank account setup.',
     },
   },
 
@@ -220,7 +240,7 @@ export const CORPORATE_SERVICES: Service[] = [
       'Incorporation as a public limited company within the window the licence allows',
       'Governance pack: board composition, conflict of interest policy and the registers a regulator expects',
       'Pakistan Centre for Philanthropy certification, the only FBR-authorised NPO evaluation',
-      'Licence renewal diarised ahead of the three-year expiry',
+      'The licence period and conditions SECP sets for you diarised, so nothing lapses unnoticed',
     ],
     audience: [
       'Founders setting up a charitable organisation',
@@ -269,7 +289,7 @@ export const CORPORATE_SERVICES: Service[] = [
       {
         question: 'What does a Section 42 licence actually allow?',
         answer:
-          'It permits a company formed for a charitable, scientific, educational or similar purpose to drop "Limited" from its name and to apply its income only to its objects rather than distributing it to members. The licence is granted for a definite period, normally three years, and must be renewed on application before it expires.',
+          'It permits a company formed for a charitable, scientific, educational or similar purpose to drop "Limited" from its name and to apply its income only to its objects rather than distributing it to members. Section 42 says the licence is granted for a period SECP specifies, so the term that binds you is the one written in your own licence, along with the conditions attached to it.',
       },
       {
         question: 'Do we need PCP certification, or is SECP registration enough?',
@@ -303,7 +323,7 @@ export const CORPORATE_SERVICES: Service[] = [
     oneLiner:
       'Registration with the Pakistan Software Export Board for freelancers, software houses and call centres, plus the annual renewal that keeps it alive.',
     intro:
-      'The Pakistan Software Export Board sits under the Ministry of IT and Telecommunication and registers the country’s IT and IT-enabled services exporters. Registration is what gets you the reduced tax rate on export proceeds and access to PSEB’s facilitation schemes. A call centre cannot legally operate without it. We register you in the right category, get the paperwork past the first review, and put the renewal on a calendar, because it is annual and it lapses quietly.',
+      'The Pakistan Software Export Board sits under the Ministry of IT and Telecommunication and registers the country’s IT and IT-enabled services exporters. Registration is what gets you the reduced tax rate on export proceeds and access to PSEB’s facilitation schemes. We register you in the right category, get the paperwork past the first review, and put the renewal on a calendar, because it is annual and it lapses quietly.',
     icon: 'award',
     included: [
       'Category assessment across freelancer, IT company or software house, and call centre or BPO',
@@ -359,7 +379,7 @@ export const CORPORATE_SERVICES: Service[] = [
       {
         question: 'Is PSEB registration compulsory?',
         answer:
-          'For a call centre, yes: operating one in Pakistan without PSEB registration is not permitted. For freelancers and software houses it is voluntary, but the reduced tax rate on export proceeds usually recovers the fee many times over within a single year, which is why most exporters register anyway.',
+          'Not in the sense of a licence to trade: a freelancer or software house can export without it. What it controls is tax. Section 154A of the Income Tax Ordinance makes PSEB registration and certification a condition of the reduced rate on IT and IT-enabled export proceeds, so an exporter who skips it gives that rate up.',
       },
       {
         question: 'What does it actually save me?',
@@ -375,6 +395,26 @@ export const CORPORATE_SERVICES: Service[] = [
         question: 'What happens if I let it lapse?',
         answer:
           'The registration expires and the tax benefit stops applying from that point, which usually surfaces as an unexpected deduction on the next remittance. Renewal is a far smaller job than re-registering, so it goes on the compliance calendar with everything else.',
+      },
+      {
+        question: 'What NTN do I need to register as a freelancer?',
+        answer:
+          'A personal NTN with no business name attached to it. PSEB states this explicitly for freelancer registration, and a business NTN is one of the more common reasons an application comes back. Alongside it you need both sides of your CNIC and a personal bank account letter, and at renewal a summary of export revenue carrying the correct State Bank IT or ITeS code plus the previous year’s income tax return.',
+      },
+      {
+        question: 'Do I have to bring 80% of my export proceeds through banking channels?',
+        answer:
+          'No. That condition was never part of section 154A. It was a proviso to section 65F(1)(c), which the Finance Act 2022 omitted, and it is still repeated on pages that have not caught up. Section 154A applies when your bank realises the foreign exchange, so the proceeds it taxes are already through a banking channel.',
+      },
+      {
+        question: 'Once I am registered, do I still need to file a tax return?',
+        answer:
+          'Yes. Section 114(1)(ae) requires a return from anyone whose income is subject to final taxation, and section 154A(2) makes the reduced rate final only if a return and any withholding statements due for the year have been filed. Registering with PSEB and then not filing loses the treatment the registration was for.',
+      },
+      {
+        question: 'Do I need sales tax registration to keep the export rate final?',
+        answer:
+          'Not as a software or IT services exporter. Section 154A(2)(c) asks for sales tax returns to have been filed where required, but its proviso disapplies that condition for exporters of computer software, IT services and IT enabled services. Whether a provincial authority separately expects you to register for sales tax on services is a different question, and in Khyber Pakhtunkhwa it is a live one.',
       },
     ],
     seo: {
@@ -432,7 +472,7 @@ export const CORPORATE_SERVICES: Service[] = [
     ],
     deliverables: [
       'Chamber of Commerce and Industry membership certificate',
-      'Membership number recorded against your PSW and WeBOC profiles',
+      'Membership number recorded against your PSW profile',
       'A worked example of a Certificate of Origin application',
       'A renewal reminder ahead of the membership year end',
     ],
@@ -483,7 +523,7 @@ export const CORPORATE_SERVICES: Service[] = [
     included: [
       'Eligibility review and the correct registration sequence for your trade',
       'Pakistan Single Window (PSW) registration and profile setup',
-      'WeBOC user ID and trader enrolment',
+      'Customs trader profile through PSW, which replaces a separate WeBOC user ID for subscribers',
       'Chamber of Commerce and Industry membership',
       'Sales tax registration where required for import or export',
       'Customs agent coordination and first-consignment guidance',
@@ -498,7 +538,7 @@ export const CORPORATE_SERVICES: Service[] = [
       {
         title: 'Prerequisites',
         description:
-          'NTN, sales tax registration and chamber membership put in place. These gate everything downstream and are where most delays occur.',
+          'NTN and, where your trade needs it, sales tax registration put in place first, because the PSW subscription is made against them. Chamber membership is arranged alongside for exporters who will need Certificates of Origin.',
       },
       {
         title: 'PSW & WeBOC',
@@ -513,7 +553,7 @@ export const CORPORATE_SERVICES: Service[] = [
     ],
     deliverables: [
       'Active PSW account with configured trader profile',
-      'WeBOC user ID and credentials',
+      'PSW subscription login and customs trader profile',
       'Chamber of Commerce membership certificate',
       'Sales tax registration certificate, where applicable',
       'A written checklist of documents required per consignment',
@@ -531,7 +571,7 @@ export const CORPORATE_SERVICES: Service[] = [
       {
         question: 'Is there a single "import-export licence" in Pakistan?',
         answer:
-          'Not as one document, despite the common name. What you actually need is a set of registrations, namely NTN, sales tax where applicable, chamber membership, and PSW/WeBOC enrolment, completed in the right order. Attempting them out of sequence is the usual cause of weeks of delay.',
+          'Not as one document, despite the common name. What you actually need is a set of registrations: an NTN, sales tax registration where your trade requires it, and a Pakistan Single Window subscription, which also covers what used to be a separate WeBOC user ID. Exporters usually add chamber membership for Certificates of Origin. Our guide on import export registration sets out each step and the official fee.',
       },
       {
         question: 'Can an individual import, or do I need a company?',

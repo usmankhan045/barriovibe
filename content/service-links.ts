@@ -197,7 +197,7 @@ export const SERVICE_LINKS: Record<string, ServiceLinks> = {
     guides: ['company-annual-compliance', 'secp-company-registration'],
   },
   'npo-registration': {
-    guides: ['non-profit-tax-status'],
+    guides: ['section-42-company-registration', 'non-profit-tax-status'],
   },
   'pseb-registration': {
     guides: [
@@ -208,7 +208,7 @@ export const SERVICE_LINKS: Record<string, ServiceLinks> = {
     tools: ['freelancer-tax'],
   },
   'import-export-license': {
-    guides: ['paying-foreign-suppliers'],
+    guides: ['import-export-license-pakistan', 'paying-foreign-suppliers'],
   },
   'contract-drafting': {
     posts: ['you-probably-do-not-own-the-code', 'who-owns-what-the-ai-wrote'],
@@ -219,12 +219,18 @@ export const SERVICE_LINKS: Record<string, ServiceLinks> = {
     guides: ['trademark-registration-cost'],
   },
   'copyright-registration': {
+    guides: ['copyright-registration-in-pakistan'],
     posts: ['who-owns-what-the-ai-wrote'],
+  },
+  'patent-registration': {
+    guides: ['patent-registration-in-pakistan'],
   },
 
   /* ── International Expansion ───────────────────────────────────────── */
   'us-company-formation': {
     guides: [
+      'wyoming-vs-delaware-llc-for-pakistanis',
+      'stripe-with-us-llc-from-pakistan',
       'us-llc-annual-compliance',
       'us-llc-foreign-asset-declaration',
       'can-a-pakistani-company-own-a-foreign-entity',
@@ -235,6 +241,12 @@ export const SERVICE_LINKS: Record<string, ServiceLinks> = {
   'us-tax-filing': {
     guides: ['us-llc-annual-compliance', 'us-llc-foreign-asset-declaration'],
     posts: ['us-llc-filings-pakistani-founders-miss'],
+  },
+  'itin-application': {
+    guides: ['itin-from-pakistan', 'us-llc-annual-compliance'],
+  },
+  'us-trademark-registration': {
+    guides: ['us-trademark-from-pakistan', 'trademark-registration-cost'],
   },
   'us-bookkeeping-payroll': {
     guides: ['us-llc-annual-compliance'],
@@ -250,6 +262,14 @@ export const SERVICE_LINKS: Record<string, ServiceLinks> = {
     ],
   },
   'uk-company-formation': {
-    guides: ['can-a-pakistani-company-own-a-foreign-entity', 'receiving-money-from-abroad'],
+    guides: [
+      'uk-company-registration-from-pakistan',
+      'companies-house-identity-verification-from-pakistan',
+      'can-a-pakistani-company-own-a-foreign-entity',
+      'receiving-money-from-abroad',
+    ],
+  },
+  'uk-vat-corporation-tax': {
+    guides: ['uk-company-registration-from-pakistan'],
   },
 };

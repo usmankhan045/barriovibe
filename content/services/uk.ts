@@ -32,11 +32,12 @@ import type { Service } from '../types';
  * is £156, both effective 1 February 2026. The confirmation statement costs £50
  * filed online or £110 on paper, and is due within 14 days of the review
  * period ending. A registered office has had to be an "appropriate address"
- * and every company has needed a registered email address since March 2024.
+ * and every company must now keep a registered email address.
  * Identity verification for directors and PSCs under the Economic Crime and
  * Corporate Transparency Act became mandatory for every new director and new
- * incorporation from 18 November 2025; existing directors and PSCs must
- * complete it by 18 November 2026 or at their next confirmation statement.
+ * incorporation from 18 November 2025, opening a 12-month transition: an
+ * existing director verifies by the company's next confirmation statement, and
+ * a PSC who is not a director within 14 days of the start of their birth month.
  * Late accounts penalties are £150 up to one month late, £375 up to three,
  * £750 up to six and £1,500 beyond that, doubled if late two years running;
  * first accounts are due 21 months after incorporation and every year after
@@ -127,12 +128,12 @@ export const UK_SERVICES: Service[] = [
       {
         question: 'Do I need to be a UK resident to form a company here?',
         answer:
-          'No. Neither residency nor a UK passport is required to be a director or shareholder of a UK private limited company, and the whole incorporation runs remotely. What Companies House does require is a registered office in the UK and, since March 2024, a registered email address it can actually use to contact the company.',
+          'No. Neither residency nor a UK passport is required to be a director or shareholder of a UK private limited company, and the whole incorporation runs remotely. What Companies House does require is a registered office in the UK and a registered email address it can actually use to contact the company.',
       },
       {
         question: 'What is the identity verification Companies House now asks for?',
         answer:
-          'Under the Economic Crime and Corporate Transparency Act, every director and person with significant control has to verify their identity with Companies House, either directly or through an authorised agent. It became mandatory for every new director and new incorporation from 18 November 2025, and existing directors and PSCs have to complete it by 18 November 2026 or at their next confirmation statement, whichever comes first. Companies House has said active enforcement begins once that transition period ends.',
+          'Under the Economic Crime and Corporate Transparency Act, every director and person with significant control has to verify their identity with Companies House, either directly or through an authorised agent. It became mandatory for new directors and new incorporations from 18 November 2025, which also started a 12-month transition for everyone already in post. An existing director verifies by the company\'s next confirmation statement, which cannot be filed until every director has; a PSC who is not a director has 14 days from the start of their birth month. Acting as a director without verifying is an offence, though it does not invalidate what the director signed.',
       },
       {
         question: 'What does the confirmation statement actually confirm?',
@@ -143,6 +144,26 @@ export const UK_SERVICES: Service[] = [
         question: 'What happens if the annual accounts are filed late?',
         answer:
           'A private limited company’s first accounts are due 21 months after incorporation, and every year after that, nine months after the accounting reference date. Penalties are automatic and rise with how late you are: £150 up to one month, £375 up to three months, £750 up to six months and £1,500 beyond that, doubled if you were late the year before as well.',
+      },
+      {
+        question: 'Can I use my address in Pakistan as the registered office?',
+        answer:
+          'No. The registered office must be a physical address in the UK, in the same UK country the company is registered in, so a company registered in Scotland needs a Scottish address. It must also be an appropriate address, meaning someone acting for the company is made aware of post delivered there, and a PO Box no longer qualifies. A company without a compliant address can be struck off, which is why most overseas founders use an accountant’s or an agent’s address with their permission.',
+      },
+      {
+        question: 'What does Companies House charge to incorporate?',
+        answer:
+          'The government fee is £100 to register online, paid by card, or £124 by post on form IN01. That is Companies House’s own fee for the incorporation itself. Registering online usually sets the company up for Corporation Tax at the same time, unless it is dormant.',
+      },
+      {
+        question: 'Will my personal details be public?',
+        answer:
+          'Some of them. Directors’ names and a service address are published on the Companies House register, and so is the registered office address, which is why a home address is best kept off it. A director who gives a home address as the service address can ask Companies House to remove it. The registered email address is not published.',
+      },
+      {
+        question: 'Who can be a director of a UK company?',
+        answer:
+          'Every private limited company needs at least one director, who must be 16 or over and does not have to live in the UK. Registering the company needs the personal code each director receives after verifying their identity with Companies House. Someone disqualified from being a director, or an undischarged bankrupt, needs the court’s permission to act.',
       },
     ],
     seo: {

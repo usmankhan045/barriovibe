@@ -40,6 +40,10 @@ export function Wordmark({
         alt=""
         aria-hidden="true"
         priority
+        /* The mark renders 36px tall. Without `sizes` Next offers only the
+           device widths (640px up) and the browser preloaded a 640px PNG for
+           it on every page. This lets it pick from `imageSizes` instead. */
+        sizes="48px"
         className="h-9 w-auto flex-none"
       />
 

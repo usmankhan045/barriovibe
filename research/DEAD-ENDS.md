@@ -68,6 +68,15 @@ Seventh Schedule PDF, cross-checked against Business Recorder's reporting of
 the 21 April 2025 structure. For anything where only SECP has the document,
 download it manually in a browser.
 
+**Update, 27 Sep 2026: SECP PDFs ARE reachable**, by the same in-page fetch
+that works for SBP. Load any secp.gov.pk page in StealthyFetcher
+(`solve_cloudflare=True`), then from inside that page `fetch()` the document's
+`?wpdmdl=` download link with `credentials: 'include'` and base64 the bytes
+back out (the snippet in the SBP section above). This retrieved the Seventh
+Schedule consolidation, the Companies Regulations 2024, the section 42
+guidebook and its checklist, now in `research/raw/secp-*`. Run `file` on each
+download before trusting it, as with SBP.
+
 ## WIPO Lex record 17010 is not the Pakistan Trade Marks Rules
 
 Tried `https://www.wipo.int/wipolex/en/legislation/details/17010` expecting the

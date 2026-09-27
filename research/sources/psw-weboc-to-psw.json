@@ -1,0 +1,9 @@
+{
+  "id": "psw-weboc-to-psw",
+  "url": "https://www.psw.gov.pk/weboc-to-psw",
+  "status": 200,
+  "fetched_at": "2026-09-27T09:28:02.605026+00:00",
+  "sha256": "6c32c7f153d8f872",
+  "bytes": 11295,
+  "method": "scrapling stealthy_fetch"
+}

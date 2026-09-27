@@ -1,0 +1,9 @@
+{
+  "id": "moc-epo-2022",
+  "url": "https://www.commerce.gov.pk/wp-content/uploads/2022/04/EPO-2022-SRO-544-2022-dt.22.4.22.pdf",
+  "status": 200,
+  "fetched_at": "2026-09-27T09:28:02.605026+00:00",
+  "sha256": "fc4e108c5e9aa0a4",
+  "bytes": 33755622,
+  "method": "StealthyFetcher page + in-page fetch(credentials:include)"
+}

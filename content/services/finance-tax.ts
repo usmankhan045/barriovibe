@@ -376,6 +376,26 @@ export const FINANCE_TAX_SERVICES: Service[] = [
         answer:
           'Individuals and AOPs file by 30 September following the tax year. Companies file by 31 December. FBR does sometimes extend those dates, and every year a number of businesses plan around an extension that then does not arrive or arrives shorter than expected. We work to the original date for that reason.',
       },
+      {
+        question: 'Can I file my return after the deadline?',
+        answer:
+          'Yes, and the sooner the better. The section 182 penalty is the higher of 0.1% of tax payable or Rs 1,000 for each day of default, with a minimum of Rs 10,000 for an individual with 75% or more of income from salary and Rs 50,000 otherwise, and it is cut by 75%, 50% or 25% if you file within one, two or three months of the due date. Separately, section 182A keeps a late filer off the Active Taxpayer List for that year until a surcharge is paid: Rs 25,000 for an individual, Rs 50,000 for an AOP and Rs 100,000 for a company. An individual can avoid the surcharge by undertaking to the Commissioner not to acquire any property for six months.',
+      },
+      {
+        question: 'Can I revise my return after filing it?',
+        answer:
+          'Yes. Section 114(6) generally requires the Commissioner’s written approval, but not if you revise within sixty days of the original filing. Approval is also deemed granted if the Commissioner does not respond within sixty days or where you declare more income or less loss, and it must be granted for a bona fide omission or wrong statement.',
+      },
+      {
+        question: 'Do I have to file a wealth statement?',
+        answer:
+          'Yes, if you are a resident individual filing a return. Section 116(2) requires a wealth statement and a wealth reconciliation statement with every such return, and there is no income threshold: the old Rs 1 million floor was removed by the Finance Act 2013. Both go in with the return, by the return’s own due date.',
+      },
+      {
+        question: 'My employer already deducts my tax. Do I still need to file?',
+        answer:
+          'Yes. Deduction at source and filing are separate obligations, and the Active Taxpayer List is built only from returns filed, so without one you pay non-filer rates on property, vehicles and banking transactions. In the return, the tax your employer withheld is claimed against the section 149 line so that it is not paid twice.',
+      },
     ],
     seo: {
       title: 'Income Tax Return Filing in Pakistan (FBR)',

@@ -26,7 +26,7 @@ import type { Service } from '../types';
  * owner, extendable six months on Form 7004. The penalty is $25,000 per form
  * per year, plus $25,000 for each 30 days once the IRS has issued a 90-day
  * notice. Wyoming's annual report falls on the first day of the formation
- * anniversary month with a $60 minimum licence tax; Delaware's flat $300 LLC
+ * anniversary month with a $60 minimum licence tax; Delaware's flat $400 LLC
  * tax falls on 1 June; New Mexico requires no annual report at all. Form W-7
  * is paper only. The USPTO has required a US-licensed attorney of record from
  * every foreign-domiciled applicant since 2019, and since January 2025 charges
@@ -124,7 +124,7 @@ export const USA_SERVICES: Service[] = [
       {
         question: 'Which state should I register in?',
         answer:
-          'It depends on what the company will do. Wyoming is the common default for a single-member LLC and charges an annual report licence tax with a $60 minimum, due on the first day of your formation anniversary month. New Mexico requires no annual report at all. Delaware charges a flat $300 LLC tax every 1 June and earns that cost mainly if you intend to raise venture capital. We recommend on your facts rather than on a default.',
+          'It depends on what the company will do. Wyoming is the common default for a single-member LLC and charges an annual report licence tax with a $60 minimum, due on the first day of your formation anniversary month. New Mexico requires no annual report at all. Delaware charges a flat $400 LLC tax due by 1 June and earns that cost mainly if you intend to raise venture capital. We recommend on your facts rather than on a default.',
       },
       {
         question: 'Will forming a US LLC get me a Stripe account?',
@@ -135,6 +135,26 @@ export const USA_SERVICES: Service[] = [
         question: 'Do I still have to file a BOI report with FinCEN?',
         answer:
           'Not for a company formed in the United States. FinCEN’s final rule, effective 14 August 2026, permanently exempts entities created in the US and their beneficial owners from beneficial ownership reporting. Only an entity formed under foreign law and then registered to do business in a US state remains a reporting company, which is not what this service produces.',
+      },
+      {
+        question: 'What does a foreign-owned LLC have to file with the IRS every year?',
+        answer:
+          'Form 5472 attached to a pro forma Form 1120, due 15 April for a calendar-year LLC, even in a year with no trading, because formation, contributions and distributions are themselves reportable. It cannot be e-filed: it goes by fax or to a dedicated IRS address in Ogden, not the ordinary Form 1120 one. The penalty for not filing is $25,000 for each year, and a substantially incomplete form counts as not filing.',
+      },
+      {
+        question: 'Can I act as my own registered agent from Pakistan?',
+        answer:
+          'No. Wyoming requires the agent to have a physical address in the state and rules out a drop box, New Mexico requires a resident individual or an entity with a place of business there, and Delaware requires a Delaware street address. So a Pakistan-based owner needs a commercial registered agent for as long as the company exists, and that address becomes public record.',
+      },
+      {
+        question: 'Do I have to declare my US LLC to FBR?',
+        answer:
+          'If you are resident in Pakistan and your foreign assets are worth USD 100,000 or more, or your foreign income is USD 10,000 or more, yes: section 116A requires a foreign income and assets statement with your return. The LLC is a foreign asset whether or not it paid you anything, and it makes no difference that it owes no US federal tax. Residency is decided by section 82, which can treat a citizen living abroad as resident.',
+      },
+      {
+        question: 'Does the State Bank allow a Pakistani resident to own a US LLC personally?',
+        answer:
+          'It is not covered by the general permissions. Para 13 of Chapter 20 of the Foreign Exchange Manual lets a resident individual invest abroad in exactly three ways: listed shares up to USD 25,000 a year, an employer’s stock option plan up to USD 50,000 a year, and sweat equity. Forming your own private company is not one of them, so it is a question to settle with your bank before funding the LLC from Pakistan, not an assumption to make.',
       },
     ],
     seo: {
@@ -314,7 +334,7 @@ export const USA_SERVICES: Service[] = [
       {
         question: 'How long does the IRS take?',
         answer:
-          'The IRS runs to roughly seven weeks outside peak season and nine to eleven weeks during it, measured from the day a complete application reaches them. An incomplete application restarts rather than continues, which is the whole case for getting it right the first time.',
+          'The IRS says to allow nine to eleven weeks for anyone filing from overseas, which covers every application from Pakistan, whatever the season. Seven weeks is its figure only for domestic filers outside peak season. The clock runs from the day a complete application reaches them. An incomplete application restarts rather than continues, which is the whole case for getting it right the first time.',
       },
       {
         question: 'Is an ITIN the same thing as an EIN?',

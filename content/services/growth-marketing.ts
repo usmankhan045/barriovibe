@@ -309,7 +309,11 @@ export const GROWTH_SERVICES: Service[] = [
       },
     ],
     seo: {
-      title: 'Social Media Presence Management',
+      /* Not "Social Media Presence Management", which competed with the
+         management service's own title for one search. This service's
+         difference is reputation across every surface, reviews and forums
+         included, and that is the search it answers. */
+      title: 'Online Reputation & Brand Presence Management',
       description:
         'Your whole online presence run as one: Instagram, TikTok, LinkedIn, YouTube, Reddit, Quora and Google Business Profile, with community and reviews handled.',
     },
