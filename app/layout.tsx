@@ -30,10 +30,13 @@ export const metadata: Metadata = {
   // it does not cover the home page or anything that builds metadata by hand,
   // and a card without it is attributed to nobody.
   twitter: { card: 'summary_large_image', site: X_HANDLE, creator: X_HANDLE },
+  // No `index: true, follow: true` here, although that is what every public
+  // page wants. It is also what a page means with no robots tag at all, and
+  // stating it made every 404 ship two contradictory tags: this one, and the
+  // `noindex` Next injects for a 404 status. Only the Googlebot preview size is
+  // not a default, so only it is stated.
   robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true, 'max-image-preview': 'large' },
+    googleBot: { 'max-image-preview': 'large' },
   },
 };
 

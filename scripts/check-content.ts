@@ -19,6 +19,10 @@ import { MEGA_MENU_COLUMNS } from '../content/nav';
 import { INDEXNOW_KEY } from '../content/site';
 import type { Service } from '../content/types';
 import { hasGitHistory } from '../lib/lastmod';
+import { SERVICE_LINKS } from '../content/service-links';
+import { ALL_GUIDES } from '../content/guides';
+import { ALL_POSTS } from '../content/posts';
+import { TOOLS } from '../content/tools';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -159,6 +163,31 @@ for (const service of SERVICES) {
     warn(
       `${service.slug}: all related services are in the same pillar. At least one cross-pillar link helps discovery.`,
     );
+  }
+}
+
+// ── Service-to-content links must resolve ───────────────────────────────────
+/* Checked against the FULL slate, not the published one: a scheduled guide is
+   a legitimate entry that the renderer holds back until its slot, while a slug
+   that names nothing at all is a typo that would silently never render. See
+   content/service-links.ts. */
+{
+  const known = {
+    guides: new Set(ALL_GUIDES.map((g) => g.slug)),
+    tools: new Set(TOOLS.map((t) => t.slug)),
+    posts: new Set(ALL_POSTS.map((p) => p.slug)),
+  };
+  for (const [serviceSlug, links] of Object.entries(SERVICE_LINKS)) {
+    if (!slugs.has(serviceSlug)) {
+      fail(`content/service-links.ts: "${serviceSlug}" is not a service.`);
+    }
+    for (const kind of ['guides', 'tools', 'posts'] as const) {
+      for (const slug of links[kind] ?? []) {
+        if (!known[kind].has(slug)) {
+          fail(`content/service-links.ts: ${serviceSlug} lists ${kind} "${slug}", which does not exist.`);
+        }
+      }
+    }
   }
 }
 

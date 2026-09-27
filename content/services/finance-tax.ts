@@ -19,6 +19,7 @@ export const FINANCE_TAX_SERVICES: Service[] = [
     slug: 'financial-accounting',
     pillar: 'finance-tax',
     title: 'Financial Accounting',
+    headline: 'Financial Accounting Services in Pakistan',
     navLabel: 'Financial Accounting',
     oneLiner:
       'Monthly management accounts and year-end financial statements you can hand to a bank or an investor.',
@@ -108,6 +109,7 @@ export const FINANCE_TAX_SERVICES: Service[] = [
     slug: 'bookkeeping',
     pillar: 'finance-tax',
     title: 'Bookkeeping',
+    headline: 'Bookkeeping Services in Pakistan',
     navLabel: 'Bookkeeping',
     oneLiner:
       'Every sale, expense and bank transaction recorded and reconciled weekly, so nothing is ever reconstructed from memory.',
@@ -187,9 +189,114 @@ export const FINANCE_TAX_SERVICES: Service[] = [
   },
 
   {
+    /* Its own page since September 2026. NTN registration was a bullet inside
+       Income Tax and Company Registration, which meant "ntn registration", one
+       of the most searched tax phrases in the country, had no page on this site
+       whose subject it was. Every fact below is from FBR's own documents and is
+       worked through, with sources, in the two NTN guides linked from the page. */
+    slug: 'ntn-registration',
+    pillar: 'finance-tax',
+    title: 'NTN Registration',
+    headline: 'NTN Registration in Pakistan',
+    navLabel: 'NTN Registration',
+    oneLiner:
+      'Your National Tax Number registered with FBR, completed to the step most people miss, for individuals, AOPs, companies and non-profits.',
+    intro:
+      'FBR charges nothing for an NTN, and for a salaried person with no business the registration needs no attachments at all, so this is a service for the cases where it is not that simple: a business with premises to evidence, a partnership or company whose principal officer has to deal with the Regional Tax Office, or an IRIS account that exists but never became a registration. We complete Form 181, confirm the order granting it, and leave you knowing what the number now obliges you to do.',
+    icon: 'document',
+    included: [
+      'NTN registration for salaried individuals, sole proprietors, AOPs, companies and not-for-profits',
+      'IRIS account created or recovered, and Form 181 completed and submitted, which is the step that actually registers you',
+      'The registration order confirmed in IRIS, rather than the account alone taken as proof',
+      'Business premises evidence prepared for a sole proprietor: letterhead, a recent paid utility bill, and tenancy or ownership proof',
+      'The Regional Tax Office process handled for an AOP or company, whose principal officer FBR requires to register in person',
+      'Your status checked afterwards, and the duties registration brings explained, including the NTN a business must display',
+    ],
+    audience: [
+      'Freelancers and sole proprietors',
+      'Partnerships and new companies',
+      'Anyone stuck partway through IRIS',
+    ],
+    steps: [
+      {
+        title: 'Which registration',
+        description:
+          'We confirm what you are registering as. An individual, a business individual, an AOP and a company each need different evidence, and only an individual can finish entirely online.',
+      },
+      {
+        title: 'Evidence',
+        description:
+          'We gather only what FBR asks for your category, and check the one requirement that stops most applications: a mobile number registered against your own CNIC.',
+      },
+      {
+        title: 'Form 181',
+        description:
+          'IRIS account created, Form 181 completed and submitted with its attachments, or the Regional Tax Office visit prepared for an AOP or company.',
+      },
+      {
+        title: 'Confirmation',
+        description:
+          'We check IRIS for the order granting registration and send you the NTN certificate, with a note on what the registration now requires of you.',
+      },
+    ],
+    deliverables: [
+      'NTN certificate from FBR',
+      'IRIS login credentials, set up in your own name and email',
+      'Confirmation of the registration order in IRIS',
+      'A one-page note on the obligations that follow registration',
+    ],
+    documents: [
+      'CNIC of the individual, or of every partner or director',
+      'A mobile SIM registered against your own CNIC, and an email address you can access',
+      'A certificate of maintenance of a personal bank account in your name',
+      'For a business: letterhead, a paid utility bill for the premises not older than three months, and tenancy or ownership proof',
+      'For an AOP: partnership deed, Registrar of Firms certificate, and an authorisation letter signed by all partners',
+      'For a company: incorporation certificate and a letter on company letterhead signed by all directors naming the principal officer',
+    ],
+    related: ['income-tax-filing', 'company-registration', 'pseb-registration'],
+    faqs: [
+      {
+        question: 'Does FBR charge a fee for an NTN?',
+        answer:
+          'No. The statutory fee was removed when the Finance Act 2008 substituted Part IX of the Income Tax Ordinance, and the current section 181 has no fee provision. What anyone charges you, us included, is a service charge for doing the work, and for a salaried person with no business that work is simple enough to do yourself. Our guide on getting an NTN walks through it.',
+      },
+      {
+        question: 'Is my CNIC already my NTN?',
+        answer:
+          'The number, yes. Section 181(4) makes an individual\'s CNIC their National Tax Number from tax year 2015 onwards. The registration, no. Until Form 181 is submitted in IRIS and FBR issues the order granting it, you are not registered, which is why a person who has held a CNIC for years can still be treated as unregistered.',
+      },
+      {
+        question: 'I made an IRIS account. Am I registered?',
+        answer:
+          'Not necessarily, and this is where most self-registrations stall. Creating the account and reaching the dashboard is not registration. FBR says a return cannot be filed until the registration application is submitted: in IRIS, that is the Form 181 task under Draft, and the proof is the registration order under Completed Tasks.',
+      },
+      {
+        question: 'Can a company or partnership register online?',
+        answer:
+          'Not fully. FBR allows an individual to register through IRIS, but the principal officer of a company or an association of persons has to register through the Regional Tax Office. The exception is a company incorporated through SECP, where the NTN is issued as part of incorporation.',
+      },
+      {
+        question: 'Does an NTN make me a filer?',
+        answer:
+          'No. Registration gives you the number; filing an income tax return is what puts you on the Active Taxpayer List. The two are separate acts, and the difference decides the withholding rates you pay on banking, property and vehicles.',
+      },
+      {
+        question: 'Do freelancers need an NTN?',
+        answer:
+          'In practice, yes. Filing a return starts from a registration with FBR, and so does PSEB registration, which lists an NTN among its prerequisites and is what the reduced tax rate on IT export income depends on.',
+      },
+    ],
+    seo: {
+      title: 'NTN Registration in Pakistan: Individuals & Companies',
+      description:
+        'NTN registration with FBR for individuals, freelancers, AOPs and companies: Form 181 in IRIS completed and confirmed, and the RTO process handled.',
+    },
+  },
+  {
     slug: 'income-tax-filing',
     pillar: 'finance-tax',
     title: 'Income Tax',
+    headline: 'Income Tax Return Filing in Pakistan',
     navLabel: 'Income Tax',
     oneLiner:
       'NTN registration, annual income tax returns and wealth statements filed through FBR IRIS, correctly and before the deadline.',
@@ -242,7 +349,7 @@ export const FINANCE_TAX_SERVICES: Service[] = [
       'Details of assets acquired or disposed during the year',
       'Prior year return, if previously filed',
     ],
-    related: ['sales-tax-registration-filing', 'financial-accounting', 'corporate-secretarial-compliance'],
+    related: ['sales-tax-registration-filing', 'ntn-registration', 'corporate-secretarial-compliance'],
     faqs: [
       {
         question: 'Can I work out what I will owe before contacting you?',
@@ -281,6 +388,7 @@ export const FINANCE_TAX_SERVICES: Service[] = [
     slug: 'sales-tax-registration-filing',
     pillar: 'finance-tax',
     title: 'Sales Tax',
+    headline: 'Sales Tax Registration and Filing in Pakistan',
     navLabel: 'Sales Tax',
     oneLiner:
       'Sales tax registration and monthly returns for FBR and the provincial revenue authorities, with input tax properly claimed.',
@@ -367,6 +475,7 @@ export const FINANCE_TAX_SERVICES: Service[] = [
     slug: 'withholding-tax-statements',
     pillar: 'finance-tax',
     title: 'Withholding Tax Statements',
+    headline: 'Withholding Tax Statements in Pakistan',
     navLabel: 'Withholding Statements',
     oneLiner:
       'Quarterly and annual withholding statements filed under section 165, with the tax deducted at the right rate and deposited on time.',
@@ -458,6 +567,7 @@ export const FINANCE_TAX_SERVICES: Service[] = [
     slug: 'tax-advisory',
     pillar: 'finance-tax',
     title: 'Tax Advisory',
+    headline: 'Tax Advisory and FBR Representation in Pakistan',
     navLabel: 'Tax Advisory',
     oneLiner:
       'Planning, written opinions and representation: the work that decides what a transaction costs before you do it, and defends it afterwards.',
@@ -548,6 +658,7 @@ export const FINANCE_TAX_SERVICES: Service[] = [
     slug: 'audit-assurance',
     pillar: 'finance-tax',
     title: 'Audit & Assurance',
+    headline: 'Audit and Assurance Services in Pakistan',
     navLabel: 'Audit & Assurance',
     oneLiner:
       'Statutory audit support, internal audit, and the certificates and agreed-upon procedures a bank, a donor or a regulator asks you to produce.',
@@ -645,6 +756,7 @@ export const FINANCE_TAX_SERVICES: Service[] = [
     slug: 'financial-advisory',
     pillar: 'finance-tax',
     title: 'Financial Advisory',
+    headline: 'Financial Advisory for Businesses in Pakistan',
     navLabel: 'Financial Advisory',
     oneLiner:
       'Feasibility studies, cost and profitability analysis, internal controls and written SOPs: the work that answers whether a plan actually holds.',

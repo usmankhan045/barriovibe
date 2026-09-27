@@ -37,7 +37,12 @@ export function JsonLd({ data }: { data: object }) {
  * `@id`, so a consumer that has seen the full node elsewhere merges the two; a
  * consumer that has not still gets a named, located provider instead of a
  * dangling pointer. The full node stays on home, about and contact, where the
- * address, hours and catalogue actually belong.
+ * hours and catalogue actually belong.
+ *
+ * The street address and telephone ARE here, although they repeat the full
+ * node. A validator reads each page alone and flags a LocalBusiness-family
+ * node without them as incomplete, which on sixty-six pages was sixty-six
+ * warnings about a business whose address the site knows perfectly well.
  */
 export function organizationRef() {
   return {
@@ -47,8 +52,10 @@ export function organizationRef() {
     name: BRAND.name,
     url: SITE_URL,
     logo: absoluteUrl('/icon.png'),
+    telephone: CONTACT.phone,
     address: {
       '@type': 'PostalAddress',
+      streetAddress: CONTACT.address.line1,
       addressLocality: CONTACT.address.city,
       addressRegion: 'Khyber Pakhtunkhwa',
       addressCountry: 'PK',

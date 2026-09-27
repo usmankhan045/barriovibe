@@ -27,6 +27,7 @@ export const CORPORATE_SERVICES: Service[] = [
     slug: 'company-registration',
     pillar: 'corporate-legal',
     title: 'Company Registration',
+    headline: 'Company Registration in Pakistan',
     navLabel: 'Company Registration',
     oneLiner:
       'Your business registered in the right legal form: private limited, single member, LLP or a registered partnership, with the NTN and bank account that follow.',
@@ -82,7 +83,7 @@ export const CORPORATE_SERVICES: Service[] = [
       'Shareholding or profit-sharing split between the subscribers',
       'Passport-size photographs of directors',
     ],
-    related: ['corporate-secretarial-compliance', 'income-tax-filing', 'pseb-registration'],
+    related: ['corporate-secretarial-compliance', 'ntn-registration', 'pseb-registration'],
     faqs: [
       {
         question: 'Should I register an SMC or a private limited company?',
@@ -116,6 +117,7 @@ export const CORPORATE_SERVICES: Service[] = [
     slug: 'corporate-secretarial-compliance',
     pillar: 'corporate-legal',
     title: 'Corporate Compliance',
+    headline: 'SECP Corporate Compliance in Pakistan',
     navLabel: 'Corporate Compliance',
     oneLiner:
       'Every SECP filing after incorporation, run on a calendar: annual returns, director and address changes, registers and board minutes.',
@@ -205,6 +207,7 @@ export const CORPORATE_SERVICES: Service[] = [
     slug: 'npo-registration',
     pillar: 'corporate-legal',
     title: 'Non-Profit Registration',
+    headline: 'Non-Profit Registration in Pakistan',
     navLabel: 'Non-Profit Registration',
     oneLiner:
       'A not-for-profit licensed under Section 42 and incorporated with SECP, then certified by the Pakistan Centre for Philanthropy so donors can claim relief.',
@@ -295,6 +298,7 @@ export const CORPORATE_SERVICES: Service[] = [
     slug: 'pseb-registration',
     pillar: 'corporate-legal',
     title: 'PSEB Registration',
+    headline: 'PSEB Registration in Pakistan',
     navLabel: 'PSEB Registration',
     oneLiner:
       'Registration with the Pakistan Software Export Board for freelancers, software houses and call centres, plus the annual renewal that keeps it alive.',
@@ -350,7 +354,7 @@ export const CORPORATE_SERVICES: Service[] = [
       'Company profile, website and client references',
       'Premises and infrastructure details, for call centre registration',
     ],
-    related: ['company-registration', 'income-tax-filing', 'web-development'],
+    related: ['company-registration', 'ntn-registration', 'web-development'],
     faqs: [
       {
         question: 'Is PSEB registration compulsory?',
@@ -384,6 +388,7 @@ export const CORPORATE_SERVICES: Service[] = [
     slug: 'trade-body-registration',
     pillar: 'corporate-legal',
     title: 'Chamber & Trade Body Membership',
+    headline: 'Chamber of Commerce Membership in Pakistan',
     navLabel: 'Chamber Membership',
     oneLiner:
       'Membership of your Chamber of Commerce and Industry, which is what lets you obtain Certificates of Origin and the trade documents an exporter needs.',
@@ -468,6 +473,7 @@ export const CORPORATE_SERVICES: Service[] = [
     slug: 'import-export-license',
     pillar: 'corporate-legal',
     title: 'Import & Export License',
+    headline: 'Import Export License in Pakistan',
     navLabel: 'Import/Export License',
     oneLiner:
       'Everything needed to legally import or export from Pakistan: WeBOC and PSW registration, chamber membership and customs setup.',
@@ -549,6 +555,7 @@ export const CORPORATE_SERVICES: Service[] = [
     slug: 'contract-drafting',
     pillar: 'corporate-legal',
     title: 'Contract & Agreement Drafting',
+    headline: 'Contract Drafting in Pakistan',
     navLabel: 'Contract Drafting',
     oneLiner:
       'The agreements your business actually runs on, drafted to your facts rather than downloaded: commercial, employment, IP, property and digital policies.',

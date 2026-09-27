@@ -188,8 +188,23 @@ export interface Service {
   slug: string;
   pillar: PillarSlug;
 
-  /** Full name, used as the H1 and in the service index. */
+  /** Full name, used in the service index, the menus and the breadcrumb. */
   title: string;
+  /**
+   * The H1, and the link text wherever a guide, tool or post names this
+   * service. Written as the service is searched, which for anything done in
+   * one jurisdiction means the jurisdiction is in it: "Trademark Registration
+   * in Pakistan", not "Trademark Registration".
+   *
+   * Separate from `title` because the menus and cards sit inside a page that
+   * already says where, and "in Pakistan" forty times down a mega-menu is
+   * noise. The H1 and the anchor text are the two places a search engine
+   * reads hardest for what the page is about, and there it is the point.
+   *
+   * Optional: a service sold the same way everywhere (software, most
+   * marketing) has no jurisdiction to name, and falls back to `title`.
+   */
+  headline?: string;
   /** Compact name for the mega-menu and footer where space is tight. */
   navLabel: string;
   /**

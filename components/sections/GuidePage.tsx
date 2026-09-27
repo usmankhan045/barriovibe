@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/Button";
 import { FaqAccordion } from "@/components/sections/FaqList";
 import { ContentBlock } from "@/components/sections/ContentBlock";
 import { RateProvenance } from "@/components/sections/RateProvenance";
+import { DoneForYou } from "@/components/sections/ServiceLinks";
+import { servicesFor } from "@/lib/service-links";
 import {
   JsonLd,
   breadcrumbSchema,
@@ -125,6 +127,7 @@ export function GuidePage({ guide }: { guide: Guide }) {
             <p id="guide-answer" className="mt-6 text-body-lg text-ink-body">
               {guide.answer}
             </p>
+            <DoneForYou services={servicesFor("guides", guide.slug)} />
           </div>
 
           {/* Where the figures come from, in the same block the calculators

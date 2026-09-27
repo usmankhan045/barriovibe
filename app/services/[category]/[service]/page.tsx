@@ -17,6 +17,8 @@ import { BrandMark, hasBrandMark } from '@/components/icons/brands';
 import { Reveal } from '@/components/ui/Reveal';
 import { Button } from '@/components/ui/Button';
 import { FaqAccordion } from '@/components/sections/FaqList';
+import { ServiceEvidence } from '@/components/sections/ServiceLinks';
+import { serviceEvidence } from '@/lib/service-links';
 import {
   JsonLd,
   breadcrumbSchema,
@@ -144,7 +146,7 @@ export default async function ServicePage({ params }: { params: Params }) {
                 </Link>
               </div>
 
-              <h1 className="text-h1 text-ink">{service.title}</h1>
+              <h1 className="text-h1 text-ink">{service.headline ?? service.title}</h1>
               <Rule className="mt-6" />
 
               <p className="mt-6 max-w-[60ch] text-body-lg text-ink-body">{service.intro}</p>
@@ -428,7 +430,12 @@ export default async function ServicePage({ params }: { params: Params }) {
         </Container>
       </Section>
 
-      {/* ── 10. Related services ───────────────────────────────────────── */}
+      {/* ── 10. The writing behind it ─────────────────────────────────── */}
+      {/* Omitted for a service with nothing published behind it yet. See
+          content/service-links.ts. */}
+      <ServiceEvidence items={serviceEvidence(service)} />
+
+      {/* ── 11. Related services ───────────────────────────────────────── */}
       <Section tight>
         <Container>
           <Reveal>

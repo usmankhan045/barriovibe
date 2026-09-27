@@ -17,6 +17,7 @@ export const IP_SERVICES: Service[] = [
     slug: 'trademark-registration',
     pillar: 'intellectual-property',
     title: 'Trademark Registration',
+    headline: 'Trademark Registration in Pakistan',
     navLabel: 'Trademark Registration',
     oneLiner:
       'Your brand name and logo searched, filed and registered with IPO Pakistan, with the objection stage handled if one arrives.',
@@ -102,6 +103,7 @@ export const IP_SERVICES: Service[] = [
     slug: 'copyright-registration',
     pillar: 'intellectual-property',
     title: 'Copyright Registration',
+    headline: 'Copyright Registration in Pakistan',
     navLabel: 'Copyright Registration',
     oneLiner:
       "Your software, content or creative work registered with IPO Pakistan's Copyright Office, so ownership is a certificate, not an argument.",
@@ -186,6 +188,7 @@ export const IP_SERVICES: Service[] = [
     slug: 'patent-registration',
     pillar: 'intellectual-property',
     title: 'Patent Registration',
+    headline: 'Patent Registration in Pakistan',
     navLabel: 'Patent Registration',
     oneLiner:
       'Your invention filed, examined and carried through to grant with IPO Pakistan, protected for 20 years from the filing date.',

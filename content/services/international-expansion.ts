@@ -28,6 +28,7 @@ export const INTERNATIONAL_SERVICES: Service[] = [
     slug: 'saudi-business-setup',
     pillar: 'international-expansion',
     title: 'Saudi Arabia Business Setup',
+    headline: 'Saudi Arabia Business Setup for Pakistani Companies',
     navLabel: 'Saudi Business Setup',
     oneLiner:
       'A Pakistani business registered and licensed to operate in Saudi Arabia, from the MISA investment registration to your first bank account.',

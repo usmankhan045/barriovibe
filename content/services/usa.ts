@@ -51,6 +51,7 @@ export const USA_SERVICES: Service[] = [
     slug: 'us-company-formation',
     pillar: 'international-expansion',
     title: 'US Company Formation',
+    headline: 'US LLC Formation from Pakistan',
     navLabel: 'US Company Formation',
     oneLiner:
       'A US LLC or C-Corporation registered in your name from Pakistan, with the EIN, registered agent and business banking that make it usable.',
@@ -147,6 +148,7 @@ export const USA_SERVICES: Service[] = [
     slug: 'us-tax-filing',
     pillar: 'international-expansion',
     title: 'US Federal & State Tax Filing',
+    headline: 'US Tax Filing for Foreign-Owned LLCs',
     navLabel: 'US Tax Filing',
     oneLiner:
       'Federal and state returns for your US company and its owners, including the Form 5472 filing that carries a $25,000 penalty when it is missed.',
@@ -243,6 +245,7 @@ export const USA_SERVICES: Service[] = [
     slug: 'itin-application',
     pillar: 'international-expansion',
     title: 'ITIN Application',
+    headline: 'ITIN Application for Non-US Citizens',
     navLabel: 'ITIN Application',
     oneLiner:
       'An IRS Individual Taxpayer Identification Number for someone not eligible for a Social Security Number, applied for on Form W-7 and seen through.',
@@ -304,6 +307,11 @@ export const USA_SERVICES: Service[] = [
           'Not if the copies are certified for you. A Certifying Acceptance Agent verifies the passport and certifies it to the IRS, and the issuing authority can also certify a copy. Both routes keep the original in your hands, which matters, because the IRS holds original documents for the duration of processing.',
       },
       {
+        question: 'Where do I mail an ITIN application?',
+        answer:
+          'By post, to Internal Revenue Service, ITIN Operation, P.O. Box 149342, Austin, TX 78714-9342. By courier (the IRS calls these private delivery services, such as DHL or FedEx), to Internal Revenue Service, ITIN Operation, Mail Stop 6090-AUSC, 3651 S. Interregional, Hwy 35, Austin, TX 78741-0000. Both are from the IRS instructions for Form W-7. If a tax return goes with the application, it goes to this address too, not to the one printed in the return\'s own instructions: the IRS processes the return as part of the ITIN package. The alternatives to posting anything are a Certifying Acceptance Agent, or an appointment at a designated IRS Taxpayer Assistance Center inside the US.',
+      },
+      {
         question: 'How long does the IRS take?',
         answer:
           'The IRS runs to roughly seven weeks outside peak season and nine to eleven weeks during it, measured from the day a complete application reaches them. An incomplete application restarts rather than continues, which is the whole case for getting it right the first time.',
@@ -325,7 +333,7 @@ export const USA_SERVICES: Service[] = [
       },
     ],
     seo: {
-      title: 'ITIN Application for Non-US Citizens | Form W-7',
+      title: 'ITIN Application for Non-US Citizens (Form W-7)',
       description:
         'IRS Individual Taxpayer Identification Number applications on Form W-7, prepared and filed from Pakistan with certified documents and renewals handled.',
     },
@@ -335,6 +343,7 @@ export const USA_SERVICES: Service[] = [
     slug: 'us-bookkeeping-payroll',
     pillar: 'international-expansion',
     title: 'US Bookkeeping & Payroll',
+    headline: 'US Bookkeeping and Payroll for Foreign-Owned Companies',
     navLabel: 'US Bookkeeping & Payroll',
     oneLiner:
       'Books kept in US dollars to the standard a US return is filed from, plus payroll and contractor reporting where you have people being paid.',
@@ -425,6 +434,7 @@ export const USA_SERVICES: Service[] = [
     slug: 'us-trademark-registration',
     pillar: 'international-expansion',
     title: 'US Trademark Registration',
+    headline: 'US Trademark Registration with the USPTO',
     navLabel: 'US Trademark',
     oneLiner:
       'Your brand registered with the USPTO, which a foreign-domiciled applicant is only permitted to do through a US-licensed attorney.',

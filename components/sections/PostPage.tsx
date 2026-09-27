@@ -12,6 +12,8 @@ import { Reveal } from "@/components/ui/Reveal";
 import { Button } from "@/components/ui/Button";
 import { FaqAccordion } from "@/components/sections/FaqList";
 import { ContentBlock } from "@/components/sections/ContentBlock";
+import { DoneForYou } from "@/components/sections/ServiceLinks";
+import { servicesFor } from "@/lib/service-links";
 import {
   JsonLd,
   breadcrumbSchema,
@@ -134,6 +136,7 @@ export function PostPage({ post }: { post: Post }) {
             <p id="post-answer" className="mt-6 text-body-lg text-ink-body">
               {post.answer}
             </p>
+            <DoneForYou services={servicesFor("posts", post.slug)} />
           </div>
         </Container>
       </section>

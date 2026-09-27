@@ -12,6 +12,8 @@ import { Reveal } from '@/components/ui/Reveal';
 import { Button } from '@/components/ui/Button';
 import { FaqAccordion } from '@/components/sections/FaqList';
 import { RateProvenance } from '@/components/sections/RateProvenance';
+import { DoneForYou } from '@/components/sections/ServiceLinks';
+import { servicesFor } from '@/lib/service-links';
 import {
   JsonLd,
   breadcrumbSchema,
@@ -115,6 +117,7 @@ export function ToolPage({
             <h1 className="mt-3 font-display text-h1 text-ink">{tool.title}</h1>
             <Rule className="mt-6" />
             <p className="mt-6 text-body-lg text-ink-body">{tool.intro}</p>
+            <DoneForYou services={servicesFor('tools', tool.slug)} />
           </div>
 
           <div className="mt-8 md:mt-12">{children}</div>

@@ -66,6 +66,7 @@ export const UK_SERVICES: Service[] = [
     slug: 'uk-company-formation',
     pillar: 'international-expansion',
     title: 'UK Company Formation & Companies House Compliance',
+    headline: 'UK Company Formation from Pakistan',
     navLabel: 'UK Company Formation',
     oneLiner:
       'A private limited company incorporated with Companies House, registered for Corporation Tax, and kept compliant through the confirmation statement each year.',

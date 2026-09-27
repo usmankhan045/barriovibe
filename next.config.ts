@@ -1,4 +1,10 @@
 import type { NextConfig } from 'next';
+import {
+  LEGACY_BLOG_SLUGS,
+  LEGACY_HOST,
+  LEGACY_PAGES,
+  LEGACY_SECTIONS,
+} from './lib/legacy-redirects';
 
 /**
  * Content Security Policy.
@@ -86,6 +92,31 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+    ];
+  },
+
+  // The printables site that used to live on this domain. See
+  // lib/legacy-redirects.ts for why, and for when this can go.
+  async redirects() {
+    return [
+      ...LEGACY_SECTIONS.flatMap((section) => [
+        { source: `/${section}`, destination: `${LEGACY_HOST}/${section}`, permanent: true },
+        {
+          source: `/${section}/:path*`,
+          destination: `${LEGACY_HOST}/${section}/:path*`,
+          permanent: true,
+        },
+      ]),
+      ...LEGACY_PAGES.map((page) => ({
+        source: `/${page}`,
+        destination: `${LEGACY_HOST}/${page}`,
+        permanent: true,
+      })),
+      ...LEGACY_BLOG_SLUGS.map((slug) => ({
+        source: `/blog/${slug}`,
+        destination: `${LEGACY_HOST}/blog/${slug}`,
+        permanent: true,
+      })),
     ];
   },
 };
