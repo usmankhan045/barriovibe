@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <>
-      <main id="main" tabIndex={-1}>
+      <main id="main" tabIndex={-1} className="u-defer-offscreen">
       {/*
         The home page is where the Organization node must be DEFINED, not just
         referenced. Every service page's `Service.provider` points at

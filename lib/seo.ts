@@ -32,7 +32,17 @@ const OG_IMAGE = {
   alt: `${BRAND.name}: ${TAGLINE}`,
 };
 
+/**
+ * The home page is the bare origin, never origin + "/". Its canonical is
+ * SITE_URL, and the sitemap and the breadcrumb both build their URL through
+ * here, so they emitted "https://www.barriovibe.com/" beside a canonical of
+ * "https://www.barriovibe.com": the same page named two ways.
+ */
+/** Characters Google reliably shows of a title before truncating it. */
+const TITLE_LIMIT = 60;
+
 export function absoluteUrl(path: string): string {
+  if (path === '/' || path === '') return SITE_URL;
   return `${SITE_URL}${path.startsWith('/') ? path : `/${path}`}`;
 }
 
@@ -53,12 +63,26 @@ export function pageMetadata({
 }: PageMetaInput): Metadata {
   const url = absoluteUrl(path);
 
+  /*
+   * The brand suffix, only where it fits.
+   *
+   * The layout template appends " | BarrioVibe" to every title. Google shows
+   * roughly the first sixty characters, so on a title that is already near
+   * that length the suffix is what gets cut, and a title reported as seventy
+   * characters is flagged by every audit even though the words that match the
+   * search are all visible. Where the branded title would pass sixty, the page
+   * title goes out on its own (`absolute` skips the template) and the brand is
+   * left to the URL beneath it, which is where a searcher reads it anyway.
+   */
+  const branded = `${title} | ${BRAND.name}`;
+  const fullTitle = branded.length <= TITLE_LIMIT ? branded : title;
+
   return {
-    title,
+    title: { absolute: fullTitle },
     description,
     alternates: { canonical: url },
     openGraph: {
-      title: `${title} | ${BRAND.name}`,
+      title: fullTitle,
       description,
       url,
       siteName: BRAND.name,
@@ -68,7 +92,7 @@ export function pageMetadata({
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${title} | ${BRAND.name}`,
+      title: fullTitle,
       description,
       // Both keys, because they answer different questions: `site` is the
       // account the page belongs to and `creator` the byline. With one

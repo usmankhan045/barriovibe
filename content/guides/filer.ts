@@ -225,7 +225,7 @@ const FILER_VS_NON_FILER: Guide = {
   seo: {
     title: 'Filer vs Non-Filer in Pakistan: The Real Cost',
     description:
-      'What non-filer status costs on property, vehicles, cash withdrawals and dividends in Pakistan, with the Ordinance section behind every rate and free calculators for your own figures.',
+      'What non-filer status costs in Pakistan on property, vehicles, cash withdrawals and dividends, with the Ordinance section behind every rate.',
   },
 };
 
@@ -374,7 +374,7 @@ const HOW_TO_BECOME_A_FILER: Guide = {
   seo: {
     title: 'How to Become a Filer in Pakistan: Three Steps',
     description:
-      'Register, file one return, check your status. What the late surcharge costs after the Finance Act 2026, the undertaking that avoids it, and why inclusion is now immediate.',
+      'How to become a filer: register, file one return, check your status. The late surcharge after the Finance Act 2026 and the undertaking that avoids it.',
   },
 };
 
@@ -526,7 +526,7 @@ const CHECKING_ATL_STATUS: Guide = {
   seo: {
     title: 'How to Check Your Active Taxpayer List Status in Pakistan',
     description:
-      'Every official route including the SMS formats to 9966, why the list now updates daily rather than weekly, and what to do when you have filed but are still not showing.',
+      'Check your ATL status by every official route, including SMS to 9966, why the list now updates daily, and what to do if you filed but are not showing.',
   },
 };
 
@@ -690,7 +690,7 @@ const VEHICLE_TAX: Guide = {
   seo: {
     title: 'Tax on Buying and Transferring a Car in Pakistan',
     description:
-      'Section 231B explained: what is collected at registration and transfer, why nothing is due after five years, the triple rate for non-filers, and how not to pay twice.',
+      'Tax on buying a car under section 231B: what is collected at registration and transfer, why nothing is due after five years, and how not to pay twice.',
   },
 };
 

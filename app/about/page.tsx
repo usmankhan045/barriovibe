@@ -12,14 +12,16 @@ import {
 import { IconBadge } from '@/components/ui/IconBadge';
 import { Reveal } from '@/components/ui/Reveal';
 import { Button } from '@/components/ui/Button';
-import { JsonLd, breadcrumbSchema, organizationSchema } from '@/lib/jsonld';
+import { JsonLd, breadcrumbSchema, organizationSchema, webPageSchema } from '@/lib/jsonld';
 import { DIFFERENTIATORS, PROCESS } from '@/content/differentiators';
 import { PILLARS } from '@/content/pillars';
 import { SERVICE_COUNT } from '@/content/services';
 import { pageMetadata } from '@/lib/seo';
 
+const PAGE_TITLE = 'About BarrioVibe: Software, Tax and Legal in One Firm';
+
 export const metadata = pageMetadata({
-  title: 'About',
+  title: PAGE_TITLE,
   description: `How we work: fixed scope, fixed dates, deadlines we own, and ${SERVICE_COUNT} services across software, AI, finance, compliance, growth and e-commerce under one accountable team.`,
   path: '/about',
 });
@@ -32,6 +34,14 @@ const CRUMBS = [
 export default function AboutPage() {
   return (
     <main id="main" tabIndex={-1}>
+      <JsonLd
+        data={webPageSchema({
+          type: 'AboutPage',
+          name: PAGE_TITLE,
+          description: String(metadata.description),
+          path: '/about',
+        })}
+      />
       <JsonLd data={organizationSchema()} />
       <JsonLd data={breadcrumbSchema(CRUMBS)} />
 

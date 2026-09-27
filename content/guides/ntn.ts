@@ -401,7 +401,7 @@ const NTN_DOCUMENTS: Guide = {
   seo: {
     title: 'NTN Registration Documents: What FBR Actually Requires',
     description:
-      'Required documents by taxpayer type from FBR\'s own pages, the bank certificate FBR states two ways, the premises evidence it never defines, and the SIM rule with no workaround.',
+      'NTN registration documents by taxpayer type from FBR\'s own pages: the bank certificate stated two ways, the undefined premises evidence and the SIM rule.',
   },
 };
 

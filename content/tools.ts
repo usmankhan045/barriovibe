@@ -81,7 +81,7 @@ export const SALARY_TAX_TOOL: Tool = {
   seo: {
     title: 'Pakistan Salary Tax Calculator',
     description:
-      'Work out your monthly take-home pay in Pakistan on the FBR salary slabs for any tax year from 2012-13 to 2026-27, with EOBI, provident fund, Zakat, donation and pension relief, and the working shown.',
+      'Pakistan salary tax calculator: monthly take-home pay on the FBR slabs for tax years 2012-13 to 2026-27, with EOBI, provident fund, Zakat and pension relief.',
   },
 };
 
@@ -313,7 +313,7 @@ export const SUPER_TAX_TOOL: Tool = {
   seo: {
     title: 'Super Tax Calculator Pakistan | Section 4C',
     description:
-      'Calculate Pakistan super tax under section 4C. Nothing at or below Rs 500 million and 8% above it for most businesses, 10% from Rs 150 million for banks, oil and gas and fertilizer.',
+      'Pakistan super tax calculator under section 4C: nothing at or below Rs 500 million for most businesses, and a separate threshold for banks, oil and gas.',
   },
 };
 
@@ -614,7 +614,7 @@ export const ELECTRICITY_TOOL: Tool = {
   seo: {
     title: 'Electricity Bill Tax Calculator Pakistan | Section 235',
     description:
-      'Calculate the income tax on a Pakistan electricity bill under section 235: 7.5% on home bills from Rs 25,000 for non-filers, plus the commercial and industrial bands.',
+      'Electricity bill tax calculator under section 235: the income tax on a Pakistan bill, home bills for non-filers plus the commercial and industrial bands.',
   },
 };
 
@@ -683,7 +683,7 @@ export const RATE_CARD_TOOL: Tool = {
   seo: {
     title: 'Withholding Tax Rate Card Pakistan',
     description:
-      'Pakistan withholding tax rates on one page, filer and non-filer side by side, with the section of the Income Tax Ordinance against each rate. Free to read and download.',
+      'Pakistan withholding tax rates on one page, filer and non-filer side by side, with the Income Tax Ordinance section against each rate. Free to download.',
   },
 };
 

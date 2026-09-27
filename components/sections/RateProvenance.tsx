@@ -3,6 +3,7 @@ import {
   RATES_DISCLAIMER,
   RATES_REVIEWED,
   RATES_REVIEWER,
+  SOURCES_DISCLAIMER,
 } from '@/content/provenance';
 
 /**
@@ -18,8 +19,23 @@ import {
  * sentence naming an Act and a date is a checkable claim, which is the only
  * kind worth making. See content/provenance.ts for why this exists at all.
  */
-export function RateProvenance() {
-  const reviewed = new Date(RATES_REVIEWED);
+export function RateProvenance({
+  basis,
+  reviewedOn,
+}: {
+  /**
+   * A guide's own sources, for a guide that is not about tax rates. Unset, the
+   * block states the Income Tax Ordinance, which is right for every calculator
+   * and every tax guide and wrong for a patent or a Companies House guide. See
+   * `basis` in content/guides/types.ts.
+   */
+  basis?: string;
+  /** When `basis` was last read. Required in practice whenever `basis` is set. */
+  reviewedOn?: string;
+} = {}) {
+  const ownSources = Boolean(basis);
+  const reviewedIso = ownSources && reviewedOn ? reviewedOn : RATES_REVIEWED;
+  const reviewed = new Date(reviewedIso);
   // en-GB gives "4 September 2026": unambiguous to a Pakistani reader, where a
   // numeric date is not. `timeZone` is pinned so the rendered string cannot
   // shift by a day depending on where the build ran.
@@ -38,26 +54,30 @@ export function RateProvenance() {
 
       <dl className="mt-4 grid grid-cols-1 gap-x-10 gap-y-4 sm:grid-cols-2">
         <div>
-          <dt className="text-[12.5px] text-ink-body">Statutory basis</dt>
-          <dd className="mt-1 text-[14px] leading-[1.6] text-ink-strong">{RATES_BASIS}</dd>
+          <dt className="text-[12.5px] text-ink-body">{ownSources ? 'Sources' : 'Statutory basis'}</dt>
+          <dd className="mt-1 text-[14px] leading-[1.6] text-ink-strong">{basis ?? RATES_BASIS}</dd>
         </div>
 
         <div>
-          <dt className="text-[12.5px] text-ink-body">Last checked against the statute</dt>
+          <dt className="text-[12.5px] text-ink-body">
+            {ownSources ? 'Last checked against the sources' : 'Last checked against the statute'}
+          </dt>
           <dd className="mt-1 text-[14px] leading-[1.6] text-ink-strong">
             {/* A machine-readable date beside the human one: this is the value
                 the page's dateModified is emitted from, and a crawler that
                 reads the markup rather than the schema still gets it. */}
-            <time dateTime={RATES_REVIEWED}>{reviewedLabel}</time> by{' '}
+            <time dateTime={reviewedIso}>{reviewedLabel}</time> by{' '}
             {RATES_REVIEWER.name}
-            {RATES_REVIEWER.credential ? `, ${RATES_REVIEWER.credential}` : ''}, which{' '}
-            {RATES_REVIEWER.standing}.
+            {RATES_REVIEWER.credential ? `, ${RATES_REVIEWER.credential}` : ''}
+            {/* The standing is a tax claim (it files through IRIS), so it is
+                said only where the figures are tax figures. */}
+            {ownSources ? '.' : <>, which {RATES_REVIEWER.standing}.</>}
           </dd>
         </div>
       </dl>
 
       <p className="mt-5 max-w-[68ch] border-t border-line pt-5 text-[13.5px] leading-[1.6] text-ink-body">
-        {RATES_DISCLAIMER}
+        {ownSources ? SOURCES_DISCLAIMER : RATES_DISCLAIMER}
       </p>
     </div>
   );

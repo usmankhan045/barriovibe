@@ -15,7 +15,7 @@ import { BUILDS, BUILDS_ENABLED, BUILD_GROUPS, CATEGORY_BY_SLUG, buildHref } fro
 import { pageMetadata } from '@/lib/seo';
 
 export const metadata = pageMetadata({
-  title: 'Work',
+  title: 'Our Work: Software, AI and Marketing Projects',
   description:
     'Projects across software and AI, marketing and e-commerce, and corporate and advisory. What each one was, how it was built, and what it runs on.',
   path: '/work',

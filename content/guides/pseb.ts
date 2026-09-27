@@ -203,7 +203,7 @@ const PSEB_RATE: Guide = {
   seo: {
     title: 'PSEB Registration and the 0.25% IT Export Tax Rate',
     description:
-      'What section 154A actually requires for the 0.25% rate, the 80% banking condition repealed in 2022, PSEB\'s real fees, and the proviso that exempts IT exporters from the sales tax condition.',
+      'PSEB registration and the 0.25% rate: what section 154A requires, the banking condition repealed in 2022, PSEB\'s real fees, and the sales tax proviso.',
   },
 };
 
@@ -393,7 +393,7 @@ const FREELANCER_TAX: Guide = {
   seo: {
     title: 'Tax for Freelancers in Pakistan: Rates and Rules',
     description:
-      'Why freelancers use the non-salaried slabs, the 0.25% and 1% export rates under section 154A, the repealed 80% banking rule, and what KPK sales tax actually says about exported services.',
+      'Tax for freelancers in Pakistan: the non-salaried slabs, the section 154A export rates, the repealed banking rule, and what KPK sales tax says on exports.',
   },
 };
 

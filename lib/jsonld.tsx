@@ -78,6 +78,17 @@ export function organizationSchema() {
     description: TAGLINE,
     email: CONTACT.email,
     telephone: CONTACT.phone,
+    // The same number and inbox as above, stated as the way to reach the
+    // firm. `contactType` is what lets a search engine present it as the
+    // customer contact rather than as an unlabelled number.
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'customer service',
+      telephone: CONTACT.phone,
+      email: CONTACT.email,
+      areaServed: 'PK',
+      availableLanguage: 'English',
+    },
     address: {
       '@type': 'PostalAddress',
       streetAddress: CONTACT.address.line1,
@@ -163,6 +174,38 @@ export function serviceSchema(service: Service) {
         itemOffered: { '@type': 'Service', name: item },
       })),
     },
+  };
+}
+
+/**
+ * The page itself, typed, for the two pages whose subject is the firm.
+ *
+ * `AboutPage` and `ContactPage` say what the URL is for; the organisation node
+ * beside them says who it is about, and `about` ties the two together by `@id`.
+ * No `isPartOf` pointing at the WebSite node: that node is on the home page
+ * only, and a reference to a node absent from the same page resolves to
+ * nothing (see organizationRef above).
+ */
+export function webPageSchema({
+  type,
+  name,
+  description,
+  path,
+}: {
+  type: 'AboutPage' | 'ContactPage';
+  name: string;
+  description: string;
+  path: string;
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': type,
+    '@id': `${absoluteUrl(path)}#webpage`,
+    url: absoluteUrl(path),
+    name,
+    description,
+    inLanguage: 'en-PK',
+    about: { '@id': `${SITE_URL}/#organization` },
   };
 }
 
@@ -294,8 +337,14 @@ export function webApplicationSchema({
      */
     dateModified: RATES_REVIEWED,
     author: { '@id': `${SITE_URL}/#organization` },
-    reviewedBy: { '@id': `${SITE_URL}/#organization` },
     citation: RATES_BASIS,
+    // The reviewer, on the WebPage where schema.org defines it (see guideSchema).
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': absoluteUrl(path),
+      reviewedBy: { '@id': `${SITE_URL}/#organization` },
+      lastReviewed: RATES_REVIEWED,
+    },
   };
 }
 
@@ -325,6 +374,33 @@ export function webSiteSchema() {
 }
 
 /**
+ * The image an Article carries. Google lists `image` as required for Article
+ * rich results and recommends at least 1200px wide; every page on the site
+ * already shares the 1200x630 social card, so that is what this names rather
+ * than nothing, which is what all thirty-nine articles emitted before.
+ */
+const ARTICLE_IMAGE = {
+  '@type': 'ImageObject',
+  url: absoluteUrl('/opengraph-image'),
+  width: 1200,
+  height: 630,
+};
+
+/**
+ * `dateModified` in the same full ISO form as `datePublished`, and never
+ * earlier than it.
+ *
+ * The two used to differ in shape (a timestamp beside a bare date), which some
+ * validators flag, and a review date can precede publication for a guide
+ * researched before its slot. A page cannot have been modified before it
+ * existed, so the publication instant wins in that case.
+ */
+function notBefore(publishedAt: string, modified: string): string {
+  const modifiedIso = /^\d{4}-\d{2}-\d{2}$/.test(modified) ? `${modified}T00:00:00Z` : modified;
+  return Date.parse(modifiedIso) > Date.parse(publishedAt) ? modifiedIso : publishedAt;
+}
+
+/**
  * A guide, described as an article with a review date and a named reviewer.
  *
  * Guides are YMYL content: they answer tax questions a reader will act on. The
@@ -333,65 +409,19 @@ export function webSiteSchema() {
  * rather than written per guide. The same module drives the visible block on the
  * page, so the markup and the schema cannot come apart.
  *
- * `dateModified` carries the statutory review date rather than a build
- * timestamp, for the reason set out in content/provenance.ts: a date that moves
- * on its own is a claim about work nobody did.
+ * `dateModified` carries the statutory review date, or for a guide with its own
+ * `basis` the date those sources were read, rather than a build timestamp, for
+ * the reason set out in content/provenance.ts: a date that moves on its own is a
+ * claim about work nobody did.
  */
-/**
- * A procedure inside a guide, as HowTo.
- *
- * ## Why this exists when the rich result does not
- *
- * Google retired the HowTo rich result in 2023, so this buys no SERP
- * decoration and it would be cargo-cult to pretend otherwise. It is here for a
- * different consumer: an assistant extracting a procedure from the page gets
- * an ordered, unambiguous list of steps instead of having to infer structure
- * from prose. That is the whole case for it, and it is a real one for guides
- * whose steps are genuinely numbered and causally ordered, which these are.
- *
- * ## What it deliberately does not claim
- *
- * No `totalTime`, `estimatedCost`, `tool` or `supply`. The content does not
- * carry that data, and inventing a duration for a statutory filing process
- * would be a misleading number dressed as structure.
- *
- * It is emitted as a sibling of the Article rather than as the page's primary
- * type, because the page is a reference guide that contains a procedure, not a
- * procedure with prose attached.
- */
-export function howToSchema({
-  name,
-  description,
-  path,
-  steps,
-}: {
-  name: string;
-  description: string;
-  path: string;
-  steps: { title: string; body: string }[];
-}) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'HowTo',
-    '@id': `${absoluteUrl(path)}#howto`,
-    name,
-    description,
-    inLanguage: 'en-PK',
-    step: steps.map((step, i) => ({
-      '@type': 'HowToStep',
-      position: i + 1,
-      name: step.title,
-      text: step.body,
-    })),
-  };
-}
-
 export function guideSchema({
   title,
   description,
   path,
   cluster,
   publishedAt,
+  basis,
+  reviewedOn,
 }: {
   title: string;
   description: string;
@@ -399,14 +429,29 @@ export function guideSchema({
   cluster: string;
   /** The guide's own publication instant, from its `publishedAt`. */
   publishedAt: string;
+  /** The guide's own sources, where they are not the Income Tax Ordinance. */
+  basis?: string;
+  /** When `basis` was last read; defaults to the publication date. */
+  reviewedOn?: string;
 }) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: title,
+    image: ARTICLE_IMAGE,
     description,
     url: absoluteUrl(path),
-    mainEntityOfPage: { '@type': 'WebPage', '@id': absoluteUrl(path) },
+    /*
+     * `reviewedBy` and `lastReviewed` live on the WebPage, not the Article:
+     * schema.org defines them for WebPage, and the validator flags them as
+     * unknown fields anywhere else.
+     */
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': absoluteUrl(path),
+      reviewedBy: { '@id': `${SITE_URL}/#organization` },
+      lastReviewed: (basis ? (reviewedOn ?? publishedAt) : RATES_REVIEWED).slice(0, 10),
+    },
     articleSection: cluster,
     inLanguage: 'en-PK',
     /*
@@ -425,12 +470,12 @@ export function guideSchema({
      * dateModified earlier than its own datePublished.
      */
     datePublished: publishedAt,
-    dateModified:
-      publishedAt.slice(0, 10) > RATES_REVIEWED ? publishedAt.slice(0, 10) : RATES_REVIEWED,
+    dateModified: notBefore(publishedAt, basis ? (reviewedOn ?? publishedAt) : RATES_REVIEWED),
     author: { '@id': `${SITE_URL}/#organization` },
     publisher: { '@id': `${SITE_URL}/#organization` },
-    reviewedBy: { '@id': `${SITE_URL}/#organization` },
-    citation: RATES_BASIS,
+    // The guide's own sources where it declares them. The Ordinance is the
+    // right citation for a tax guide and a false one for a patent guide.
+    citation: basis ?? RATES_BASIS,
     isAccessibleForFree: true,
     /*
      * Points at the answer paragraph, which GuidePage renders with this id.
@@ -490,18 +535,18 @@ export function postSchema({
   reviewedOn?: string;
   sources: { label: string; url: string; readOn: string }[];
 }) {
-  const published = publishedAt.slice(0, 10);
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: title,
+    image: ARTICLE_IMAGE,
     description,
     url: absoluteUrl(path),
     mainEntityOfPage: { '@type': 'WebPage', '@id': absoluteUrl(path) },
     articleSection: cluster,
     inLanguage: 'en-PK',
     datePublished: publishedAt,
-    dateModified: reviewedOn && reviewedOn > published ? reviewedOn : published,
+    dateModified: notBefore(publishedAt, reviewedOn ?? publishedAt),
     author: { '@id': `${SITE_URL}/#organization` },
     publisher: { '@id': `${SITE_URL}/#organization` },
     /*

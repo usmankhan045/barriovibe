@@ -196,7 +196,7 @@ const SALARY_TAX: Guide = {
 
   seo: {
     title: `Salary Tax Slabs in Pakistan ${TAX_YEAR.searchLabel}`,
-    description: `The eight salary tax bands for ${TAX_YEAR.label.toLowerCase()}, the section 4AB surcharge withdrawn by the Finance Act 2026, and why business income on the same figure is taxed far more heavily.`,
+    description: `The eight salary tax slabs for ${TAX_YEAR.label.toLowerCase()}, the section 4AB surcharge withdrawn by the Finance Act 2026, and why business income is taxed more.`,
   },
 };
 

@@ -9,13 +9,15 @@ import {
 import { Icon } from '@/components/icons';
 import { Reveal } from '@/components/ui/Reveal';
 import { ContactForm } from '@/components/sections/ContactForm';
-import { JsonLd, breadcrumbSchema, organizationSchema } from '@/lib/jsonld';
+import { JsonLd, breadcrumbSchema, organizationSchema, webPageSchema } from '@/lib/jsonld';
 import { CONTACT } from '@/content/site';
 import { SERVICE_COUNT, SERVICE_GROUPS } from '@/content/services';
 import { pageMetadata } from '@/lib/seo';
 
+const PAGE_TITLE = 'Contact BarrioVibe: Get a Scope Within One Working Day';
+
 export const metadata = pageMetadata({
-  title: 'Contact',
+  title: PAGE_TITLE,
   description:
     'Tell us what you need and get a scope and a date within one working day. Accounting, tax, compliance, marketing, web and AI services in Pakistan.',
   path: '/contact',
@@ -57,6 +59,14 @@ export default function ContactPage() {
 
   return (
     <main id="main" tabIndex={-1}>
+      <JsonLd
+        data={webPageSchema({
+          type: 'ContactPage',
+          name: PAGE_TITLE,
+          description: String(metadata.description),
+          path: '/contact',
+        })}
+      />
       <JsonLd data={organizationSchema()} />
       <JsonLd data={breadcrumbSchema(CRUMBS)} />
 

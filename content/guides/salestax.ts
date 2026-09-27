@@ -201,7 +201,7 @@ const SALES_TAX_REGISTRATION: Guide = {
   seo: {
     title: 'Sales Tax Registration in Pakistan: Who Must Register',
     description:
-      'The turnover threshold that does not exist, the federal and provincial split, KPRA under the 2022 Act, and the thirty-day biometric deadline that removes you from the active list.',
+      'Sales tax registration: the turnover threshold that does not exist, the federal and provincial split, KPRA, and the thirty-day biometric deadline.',
   },
 };
 
@@ -351,7 +351,7 @@ const SELLING_ONLINE: Guide = {
   seo: {
     title: 'Tax on Selling Online in Pakistan: Section 6A',
     description:
-      'The 1% and 2% collected before you are paid, why IT export proceeds are carved out, the final-tax default below Rs 200m turnover, and the registration marketplaces now enforce.',
+      'Tax on selling online under section 6A: what is collected before you are paid, the IT export carve-out, the final-tax default, and marketplace registration.',
   },
 };
 

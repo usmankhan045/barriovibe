@@ -186,7 +186,7 @@ const CREATOR_TAX: Guide = {
   seo: {
     title: 'Tax on YouTube and Social Media Income in Pakistan',
     description:
-      'Section 154B explained: why the 5% is minimum tax rather than final for residents, where the 10% non-filer rate actually comes from, and why your bank collects it rather than the platform.',
+      'Tax on YouTube and social media income under section 154B: why it is minimum tax, not final, for residents, the non-filer rate, and why your bank collects it.',
   },
 };
 

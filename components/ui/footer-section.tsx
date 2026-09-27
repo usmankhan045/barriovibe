@@ -1,8 +1,5 @@
-'use client';
-
-import type { ComponentProps, ReactNode } from 'react';
 import Link from 'next/link';
-import { motion, useReducedMotion } from 'motion/react';
+import { Reveal } from '@/components/ui/Reveal';
 import { Wordmark } from '@/components/layout/Wordmark';
 import { BrandMark } from '@/components/icons/brands';
 import { BRAND, CONTACT, SHORT_TAGLINE, SOCIALS } from '@/content/site';
@@ -17,10 +14,13 @@ import { COMPANY_LINKS, LEGAL_LINKS, MEGA_MENU_COLUMNS } from '@/content/nav';
  * below, so a future re-sync from upstream knows exactly what was changed and
  * why.
  *
- * NOTE — this is the site's only client component that is not behind an
- * interaction. `motion` puts the whole footer on the client on every route.
- * That was a deliberate call; the zero-JS alternative is `<Reveal>`, which
- * produces the same blur/translate/fade from one shared IntersectionObserver.
+ * A server component. It used to animate with `motion`, which made it the
+ * site's only client component not behind an interaction and put the motion
+ * runtime into every page's JavaScript for a fade at the bottom of the page.
+ * That runtime was the largest avoidable cost in the site's total blocking
+ * time, so the columns now use `<Reveal>`, the shared CSS reveal driven by one
+ * IntersectionObserver, which gives the same rise-and-fade with no JavaScript
+ * of its own.
  */
 
 /* ADAPTED 1 — icons.
@@ -221,7 +221,7 @@ export function Footer() {
 				    to max-content, which overflows on mobile — the exact bug
 				    `pnpm check:layout` fails the build on. See check-layout.mjs. */}
         <div className="grid w-full grid-cols-1 gap-8 xl:grid-cols-[1fr_auto] xl:gap-8">
-          <AnimatedContainer>
+          <Reveal>
             <Wordmark />
             {/* The tagline, not the copyright line, now sits under the
                 lockup — the copyright moved to its own bar at the very
@@ -251,7 +251,7 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-          </AnimatedContainer>
+          </Reveal>
 
           {/* `auto` rather than a 2fr share: an even split leaves the fourth
 				    column's text stranded short of the right edge, because each cell
@@ -265,7 +265,7 @@ export function Footer() {
 				    email address — which would leave "Legal" trailing dead space. */}
           <div className="grid grid-cols-2 gap-x-10 gap-y-8 sm:grid-cols-[repeat(4,auto)] lg:gap-x-14">
             {footerLinks.map((section, index) => (
-              <AnimatedContainer key={section.label} delay={0.1 + index * 0.1}>
+              <Reveal key={section.label} index={index + 1}>
                 <h3 className="font-display text-[11px] font-bold tracking-[0.14em] text-ink-strong uppercase">
                   {section.label}
                 </h3>
@@ -293,7 +293,7 @@ export function Footer() {
                     </li>
                   ))}
                 </ul>
-              </AnimatedContainer>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -310,58 +310,15 @@ export function Footer() {
             floating rather than as closing the page. Balanced padding on the
             bar is what makes it a row. Anything added below this must bring
             its own bottom padding, or put it back on the <footer>. */}
-        <AnimatedContainer
-          delay={0.1 + footerLinks.length * 0.1}
+        <Reveal
+          index={footerLinks.length + 1}
           className="mt-6 border-t border-line py-4 text-center lg:mt-8"
         >
           <p className="text-[13px] text-ink-body">
             © {new Date().getFullYear()} {BRAND.legalName}. All rights reserved.
           </p>
-        </AnimatedContainer>
+        </Reveal>
       </div>
     </footer>
-  );
-}
-
-type ViewAnimationProps = {
-  delay?: number;
-  className?: ComponentProps<typeof motion.div>['className'];
-  children: ReactNode;
-};
-
-function AnimatedContainer({ className, delay = 0.1, children }: ViewAnimationProps) {
-  const shouldReduceMotion = useReducedMotion();
-
-  if (shouldReduceMotion) {
-    // Wrapped rather than returned bare: `children` is ReactNode, which is
-    // wider than what a component may return under this tsconfig's `strict`.
-    return <div className={className}>{children}</div>;
-  }
-
-  return (
-    <motion.div
-      /* No `filter: blur()` in this animation, deliberately — the original had
-       * blur(4px) → blur(0px).
-       *
-       * opacity and transform are the two properties the compositor can
-       * animate on its own thread without touching layout or paint. `filter`
-       * is not one of them: every frame of a blur re-rasterizes the element
-       * and its subtree. Here that is five containers re-rasterizing together,
-       * at the bottom of every page on the site, arriving exactly when the
-       * scroll reaches the end. Dropping it costs a little softness and buys
-       * back the one animation on the site that could not run on the
-       * compositor.
-       *
-       * 0.8s → 0.45s for the same reason the CSS reveals came down: at scroll
-       * speed the longer curve finishes well after you are already reading.
-       */
-      initial={{ translateY: -8, opacity: 0 }}
-      whileInView={{ translateY: 0, opacity: 1 }}
-      viewport={{ once: true, margin: '0px 0px -10% 0px' }}
-      transition={{ delay, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-      className={className}
-    >
-      {children}
-    </motion.div>
   );
 }

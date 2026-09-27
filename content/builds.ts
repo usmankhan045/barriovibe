@@ -312,7 +312,7 @@ export const BUILDS: Build[] = [
       seo: {
         title: 'nothungry: AI nutrition tracker for iOS and Android',
         description:
-          'A production iOS and Android nutrition tracker we designed, engineered and shipped: photograph a meal and get calories and macros back, correct anything before it saves, and log it with or without a connection.',
+          'A production iOS and Android nutrition tracker we designed and shipped: photograph a meal for calories and macros, correct it, and log it even offline.',
       },
     },
   },
@@ -426,7 +426,7 @@ export const BUILDS: Build[] = [
       seo: {
         title: 'LinkedIn FTE: autonomous content and lead generation system',
         description:
-          'An autonomous system that plans, writes, illustrates and publishes LinkedIn content, triages comments and identifies leads, with a person approving every post before it goes out.',
+          'An autonomous LinkedIn content system that plans, writes, illustrates and publishes posts, triages comments and finds leads, with a person approving each one.',
       },
     },
   },
@@ -498,7 +498,7 @@ export const BUILDS: Build[] = [
       seo: {
         title: 'AI Lead Research & Qualification System',
         description:
-          'An agentic system that turns your ideal customer profile into researched, scored leads with the evidence behind every score, approved by a person before it reaches your CRM.',
+          'An AI lead research agent that turns your ideal customer profile into scored leads with evidence behind every score, approved before it reaches your CRM.',
       },
     },
   },
@@ -642,7 +642,7 @@ export const BUILDS: Build[] = [
       seo: {
         title: 'AI Proposal & Quotation Builder',
         description:
-          'An agentic system that turns a client brief into a priced, formatted proposal using your own pricing rules and approved content, with every total checked before it sends.',
+          'An AI proposal builder that turns a client brief into a priced, formatted proposal using your pricing rules and approved content, with every total checked.',
       },
     },
   },
@@ -930,7 +930,7 @@ export const BUILDS: Build[] = [
       seo: {
         title: 'AI Business Intelligence Agent',
         description:
-          'An agentic system that answers questions about your own data in plain English, with validated queries, your business definitions and the working shown behind every figure.',
+          'An AI business intelligence agent that answers questions about your data in plain English, with validated queries and the working behind every figure.',
       },
     },
   },
@@ -1146,7 +1146,7 @@ export const BUILDS: Build[] = [
       seo: {
         title: 'AI Reviews & Reputation Manager',
         description:
-          'An agentic system that collects reviews from every platform, sorts them by urgency and drafts replies in your voice, with sensitive complaints always escalated to a person.',
+          'An AI reviews agent that gathers reviews from every platform, sorts them by urgency, drafts replies in your voice and sends sensitive complaints to a person.',
       },
     },
   },

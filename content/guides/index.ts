@@ -242,6 +242,6 @@ export const GUIDES_HUB = {
   seo: {
     title: 'Tax and Compliance Guides for Pakistan',
     description:
-      'Reference guides on Pakistani income tax, filer status, company registration, PSEB and trademarks. Every rate cited to its section of the Ordinance and linked to a free calculator.',
+      'Tax and compliance guides for Pakistan on income tax, filer status, companies, PSEB and trademarks, each rate cited to the Ordinance with a free calculator.',
   },
 } as const;

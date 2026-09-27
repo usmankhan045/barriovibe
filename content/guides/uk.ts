@@ -213,6 +213,9 @@ const UK_COMPANY_FROM_PAKISTAN: Guide = {
   ],
 
   publishedAt: '2026-10-06T07:00:00Z',
+  basis:
+    'Sourced from the Companies Act 2006, Companies House fees and guidance, and HMRC\'s Corporation Tax guidance.',
+  reviewedOn: '2026-09-27',
 
   cta: {
     heading: 'Forming a UK company from Pakistan?',
@@ -424,6 +427,9 @@ const CH_IDENTITY_VERIFICATION: Guide = {
   ],
 
   publishedAt: '2026-10-07T03:00:00Z',
+  basis:
+    'Sourced from the Economic Crime and Corporate Transparency Act 2023, the Companies Act 2006 and Companies House guidance.',
+  reviewedOn: '2026-09-27',
 
   cta: {
     heading: 'A director or PSC in Pakistan who has not verified yet?',

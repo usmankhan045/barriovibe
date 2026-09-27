@@ -219,7 +219,7 @@ const FILING_A_RETURN: Guide = {
   seo: {
     title: 'How to File Your Income Tax Return in Pakistan (IRIS)',
     description:
-      'The IRIS screens in order with the amount codes, why the wealth statement is compulsory for every filer, how to reconcile it to zero, and the late-filing relief nobody mentions.',
+      'How to file your tax return on IRIS: the screens in order with amount codes, the compulsory wealth statement, reconciling it to zero, and late-filing relief.',
   },
 };
 
@@ -385,7 +385,7 @@ const PAYING_FBR: Guide = {
   seo: {
     title: 'How to Pay Your Tax to FBR: PSID, Challan and CPR',
     description:
-      'Creating a payment slip without logging in, why the seven-day expiry is a PTA rule, which banks support which channels, and what to do when the receipt does not appear.',
+      'How to pay FBR tax: a payment slip without logging in, why the seven-day expiry is a PTA rule, bank channels, and what to do when no receipt appears.',
   },
 };
 
@@ -703,7 +703,7 @@ const AMENDED_ASSESSMENT: Guide = {
   seo: {
     title: 'When FBR Amends Your Assessment: Section 122',
     description:
-      'How long FBR has to reopen a return, why the clock runs from the financial year rather than from filing, the hearing that cannot be skipped, and the offshore carve-out.',
+      'When FBR amends your assessment: the time limit to reopen a return, why it runs from the financial year, the mandatory hearing, and the offshore carve-out.',
   },
 };
 
@@ -860,7 +860,7 @@ const ADVANCE_TAX: Guide = {
   seo: {
     title: 'Advance Tax in Pakistan: Section 147 Explained',
     description:
-      'Why most salaried people and most first-year freelancers are outside it, the quarterly dates that differ between individuals and companies, and how the instalment is computed.',
+      'Advance tax under section 147: why most salaried people and first-year freelancers are outside it, the quarterly dates, and how the instalment is computed.',
   },
 };
 

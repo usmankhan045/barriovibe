@@ -20,7 +20,6 @@ import {
   breadcrumbSchema,
   faqSchema,
   guideSchema,
-  howToSchema,
   organizationRef,
 } from "@/lib/jsonld";
 import {
@@ -29,7 +28,6 @@ import {
   clusterHref,
   guideHref,
   type Guide,
-  type GuideSection,
 } from "@/content/guides";
 
 /**
@@ -68,12 +66,6 @@ export function GuidePage({ guide }: { guide: Guide }) {
     .map((slug) => PUBLISHED_GUIDES.find((g) => g.slug === slug))
     .filter((g): g is Guide => Boolean(g));
 
-  /* The first steps block, if the guide has one. Used for HowTo schema only:
-     the visible rendering is unchanged and happens in GuideBlock. */
-  const stepsSection = guide.sections.find(
-    (s): s is Extract<GuideSection, { kind: "steps" }> => s.kind === "steps",
-  );
-
   return (
     <main id="main" tabIndex={-1}>
       <JsonLd data={breadcrumbSchema(crumbs)} />
@@ -86,21 +78,10 @@ export function GuidePage({ guide }: { guide: Guide }) {
           path: guideHref(guide),
           cluster: cluster.title,
           publishedAt: guide.publishedAt,
+          basis: guide.basis,
+          reviewedOn: guide.reviewedOn,
         })}
       />
-      {/* A procedure, where the guide has one. Emitted as a sibling of the
-          Article rather than as the page's primary type: this is a reference
-          guide containing a procedure, not a procedure with prose attached. */}
-      {stepsSection && (
-        <JsonLd
-          data={howToSchema({
-            name: stepsSection.heading,
-            description: stepsSection.intro ?? guide.answer,
-            path: guideHref(guide),
-            steps: stepsSection.steps,
-          })}
-        />
-      )}
       <JsonLd data={faqSchema(guide.faqs)} />
 
       {/* ── 1. The answer ─────────────────────────────────────────────────
@@ -134,7 +115,7 @@ export function GuidePage({ guide }: { guide: Guide }) {
               carry. Guides are YMYL content and an undated, unsourced page
               about tax rates is the profile that rates worst. */}
           <div className="u-measure">
-            <RateProvenance />
+            <RateProvenance basis={guide.basis} reviewedOn={guide.reviewedOn ?? guide.publishedAt.slice(0, 10)} />
           </div>
         </Container>
       </section>

@@ -234,12 +234,14 @@ const TRADEMARK_REGISTRATION: Guide = {
   ],
 
   publishedAt: '2026-09-12T03:00:00Z',
+  basis:
+    'Sourced from the Trade Marks Rules 2004 and IPO Pakistan\'s gazetted fee schedule.',
   related: ['secp-company-registration'],
 
   seo: {
     title: 'Trademark Registration Cost in Pakistan: Every Official Fee',
     description:
-      'The full gazette fee schedule, why one class is not the whole bill under rule 13, the renewal at Rs 15,000 nobody mentions, and the exact renewal and restoration windows.',
+      'Trademark registration cost in Pakistan: the full gazette fee schedule, why one class is not the whole bill, the renewal fee, and the restoration windows.',
   },
 };
 

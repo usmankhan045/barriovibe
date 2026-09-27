@@ -85,7 +85,9 @@ const nextConfig: NextConfig = {
           },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          // DENY, to say what `frame-ancestors 'none'` in the CSP says. It was
+          // SAMEORIGIN, which contradicted it for any browser reading only this.
+          { key: 'X-Frame-Options', value: 'DENY' },
           {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()',

@@ -2194,7 +2194,7 @@ export function Coverflow({
             aria-label={`Show ${slide.label}`}
             aria-current={index === selected}
             onClick={() => goTo(index)}
-            className="group grid h-11 place-items-center px-2"
+            className="group grid h-11 min-w-6 place-items-center px-2"
           >
             <span
               aria-hidden="true"

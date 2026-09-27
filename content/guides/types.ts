@@ -158,5 +158,30 @@ export interface Guide {
    */
   related?: string[];
 
+  /**
+   * What this guide is sourced from, as one sentence, where that is NOT the
+   * Income Tax Ordinance.
+   *
+   * Every guide used to render the tax calculators' provenance block and emit
+   * the Ordinance as its schema `citation`. That was true of the tax guides and
+   * false of the rest: a patent guide telling the reader, and the crawler, that
+   * its figures come from the Income Tax Ordinance is a wrong statement about
+   * its own sources on exactly the kind of page where sourcing is the point.
+   *
+   * Set it and the guide shows this sentence instead, with a disclaimer that
+   * does not talk about tax rates. Leave it unset for a tax guide and nothing
+   * changes.
+   */
+  basis?: string;
+
+  /**
+   * The date someone last read `basis` against the guide, ISO `YYYY-MM-DD`.
+   * Only meaningful with `basis`; a tax guide takes its date from
+   * `RATES_REVIEWED`. Defaults to the publication date, the honest claim for a
+   * guide checked when it was written and not since. Move it only when a
+   * person has actually re-read the sources.
+   */
+  reviewedOn?: string;
+
   seo: { title: string; description: string };
 }

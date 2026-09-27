@@ -581,7 +581,7 @@ const RENTAL_INCOME: Guide = {
   seo: {
     title: 'Tax on Rental Income in Pakistan',
     description:
-      'The rent table, why tenant withholding stopped being a final tax in 2010, the deductions landlords miss, and how a non-adjustable deposit becomes ten years of taxable rent.',
+      'Tax on rental income: the rent table, why tenant withholding stopped being final in 2010, missed deductions, and how a deposit becomes ten years of rent.',
   },
 };
 
@@ -792,7 +792,7 @@ const PROVINCIAL_PROPERTY_TAX: Guide = {
   seo: {
     title: 'Provincial Property Tax in Pakistan (Punjab and Beyond)',
     description:
-      'Punjab moved to capital value in 2024 and its own department page still says otherwise. The rates, the transitional floor, the portal, and how it differs from 236C and 236K.',
+      'Provincial property tax: Punjab moved to capital value in 2024 but its page disagrees. Rates, the transitional floor, the portal, and 236C and 236K compared.',
   },
 };
 
@@ -951,7 +951,7 @@ const LANDLORD_DEDUCTIONS: Guide = {
   seo: {
     title: 'What a Landlord Can Deduct in Pakistan: Section 15A',
     description:
-      'The one-fifth repair allowance allowed whether or not you spent it, provincial property tax as a deduction, the four per cent collection cap, and why it is not company-only.',
+      'Landlord tax deductions: the one-fifth repair allowance even if unspent, provincial property tax, the collection cap, and why it is not company-only.',
   },
 };
 
@@ -1108,7 +1108,7 @@ const GIFTS_AND_INHERITANCE: Guide = {
   seo: {
     title: 'Tax on Gifts and Inherited Property in Pakistan',
     description:
-      'Why a gift to a relative preserves the gain rather than erasing it, who counts as a relative, the 2026 family settlement rule, and why there is no inheritance tax but there is tax.',
+      'Tax on gifts and inheritance in Pakistan: why a gift to a relative keeps the gain, who counts as a relative, and the 2026 family settlement rule.',
   },
 };
 

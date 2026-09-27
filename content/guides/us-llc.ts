@@ -177,6 +177,9 @@ const STATE_CHOICE: Guide = {
   ],
 
   publishedAt: '2026-10-05T07:00:00Z',
+  basis:
+    'Sourced from the Wyoming, Delaware and New Mexico LLC statutes and each Secretary of State\'s fee schedule.',
+  reviewedOn: '2026-09-27',
 
   cta: {
     heading: 'Choosing a state for a company you will run from Pakistan?',
@@ -365,6 +368,9 @@ const STRIPE_FROM_PAKISTAN: Guide = {
   ],
 
   publishedAt: '2026-10-06T03:00:00Z',
+  basis:
+    'Sourced from Stripe\'s published account requirements and supported-countries list, and IRS guidance on the EIN.',
+  reviewedOn: '2026-09-27',
 
   cta: {
     heading: 'Setting up a US company so you can take Stripe payments?',

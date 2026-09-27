@@ -3,7 +3,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion, useReducedMotion } from 'motion/react';
 import { Icon } from '@/components/icons';
 import type { IconName } from '@/content/types';
 import { Button } from '@/components/ui/Button';
@@ -96,7 +95,6 @@ export function HeaderClient({ nav }: { nav: NavData }) {
   const [openMega, setOpenMega] = useState<{ menu: MegaMenuId; tab: string } | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
-  const reduceMotion = useReducedMotion();
   const megaRef = useRef<HTMLDivElement>(null);
   /* Escape has to return focus to the trigger that opened the panel, and the
      panel has to be positioned under it, so each trigger keeps a reference
@@ -397,8 +395,7 @@ export function HeaderClient({ nav }: { nav: NavData }) {
         {/* ── Desktop nav ─────────────────────────────────────────────── */}
         {/*
           The "tube light" treatment: a white pill holding the links, with the
-          active item on a tinted seat that SLIDES between items on a shared
-          motion layoutId, marked by a bar along its top edge.
+          active item on a tinted seat, marked by a bar along its top edge.
 
           White pill on a near-white canvas, so it is separated by border and
           shadow rather than by fill — the same way `.u-tile` works. The
@@ -552,20 +549,13 @@ export function HeaderClient({ nav }: { nav: NavData }) {
                     )}
 
                     {active && (
-                      <motion.span
-                        layoutId="header-nav-lamp"
+                      /* Where the page is, drawn under the active item. It
+                         used to slide between items on navigation through a
+                         `motion` layoutId, which was worth less than the
+                         motion runtime it put into every page; it now simply
+                         sits under whichever item is active. */
+                      <span
                         className="absolute inset-0 -z-10 rounded-pill bg-blue-50"
-                        initial={false}
-                        // The accessibility floor requires reduced motion be
-                        // honoured, and the global @media rule in globals.css
-                        // cannot reach this: motion animates via inline
-                        // transforms on rAF, not CSS transitions. The seat
-                        // still moves, it just arrives instantly.
-                        transition={
-                          reduceMotion
-                            ? { duration: 0 }
-                            : { type: 'spring', stiffness: 300, damping: 30 }
-                        }
                       >
                         {/* The bar, plus three stacked blurs beneath it.
                             Chess Blue on white — the brand colour is legible
@@ -580,7 +570,7 @@ export function HeaderClient({ nav }: { nav: NavData }) {
                           <span className="absolute top-0 h-6 w-8 rounded-pill bg-blue-600/20 blur-md" />
                           <span className="absolute left-2 top-0 h-4 w-4 rounded-pill bg-blue-600/20 blur-sm" />
                         </span>
-                      </motion.span>
+                      </span>
                     )}
                   </Link>
 
@@ -663,12 +653,9 @@ export function HeaderClient({ nav }: { nav: NavData }) {
             gutter to the right of its trigger. */}
         <div className="u-container">
           <div ref={megaTrackRef} className="relative pt-2">
-        <motion.div
+        <div
           data-mega-panel
           style={{ left: panelLeft }}
-          initial={reduceMotion ? false : { opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={reduceMotion ? { duration: 0 } : { duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
           /* `w-max`, and the width comes from the fixed-width discipline columns
              inside it: Software & AI opens at ~518px and Corporate & Advisory at
              ~1020px. That is the point of giving each practice its own panel,
@@ -688,7 +675,7 @@ export function HeaderClient({ nav }: { nav: NavData }) {
              disciplines, which would otherwise widen past the page gutters.
              `top-2` reproduces the frame's `pt-2`, which an absolutely
              positioned child does not inherit. */
-          className="u-glass absolute top-2 flex w-max max-w-[72rem] flex-col overflow-hidden rounded-tile-lg shadow-bar"
+          className="u-glass absolute top-2 flex w-max max-w-[72rem] flex-col overflow-hidden rounded-tile-lg shadow-bar animate-[u-mega-in_180ms_cubic-bezier(0.16,1,0.3,1)]"
         >
           {/* The practice tab strip. There is one trigger in the navbar now
               ("Services"), so this row is what picks which practice's
@@ -867,7 +854,7 @@ export function HeaderClient({ nav }: { nav: NavData }) {
               )}
             </div>
           </div>
-        </motion.div>
+        </div>
           </div>
         </div>
       </div>

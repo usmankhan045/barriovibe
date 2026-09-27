@@ -4560,6 +4560,22 @@
       transform: translateY(0);
     }
   }
+  /* The mega menu panel's entrance: a short rise and fade as it mounts. It
+     was a `motion` animation, which was the reason the motion runtime shipped
+     on every page; one keyframe does the same job. Reduced motion is handled
+     by the global rule at the end of this file, which collapses every
+     animation to an instant. */
+  @keyframes u-mega-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
 
   /* Edges fade out instead of hard-clipping. */
   .u-marquee-mask {
@@ -4880,34 +4896,37 @@
 }
 
 /* ==========================================================================
-   NO-SCRIPT FALLBACK FOR THE MOTION-DRIVEN FOOTER
+   DEFERRED RENDERING FOR THE LONG HOME PAGE
    ==========================================================================
 
-   `components/ui/footer-section.tsx` animates with `motion`, which writes its
-   `initial` state as an INLINE style into the prerendered HTML — the footer
-   ships as `opacity:0;filter:blur(4px)` and only becomes visible once ~66KB of
-   JS has loaded, hydrated and the viewport observer has fired. If that JS
-   fails, the footer is permanently invisible.
+   The home page is eight sections of glass, blur and layered art, and a
+   browser styles, lays out and paints all of it on load, including the six
+   thousand pixels nobody has scrolled to yet. Measured with Lighthouse, that
+   was around two seconds of style and layout and a second of paint on the
+   main thread, the bulk of the page's total blocking time.
 
-   This is the same failure the `[data-reveal]` system avoids by gating its
-   hidden state behind `scripting: enabled` (see MOTION above). The dropped-in
-   footer cannot use that gate, because its hidden state is inline rather than
-   in a stylesheet — so the fallback has to override it here.
+   `content-visibility: auto` lets the browser skip that work for a section
+   until it approaches the viewport. It starts from the third section: the
+   hero and the disciplines strip are what the first screen shows. The
+   intrinsic size is a placeholder height so the scrollbar does not jump as
+   sections render; `auto` makes the browser remember each section's real
+   height once it has been rendered once.
+   ========================================================================== */
+.u-defer-offscreen > section:nth-of-type(n + 3) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1200px;
+}
 
-   Unlayered and `!important` because an inline style outranks every cascade
-   layer; this is one of the few places that genuinely requires it.
+/* ==========================================================================
+   NO-SCRIPT FALLBACKS
+   ==========================================================================
+
+   What each section falls back to when JavaScript is off. The footer used to
+   need a rule here, to undo the inline `opacity: 0` that `motion` wrote into
+   the prerendered HTML; it now uses `<Reveal>`, whose hidden state is already
+   gated behind `scripting: enabled`, so it needs nothing.
    ========================================================================== */
 @media not (scripting: enabled) {
-  /* Matches on `opacity`, not `blur`: the footer animation used to start at
-     filter: blur(4px) and no longer does, and a selector keyed to the old
-     property would quietly stop matching and leave the footer invisible.
-     opacity: 0 is the one thing every motion `initial` here writes. */
-  footer [style*="opacity"] {
-    filter: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-  }
-
   /* ── And the stack falls back to a plain list of the six ─────────────────
      Which service is in front is React state, so with no script the rail is six
      dead buttons over a stage frozen on the first mockup, and the other five

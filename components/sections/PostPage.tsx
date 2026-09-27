@@ -18,7 +18,6 @@ import {
   JsonLd,
   breadcrumbSchema,
   faqSchema,
-  howToSchema,
   organizationRef,
   postSchema,
 } from "@/lib/jsonld";
@@ -29,7 +28,6 @@ import {
   postHref,
   type Post,
 } from "@/content/posts";
-import type { GuideSection } from "@/content/guides";
 
 /**
  * The shared shell for every post under `/blog`.
@@ -69,10 +67,6 @@ export function PostPage({ post }: { post: Post }) {
     .map((slug) => PUBLISHED_POSTS.find((p) => p.slug === slug))
     .filter((p): p is Post => Boolean(p));
 
-  const stepsSection = post.sections.find(
-    (s): s is Extract<GuideSection, { kind: "steps" }> => s.kind === "steps",
-  );
-
   const published = post.publishedAt.slice(0, 10);
   const reviewed = post.reviewedOn ?? published;
 
@@ -91,16 +85,6 @@ export function PostPage({ post }: { post: Post }) {
           sources: post.sources,
         })}
       />
-      {stepsSection && (
-        <JsonLd
-          data={howToSchema({
-            name: stepsSection.heading,
-            description: stepsSection.intro ?? post.answer,
-            path: postHref(post),
-            steps: stepsSection.steps,
-          })}
-        />
-      )}
       <JsonLd data={faqSchema(post.faqs)} />
 
       {/* ── 1. The answer ───────────────────────────────────────────────── */}

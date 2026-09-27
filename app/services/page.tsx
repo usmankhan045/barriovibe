@@ -28,7 +28,7 @@ import { pageMetadata } from '@/lib/seo';
 
 export const metadata = pageMetadata({
   title: `All ${SERVICE_COUNT} Services`,
-  description: `Every service we offer, listed in full: web, apps, AI agents, RAG, automation, accounting, income and sales tax, SECP registration and compliance, trademarks and patents, contracts, paid ads, Shopify, and company setup in Saudi Arabia, the UAE and the UK.`,
+  description: `Every service we offer, in full: web, apps, AI agents, automation, accounting, tax, SECP compliance, trademarks, ads, Shopify, and company setup abroad.`,
   path: '/services',
 });
 

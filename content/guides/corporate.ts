@@ -277,6 +277,9 @@ const SECTION_42: Guide = {
   ],
 
   publishedAt: '2026-10-07T07:00:00Z',
+  basis:
+    'Sourced from section 42 of the Companies Act 2017, the Companies Regulations 2024 and SECP\'s Seventh Schedule fees.',
+  reviewedOn: '2026-09-27',
 
   cta: {
     heading: 'Setting up a non-profit company?',
@@ -453,6 +456,9 @@ const IMPORT_EXPORT: Guide = {
   ],
 
   publishedAt: '2026-10-08T03:00:00Z',
+  basis:
+    'Sourced from Pakistan Single Window\'s published rules and fees under SRO 2296(I)/2022, and the Import and Export Policy Orders 2022.',
+  reviewedOn: '2026-09-27',
 
   cta: {
     heading: 'Setting up to import or export?',

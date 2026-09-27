@@ -263,6 +263,9 @@ const PATENT_REGISTRATION: Guide = {
   ],
 
   publishedAt: '2026-10-03T07:00:00Z',
+  basis:
+    'Sourced from the Patents Ordinance 2000, the Patents Rules 2003 and IPO Pakistan\'s gazetted fee schedule of March 2019.',
+  reviewedOn: '2026-09-27',
   related: ['copyright-registration-in-pakistan', 'trademark-registration-cost'],
 
   cta: {
@@ -483,6 +486,9 @@ const COPYRIGHT_REGISTRATION: Guide = {
   ],
 
   publishedAt: '2026-10-04T03:00:00Z',
+  basis:
+    'Sourced from the Copyright Ordinance 1962, the Copyright Rules 1967 and IPO Pakistan\'s gazetted fee schedule of March 2019.',
+  reviewedOn: '2026-09-27',
   related: ['patent-registration-in-pakistan', 'trademark-registration-cost'],
 
   cta: {

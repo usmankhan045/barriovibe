@@ -99,3 +99,11 @@ export const RATES_REVIEWER = {
  */
 export const RATES_DISCLAIMER =
   `These figures are an estimate computed from the rates above, not tax advice for your situation. Your return depends on facts a form cannot see, so treat the number as a starting point and speak to us before you file on it.`;
+
+/**
+ * The same limit, for a guide sourced from something other than the tax rates:
+ * a filing procedure, a registry's fees, a foreign regulator. It cannot say
+ * "computed from the rates above", because there are none.
+ */
+export const SOURCES_DISCLAIMER =
+  `This is general guidance from the sources above, not advice on your situation. Procedures and official fees change, so confirm the current position before you file, or speak to us first.`;

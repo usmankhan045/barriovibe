@@ -244,6 +244,8 @@ const SECP_REGISTRATION: Guide = {
   ],
 
   publishedAt: '2026-09-11T07:00:00Z',
+  basis:
+    'Sourced from the Companies Act 2017 and SECP\'s published fee schedule (the Seventh Schedule), with the eZfile steps as SECP describes them.',
 
   cta: {
     heading: 'Rather have the incorporation handled?',
@@ -420,12 +422,14 @@ const CHOOSING_A_STRUCTURE: Guide = {
   ],
 
   publishedAt: '2026-09-14T03:00:00Z',
+  basis:
+    'Sourced from the Companies Act 2017 for the company forms and the Income Tax Ordinance, 2001 for how each is taxed.',
   related: ['secp-company-registration', 'how-to-get-an-ntn', 'registering-a-partnership-firm', 'non-profit-tax-status'],
 
   seo: {
     title: 'SMC vs Private Limited vs Sole Proprietor in Pakistan',
     description:
-      'What differs between the three structures, why an SMC is taxed identically to a private limited, and the three audit thresholds that competitors collapse into one wrong number.',
+      'SMC vs private limited vs sole proprietor: what differs, why an SMC is taxed like a private limited, and the three audit thresholds often merged into one.',
   },
 };
 
@@ -593,6 +597,8 @@ const PARTNERSHIP: Guide = {
   ],
 
   publishedAt: '2026-09-18T03:00:00Z',
+  basis:
+    'Sourced from the Partnership Act 1932 and the Income Tax Ordinance, 2001.',
   related: ['smc-vs-private-limited-vs-sole-proprietor', 'how-to-get-an-ntn'],
 
   seo: {
@@ -759,12 +765,14 @@ const SECP_ANNUAL: Guide = {
   ],
 
   publishedAt: '2026-09-25T07:00:00Z',
+  basis:
+    'Sourced from the Companies Act 2017 and SECP\'s published fee schedule.',
   related: ['secp-company-registration', 'smc-vs-private-limited-vs-sole-proprietor'],
 
   seo: {
     title: 'Company Annual Compliance in Pakistan: What SECP Requires',
     description:
-      'The thirty-day share money deadline nobody warns about, Form 29 in fifteen days, when an annual return is not required, and the three audit thresholds that do different jobs.',
+      'Company annual compliance with SECP: the thirty-day share money deadline, Form 29 in fifteen days, when no annual return is due, and three audit thresholds.',
   },
 };
 

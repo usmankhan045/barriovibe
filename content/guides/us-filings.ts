@@ -227,6 +227,9 @@ const ITIN_FROM_PAKISTAN: Guide = {
   ],
 
   publishedAt: '2026-10-04T07:00:00Z',
+  basis:
+    'Sourced from the IRS Instructions for Form W-7 (Rev. December 2024) and the IRS\'s ITIN guidance.',
+  reviewedOn: '2026-09-27',
 
   cta: {
     heading: 'Not sure you need an ITIN at all?',
@@ -427,6 +430,9 @@ const US_TRADEMARK_FROM_PAKISTAN: Guide = {
   ],
 
   publishedAt: '2026-10-05T03:00:00Z',
+  basis:
+    'Sourced from the USPTO\'s rules in 37 CFR Part 2 and its fee schedule in force from 18 January 2025.',
+  reviewedOn: '2026-09-27',
 
   cta: {
     heading: 'Selling into the US under your own brand?',

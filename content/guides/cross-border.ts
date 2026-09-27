@@ -467,6 +467,8 @@ const FOREIGN_ENTITY_PERMISSION: Guide = {
   ],
 
   publishedAt: '2026-09-19T03:00:00Z',
+  basis:
+    'Sourced from the State Bank of Pakistan\'s Foreign Exchange Manual and circulars, and the Income Tax Ordinance, 2001 for what must be declared.',
 
   cta: {
     heading: 'Already set up abroad without permission?',
@@ -1056,12 +1058,14 @@ const US_LLC_CALENDAR: Guide = {
   ],
 
   publishedAt: '2026-09-20T07:00:00Z',
+  basis:
+    'Sourced from IRS instructions for Forms 5472 and 1120, and the Wyoming, Delaware and New Mexico state filing rules.',
   related: ['us-llc-foreign-asset-declaration', 'can-a-pakistani-company-own-a-foreign-entity'],
 
   seo: {
     title: 'What a US LLC Costs to Keep: Form 5472 and State Fees',
     description:
-      'The federal filing that cannot be e-filed and its USD 25,000 penalty, why Delaware is 400 and not 300, Wyoming and New Mexico compared, and the EIN wait before Stripe.',
+      'US LLC annual compliance: the federal filing that cannot be e-filed and its USD 25,000 penalty, Delaware at 400 not 300, other states, and the EIN wait.',
   },
 };
 

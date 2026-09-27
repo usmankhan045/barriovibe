@@ -49,7 +49,10 @@ export function MobileStepRing({ steps, label }: { steps: ProcessStep[]; label: 
   const step = steps[active] ?? steps[0]!;
 
   return (
-    <div role="list" aria-label={label}>
+    /* `group`, not `list`: the ring is a set of four toggle buttons choosing
+       which step the panel shows, not a list, and `list` requires `listitem`
+       children, which a button cannot be. */
+    <div role="group" aria-label={label}>
       <div className="relative mx-auto aspect-square w-full max-w-[272px]">
         {/* The ring itself. A `<circle>` rather than an open path, so the
             `u-flow-dash` loop (borrowed from the desktop canvas's own

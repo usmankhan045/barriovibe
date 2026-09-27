@@ -149,7 +149,7 @@ const PENSION_TAX: Guide = {
   seo: {
     title: 'Tax on Pension in Pakistan',
     description:
-      'The Finance Act 2025 repealed the general pension exemption. What replaced it, why most pensioners still owe nothing, what stayed exempt, and the case that costs money.',
+      'Tax on pension in Pakistan: the Finance Act 2025 repealed the general exemption. What replaced it, why most pensioners owe nothing, and what stayed exempt.',
   },
 };
 
