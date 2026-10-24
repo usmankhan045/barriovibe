@@ -3,6 +3,7 @@ import { satoshi, inter } from './fonts';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/ui/footer-section';
 import { SkipLink } from '@/components/layout/SkipLink';
+import { PublicOnly } from '@/components/layout/PublicOnly';
 import { RevealObserver } from '@/components/ui/RevealObserver';
 import { BRAND, TAGLINE, SEO_TITLE, X_HANDLE } from '@/content/site';
 import { SITE_URL } from '@/lib/seo';
@@ -52,23 +53,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en-PK" className={`${satoshi.variable} ${inter.variable}`}>
       <body>
-        <SkipLink />
-        <Header />
+        <PublicOnly>
+          <SkipLink />
+          <Header />
+        </PublicOnly>
         {children}
-        <Footer />
-        {/*
-          One IntersectionObserver for the entire site's scroll animations.
-          Mounted here rather than per-element so every revealed component
-          stays a Server Component. See components/ui/Reveal.tsx.
-        */}
-        <RevealObserver />
-        {/*
-          Warms the two button hover sprites. They are referenced only from
-          :hover rules, so without this the first hover on a page fetches a
-          34KB PNG with the cursor already on the button and the pill flashes
-          empty for a frame. See .u-btn-sprite-warm in app/globals.css.
-        */}
-        <div className="u-btn-sprite-warm" aria-hidden="true" />
+        <PublicOnly>
+          <Footer />
+          {/*
+            One IntersectionObserver for the public site's scroll animations.
+            It is deliberately absent from /admin, which has no reveal effects.
+          */}
+          <RevealObserver />
+          {/*
+            Warms the two public-site button hover sprites. Admin controls use
+            plain CSS fills and do not need these assets.
+          */}
+          <div className="u-btn-sprite-warm" aria-hidden="true" />
+        </PublicOnly>
       </body>
     </html>
   );

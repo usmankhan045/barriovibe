@@ -9,12 +9,12 @@ export const dynamic = 'force-dynamic';
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await getSession();
-  if (!session) return <div className="fixed inset-0 z-[100] overflow-auto bg-silver-100 text-ink">{children}</div>;
+  if (!session) return <div className="min-h-dvh bg-silver-100 text-ink">{children}</div>;
 
   return (
-    <div className="fixed inset-0 z-[100] overflow-auto bg-silver-100 text-ink">
-      <div className="flex min-h-full flex-col lg:flex-row">
-        <aside className="border-b border-silver-300 bg-white lg:flex lg:w-64 lg:shrink-0 lg:flex-col lg:border-b-0 lg:border-r">
+    <div className="min-h-dvh bg-silver-100 text-ink">
+      <div className="flex min-h-dvh flex-col lg:flex-row">
+        <aside className="border-b border-silver-300 bg-white lg:sticky lg:top-0 lg:flex lg:h-dvh lg:w-64 lg:shrink-0 lg:flex-col lg:self-start lg:border-b-0 lg:border-r">
           <div className="flex items-center gap-3 border-b border-silver-300 px-5 py-5">
             <span className="grid size-10 place-items-center rounded-xl bg-blue-600 font-display font-black text-white">BV</span>
             <div><p className="font-display font-black leading-tight">BarrioVibe</p><p className="text-xs text-ink-body">Content control</p></div>
