@@ -1,5 +1,8 @@
 # These packages ship prebuilt native binaries and need their install scripts
 # to run: esbuild (via tsx), unrs-resolver (via eslint), sharp (art pipeline).
+packages:
+  - '.'
+
 allowBuilds:
   esbuild: true
   unrs-resolver: true

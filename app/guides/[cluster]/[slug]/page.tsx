@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { GuidePage } from '@/components/sections/GuidePage';
-import { PUBLISHED_GUIDES, guideHref } from '@/content/guides';
+import { guideHref } from '@/content/guides';
+import { getManagedGuide, managedGuides } from '@/lib/editorial-content';
 import { pageMetadata } from '@/lib/seo';
 
 /**
@@ -14,8 +15,8 @@ import { pageMetadata } from '@/lib/seo';
  * publishing mechanism.
  */
 
-export function generateStaticParams() {
-  return PUBLISHED_GUIDES.map((g) => ({ cluster: g.cluster, slug: g.slug }));
+export async function generateStaticParams() {
+  return (await managedGuides()).map((g) => ({ cluster: g.cluster, slug: g.slug }));
 }
 
 export async function generateMetadata({
@@ -23,8 +24,8 @@ export async function generateMetadata({
 }: {
   params: Promise<{ cluster: string; slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
-  const guide = PUBLISHED_GUIDES.find((g) => g.slug === slug);
+  const { cluster, slug } = await params;
+  const guide = await getManagedGuide(cluster, slug);
   if (!guide) return {};
   return pageMetadata({
     title: guide.seo.title,
@@ -39,7 +40,7 @@ export default async function Page({
   params: Promise<{ cluster: string; slug: string }>;
 }) {
   const { cluster, slug } = await params;
-  const guide = PUBLISHED_GUIDES.find((g) => g.slug === slug && g.cluster === cluster);
+  const guide = await getManagedGuide(cluster, slug);
   if (!guide) notFound();
   return <GuidePage guide={guide} />;
 }

@@ -13,18 +13,19 @@ import { Reveal } from '@/components/ui/Reveal';
 import { JsonLd, breadcrumbSchema, itemListSchema, organizationRef } from '@/lib/jsonld';
 import {
   CLUSTER_BY_SLUG,
-  activeClusters,
+  CLUSTERS,
   clusterHref,
   guideHref,
-  guidesInCluster,
   type ClusterSlug,
 } from '@/content/guides';
+import { managedGuides } from '@/lib/editorial-content';
 import { pageMetadata } from '@/lib/seo';
 
 /** /guides/{cluster}: the hub that owns the head term for its topic. */
 
-export function generateStaticParams() {
-  return activeClusters().map((c) => ({ cluster: c.slug }));
+export async function generateStaticParams() {
+  const guides = await managedGuides();
+  return CLUSTERS.filter((c) => guides.some((guide) => guide.cluster === c.slug)).map((c) => ({ cluster: c.slug }));
 }
 
 export async function generateMetadata({
@@ -46,7 +47,7 @@ export default async function Page({ params }: { params: Promise<{ cluster: stri
   const { cluster } = await params;
   const c = CLUSTER_BY_SLUG[cluster as ClusterSlug];
   if (!c) notFound();
-  const guides = guidesInCluster(c.slug);
+  const guides = (await managedGuides()).filter((guide) => guide.cluster === c.slug);
   if (guides.length === 0) notFound();
 
   const crumbs = [

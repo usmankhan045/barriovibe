@@ -3,13 +3,13 @@ import { SERVICES, serviceHref, PRACTICE_PAGES } from '@/content/services';
 import { PILLARS } from '@/content/pillars';
 import { BUILD_PAGES, buildHref } from '@/content/builds';
 import { TOOLS, toolHref } from '@/content/tools';
-import { PUBLISHED_GUIDES, activeClusters, clusterHref, guideHref } from '@/content/guides';
+import { CLUSTERS, clusterHref, guideHref } from '@/content/guides';
 import {
-  PUBLISHED_POSTS,
-  activePostClusters,
+  POST_CLUSTERS,
   postClusterHref,
   postHref,
 } from '@/content/posts';
+import { managedArticles, managedGuides } from '@/lib/editorial-content';
 import { absoluteUrl } from '@/lib/seo';
 import { newestLastModified } from '@/lib/lastmod';
 
@@ -44,7 +44,10 @@ function modified(...sources: string[]): Date {
   return newestLastModified([...GLOBAL_SOURCES, ...sources]);
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [publishedGuides, publishedPosts] = await Promise.all([managedGuides(), managedArticles()]);
+  const activeGuideClusters = CLUSTERS.filter((cluster) => publishedGuides.some((guide) => guide.cluster === cluster.slug));
+  const activeArticleClusters = POST_CLUSTERS.filter((cluster) => publishedPosts.some((post) => post.cluster === cluster.slug));
   /*
    * changeFrequency is a hint Google has said for years that it ignores, so
    * these are set to be *true* rather than to be persuasive. The calculators
@@ -116,13 +119,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     /* Guide clusters, then the guides themselves. Only published guides are in
        PUBLISHED_GUIDES, so a future-dated guide is absent from the sitemap
        rather than announced before the page exists. */
-    ...activeClusters().map((c) => ({
+    ...activeGuideClusters.map((c) => ({
       url: absoluteUrl(clusterHref(c.slug)),
       lastModified: modified('content/guides/index.ts', 'app/guides/[cluster]/page.tsx'),
       changeFrequency: 'monthly' as const,
       priority: 0.7,
     })),
-    ...PUBLISHED_GUIDES.map((g) => ({
+    ...publishedGuides.map((g) => ({
       url: absoluteUrl(guideHref(g)),
       lastModified: modified(
         `content/guides/${g.cluster}.ts`,
@@ -140,13 +143,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
        guide it does NOT depend on content/provenance.ts, because a post's
        figures are vendor prices rather than tax rates and a statutory review
        has nothing to say about them. */
-    ...activePostClusters().map((c) => ({
+    ...activeArticleClusters.map((c) => ({
       url: absoluteUrl(postClusterHref(c.slug)),
       lastModified: modified('content/posts/index.ts', 'app/blog/[cluster]/page.tsx'),
       changeFrequency: 'weekly' as const,
       priority: 0.6,
     })),
-    ...PUBLISHED_POSTS.map((p) => ({
+    ...publishedPosts.map((p) => ({
       url: absoluteUrl(postHref(p)),
       lastModified: modified(
         `content/posts/${p.cluster}.ts`,

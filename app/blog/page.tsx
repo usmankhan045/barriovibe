@@ -14,12 +14,11 @@ import { JsonLd, breadcrumbSchema, itemListSchema, organizationRef } from '@/lib
 import { pageMetadata } from '@/lib/seo';
 import {
   BLOG_HUB,
-  PUBLISHED_POSTS,
-  activePostClusters,
+  POST_CLUSTERS,
   postClusterHref,
   postHref,
-  postsInCluster,
 } from '@/content/posts';
+import { managedArticles } from '@/lib/editorial-content';
 
 export const metadata = pageMetadata({
   title: BLOG_HUB.seo.title,
@@ -48,16 +47,17 @@ const CRUMBS = [
  * so. That also makes it the correct thing to render if every post were ever
  * withdrawn, which a boolean would have quietly got wrong.
  */
-export default function BlogPage() {
-  const clusters = activePostClusters();
-  const hasPosts = PUBLISHED_POSTS.length > 0;
+export default async function BlogPage() {
+  const publishedPosts = await managedArticles();
+  const clusters = POST_CLUSTERS.filter((cluster) => publishedPosts.some((post) => post.cluster === cluster.slug));
+  const hasPosts = publishedPosts.length > 0;
 
   return (
     <main id="main" tabIndex={-1}>
       <JsonLd data={breadcrumbSchema(CRUMBS)} />
       <JsonLd data={organizationRef()} />
       {hasPosts && (
-        <JsonLd data={itemListSchema('Blog', PUBLISHED_POSTS.map(postHref))} />
+        <JsonLd data={itemListSchema('Blog', publishedPosts.map(postHref))} />
       )}
 
       <Section tight>
@@ -89,7 +89,7 @@ export default function BlogPage() {
       {hasPosts ? (
         <>
           {clusters.map((cluster) => {
-            const posts = postsInCluster(cluster.slug);
+            const posts = publishedPosts.filter((post) => post.cluster === cluster.slug);
             return (
               <Section key={cluster.slug} tight>
                 <Container>

@@ -13,18 +13,19 @@ import { Reveal } from '@/components/ui/Reveal';
 import { JsonLd, breadcrumbSchema, itemListSchema, organizationRef } from '@/lib/jsonld';
 import {
   POST_CLUSTER_BY_SLUG,
-  activePostClusters,
+  POST_CLUSTERS,
   postClusterHref,
   postHref,
-  postsInCluster,
   type PostClusterSlug,
 } from '@/content/posts';
+import { managedArticles } from '@/lib/editorial-content';
 import { pageMetadata } from '@/lib/seo';
 
 /** /blog/{cluster}: the hub for one line of argument. */
 
-export function generateStaticParams() {
-  return activePostClusters().map((c) => ({ cluster: c.slug }));
+export async function generateStaticParams() {
+  const articles = await managedArticles();
+  return POST_CLUSTERS.filter((c) => articles.some((article) => article.cluster === c.slug)).map((c) => ({ cluster: c.slug }));
 }
 
 export async function generateMetadata({
@@ -46,7 +47,7 @@ export default async function Page({ params }: { params: Promise<{ cluster: stri
   const { cluster } = await params;
   const c = POST_CLUSTER_BY_SLUG[cluster as PostClusterSlug];
   if (!c) notFound();
-  const posts = postsInCluster(c.slug);
+  const posts = (await managedArticles()).filter((post) => post.cluster === c.slug);
   if (posts.length === 0) notFound();
 
   const crumbs = [

@@ -368,6 +368,18 @@ be verified in one URL rather than by clicking through 36 pages.
 
 ---
 
+## Admin dashboard
+
+`/admin` controls every guide and article through the dedicated Neon project
+documented in `neon/README.md`. It supports drafts, scheduled publishing,
+archiving, SEO fields, structured sections, FAQs, sources and related content.
+Existing source-controlled content is used as a fallback until an override is
+saved, so connecting the dashboard cannot empty the public site.
+
+The local repository is already linked and `DATABASE_URL` is present in the
+gitignored `.env.local`. Configure the same variable, `ADMIN_PASSWORD`, and
+`ADMIN_SESSION_SECRET` in the production host before deployment.
+
 ## Lead capture setup
 
 ### How it works
@@ -423,7 +435,7 @@ leaked publishable key cannot expose a single customer enquiry. The only writer
 is `/api/contact`, using the service-role key, which bypasses RLS by design and
 lives only in a server-side environment variable.
 
-**3. Set the three environment variables.** Copy `.env.example` to `.env.local`
+**3. Set the environment variables.** Copy `.env.example` to `.env.local`
 for development, and set the same values in your host's environment for
 production:
 
@@ -433,8 +445,11 @@ cp .env.example .env.local
 
 | Variable | Where to find it | Notes |
 |---|---|---|
+| `DATABASE_URL` | Neon project → Connect | Server-only pooled connection for the admin editorial database. |
 | `SUPABASE_URL` | Supabase dashboard → Project Settings → API | Server-only. |
 | `SUPABASE_SERVICE_ROLE_KEY` | Same page | Server-only. **Bypasses RLS.** If it ever reaches a browser, every lead is readable by anyone. |
+| `ADMIN_PASSWORD` | Choose a strong password | Signs in to the guide/article dashboard at `/admin`. |
+| `ADMIN_SESSION_SECRET` | Generate: `openssl rand -base64 32` | Signs the HTTP-only admin session cookie. Keep it separate from the password and database URL. |
 | `LEAD_IP_SALT` | Generate: `openssl rand -hex 32` | Salts the IP hash so it cannot be reversed by hashing all ~4 billion IPv4 addresses. Changing it later is safe; it only means old and new hashes stop matching. |
 
 Note that **none of these carry the `NEXT_PUBLIC_` prefix**, which is exactly

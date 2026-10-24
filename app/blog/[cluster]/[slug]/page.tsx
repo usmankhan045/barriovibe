@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { PostPage } from '@/components/sections/PostPage';
-import { PUBLISHED_POSTS, postHref } from '@/content/posts';
+import { postHref } from '@/content/posts';
+import { getManagedArticle, managedArticles } from '@/lib/editorial-content';
 import { pageMetadata } from '@/lib/seo';
 
 /**
@@ -13,8 +14,8 @@ import { pageMetadata } from '@/lib/seo';
  * publishing step.
  */
 
-export function generateStaticParams() {
-  return PUBLISHED_POSTS.map((p) => ({ cluster: p.cluster, slug: p.slug }));
+export async function generateStaticParams() {
+  return (await managedArticles()).map((p) => ({ cluster: p.cluster, slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -22,8 +23,8 @@ export async function generateMetadata({
 }: {
   params: Promise<{ cluster: string; slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
-  const post = PUBLISHED_POSTS.find((p) => p.slug === slug);
+  const { cluster, slug } = await params;
+  const post = await getManagedArticle(cluster, slug);
   if (!post) return {};
   return pageMetadata({
     title: post.seo.title,
@@ -38,7 +39,7 @@ export default async function Page({
   params: Promise<{ cluster: string; slug: string }>;
 }) {
   const { cluster, slug } = await params;
-  const post = PUBLISHED_POSTS.find((p) => p.slug === slug && p.cluster === cluster);
+  const post = await getManagedArticle(cluster, slug);
   if (!post) notFound();
   return <PostPage post={post} />;
 }

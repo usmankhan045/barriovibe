@@ -9,7 +9,8 @@ import {
 import { Icon } from '@/components/icons';
 import { Reveal } from '@/components/ui/Reveal';
 import { JsonLd, breadcrumbSchema, itemListSchema, organizationRef } from '@/lib/jsonld';
-import { GUIDES_HUB, activeClusters, clusterHref, guidesInCluster } from '@/content/guides';
+import { GUIDES_HUB, CLUSTERS, clusterHref } from '@/content/guides';
+import { managedGuides } from '@/lib/editorial-content';
 import { pageMetadata } from '@/lib/seo';
 
 /**
@@ -30,8 +31,9 @@ const CRUMBS = [
   { label: 'Guides', href: '/guides' },
 ];
 
-export default function GuidesPage() {
-  const clusters = activeClusters();
+export default async function GuidesPage() {
+  const guides = await managedGuides();
+  const clusters = CLUSTERS.filter((cluster) => guides.some((guide) => guide.cluster === cluster.slug));
 
   return (
     <main id="main" tabIndex={-1}>
@@ -53,7 +55,7 @@ export default function GuidesPage() {
 
           <ul className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
             {clusters.map((c, i) => {
-              const count = guidesInCluster(c.slug).length;
+              const count = guides.filter((guide) => guide.cluster === c.slug).length;
               return (
                 <Reveal key={c.slug} as="li" index={i} className="h-full">
                   <Link

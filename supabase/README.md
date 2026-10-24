@@ -1,4 +1,4 @@
-# Supabase — lead capture
+# Supabase — optional lead archive
 
 **Status: architected, not provisioned.** No Supabase project has been created
 and no credentials exist. Everything on this page is ready to run when you say

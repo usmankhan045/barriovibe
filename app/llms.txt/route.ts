@@ -1,13 +1,13 @@
 import { BRAND, TAGLINE, CONTACT } from '@/content/site';
 import { PRACTICE_GROUPS, SERVICES, serviceHref, practiceHref } from '@/content/services';
 import { TOOL_GROUPS, toolHref } from '@/content/tools';
-import { PUBLISHED_GUIDES, activeClusters, clusterHref, guideHref } from '@/content/guides';
+import { CLUSTERS, clusterHref, guideHref } from '@/content/guides';
 import {
-  PUBLISHED_POSTS,
-  activePostClusters,
+  POST_CLUSTERS,
   postClusterHref,
   postHref,
 } from '@/content/posts';
+import { managedArticles, managedGuides } from '@/lib/editorial-content';
 import { RATES_REVIEWED } from '@/content/provenance';
 import { absoluteUrl } from '@/lib/seo';
 
@@ -23,9 +23,12 @@ import { absoluteUrl } from '@/lib/seo';
  * that fetches it directly.
  */
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 
-export function GET() {
+export async function GET() {
+  const [publishedGuides, publishedPosts] = await Promise.all([managedGuides(), managedArticles()]);
+  const activeGuideClusters = CLUSTERS.filter((cluster) => publishedGuides.some((guide) => guide.cluster === cluster.slug));
+  const activeArticleClusters = POST_CLUSTERS.filter((cluster) => publishedPosts.some((post) => post.cluster === cluster.slug));
   const lines: string[] = [];
 
   lines.push(`# ${BRAND.name}`);
@@ -76,7 +79,7 @@ export function GET() {
      derived from TOOL_GROUPS. An AI crawler reading this file is exactly the
      audience a reference guide is written for, so listing them individually
      rather than only the hub is deliberate. */
-  if (PUBLISHED_GUIDES.length > 0) {
+  if (publishedGuides.length > 0) {
     lines.push('## Guides');
     lines.push('');
     lines.push(
@@ -88,10 +91,10 @@ export function GET() {
     lines.push(
       `- Every rate in these guides is rendered from the same modules the site's calculators compute with, reconciled against the Income Tax Ordinance 2001 and the current Finance Act on each build, so a guide cannot state a figure its calculator disagrees with. Each guide names the provision it rests on, for example "section 231B(2)", rather than restating a number without a source. Where the law could not be established, the guide says so instead of guessing. Figures last checked against the statute on ${RATES_REVIEWED}.`,
     );
-    for (const cluster of activeClusters()) {
+    for (const cluster of activeGuideClusters) {
       lines.push(`- [${cluster.title}](${absoluteUrl(clusterHref(cluster.slug))}): ${cluster.card}`);
     }
-    for (const guide of PUBLISHED_GUIDES) {
+    for (const guide of publishedGuides) {
       lines.push(`- [${guide.title}](${absoluteUrl(guideHref(guide))}): ${guide.card}`);
     }
     lines.push('');
@@ -101,7 +104,7 @@ export function GET() {
      sourcing sentence is different on purpose: guides rest on one statute named
      once, posts rest on their own sources, and the honest summary for a crawler
      is that each post carries its own citations with the date they were read. */
-  if (PUBLISHED_POSTS.length > 0) {
+  if (publishedPosts.length > 0) {
     lines.push('## Blog');
     lines.push('');
     lines.push(
@@ -110,12 +113,12 @@ export function GET() {
     lines.push(
       '- Every figure in these posts is sourced to the page it came from and the date it was read, listed at the foot of each post and emitted as schema citations. Prices are quoted in a named currency with the billing period stated. Each post also carries an explicit statement of what it does not cover. Where a primary document could not be retrieved, the post is not written rather than sourced second-hand.',
     );
-    for (const cluster of activePostClusters()) {
+    for (const cluster of activeArticleClusters) {
       lines.push(
         `- [${cluster.title}](${absoluteUrl(postClusterHref(cluster.slug))}): ${cluster.card}`,
       );
     }
-    for (const post of PUBLISHED_POSTS) {
+    for (const post of publishedPosts) {
       lines.push(
         `- [${post.title}](${absoluteUrl(postHref(post))}), ${post.publishedAt.slice(0, 10)}: ${post.card}`,
       );

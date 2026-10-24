@@ -23,6 +23,7 @@
     "signature": "tsx scripts/gen-signature.mts"
   },
   "dependencies": {
+    "@neondatabase/serverless": "1.2.0",
     "@supabase/supabase-js": "^2.112.1",
     "lucide-react": "^1.28.0",
     "motion": "^13.0.0",
