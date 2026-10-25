@@ -6,7 +6,7 @@ import { useEffect, useState, useSyncExternalStore } from 'react';
 import { trackAnalyticsEvent } from '@/lib/analytics';
 
 const GOOGLE_TAG_ID = 'G-X6R5F9BXJD';
-const TIKTOK_PIXEL_ID = 'DBEQM4JC77U4J2JQDPS0';
+const TIKTOK_PIXEL_ID = 'DBETICJC77UASCMGJQM0';
 /* Versioned because the earlier choice covered TikTok only. Every visitor must
    make a fresh, informed choice now that Google Analytics is included. */
 const STORAGE_KEY = 'barriovibe-analytics-consent-v2';
