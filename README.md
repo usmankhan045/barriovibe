@@ -79,7 +79,7 @@ Every entry in `package.json`:
 
 Consent-controlled measurement lives in `components/analytics/SiteAnalytics.tsx`.
 Google Analytics uses measurement ID `G-X6R5F9BXJD`; TikTok uses Pixel ID
-`DBEU5ABC77UASCMGJS60`. Neither library loads until the visitor selects
+`DBEU9GRC77UASCMGJSH0`. Neither library loads until the visitor selects
 **Allow analytics**, and the footer keeps a permanent privacy-choices control.
 
 GA4 receives its standard traffic source, campaign, geography, device, session
