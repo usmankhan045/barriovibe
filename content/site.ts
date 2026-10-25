@@ -46,7 +46,7 @@ export const CONTACT = {
   phone: '+92 309 5034118',
   /** Digits only, no +, no spaces: this is what wa.me expects. */
   whatsapp: '923095034118',
-  email: 'barriovibe@gmail.com',
+  email: 'info@barriovibe.com',
   address: {
     line1: 'Ayan Plaza, Mardan Road',
     city: 'Charsadda',
