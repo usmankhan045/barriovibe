@@ -5,6 +5,7 @@ import { Footer } from '@/components/ui/footer-section';
 import { SkipLink } from '@/components/layout/SkipLink';
 import { PublicOnly } from '@/components/layout/PublicOnly';
 import { RevealObserver } from '@/components/ui/RevealObserver';
+import { TikTokPixel } from '@/components/analytics/TikTokPixel';
 import { BRAND, TAGLINE, SEO_TITLE, X_HANDLE } from '@/content/site';
 import { SITE_URL } from '@/lib/seo';
 import { TOKENS } from '@/lib/tokens';
@@ -60,6 +61,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <PublicOnly>
           <Footer />
+          <TikTokPixel />
           {/*
             One IntersectionObserver for the public site's scroll animations.
             It is deliberately absent from /admin, which has no reveal effects.

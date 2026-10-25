@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { Field, SelectField, TextareaField } from '@/components/ui/Field';
 import { Icon } from '@/components/icons';
 import { validateLead, submitLead, type LeadInput } from '@/lib/leads';
+import { trackTikTokEvent } from '@/lib/tiktok';
 
 /**
  * The contact form.
@@ -119,6 +120,7 @@ export function ContactForm({ serviceOptions, contact }: ContactFormProps) {
     const result = await submitLead(input);
 
     if (result.ok) {
+      trackTikTokEvent('Lead');
       setStatus('sent');
       return;
     }

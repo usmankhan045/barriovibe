@@ -9,10 +9,10 @@ import {
 /**
  * Content Security Policy.
  *
- * The site loads nothing from anywhere else: fonts are self-hosted by
- * next/font, there are no third-party scripts, no analytics, no embeds and no
- * iframes. So every fetch directive can be `'self'` and the few that have no
- * legitimate use at all are closed outright.
+ * Fonts are self-hosted by next/font, and there are no embeds or iframes.
+ * Visitors who grant marketing consent load the TikTok Pixel from
+ * analytics.tiktok.com; its script and event requests are the only third-party
+ * resources allowed by this policy.
  *
  * Two directives cannot be tightened without changing how the app is built:
  *
@@ -29,12 +29,12 @@ import {
  */
 const CSP = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
+  "script-src 'self' 'unsafe-inline' https://analytics.tiktok.com",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob:",
+  "img-src 'self' data: blob: https://analytics.tiktok.com",
   "font-src 'self'",
-  // The contact form posts to /api/contact on this origin. Nothing else.
-  "connect-src 'self'",
+  // The contact form stays same-origin; consented Pixel events go to TikTok.
+  "connect-src 'self' https://analytics.tiktok.com",
   "form-action 'self'",
   "base-uri 'self'",
   "frame-ancestors 'none'",

@@ -12,9 +12,9 @@ export const metadata = pageMetadata({
  * ⚠ TEMPLATE — reviewed by a lawyer before launch.
  *
  * This describes what the site actually does today, which is deliberately
- * little: one contact form, no analytics, no third-party trackers, no cookies.
- * If analytics or a marketing pixel is ever added, this page must be updated
- * in the same commit.
+ * little: one contact form and one consent-controlled advertising pixel.
+ * Any change to collection or sharing must update this page in the same
+ * commit so the policy continues to describe the deployed site.
  */
 export default function PrivacyPage() {
   return (
@@ -24,7 +24,7 @@ export default function PrivacyPage() {
       lines={['How we handle']}
       accent="your information"
       path="/privacy"
-      updated="6 August 2026"
+      updated="25 October 2026"
     >
       <p>
         This policy explains what {BRAND.legalName} does with personal information
@@ -32,7 +32,7 @@ export default function PrivacyPage() {
         not to cover every theoretical possibility.
       </p>
 
-      <h2>What we collect</h2>
+      <h2>What we collect directly</h2>
       <p>
         Only what you type into the contact form: your name, email address, and
         optionally your phone number, company name, the service you are interested in
@@ -45,30 +45,28 @@ export default function PrivacyPage() {
         retaining your actual IP address, which we have no use for.
       </p>
 
-      <h2>What we do not collect</h2>
-      <ul>
-        <li>
-          <strong>No analytics.</strong> This site runs no Google Analytics, no
-          Meta pixel and no third-party tracking of any kind.
-        </li>
-        <li>
-          <strong>No cookies.</strong> The site sets no cookies and requires no
-          cookie banner, because there is nothing to consent to.
-        </li>
-        <li>
-          <strong>No advertising identifiers</strong> and no cross-site tracking.
-        </li>
-        <li>
-          <strong>No fonts or scripts from third-party servers.</strong> Everything
-          is served from this domain, so no external party sees your visit.
-        </li>
-      </ul>
+      <h2>TikTok advertising measurement</h2>
+      <p>
+        If you select &ldquo;Allow TikTok&rdquo; in the privacy choices, this site loads
+        the TikTok Pixel. It measures page visits and whether an enquiry was submitted
+        so we can understand and improve our TikTok advertising. The Pixel may send
+        TikTok event information, timestamps, your IP address, browser and device
+        information, page metadata and cookie identifiers. The Lead event added by this
+        site contains no form fields: we do not add your name, email address, phone
+        number, message or selected service to it.
+      </p>
+      <p>
+        TikTok does not load before you allow it. If you reject it, the site continues
+        to work normally. Your choice is saved in your browser&rsquo;s local storage and
+        can be changed at any time through &ldquo;Privacy choices&rdquo; in the footer.
+      </p>
 
       <h2>Why we hold it</h2>
       <p>
         To reply to your enquiry and to keep a record of the conversation if you become
-        a client. That is the only purpose. We do not sell, rent or share your details
-        with anyone, and we do not add you to a mailing list.
+        a client. We do not sell or rent your enquiry details, and we do not add you to
+        a mailing list. With consent, the separate TikTok Pixel data is used to measure
+        and improve advertising performance as described above.
       </p>
 
       <h2>Where it is stored</h2>
@@ -76,6 +74,10 @@ export default function PrivacyPage() {
         Enquiries are stored in a Supabase database with access restricted to our team.
         Data is transmitted over HTTPS. Our database credentials are held on the server
         only and are never present in your browser.
+      </p>
+      <p>
+        TikTok receives consented Pixel events directly from your browser and handles
+        that information under its own privacy terms.
       </p>
 
       <h2>How long we keep it</h2>
@@ -95,8 +97,9 @@ export default function PrivacyPage() {
 
       <h2>Changes to this policy</h2>
       <p>
-        If we add analytics, a chat widget, or anything else that collects data, this
-        page will be updated at the same time and the date at the top will change.
+        If we change the advertising measurement, add a chat widget, or make any other
+        change to data collection, this page will be updated at the same time and the
+        date at the top will change.
       </p>
 
       <h2>Contact</h2>
