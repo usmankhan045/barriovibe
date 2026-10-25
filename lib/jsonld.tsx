@@ -57,7 +57,7 @@ export function organizationRef() {
       '@type': 'PostalAddress',
       streetAddress: CONTACT.address.line1,
       addressLocality: CONTACT.address.city,
-      addressRegion: 'Khyber Pakhtunkhwa',
+      addressRegion: 'Islamabad Capital Territory',
       addressCountry: 'PK',
     },
   };
@@ -93,25 +93,24 @@ export function organizationSchema() {
       '@type': 'PostalAddress',
       streetAddress: CONTACT.address.line1,
       addressLocality: CONTACT.address.city,
-      addressRegion: 'Khyber Pakhtunkhwa',
+      addressRegion: 'Islamabad Capital Territory',
       addressCountry: 'PK',
     },
     /*
      * Two claims, not one. The firm works nationally, and most of what it does
      * (a return filed through IRIS, a company registered with SECP) needs no
-     * physical proximity at all. But it is also a real office in Charsadda, and
+     * physical proximity at all. But it is also a real office in Islamabad, and
      * a country-only `areaServed` states the first and hides the second, which
-     * is the half that wins "tax consultant near me" in Khyber Pakhtunkhwa
-     * where the competition is thin.
+     * is the half that supports relevant local results.
      *
-     * TODO: add `geo` with the exact GeoCoordinates for Ayan Plaza. Real
+     * TODO: add `geo` with the exact GeoCoordinates for the office. Real
      * coordinates have to be read off the map, not guessed from the city
      * centre: a pin in the wrong place is worse for a local search than no pin,
      * because Google matches it against the address and finds a contradiction.
      */
     areaServed: [
       { '@type': 'Country', name: 'Pakistan' },
-      { '@type': 'AdministrativeArea', name: 'Khyber Pakhtunkhwa' },
+      { '@type': 'AdministrativeArea', name: 'Islamabad Capital Territory' },
     ],
     /*
      * A band, not a price. Schema.org wants the symbol form here, and it is the

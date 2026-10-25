@@ -48,8 +48,8 @@ export const CONTACT = {
   whatsapp: '923095034118',
   email: 'info@barriovibe.com',
   address: {
-    line1: 'Ayan Plaza, Mardan Road',
-    city: 'Charsadda',
+    line1: 'House No. 352, First Floor, Street 68, MPCHS, E-11/3',
+    city: 'Islamabad',
     country: 'Pakistan',
   },
   /** Displayed on the contact page so nobody wonders when they'll hear back. */

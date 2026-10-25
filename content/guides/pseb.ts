@@ -217,8 +217,9 @@ const PSEB_RATE: Guide = {
  * It carries the KPK finding, which is the opposite of what most pages assume.
  * Islamabad zero-rates exported services under s.3(1A) of the ICT Ordinance.
  * The KP Act contains no such relief and s.3(4) expressly taxes a service that
- * originates in the Province and terminates outside Pakistan. Since the firm
- * is in Khyber Pakhtunkhwa, getting that right matters more here than anywhere.
+ * originates in the Province and terminates outside Pakistan. The contrast
+ * matters because the firm is now based in Islamabad while the guide serves
+ * readers operating under both regimes.
  */
 const FREELANCER_TAX: Guide = {
   slug: 'tax-for-freelancers',

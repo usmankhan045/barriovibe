@@ -9,9 +9,10 @@ import type { Guide } from './types';
  * appears to have been invented or transplanted, and correcting it is the
  * clearest single service this guide performs.
  *
- * Second, the firm is in Khyber Pakhtunkhwa, and KPK guides almost universally
- * cite the Finance Act 2013 when the operative statute has been the KP Sales
- * Tax on Services Act 2022 since June 2022.
+ * Second, provincial jurisdiction changes the answer. KPK guides almost
+ * universally cite the Finance Act 2013 when the operative statute has been
+ * the KP Sales Tax on Services Act 2022 since June 2022, while Islamabad uses
+ * the ICT regime discussed throughout the cluster.
  */
 
 const SALES_TAX_REGISTRATION: Guide = {
