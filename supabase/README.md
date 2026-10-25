@@ -117,6 +117,7 @@ user-agent string. The hash exists to identify repeated automated submissions
 without retaining the IP address itself, which we have no use for. Changing
 `LEAD_IP_SALT` is safe — it only means old and new hashes stop matching.
 
-Not stored in Supabase: TikTok Pixel events, cookies, or advertising
-identifiers. When a visitor grants marketing consent those go directly from
-the browser to TikTok; `/privacy` describes that separate data flow.
+Not stored in Supabase: Google Analytics or TikTok Pixel events, cookies, or
+advertising identifiers. When a visitor grants analytics consent those go
+directly from the browser to Google and TikTok; `/privacy` describes that
+separate data flow.

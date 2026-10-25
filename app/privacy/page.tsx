@@ -12,7 +12,8 @@ export const metadata = pageMetadata({
  * ⚠ TEMPLATE — reviewed by a lawyer before launch.
  *
  * This describes what the site actually does today, which is deliberately
- * little: one contact form and one consent-controlled advertising pixel.
+ * little: one contact form and consent-controlled Google Analytics and TikTok
+ * measurement.
  * Any change to collection or sharing must update this page in the same
  * commit so the policy continues to describe the deployed site.
  */
@@ -45,28 +46,37 @@ export default function PrivacyPage() {
         retaining your actual IP address, which we have no use for.
       </p>
 
-      <h2>TikTok advertising measurement</h2>
+      <h2>Analytics and advertising measurement</h2>
       <p>
-        If you select &ldquo;Allow TikTok&rdquo; in the privacy choices, this site loads
-        the TikTok Pixel. It measures page visits and whether an enquiry was submitted
-        so we can understand and improve our TikTok advertising. The Pixel may send
-        TikTok event information, timestamps, your IP address, browser and device
-        information, page metadata and cookie identifiers. The Lead event added by this
-        site contains no form fields: we do not add your name, email address, phone
-        number, message or selected service to it.
+        If you select &ldquo;Allow analytics&rdquo; in the privacy choices, this site loads
+        Google Analytics and the TikTok Pixel. Google Analytics measures pages visited,
+        referral and campaign information, session and engagement time, approximate
+        location, device and browser details, scroll depth, and interactions with calls
+        to action, contact links and outbound links. We use it to understand how people
+        find and use the site.
       </p>
       <p>
-        TikTok does not load before you allow it. If you reject it, the site continues
-        to work normally. Your choice is saved in your browser&rsquo;s local storage and
-        can be changed at any time through &ldquo;Privacy choices&rdquo; in the footer.
+        The TikTok Pixel measures page visits and whether an enquiry was submitted so
+        we can understand and improve our TikTok advertising. These services may
+        receive event timestamps, your IP address, browser and device information, page
+        metadata and cookie identifiers. The lead events added by this site contain no
+        form fields: we do not add your name, email address, phone number, message or
+        selected service to them.
+      </p>
+      <p>
+        Neither service loads before you allow it. If you reject analytics, the site
+        continues to work normally. Your choice is saved in your browser&rsquo;s local
+        storage and can be changed at any time through &ldquo;Privacy choices&rdquo; in the
+        footer.
       </p>
 
       <h2>Why we hold it</h2>
       <p>
         To reply to your enquiry and to keep a record of the conversation if you become
         a client. We do not sell or rent your enquiry details, and we do not add you to
-        a mailing list. With consent, the separate TikTok Pixel data is used to measure
-        and improve advertising performance as described above.
+        a mailing list. With consent, the separate Google Analytics and TikTok data is
+        used to understand site usage and improve advertising performance as described
+        above.
       </p>
 
       <h2>Where it is stored</h2>
@@ -76,8 +86,8 @@ export default function PrivacyPage() {
         only and are never present in your browser.
       </p>
       <p>
-        TikTok receives consented Pixel events directly from your browser and handles
-        that information under its own privacy terms.
+        Google and TikTok receive consented measurement events directly from your
+        browser and handle that information under their own privacy terms.
       </p>
 
       <h2>How long we keep it</h2>

@@ -4,7 +4,7 @@ import { Wordmark } from '@/components/layout/Wordmark';
 import { BrandMark } from '@/components/icons/brands';
 import { BRAND, CONTACT, SHORT_TAGLINE, SOCIALS } from '@/content/site';
 import { COMPANY_LINKS, LEGAL_LINKS, MEGA_MENU_COLUMNS } from '@/content/nav';
-import { MarketingPreferencesButton } from '@/components/analytics/TikTokPixel';
+import { AnalyticsPreferencesButton } from '@/components/analytics/SiteAnalytics';
 
 /**
  * SLOT — dropped-in footer (`footer-section`).
@@ -318,7 +318,7 @@ export function Footer() {
           <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[13px] text-ink-body">
             <p>© {new Date().getFullYear()} {BRAND.legalName}. All rights reserved.</p>
             <span aria-hidden="true">·</span>
-            <MarketingPreferencesButton />
+            <AnalyticsPreferencesButton />
           </div>
         </Reveal>
       </div>

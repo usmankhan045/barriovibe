@@ -10,8 +10,8 @@ import {
  * Content Security Policy.
  *
  * Fonts are self-hosted by next/font, and there are no embeds or iframes.
- * Visitors who grant marketing consent load the TikTok Pixel from
- * analytics.tiktok.com; its script and event requests are the only third-party
+ * Visitors who grant analytics consent load Google Analytics and the TikTok
+ * Pixel. Their script, image and event endpoints are the only third-party
  * resources allowed by this policy.
  *
  * Two directives cannot be tightened without changing how the app is built:
@@ -29,12 +29,12 @@ import {
  */
 const CSP = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://analytics.tiktok.com",
+  "script-src 'self' 'unsafe-inline' https://analytics.tiktok.com https://www.googletagmanager.com",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://analytics.tiktok.com",
+  "img-src 'self' data: blob: https://analytics.tiktok.com https://www.googletagmanager.com https://*.google-analytics.com",
   "font-src 'self'",
-  // The contact form stays same-origin; consented Pixel events go to TikTok.
-  "connect-src 'self' https://analytics.tiktok.com",
+  // The contact form stays same-origin; consented measurements go to these hosts.
+  "connect-src 'self' https://analytics.tiktok.com https://www.googletagmanager.com https://*.google-analytics.com https://*.google.com",
   "form-action 'self'",
   "base-uri 'self'",
   "frame-ancestors 'none'",

@@ -130,7 +130,7 @@ export async function GET() {
   lines.push('');
   lines.push(`- [How we work](${absoluteUrl('/about')})`);
   lines.push(`- [Results](${absoluteUrl('/work')})`);
-  lines.push(`- [Privacy](${absoluteUrl('/privacy')}): contact-form data and consent-controlled TikTok advertising measurement.`);
+  lines.push(`- [Privacy](${absoluteUrl('/privacy')}): contact-form data and consent-controlled Google Analytics and TikTok measurement.`);
   lines.push(`- [Terms](${absoluteUrl('/terms')})`);
   lines.push('');
 

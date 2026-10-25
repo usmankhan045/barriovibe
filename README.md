@@ -75,6 +75,29 @@ Every entry in `package.json`:
 
 ---
 
+## Analytics
+
+Consent-controlled measurement lives in `components/analytics/SiteAnalytics.tsx`.
+Google Analytics uses measurement ID `G-X6R5F9BXJD`; TikTok uses Pixel ID
+`DBEQM4JC77U4J2JQDPS0`. Neither library loads until the visitor selects
+**Allow analytics**, and the footer keeps a permanent privacy-choices control.
+
+GA4 receives its standard traffic source, campaign, geography, device, session
+and engagement measurements, plus these site events: `scroll_depth` at 25%,
+50%, 75% and 90%; `cta_click`; `contact_click`; `outbound_link_click`;
+`contact_form_start`; validation and submission errors; and the recommended
+`generate_lead` event after a successful enquiry. No form values are attached
+to analytics events.
+
+In GA4 → Admin → Data streams → Web → Enhanced measurement, keep Page views
+enabled for both page loads and browser-history changes so Next.js navigation
+is counted without duplicate manual page views. Mark `generate_lead` as a key
+event. Register event-scoped custom dimensions for `percent_scrolled`,
+`contact_method`, `link_domain` and `link_text` if those parameters need to be
+available in custom reports and Explorations.
+
+---
+
 ## Before launch: placeholder checklist
 
 Nothing below is a bug. Each is a deliberate placeholder that renders as a
@@ -100,7 +123,7 @@ that.
 | 7 | **Stats**, all four are structural counts rather than performance figures | `content/proof.ts` → `STATS` | Nothing renders wrong today: every figure is true and checkable. But services and disciplines are derived while jurisdictions is typed by hand, so recount that one whenever a jurisdiction is added. Client retention and filings-on-time are the intended replacements for the last two slots. Do not invent numbers. |
 | 8 | **Client logos** — empty array, `LOGOS_ENABLED = false` | `content/proof.ts` → `CLIENT_LOGOS` | Nothing renders (correct today). Add real logo files under `public/logos/` and flip the flag when there are clients to name. |
 | 9 | **Case studies** — empty array, `CASES_ENABLED = false` | `content/cases.ts` | `/work` renders an honest empty state that explains why there is nothing there yet. This is by design and is safe to launch with. When real engagements land, fill `CASE_STUDIES`, flip the flag, and make sure every metric is one you can evidence if challenged. |
-| 10 | **Privacy policy** — a template | `app/privacy/page.tsx` | Legally unreviewed. It describes the contact form and consent-controlled TikTok Pixel now used by the site, but it still needs a lawyer's sign-off. Any later change to data collection must update this page in the same commit. |
+| 10 | **Privacy policy** — a template | `app/privacy/page.tsx` | Legally unreviewed. It describes the contact form and consent-controlled Google Analytics and TikTok measurement now used by the site, but it still needs a lawyer's sign-off. Any later change to data collection must update this page in the same commit. |
 | 11 | **Terms of service** — a template | `app/terms/page.tsx` | Legally unreviewed. The ownership clause and the guarantees clause are the two that matter commercially; both are written to match what the service pages promise so the copy and the contract cannot contradict each other. Have both read by a lawyer. |
 | 12 | **"Last updated" dates on the legal pages** — privacy `25 October 2026`, terms `6 August 2026` | `app/privacy/page.tsx`, `app/terms/page.tsx` → `updated` prop | These record content changes, not legal approval. Set them to the date of legal sign-off after review. |
 | 13 | **Supabase project** — not provisioned | See [Lead capture setup](#lead-capture-setup) | The contact form returns a 503 with a message telling the visitor to email instead. The migration is written but has not been applied to any project, and no environment variables are set. Nothing is being captured today. |

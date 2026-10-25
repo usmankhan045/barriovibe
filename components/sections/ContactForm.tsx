@@ -5,6 +5,7 @@ import { Field, SelectField, TextareaField } from '@/components/ui/Field';
 import { Icon } from '@/components/icons';
 import { validateLead, submitLead, type LeadInput } from '@/lib/leads';
 import { trackTikTokEvent } from '@/lib/tiktok';
+import { trackAnalyticsEvent } from '@/lib/analytics';
 
 /**
  * The contact form.
@@ -72,6 +73,7 @@ export function ContactForm({ serviceOptions, contact }: ContactFormProps) {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   const mountedAt = useRef<number>(0);
+  const formStarted = useRef(false);
   const alertRef = useRef<HTMLDivElement>(null);
   const successRef = useRef<HTMLDivElement>(null);
 
@@ -111,6 +113,9 @@ export function ContactForm({ serviceOptions, contact }: ContactFormProps) {
     // convenience, not security. See lib/leads.ts.
     const errors = validateLead(input);
     if (Object.keys(errors).length > 0) {
+      trackAnalyticsEvent('contact_form_validation_error', {
+        error_count: Object.keys(errors).length,
+      });
       setFieldErrors(errors);
       setFormError('Please check the highlighted fields.');
       return;
@@ -121,11 +126,13 @@ export function ContactForm({ serviceOptions, contact }: ContactFormProps) {
 
     if (result.ok) {
       trackTikTokEvent('Lead');
+      trackAnalyticsEvent('generate_lead', { lead_source: 'website_contact_form' });
       setStatus('sent');
       return;
     }
 
     setStatus('idle');
+    trackAnalyticsEvent('contact_form_error');
     setFormError(result.message);
     if (result.fieldErrors) setFieldErrors(result.fieldErrors);
   }
@@ -158,7 +165,16 @@ export function ContactForm({ serviceOptions, contact }: ContactFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="u-tile p-6 md:p-9">
+    <form
+      onSubmit={handleSubmit}
+      onFocusCapture={() => {
+        if (formStarted.current) return;
+        formStarted.current = true;
+        trackAnalyticsEvent('contact_form_start');
+      }}
+      noValidate
+      className="u-tile p-6 md:p-9"
+    >
       {formError && (
         <div
           ref={alertRef}
