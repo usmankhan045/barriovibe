@@ -21,6 +21,33 @@ export interface EditorialRow {
   updated_at: string;
 }
 
+/* Neon decodes Postgres timestamptz columns to JavaScript Date objects. Keep
+ * that driver-specific shape at this boundary; the rest of the content layer
+ * intentionally deals in ISO strings, matching the source-controlled dates. */
+type DatabaseEditorialRow = Omit<
+  EditorialRow,
+  'published_at' | 'created_at' | 'updated_at'
+> & {
+  published_at: Date | string | null;
+  created_at: Date | string;
+  updated_at: Date | string;
+};
+
+function isoTimestamp(value: Date | string): string {
+  return value instanceof Date ? value.toISOString() : value;
+}
+
+function normalizeRow(row: DatabaseEditorialRow): EditorialRow {
+  return {
+    ...row,
+    published_at: row.published_at instanceof Date
+      ? row.published_at.toISOString()
+      : row.published_at,
+    created_at: isoTimestamp(row.created_at),
+    updated_at: isoTimestamp(row.updated_at),
+  };
+}
+
 function databaseUrl(required = false): string | null {
   const value = process.env.DATABASE_URL;
   if (!value && required) throw new Error('DATABASE_URL is required.');
@@ -32,7 +59,8 @@ const rows = cache(async (): Promise<EditorialRow[]> => {
   if (!connectionString) return [];
   try {
     const sql = neon(connectionString);
-    return await sql`select * from editorial_content order by updated_at desc` as EditorialRow[];
+    const result = await sql`select * from editorial_content order by updated_at desc`;
+    return (result as DatabaseEditorialRow[]).map(normalizeRow);
   } catch (error) {
     // Keep the public site available before the optional migration is applied.
     console.error('[editorial] managed content unavailable:', error instanceof Error ? error.message : error);
